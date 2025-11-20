@@ -37,4 +37,22 @@
         select <include refid="UserColumns"/> from t_user where deleted=0
         <if test="inviteCode!=null">AND invite_code = #{inviteCode}</if>
     </select>
+
+    <select id="listUsers" resultMap="UserMap">
+        select <include refid="UserColumns"/> from t_user where deleted=0
+        <if test="id != null">AND id = #{id}</if>
+        <if test="telephone != null and telephone != ''">AND telephone = #{telephone}</if>
+        <if test="inviteCode != null and inviteCode != ''">AND invite_code = #{inviteCode}</if>
+        <if test="nickName != null and nickName != ''">AND nick_name LIKE CONCAT('%', #{nickName}, '%')</if>
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="listUsersPage" resultMap="UserMap">
+        select <include refid="UserColumns"/> from t_user where deleted=0
+        <if test="request.id != null">AND id = #{request.id}</if>
+        <if test="request.telephone != null and request.telephone != ''">AND telephone = #{request.telephone}</if>
+        <if test="request.inviteCode != null and request.inviteCode != ''">AND invite_code = #{request.inviteCode}</if>
+        <if test="request.nickName != null and request.nickName != ''">AND nick_name LIKE CONCAT('%', #{request.nickName}, '%')</if>
+        ORDER BY created_at DESC
+    </select>
 </mapper>

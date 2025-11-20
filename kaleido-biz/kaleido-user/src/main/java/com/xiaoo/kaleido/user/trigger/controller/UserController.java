@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.user.trigger.controller;
 
 import com.xiaoo.kaleido.api.user.IUserOperateFacadeService;
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
+import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
 import com.xiaoo.kaleido.api.user.response.UserOperateVo;
 import com.xiaoo.kaleido.base.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +43,32 @@ public class UserController {
             @Parameter(description = "更新用户信息请求参数", required = true) 
             @RequestBody UpdateUserInfoRequest request) {
         return userOperateFacadeService.updateUserInfo(request);
+    }
+
+    @Operation(summary = "查询用户列表（不分页）", description = "根据查询条件返回匹配的用户列表，支持多条件组合查询")
+    @ApiResponse(responseCode = "200", description = "成功获取用户列表")
+    @ApiResponse(responseCode = "400", description = "请求参数错误")
+    @ApiResponse(responseCode = "500", description = "服务器内部错误")
+    @PostMapping("/query-list")
+    public Result<java.util.List<UserOperateVo>> listUsers(
+            @Parameter(description = "用户查询请求参数", required = true) 
+            @RequestBody UserQueryRequest request) {
+        return userOperateFacadeService.listUsers(request);
+    }
+
+    @Operation(summary = "分页查询用户列表", description = "根据查询条件和分页参数返回分页结果，支持多条件组合查询")
+    @ApiResponse(responseCode = "200", description = "成功获取用户列表")
+    @ApiResponse(responseCode = "400", description = "请求参数错误")
+    @ApiResponse(responseCode = "500", description = "服务器内部错误")
+    @PostMapping("/query-list-page")
+    public Result<java.util.List<UserOperateVo>> listUsersPage(
+            @Parameter(description = "用户查询请求参数", required = true) 
+            @RequestBody UserQueryRequest request,
+            @Parameter(description = "页码（从1开始）", example = "1") 
+            @RequestParam(defaultValue = "1") int page,
+            @Parameter(description = "每页大小（最大100）", example = "20") 
+            @RequestParam(defaultValue = "20") int size) {
+        return userOperateFacadeService.listUsers(request, page, size);
     }
 
 }

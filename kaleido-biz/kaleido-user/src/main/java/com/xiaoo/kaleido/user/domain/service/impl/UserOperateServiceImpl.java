@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.user.constant.UserOperateTypeEnum;
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
+import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
 import com.xiaoo.kaleido.redis.service.RedissonService;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
@@ -16,6 +17,8 @@ import com.xiaoo.kaleido.user.types.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 用户操作服务实现类
@@ -167,5 +170,52 @@ public class UserOperateServiceImpl implements IUserOperateService {
         log.info("用户注册完成，用户昵称：{},手机号：{}", user.getNickName(), user.getTelephone());
 
         return user;
+    }
+
+    /**
+     * 查询用户列表（不分页）
+     * 根据查询条件返回匹配的用户列表
+     *
+     * @param request 用户查询请求参数
+     * @return 用户列表
+     */
+    @Override
+    public List<User> listUsers(UserQueryRequest request) {
+        // 验证请求参数
+        Assert.notNull(request, () -> new UserException(UserErrorCode.REQUEST_PARAM_NULL));
+        
+        // 调用仓储层查询用户列表
+        List<User> users = userRepository.listUsers(request);
+        
+        log.info("查询用户列表完成，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 返回结果数量：{}",
+                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), users.size());
+        
+        return users;
+    }
+
+    /**
+     * 分页查询用户列表
+     * 根据查询条件和分页参数返回分页结果
+     *
+     * @param request 用户查询请求参数
+     * @param page 页码（从1开始）
+     * @param size 每页大小
+     * @return 用户列表
+     */
+    @Override
+    public List<User> listUsers(UserQueryRequest request, int page, int size) {
+        // 验证请求参数
+        Assert.notNull(request, () -> new UserException(UserErrorCode.REQUEST_PARAM_NULL));
+        Assert.isTrue(page > 0, () -> new UserException(UserErrorCode.PAGE_PARAM_INVALID));
+        Assert.isTrue(size > 0 && size <= 100, () -> new UserException(UserErrorCode.SIZE_PARAM_INVALID));
+        
+        // 调用仓储层分页查询用户列表
+        List<User> users = userRepository.listUsers(request, page, size);
+        
+        log.info("分页查询用户列表完成，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}, 返回结果数量：{}",
+                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), 
+                page, size, users.size());
+        
+        return users;
     }
 }
