@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.user.trigger.facade;
 
 import com.xiaoo.kaleido.api.user.IUserOperateFacadeService;
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
+import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
 import com.xiaoo.kaleido.api.user.request.UserRegisterRequest;
 import com.xiaoo.kaleido.api.user.response.UserOperateVo;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
@@ -14,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ouyucheng
@@ -102,6 +106,76 @@ public class UserOperateFacadeServiceImpl implements IUserOperateFacadeService {
             return Result.error(e);
         } catch (Exception e) {
             log.error("用户信息更新系统异常，用户ID：{}", request.getUserId(), e);
+            return Result.error(BizErrorCode.UNKNOWN_ERROR);
+        }
+    }
+
+    /**
+     * 查询用户列表（不分页）
+     * 根据查询条件返回匹配的用户列表
+     *
+     * @param request 用户查询请求参数
+     * @return 用户操作结果
+     */
+    @Override
+    public Result<List<UserOperateVo>> listUsers(UserQueryRequest request) {
+        try {
+            log.info("开始处理用户列表查询RPC请求，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName());
+
+            // 调用领域服务处理用户列表查询业务逻辑
+            List<User> users = userOperateService.listUsers(request);
+
+            // 将领域实体列表转换为VO对象列表返回
+            List<UserOperateVo> userOperateVos = users.stream()
+                    .map(UserConvertor.INSTANCE::mapToVo)
+                    .collect(Collectors.toList());
+
+            log.info("用户列表查询RPC请求处理成功，返回结果数量：{}", userOperateVos.size());
+            return Result.success(userOperateVos);
+        } catch (BizException e) {
+            log.error("用户列表查询业务异常，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}，错误码：{}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), e.getErrorCode(), e);
+            return Result.error(e);
+        } catch (Exception e) {
+            log.error("用户列表查询系统异常，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), e);
+            return Result.error(BizErrorCode.UNKNOWN_ERROR);
+        }
+    }
+
+    /**
+     * 分页查询用户列表
+     * 根据查询条件和分页参数返回分页结果
+     *
+     * @param request 用户查询请求参数
+     * @param page 页码（从1开始）
+     * @param size 每页大小
+     * @return 用户操作结果
+     */
+    @Override
+    public Result<List<UserOperateVo>> listUsers(UserQueryRequest request, int page, int size) {
+        try {
+            log.info("开始处理分页用户列表查询RPC请求，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), page, size);
+
+            // 调用领域服务处理分页用户列表查询业务逻辑
+            List<User> users = userOperateService.listUsers(request, page, size);
+
+            // 将领域实体列表转换为VO对象列表返回
+            List<UserOperateVo> userOperateVos = users.stream()
+                    .map(UserConvertor.INSTANCE::mapToVo)
+                    .collect(Collectors.toList());
+
+            log.info("分页用户列表查询RPC请求处理成功，返回结果数量：{}", userOperateVos.size());
+            return Result.success(userOperateVos);
+        } catch (BizException e) {
+            log.error("分页用户列表查询业务异常，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}，错误码：{}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), page, size, e.getErrorCode(), e);
+            return Result.error(e);
+        } catch (Exception e) {
+            log.error("分页用户列表查询系统异常，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}", 
+                    request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), page, size, e);
             return Result.error(BizErrorCode.UNKNOWN_ERROR);
         }
     }

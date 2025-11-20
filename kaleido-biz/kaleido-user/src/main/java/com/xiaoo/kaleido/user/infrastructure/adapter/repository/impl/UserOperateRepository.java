@@ -9,6 +9,7 @@ import com.xiaoo.kaleido.redis.service.IRedisService;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
+import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
 import com.xiaoo.kaleido.user.infrastructure.adapter.repository.IUserOperateRepository;
 import com.xiaoo.kaleido.user.infrastructure.mapper.UserMapper;
 import com.xiaoo.kaleido.user.infrastructure.mapper.UserOperateStreamMapper;
@@ -19,6 +20,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -126,5 +129,34 @@ public class UserOperateRepository implements IUserOperateRepository {
             log.error("写入用户信息唯一索引冲突，用户昵称：{},手机号：{}，邀请码：{}", user.getNickName(), user.getTelephone(), user.getInviteCode());
             throw new UserException(BizErrorCode.UNIQUE_INDEX_CONFLICT);
         }
+    }
+
+    /**
+     * 查询用户列表（不分页）
+     * 根据查询条件返回匹配的用户列表
+     *
+     * @param request 用户查询请求参数
+     * @return 用户列表
+     */
+    @Override
+    public List<User> listUsers(UserQueryRequest request) {
+        return userMapper.listUsers(request);
+    }
+
+    /**
+     * 分页查询用户列表
+     * 根据查询条件和分页参数返回分页结果
+     *
+     * @param request 用户查询请求参数
+     * @param page 页码（从1开始）
+     * @param size 每页大小
+     * @return 用户列表
+     */
+    @Override
+    public List<User> listUsers(UserQueryRequest request, int page, int size) {
+        // 使用MyBatis Plus分页插件进行分页查询
+        Page<User> pageObj = new Page<>(page, size);
+        Page<User> result = userMapper.listUsersPage(pageObj, request);
+        return result.getRecords();
     }
 }

@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.user.domain.service;
 
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
+import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 
 /**
@@ -36,4 +37,24 @@ public interface IUserOperateService {
      * @return 更新后的用户实体对象
      */
     User updateUserInfo(UpdateUserInfoRequest request);
+
+    /**
+     * 查询用户列表（不分页）
+     * 根据查询条件返回匹配的用户列表
+     *
+     * @param request 用户查询请求参数
+     * @return 用户列表
+     */
+    java.util.List<User> listUsers(UserQueryRequest request);
+
+    /**
+     * 分页查询用户列表
+     * 根据查询条件和分页参数返回分页结果
+     *
+     * @param request 用户查询请求参数
+     * @param page 页码（从1开始）
+     * @param size 每页大小
+     * @return 用户列表
+     */
+    java.util.List<User> listUsers(UserQueryRequest request, int page, int size);
 }
