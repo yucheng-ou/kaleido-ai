@@ -48,7 +48,8 @@ public class UserOperateStream extends BaseEntity {
     private String extendInfo;
 
     public static UserOperateStream operateStream(User user, UserOperateTypeEnum operateTypeEnum) {
-        return UserOperateStream.builder().userId(user.getId())
+        return UserOperateStream.builder()
+                .userId(user.getId())
                 .operateType(operateTypeEnum)
                 .operateTime(new Date())
                 .operateParam(JSONUtil.toJsonStr(user))

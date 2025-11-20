@@ -20,7 +20,8 @@ public enum UserErrorCode implements ErrorCode {
     USER_QUERY_FAIL("USER_QUERY_FAIL", "用户查询失败"),
     NICK_NAME_EXIST("NICK_NAME_EXIST", "用户名已存在"),
     USER_ID_NOT_NULL("USER_ID_NOT_NULL", "用户id不能为空"),
-    USER_UPLOAD_PICTURE_FAIL("USER_UPLOAD_PICTURE_FAIL", "用户上传图片失败");    ;
+    USER_UPLOAD_PICTURE_FAIL("USER_UPLOAD_PICTURE_FAIL", "用户上传图片失败"),
+    REQUEST_PARAM_NULL("REQUEST_PARAM_NULL", "请求参数不能为空");
 
     /**
      * 错误码

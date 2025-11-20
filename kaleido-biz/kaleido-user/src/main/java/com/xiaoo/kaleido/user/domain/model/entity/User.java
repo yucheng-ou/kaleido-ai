@@ -84,4 +84,24 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    /**
+     * 更新用户基本信息
+     * @param nickName 新昵称（可选，为null时不更新）
+     * @param avatar 新头像URL（可选，为null时不更新）
+     * @param telephone 新手机号（可选，为null时不更新）
+     * @return 当前用户实体对象（用于链式调用）
+     */
+    public User updateBasicInfo(String nickName, String avatar, String telephone) {
+        if (nickName != null) {
+            this.nickName = nickName;
+        }
+        if (avatar != null) {
+            this.avatar = avatar;
+        }
+        if (telephone != null) {
+            this.telephone = telephone;
+        }
+        return this;
+    }
+
 }

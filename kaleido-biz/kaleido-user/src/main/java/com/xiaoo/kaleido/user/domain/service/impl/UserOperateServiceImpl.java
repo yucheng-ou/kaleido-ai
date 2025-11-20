@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.user.domain.service.impl;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.user.constant.UserOperateTypeEnum;
+import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.redis.service.RedissonService;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
@@ -85,6 +86,52 @@ public class UserOperateServiceImpl implements IUserOperateService {
         return userRepository.getById(userId);
     }
 
+    /**
+     * 更新用户基本信息
+     * 包括昵称、头像和手机号的更新，支持部分更新（null值表示不更新该字段）
+     *
+     * @param request 更新用户信息请求参数
+     * @return 更新后的用户实体对象
+     * @throws UserException 当用户不存在或手机号已存在时抛出业务异常
+     */
+    @Override
+    public User updateUserInfo(UpdateUserInfoRequest request) {
+        // 验证请求参数
+        Assert.notNull(request, () -> new UserException(UserErrorCode.REQUEST_PARAM_NULL));
+        Assert.notNull(request.getUserId(), () -> new UserException(UserErrorCode.USER_ID_NOT_NULL));
+
+        // 查询用户信息
+        User user = userRepository.getById(request.getUserId());
+        Assert.notNull(user, () -> new UserException(UserErrorCode.USER_NOT_EXIST));
+
+        // 如果更新手机号，验证手机号唯一性
+        if (StrUtil.isNotBlank(request.getTelephone())) {
+            User existingUser = userRepository.getByTelephone(request.getTelephone());
+            if (existingUser != null && !existingUser.getId().equals(request.getUserId())) {
+                throw new UserException(UserErrorCode.DUPLICATE_TELEPHONE);
+            }
+        }
+
+        // 更新用户基本信息
+        user.updateBasicInfo(request.getNickName(), request.getAvatar(), request.getTelephone());
+
+        // 创建用户操作流水记录
+        UserOperateStream userOperateStream = UserOperateStream.operateStream(user, UserOperateTypeEnum.MODIFY);
+
+        // 保存用户更新（用户实体 + 操作流水）
+        userRepository.updateUserOperateAggregate(
+                UserOperateAggregate.builder()
+                        .user(user)
+                        .userOperateStream(userOperateStream)
+                        .build()
+        );
+
+        // 记录更新完成日志
+        log.info("用户信息更新完成，用户ID：{}, 昵称：{}, 手机号：{}", 
+                user.getId(), user.getNickName(), user.getTelephone());
+
+        return user;
+    }
 
     /**
      * 内部注册方法 - 执行具体的用户注册逻辑

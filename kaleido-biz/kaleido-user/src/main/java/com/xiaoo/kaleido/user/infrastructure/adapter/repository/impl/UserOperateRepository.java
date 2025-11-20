@@ -71,6 +71,38 @@ public class UserOperateRepository implements IUserOperateRepository {
         return userMapper.getByTelephone(telephone);
     }
 
+    @Override
+    public void updateUser(User user) {
+        int updateCount = userMapper.updateById(user);
+        if (updateCount != 1) {
+            log.error("用户信息更新失败，用户ID：{}, 昵称：{}, 手机号：{}", user.getId(), user.getNickName(), user.getTelephone());
+            throw new UserException(DsErrorCode.UPDATE_FAILED);
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateUserOperateAggregate(UserOperateAggregate userOperateAggregate) {
+        User user = userOperateAggregate.getUser();
+        UserOperateStream userOperateStream = userOperateAggregate.getUserOperateStream();
+
+        try {
+            // 更新用户信息
+            updateUser(user);
+
+            // 插入操作流水记录
+            userOperateStream.setUserId(user.getId());
+            int userOperateStreamCount = userOperateStreamMapper.insert(userOperateStream);
+            if (userOperateStreamCount != 1) {
+                log.error("用户流水写入失败，用户ID：{}, 操作类型：{}", user.getId(), userOperateStream.getOperateType());
+                throw new UserException(DsErrorCode.INSERT_FAILED);
+            }
+        } catch (DuplicateKeyException e) {
+            log.error("写入用户操作流水唯一索引冲突，用户ID：{}, 操作类型：{}", user.getId(), userOperateStream.getOperateType());
+            throw new UserException(BizErrorCode.UNIQUE_INDEX_CONFLICT);
+        }
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveUserOperateAggregate(UserOperateAggregate userOperateAggregate) {
