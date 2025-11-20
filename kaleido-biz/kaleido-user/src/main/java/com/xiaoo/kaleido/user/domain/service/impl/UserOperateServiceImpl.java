@@ -72,6 +72,13 @@ public class UserOperateServiceImpl implements IUserOperateService {
         return register(telephone, curUserInviteCode, nickName, password, inviterId);
     }
 
+
+    /**
+     * 根据用户ID查询用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户操作结果
+     */
     @Override
     public User getById(Long userId) {
         Assert.notNull(userId, () -> new UserException(UserErrorCode.USER_ID_NOT_NULL));

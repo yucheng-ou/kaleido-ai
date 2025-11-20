@@ -19,5 +19,11 @@ public interface IUserOperateService {
      */
     User register(String telephone, String inviteCode);
 
+    /**
+     * 根据用户ID查询用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户操作结果
+     */
     User getById(Long userId);
 }
