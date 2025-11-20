@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.6</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.xiaoo</groupId>
+    <artifactId>kaleido</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Kaleido</name>
+    <description>Kaleido</description>
+
+    <modules>
+        <module>kaleido-common</module>
+        <module>kaleido-gateway</module>
+        <module>kaleido-auth</module>
+        <module>kaleido-biz</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
+        <spring-boot.version>3.5.2</spring-boot.version>
+
+        <redisson.version>3.52.0</redisson.version>
+        <caffeine.version>3.2.3</caffeine.version>
+        <jetcache.version>2.7.8</jetcache.version>
+
+        <mybatis-plus.version>3.5.9</mybatis-plus.version>
+        <mybatis-plus-generate.version>3.5.9</mybatis-plus-generate.version>
+        <mysql-connector.version>8.4.0</mysql-connector.version>
+        <druid.version>1.2.24</druid.version>
+
+        <kaleido.version>0.0.1-SNAPSHOT</kaleido.version>
+
+
+        <lombok.version>1.18.36</lombok.version>
+        <fastjson2.version>2.0.53</fastjson2.version>
+        <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>
+        <guava.version>32.1.3-jre</guava.version>
+        <sa-token.version>1.39.0</sa-token.version>
+        <commons-pool2.version>2.12.0</commons-pool2.version>
+        <mysql-connector.version>8.4.0</mysql-connector.version>
+        <beetl.version>3.16.2.RELEASE</beetl.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <mybatis-plus-join.version>1.5.2</mybatis-plus-join.version>
+        <hutool.version>5.8.38</hutool.version>
+        <aliyun-captcha.version>1.1.2</aliyun-captcha.version>
+        <jackson.version>2.17.3</jackson.version>
+        <aliyun.oss.version>3.18.1</aliyun.oss.version>
+        <knife4j.version>4.5.0</knife4j.version>
+        <springdoc.version>2.7.0</springdoc.version>
+        <dubbo.version>3.3.0</dubbo.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!--    spring-cloud依赖管理POM -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--    spring-cloud-alibaba依赖管理POM -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alicp.jetcache</groupId>
+                <artifactId>jetcache-starter-redisson</artifactId>
+                <version>${jetcache.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-jsqlparser</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- MyBatis-Plus Generator -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generate.version}</version>
+            </dependency>
+
+            <!-- MySQL JDBC 驱动 -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+
+            <!-- Druid 数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-base</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-ds</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-redis</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-nacos</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-web</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-doc</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-api</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-rpc</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--元数据生成器 自动生成`spring-configuration-metadata.json`文件-->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring-boot.version}</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

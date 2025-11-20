@@ -1,0 +1,38 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: kaleido-gateway
+  profiles:
+    active: dev
+  config:
+    import:
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - classpath:nacos.yml
+  cloud:
+    gateway:
+      server:
+        webflux:
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_UNIQUE
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedHeaders: '*'
+                allowedMethods: '*'
+                allowedOrigins: '*'
+          routes:
+            - id: kaleido-auth-server
+              uri: lb://kaleido-auth
+              predicates:
+                - Path=/kaleido-auth/**
+            - id: kaleido-user-server
+              uri: lb://kaleido-user
+              predicates:
+                - Path=/kaleido-user/**
+    nacos:
+      discovery:
+        group: ${spring.application.name}
+      config:
+        group: ${spring.application.name}

@@ -1,0 +1,23 @@
+server:
+  port: 9011
+  servlet:
+    context-path: /kaleido-auth
+
+spring:
+  application:
+    name: kaleido-auth
+  profiles:
+    active: dev
+  config:
+    import:
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - classpath:nacos.yml
+      - classpath:ds.yml
+      - classpath:rpc.yml
+
+  cloud:
+    nacos:
+      discovery:
+        group: ${spring.application.name}
+      config:
+        group: ${spring.application.name}
