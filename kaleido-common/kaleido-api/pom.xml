@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.xiaoo</groupId>
+        <artifactId>kaleido-common</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>kaleido-api</artifactId>
+    <name>kaleido-api</name>
+    <description>kaleido-api</description>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-doc</artifactId>
+        </dependency>
+    </dependencies>
+</project>

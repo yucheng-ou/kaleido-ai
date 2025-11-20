@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.xiaoo</groupId>
+        <artifactId>kaleido</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>kaleido-gateway</artifactId>
+    <packaging>jar</packaging>
+    <name>kaleido-gateway</name>
+    <description>kaleido-gateway</description>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <application.name>kaleido-gateway</application.name>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--Spring Cloud Gateway-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
+        </dependency>
+
+        <!--Spring Cloud Loadbalancer 负载均衡组件-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-nacos</artifactId>
+        </dependency>
+    </dependencies>
+</project>

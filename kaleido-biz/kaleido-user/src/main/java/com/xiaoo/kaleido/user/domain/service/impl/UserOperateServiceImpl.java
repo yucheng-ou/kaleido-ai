@@ -1,0 +1,117 @@
+package com.xiaoo.kaleido.user.domain.service.impl;
+
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.api.user.constant.UserOperateTypeEnum;
+import com.xiaoo.kaleido.redis.service.RedissonService;
+import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
+import com.xiaoo.kaleido.user.domain.model.entity.User;
+import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
+import com.xiaoo.kaleido.user.domain.service.IUserBasicInfoGenerator;
+import com.xiaoo.kaleido.user.domain.service.IUserOperateService;
+import com.xiaoo.kaleido.user.infrastructure.adapter.repository.impl.UserOperateRepository;
+import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
+import com.xiaoo.kaleido.user.types.exception.UserException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/**
+ * 用户操作服务实现类
+ * 负责用户注册、信息修改等核心业务逻辑的实现
+ * 遵循领域驱动设计(DDD)原则，作为领域服务层的重要组成部分
+ *
+ * @author ouyucheng
+ * @date 2025/11/18
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class UserOperateServiceImpl implements IUserOperateService {
+
+    private final RedissonService redissonService;
+
+    /**
+     * 用户仓储服务 - 负责用户数据的持久化操作
+     */
+    private final UserOperateRepository userRepository;
+
+    /**
+     * 用户基础信息生成器 - 负责生成邀请码、密码、昵称等用户基础信息
+     */
+    private final IUserBasicInfoGenerator userBasicInfoGenerator;
+
+    /**
+     * 注册新用户
+     * 处理用户注册的核心业务逻辑，包括邀请码验证、用户信息生成和持久化
+     *
+     * @param telephone  用户手机号（必填，用于唯一标识用户）
+     * @param inviteCode 邀请码（可选，用于关联邀请关系）
+     * @return 注册成功的用户实体对象
+     * @throws UserException 当邀请码无效或手机号已存在时抛出业务异常
+     */
+
+    @Override
+    public User register(String telephone, String inviteCode) {
+
+        //查询邀请人信息
+        Long inviterId = null;
+        if (StrUtil.isNotBlank(inviteCode)) {
+            User inviter = userRepository.getByInviteCode(inviteCode);
+            Assert.notNull(inviter, () -> new UserException(UserErrorCode.INVALID_INVITE_CODE));
+            inviterId = inviter.getId();
+        }
+
+        //生成邀请码
+        String curUserInviteCode = userBasicInfoGenerator.generateInviteCode();
+        //生成密码
+        String password = userBasicInfoGenerator.generatePassword();
+        //生成昵称
+        String nickName = userBasicInfoGenerator.generateNickname(curUserInviteCode, telephone);
+
+        return register(telephone, curUserInviteCode, nickName, password, inviterId);
+    }
+
+    @Override
+    public User getById(Long userId) {
+        Assert.notNull(userId, () -> new UserException(UserErrorCode.USER_ID_NOT_NULL));
+        return userRepository.getById(userId);
+    }
+
+
+    /**
+     * 内部注册方法 - 执行具体的用户注册逻辑
+     * 包括手机号唯一性验证、用户实体创建、操作流水记录和聚合根持久化
+     *
+     * @param telephone  用户手机号（必填）
+     * @param inviteCode 用户邀请码（系统生成）
+     * @param nickName   用户昵称（系统生成）
+     * @param password   用户密码（系统生成）
+     * @param inviterId  邀请人ID（可选，可为null）
+     * @return 注册成功的用户实体对象
+     * @throws UserException 当手机号已存在时抛出业务异常
+     */
+    private User register(String telephone, String inviteCode, String nickName, String password, Long inviterId) {
+        // 验证手机号唯一性
+        Assert.isNull(userRepository.getByTelephone(telephone), () -> new UserException(UserErrorCode.DUPLICATE_TELEPHONE));
+
+        // 创建用户实体
+        User user = User.register(telephone, inviteCode, nickName, password, inviterId);
+
+        // 创建用户操作流水记录
+        UserOperateStream userOperateStream = UserOperateStream.operateStream(user, UserOperateTypeEnum.REGISTER);
+
+        // 保存用户聚合根（用户实体 + 操作流水）
+        userRepository.saveUserOperateAggregate(
+                UserOperateAggregate.builder()
+                        .user(user)
+                        .userOperateStream(userOperateStream)
+                        .build()
+        );
+
+        // 记录注册完成日志
+        log.info("用户注册完成，用户昵称：{},手机号：{}", user.getNickName(), user.getTelephone());
+
+        return user;
+    }
+}
