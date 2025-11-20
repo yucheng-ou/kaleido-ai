@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.user.domain.service;
 
+import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 
 /**
@@ -26,4 +27,13 @@ public interface IUserOperateService {
      * @return 用户操作结果
      */
     User getById(Long userId);
+
+    /**
+     * 更新用户基本信息
+     * 包括昵称、头像和手机号的更新
+     *
+     * @param request 更新用户信息请求参数
+     * @return 更新后的用户实体对象
+     */
+    User updateUserInfo(UpdateUserInfoRequest request);
 }

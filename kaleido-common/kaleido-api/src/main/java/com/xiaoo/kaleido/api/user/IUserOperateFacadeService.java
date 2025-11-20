@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.user;
 
+import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.api.user.request.UserRegisterRequest;
 import com.xiaoo.kaleido.api.user.response.UserOperateVo;
 import com.xiaoo.kaleido.base.result.Result;
@@ -27,4 +28,12 @@ public interface IUserOperateFacadeService {
      * @return 用户操作结果
      */
     Result<UserOperateVo> getById(Long userId);
+
+    /**
+     * 更新用户基本信息
+     * 
+     * @param request 更新用户信息请求参数
+     * @return 用户操作结果
+     */
+    Result<UserOperateVo> updateUserInfo(UpdateUserInfoRequest request);
 }

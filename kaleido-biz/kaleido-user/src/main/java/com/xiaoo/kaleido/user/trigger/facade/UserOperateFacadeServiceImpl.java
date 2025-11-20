@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.user.trigger.facade;
 
 import com.xiaoo.kaleido.api.user.IUserOperateFacadeService;
+import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.api.user.request.UserRegisterRequest;
 import com.xiaoo.kaleido.api.user.response.UserOperateVo;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
@@ -72,9 +73,36 @@ public class UserOperateFacadeServiceImpl implements IUserOperateFacadeService {
             User user = userOperateService.getById(userId);
             return Result.success(UserConvertor.INSTANCE.mapToVo(user));
         } catch (Exception e) {
-            log.error("用户注册系统异常，手机号：{}", userId);
+            log.error("用户查询系统异常，用户ID：{}", userId, e);
             return Result.error(BizErrorCode.UNKNOWN_ERROR);
         }
+    }
 
+    /**
+     * 更新用户基本信息
+     *
+     * @param request 更新用户信息请求参数
+     * @return 用户操作结果
+     */
+    @Override
+    public Result<UserOperateVo> updateUserInfo(UpdateUserInfoRequest request) {
+        try {
+            log.info("开始处理用户信息更新RPC请求，用户ID：{}", request.getUserId());
+
+            // 调用领域服务处理用户信息更新业务逻辑
+            User user = userOperateService.updateUserInfo(request);
+
+            // 将领域实体转换为VO对象返回
+            UserOperateVo userOperateVo = UserConvertor.INSTANCE.mapToVo(user);
+
+            log.info("用户信息更新RPC请求处理成功，用户ID：{}", user.getId());
+            return Result.success(userOperateVo);
+        } catch (BizException e) {
+            log.error("用户信息更新业务异常，用户ID：{}，错误码：{}", request.getUserId(), e.getErrorCode(), e);
+            return Result.error(e);
+        } catch (Exception e) {
+            log.error("用户信息更新系统异常，用户ID：{}", request.getUserId(), e);
+            return Result.error(BizErrorCode.UNKNOWN_ERROR);
+        }
     }
 }

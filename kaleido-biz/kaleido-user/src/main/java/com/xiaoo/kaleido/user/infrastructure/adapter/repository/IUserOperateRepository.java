@@ -34,6 +34,19 @@ public interface IUserOperateRepository {
      */
     User getByTelephone(String telephone);
 
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户实体对象
+     */
+    void updateUser(User user);
+
+    /**
+     * 更新用户操作聚合根（用户实体 + 操作流水）
+     *
+     * @param userOperateAggregate 用户操作聚合根
+     */
+    void updateUserOperateAggregate(UserOperateAggregate userOperateAggregate);
 
     void saveUserOperateAggregate(UserOperateAggregate userOperateAggregate);
 }
