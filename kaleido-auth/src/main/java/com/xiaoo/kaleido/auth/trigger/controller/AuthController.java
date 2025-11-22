@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.auth.trigger.controller;
 
 import com.xiaoo.kaleido.api.user.IUserOperateFacadeService;
 import com.xiaoo.kaleido.api.user.request.UserRegisterRequest;
-import com.xiaoo.kaleido.api.user.response.UserOperateVo;
+import com.xiaoo.kaleido.api.user.response.UserBasicInfoVO;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.base.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class AuthController {
 
     @Operation(summary = "用户注册", description = "通过手机号和验证码注册新用户")
     @PostMapping("/register")
-    public Result<UserOperateVo> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+    public Result<UserBasicInfoVO> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
 
         //TODO 验证码校验
         try {
