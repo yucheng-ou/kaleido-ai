@@ -2,21 +2,23 @@ package com.xiaoo.kaleido.api.user.response;
 
 import com.xiaoo.kaleido.api.user.constant.UserStatusEnum;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
 
 /**
+ * 用户基础信息VO
+ * 包含用户的基本信息字段，如ID、昵称、手机号等
+ *
  * @author ouyucheng
  * @date 2025/11/18
- * @description
  */
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserOperateVo implements Serializable {
+@SuperBuilder
+public class UserBasicInfoVO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -46,13 +48,12 @@ public class UserOperateVo implements Serializable {
     /**
      * 邀请人ID
      */
-    private String inviterId;
+    private Long inviterId;
 
     /**
      * 用户手机号
      */
     private String telephone;
-
 
     /**
      * 用户头像URL地址

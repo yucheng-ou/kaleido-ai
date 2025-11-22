@@ -6,6 +6,7 @@
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-redis</artifactId>
@@ -20,7 +21,6 @@
     </properties>
 
     <dependencies>
-        <!--     Redis  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>

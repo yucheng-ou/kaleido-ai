@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.xiaoo</groupId>
-        <artifactId>kaleido</artifactId>
+        <artifactId>kaleido-common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-doc</artifactId>

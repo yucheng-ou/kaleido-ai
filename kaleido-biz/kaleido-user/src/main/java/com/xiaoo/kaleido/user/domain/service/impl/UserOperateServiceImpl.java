@@ -3,9 +3,13 @@ package com.xiaoo.kaleido.user.domain.service.impl;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.user.constant.UserOperateTypeEnum;
+import com.xiaoo.kaleido.api.user.request.PageUserQueryRequest;
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
+import com.xiaoo.kaleido.api.user.response.UserInfoVO;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.redis.service.RedissonService;
+import com.xiaoo.kaleido.user.domain.model.convertor.UserConvertor;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
@@ -18,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 用户操作服务实现类
@@ -130,7 +136,7 @@ public class UserOperateServiceImpl implements IUserOperateService {
         );
 
         // 记录更新完成日志
-        log.info("用户信息更新完成，用户ID：{}, 昵称：{}, 手机号：{}", 
+        log.info("用户信息更新完成，用户ID：{}, 昵称：{}, 手机号：{}",
                 user.getId(), user.getNickName(), user.getTelephone());
 
         return user;
@@ -174,48 +180,93 @@ public class UserOperateServiceImpl implements IUserOperateService {
 
     /**
      * 查询用户列表（不分页）
-     * 根据查询条件返回匹配的用户列表
+     * 根据查询条件返回匹配的用户列表，包含邀请人昵称等扩展信息
      *
      * @param request 用户查询请求参数
-     * @return 用户列表
+     * @return 用户信息VO列表
      */
     @Override
-    public List<User> listUsers(UserQueryRequest request) {
+    public List<UserInfoVO> query(UserQueryRequest request) {
         // 验证请求参数
         Assert.notNull(request, () -> new UserException(UserErrorCode.REQUEST_PARAM_NULL));
-        
+
         // 调用仓储层查询用户列表
-        List<User> users = userRepository.listUsers(request);
-        
+        List<User> users = userRepository.query(request);
+
+        // 转换为UserInfoVO并设置邀请人昵称
+        List<UserInfoVO> userInfoVOs = convertUsersToUserInfoVOList(users);
+
         log.info("查询用户列表完成，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 返回结果数量：{}",
-                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), users.size());
-        
-        return users;
+                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), userInfoVOs.size());
+
+        return userInfoVOs;
     }
 
     /**
      * 分页查询用户列表
-     * 根据查询条件和分页参数返回分页结果
+     * 根据查询条件和分页参数返回分页结果，包含邀请人昵称等扩展信息
      *
      * @param request 用户查询请求参数
-     * @param page 页码（从1开始）
-     * @param size 每页大小
-     * @return 用户列表
+     * @return 用户信息VO分页结果
      */
     @Override
-    public List<User> listUsers(UserQueryRequest request, int page, int size) {
+    public PageResp<UserInfoVO> pageQuery(PageUserQueryRequest request) {
         // 验证请求参数
         Assert.notNull(request, () -> new UserException(UserErrorCode.REQUEST_PARAM_NULL));
-        Assert.isTrue(page > 0, () -> new UserException(UserErrorCode.PAGE_PARAM_INVALID));
-        Assert.isTrue(size > 0 && size <= 100, () -> new UserException(UserErrorCode.SIZE_PARAM_INVALID));
-        
+
         // 调用仓储层分页查询用户列表
-        List<User> users = userRepository.listUsers(request, page, size);
-        
-        log.info("分页查询用户列表完成，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}, 返回结果数量：{}",
-                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(), 
-                page, size, users.size());
-        
-        return users;
+        PageResp<User> pageUsers = userRepository.pageQuery(request);
+
+        List<User> users = pageUsers.getList();
+        List<UserInfoVO> userInfoVOs = convertUsersToUserInfoVOList(users);
+
+        PageResp<UserInfoVO> pageResp = PageResp.success(userInfoVOs, pageUsers.getTotal(), pageUsers.getPageNum(), pageUsers.getPageSize());
+
+        log.info("分页查询用户列表完成，查询条件：ID={}, 手机号={}, 邀请码={}, 昵称={}, 页码={}, 页大小={}, 总数量：{}",
+                request.getId(), request.getTelephone(), request.getInviteCode(), request.getNickName(),
+                request.getPageNum(), request.getPageSize(), pageResp.getTotal());
+
+        return pageResp;
     }
+
+    /**
+     * 将用户实体列表转换为UserInfoVO列表，包含邀请人昵称设置
+     * 提取公共逻辑，避免代码重复
+     *
+     * @param users 用户实体列表
+     * @return UserInfoVO列表
+     */
+    private List<UserInfoVO> convertUsersToUserInfoVOList(List<User> users) {
+        if (users == null || users.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 收集所有需要查询的邀请人ID
+        Set<Long> inviterIds = users.stream()
+                .map(User::getInviterId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        // 批量查询邀请人信息
+        Map<Long, User> inviterMap;
+        if (!inviterIds.isEmpty()) {
+            List<User> inviters = userRepository.getByIds(inviterIds);
+            inviterMap = inviters.stream()
+                    .collect(Collectors.toMap(User::getId, Function.identity()));
+        } else {
+            inviterMap = new HashMap<>();
+        }
+
+        // 使用MapStruct转换为UserInfoVO并设置邀请人昵称
+        List<UserInfoVO> userInfoVOList = UserConvertor.INSTANCE.toUserInfoVOList(users, inviterMap);
+
+        //填充邀请人昵称
+        userInfoVOList.forEach(vo -> {
+            User user = inviterMap.get(vo.getInviterId());
+            vo.setInviterNickName(user != null ? user.getNickName() : null);
+        });
+
+        return userInfoVOList;
+    }
+
 }

@@ -3,8 +3,10 @@ package com.xiaoo.kaleido.user.infrastructure.adapter.repository.impl;
 import com.alicp.jetcache.anno.CacheRefresh;
 import com.alicp.jetcache.anno.CacheType;
 import com.alicp.jetcache.anno.Cached;
+import com.xiaoo.kaleido.api.user.request.PageUserQueryRequest;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.base.exception.DsErrorCode;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.redis.service.IRedisService;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
@@ -21,7 +23,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,8 +42,6 @@ public class UserOperateRepository implements IUserOperateRepository {
     private final UserMapper userMapper;
 
     private final UserOperateStreamMapper userOperateStreamMapper;
-
-    private final IRedisService redisService;
 
     /**
      * 根据用户ID查询用户信息
@@ -139,8 +142,8 @@ public class UserOperateRepository implements IUserOperateRepository {
      * @return 用户列表
      */
     @Override
-    public List<User> listUsers(UserQueryRequest request) {
-        return userMapper.listUsers(request);
+    public List<User> query(UserQueryRequest request) {
+        return userMapper.query(request);
     }
 
     /**
@@ -148,15 +151,27 @@ public class UserOperateRepository implements IUserOperateRepository {
      * 根据查询条件和分页参数返回分页结果
      *
      * @param request 用户查询请求参数
-     * @param page 页码（从1开始）
-     * @param size 每页大小
      * @return 用户列表
      */
     @Override
-    public List<User> listUsers(UserQueryRequest request, int page, int size) {
+    public PageResp<User> pageQuery(PageUserQueryRequest request) {
         // 使用MyBatis Plus分页插件进行分页查询
-        Page<User> pageObj = new Page<>(page, size);
-        Page<User> result = userMapper.listUsersPage(pageObj, request);
-        return result.getRecords();
+        Page<User> pageObj = new Page<>(request.getPageNum(), request.getPageSize());
+        Page<User> result = userMapper.pageQuery(pageObj, request);
+        return PageResp.success(result.getRecords(), result.getTotal(), result.getCurrent(), result.getSize());
+    }
+
+    /**
+     * 根据用户ID列表批量查询用户信息
+     *
+     * @param ids 用户ID列表
+     * @return 用户列表
+     */
+    @Override
+    public List<User> getByIds(Set<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return userMapper.getByIds(ids);
     }
 }
