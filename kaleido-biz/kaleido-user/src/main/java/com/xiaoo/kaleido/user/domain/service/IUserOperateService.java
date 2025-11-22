@@ -1,8 +1,13 @@
 package com.xiaoo.kaleido.user.domain.service;
 
+import com.xiaoo.kaleido.api.user.request.PageUserQueryRequest;
 import com.xiaoo.kaleido.api.user.request.UpdateUserInfoRequest;
 import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
+import com.xiaoo.kaleido.api.user.response.UserInfoVO;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
+
+import java.util.List;
 
 /**
  * @author ouyucheng
@@ -40,21 +45,19 @@ public interface IUserOperateService {
 
     /**
      * 查询用户列表（不分页）
-     * 根据查询条件返回匹配的用户列表
+     * 根据查询条件返回匹配的用户列表，包含邀请人昵称等扩展信息
      *
      * @param request 用户查询请求参数
-     * @return 用户列表
+     * @return 用户信息VO列表
      */
-    java.util.List<User> listUsers(UserQueryRequest request);
+    List<UserInfoVO> query(UserQueryRequest request);
 
     /**
      * 分页查询用户列表
-     * 根据查询条件和分页参数返回分页结果
+     * 根据查询条件和分页参数返回分页结果，包含邀请人昵称等扩展信息
      *
      * @param request 用户查询请求参数
-     * @param page 页码（从1开始）
-     * @param size 每页大小
-     * @return 用户列表
+     * @return 用户信息VO分页结果
      */
-    java.util.List<User> listUsers(UserQueryRequest request, int page, int size);
+    PageResp<UserInfoVO> pageQuery(PageUserQueryRequest request);
 }

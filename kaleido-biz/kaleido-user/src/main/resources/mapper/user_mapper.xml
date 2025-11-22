@@ -23,6 +23,15 @@
         id, nick_name, password_hash, status, invite_code, telephone, inviter_id, avatar, deleted, lock_version, created_at, updated_at
     </sql>
 
+    <!-- 用户查询条件片段 -->
+    <sql id="UserQueryConditions">
+        <if test="request.id != null">AND id = #{request.id}</if>
+        <if test="request.telephone != null and request.telephone != ''">AND telephone LIKE CONCAT('%', #{request.telephone}, '%')</if>
+        <if test="request.inviteCode != null and request.inviteCode != ''">AND invite_code LIKE CONCAT('%', #{request.inviteCode}, '%')</if>
+        <if test="request.nickName != null and request.nickName != ''">AND nick_name LIKE CONCAT('%', #{request.nickName}, '%')</if>
+        <if test="request.statusEnum != null">AND status = #{request.statusEnum}</if>
+    </sql>
+
     <select id="getById" resultMap="UserMap">
         select <include refid="UserColumns"/> from t_user where deleted=0
         <if test="id!=null">AND id = #{id}</if>
@@ -38,21 +47,25 @@
         <if test="inviteCode!=null">AND invite_code = #{inviteCode}</if>
     </select>
 
-    <select id="listUsers" resultMap="UserMap">
+    <select id="query" resultMap="UserMap">
         select <include refid="UserColumns"/> from t_user where deleted=0
-        <if test="id != null">AND id = #{id}</if>
-        <if test="telephone != null and telephone != ''">AND telephone = #{telephone}</if>
-        <if test="inviteCode != null and inviteCode != ''">AND invite_code = #{inviteCode}</if>
-        <if test="nickName != null and nickName != ''">AND nick_name LIKE CONCAT('%', #{nickName}, '%')</if>
+        <include refid="UserQueryConditions"/>
         ORDER BY created_at DESC
     </select>
 
-    <select id="listUsersPage" resultMap="UserMap">
+    <select id="pageQuery" resultMap="UserMap">
         select <include refid="UserColumns"/> from t_user where deleted=0
-        <if test="request.id != null">AND id = #{request.id}</if>
-        <if test="request.telephone != null and request.telephone != ''">AND telephone = #{request.telephone}</if>
-        <if test="request.inviteCode != null and request.inviteCode != ''">AND invite_code = #{request.inviteCode}</if>
-        <if test="request.nickName != null and request.nickName != ''">AND nick_name LIKE CONCAT('%', #{request.nickName}, '%')</if>
+        <include refid="UserQueryConditions"/>
+        <if test="request.maxResult != null">LIMIT #{request.maxResult}</if>
         ORDER BY created_at DESC
+    </select>
+
+    <select id="getByIds" resultMap="UserMap">
+        select <include refid="UserColumns"/> from t_user where deleted=0
+        AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY id DESC
     </select>
 </mapper>

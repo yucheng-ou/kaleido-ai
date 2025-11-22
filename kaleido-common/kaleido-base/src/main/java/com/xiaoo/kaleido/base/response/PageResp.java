@@ -24,22 +24,22 @@ public class PageResp<T> extends MultipleResp<T> {
     /**
      * 总页数
      */
-    private int totalPage;
+    private long totalPage;
 
     /**
      * 当前页
      */
-    private int pageNum;
+    private long pageNum;
 
     /**
      * 分页大小
      */
-    private int pageSize;
+    private long pageSize;
 
     /**
      * 数据总数
      */
-    private int total;
+    private long total;
 
     /**
      * 创建分页成功响应
@@ -51,7 +51,7 @@ public class PageResp<T> extends MultipleResp<T> {
      * @param <T>      数据类型
      * @return 分页响应对象
      */
-    public static <T> PageResp<T> success(List<T> list, int total, int pageNum, int pageSize) {
+    public static <T> PageResp<T> success(List<T> list, long total, long pageNum, long pageSize) {
         PageResp<T> pageResp = new PageResp<>();
         pageResp.setSuccess(true);
         pageResp.setTotal(total);
@@ -59,7 +59,7 @@ public class PageResp<T> extends MultipleResp<T> {
         pageResp.setPageSize(pageSize);
         pageResp.setList(list);
         //分页计算
-        pageResp.setTotalPage(pageSize == 0 ? 0 : (int) Math.ceil((double) total / pageSize));
+        pageResp.setTotalPage(pageSize == 0 ? 0 : (long) Math.ceil((double) total / pageSize));
         return pageResp;
     }
 }

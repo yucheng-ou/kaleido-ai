@@ -5,7 +5,7 @@
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-api</artifactId>

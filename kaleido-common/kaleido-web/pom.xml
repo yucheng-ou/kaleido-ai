@@ -5,7 +5,7 @@
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-web</artifactId>
@@ -25,7 +25,6 @@
             <artifactId>kaleido-base</artifactId>
         </dependency>
 
-        <!--    springboot web starter  -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

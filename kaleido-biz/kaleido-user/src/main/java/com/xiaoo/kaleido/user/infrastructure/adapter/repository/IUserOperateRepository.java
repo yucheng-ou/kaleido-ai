@@ -1,7 +1,11 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository;
 
+import com.xiaoo.kaleido.api.user.request.PageUserQueryRequest;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
+
+import java.util.List;
 
 /**
  * @author ouyucheng
@@ -57,16 +61,22 @@ public interface IUserOperateRepository {
      * @param request 用户查询请求参数
      * @return 用户列表
      */
-    java.util.List<User> listUsers(com.xiaoo.kaleido.api.user.request.UserQueryRequest request);
+    List<User> query(com.xiaoo.kaleido.api.user.request.UserQueryRequest request);
 
     /**
      * 分页查询用户列表
      * 根据查询条件和分页参数返回分页结果
      *
      * @param request 用户查询请求参数
-     * @param page 页码（从1开始）
-     * @param size 每页大小
      * @return 用户列表
      */
-    java.util.List<User> listUsers(com.xiaoo.kaleido.api.user.request.UserQueryRequest request, int page, int size);
+    PageResp<User> pageQuery(PageUserQueryRequest request);
+
+    /**
+     * 根据用户ID列表批量查询用户信息
+     *
+     * @param ids 用户ID列表
+     * @return 用户列表
+     */
+    List<User> getByIds(java.util.Set<Long> ids);
 }

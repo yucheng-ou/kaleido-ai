@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.web.config;
 import com.xiaoo.kaleido.web.handler.GlobalExceptionHandler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author ouyucheng
@@ -10,8 +11,11 @@ import org.springframework.context.annotation.Import;
  * @description
  */
 @AutoConfiguration
-@Import({GlobalExceptionHandler.class})
-public class WebAutoConfiguration {
+@Import({GlobalExceptionHandler.class,JacksonConfiguration.class})
+public class WebAutoConfiguration implements WebMvcConfigurer {
+
 
     //TODO 注册过滤器
+
+
 }

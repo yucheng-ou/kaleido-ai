@@ -21,3 +21,6 @@ spring:
         group: ${spring.application.name}
       config:
         group: ${spring.application.name}
+dubbo:
+  application:
+    qos-port: 22223  # 添加此行，指定新的 QOS 端口

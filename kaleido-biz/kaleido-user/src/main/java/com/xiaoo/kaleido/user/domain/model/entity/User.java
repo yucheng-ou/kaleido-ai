@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.user.domain.model.entity;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xiaoo.kaleido.api.user.constant.UserStatusEnum;
@@ -95,10 +96,10 @@ public class User extends BaseEntity {
         if (nickName != null) {
             this.nickName = nickName;
         }
-        if (avatar != null) {
+        if (StrUtil.isNotBlank(avatar)) {
             this.avatar = avatar;
         }
-        if (telephone != null) {
+        if (StrUtil.isNotBlank(telephone)) {
             this.telephone = telephone;
         }
         return this;
