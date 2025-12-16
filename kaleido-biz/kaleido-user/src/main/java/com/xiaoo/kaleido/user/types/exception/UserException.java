@@ -14,10 +14,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public class UserException  extends BizException {
+public class UserException extends BizException {
 
     public UserException(ErrorCode errorCode) {
         super(errorCode);
+    }
+
+    public UserException(String errorCode, String message) {
+        super(errorCode, message);
+    }
+
+    public static UserException of(String errorCode, String message) {
+        return new UserException(errorCode, message);
     }
 
 }

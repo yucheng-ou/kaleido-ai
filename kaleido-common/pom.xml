@@ -22,6 +22,8 @@
         <module>kaleido-doc</module>
         <module>kaleido-api</module>
         <module>kaleido-rpc</module>
+        <module>kaleido-distribute</module>
+        <module>kaleido-aop</module>
     </modules>
 
     <dependencies>

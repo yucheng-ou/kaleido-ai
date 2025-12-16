@@ -35,6 +35,11 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-distribute</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-api</artifactId>
         </dependency>
 
@@ -56,6 +61,11 @@
         <dependency>
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-aop</artifactId>
         </dependency>
 
         <dependency>
