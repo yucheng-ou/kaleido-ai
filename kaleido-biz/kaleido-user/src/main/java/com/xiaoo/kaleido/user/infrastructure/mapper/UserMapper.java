@@ -1,76 +1,80 @@
 package com.xiaoo.kaleido.user.infrastructure.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xiaoo.kaleido.api.user.request.PageUserQueryRequest;
-import com.xiaoo.kaleido.api.user.request.UserQueryRequest;
-import com.xiaoo.kaleido.user.domain.model.entity.User;
+import com.xiaoo.kaleido.user.infrastructure.dao.po.UserPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Set;
+import org.apache.ibatis.annotations.Select;
 
 /**
- * 用户数据访问映射接口
- *
- * <p>负责用户实体的数据库操作，包括基本的CRUD操作和自定义查询方法</p>
+ * 用户Mapper接口
  *
  * @author ouyucheng
- * @date 2025/11/18
- * @since 1.0.0
+ * @date 2025/12/16
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends BaseMapper<UserPO> {
 
     /**
-     * 根据用户ID查询用户信息
+     * 根据用户ID查找用户
      *
-     * @param id 用户唯一标识
-     * @return 用户实体对象，如果不存在则返回null
+     * @param userId 用户ID（业务主键）
+     * @return 用户持久化对象
      */
-    User getById(@Param("id") Long id);
+    @Select("SELECT * FROM user WHERE user_id = #{userId} AND deleted = 0")
+    UserPO findByUserId(@Param("userId") String userId);
 
     /**
-     * 根据邀请码查询用户信息
+     * 根据手机号查找用户
      *
-     * @param inviteCode 用户邀请码
-     * @return 用户实体对象，如果不存在则返回null
+     * @param telephone 手机号
+     * @return 用户持久化对象
      */
-    User getByInviteCode(@Param("id") String inviteCode);
+    @Select("SELECT * FROM user WHERE telephone = #{telephone} AND deleted = 0")
+    UserPO findByTelephone(@Param("telephone") String telephone);
 
     /**
-     * 根据手机号查询用户信息
+     * 根据邀请码查找用户
      *
-     * @param telephone 用户手机号
-     * @return 用户实体对象，如果不存在则返回null
+     * @param inviteCode 邀请码
+     * @return 用户持久化对象
      */
-    User getByTelephone(@Param("id") String telephone);
+    @Select("SELECT * FROM user WHERE invite_code = #{inviteCode} AND deleted = 0")
+    UserPO findByInviteCode(@Param("inviteCode") String inviteCode);
 
     /**
-     * 查询用户列表（不分页）
-     * 根据查询条件返回匹配的用户列表
+     * 检查用户ID是否存在
      *
-     * @param request 用户查询请求参数
-     * @return 用户列表
+     * @param userId 用户ID（业务主键）
+     * @return 是否存在
      */
-    List<User> query(@Param("request") UserQueryRequest request);
+    @Select("SELECT COUNT(*) FROM user WHERE user_id = #{userId} AND deleted = 0")
+    boolean existsByUserId(@Param("userId") String userId);
 
     /**
-     * 分页查询用户列表
-     * 使用MyBatis Plus分页插件进行分页查询
+     * 检查手机号是否存在
      *
-     * @param page    MyBatis Plus分页对象
-     * @param request 用户查询请求参数
-     * @return 分页结果
+     * @param telephone 手机号
+     * @return 是否存在
      */
-    Page<User> pageQuery(Page<User> page, @Param("request") PageUserQueryRequest request);
+    @Select("SELECT COUNT(*) FROM user WHERE telephone = #{telephone} AND deleted = 0")
+    boolean existsByTelephone(@Param("telephone") String telephone);
 
     /**
-     * 根据用户ID列表批量查询用户信息
+     * 检查邀请码是否存在
      *
-     * @param ids 用户ID列表
-     * @return 用户列表
+     * @param inviteCode 邀请码
+     * @return 是否存在
      */
-    List<User> getByIds(@Param("ids") Set<Long> ids);
+    @Select("SELECT COUNT(*) FROM user WHERE invite_code = #{inviteCode} AND deleted = 0")
+    boolean existsByInviteCode(@Param("inviteCode") String inviteCode);
+
+    /**
+     * 检查昵称是否存在
+     *
+     * @param nickName 昵称
+     * @return 是否存在
+     */
+    @Select("SELECT COUNT(*) FROM user WHERE nick_name = #{nickName} AND deleted = 0")
+    boolean existsByNickName(@Param("nickName") String nickName);
 }

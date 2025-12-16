@@ -1,108 +1,211 @@
 package com.xiaoo.kaleido.user.domain.model.entity;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.api.user.constant.UserStatusEnum;
-import com.xiaoo.kaleido.ds.entity.BaseEntity;
-import lombok.*;
+import com.xiaoo.kaleido.base.model.entity.BaseEntity;
+import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
+import com.xiaoo.kaleido.user.domain.constant.UserStatus;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+import java.util.Date;
 
 /**
+ * 用户实体
+ *
  * @author ouyucheng
- * @date 2025/11/18
- * @description
+ * @date 2025/12/16
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-@Builder
-@TableName("t_user")
 public class User extends BaseEntity {
+
+    /**
+     * 手机号（唯一）
+     */
+    private String telephone;
+
+    /**
+     * 密码哈希值
+     */
+    private String passwordHash;
+
     /**
      * 昵称
      */
     private String nickName;
 
     /**
-     * 密码（hash）
+     * 用户状态
      */
-    private String passwordHash;
+    private UserStatus status;
 
     /**
-     * 用户状态 活跃、冻结
-     */
-    private UserStatusEnum status;
-
-    /**
-     * 邀请码
+     * 用户邀请码（唯一）
      */
     private String inviteCode;
 
     /**
-     * 邀请人ID
+     * 邀请人ID（可为空）
      */
-    private Long inviterId;
+    private String inviterId;
 
     /**
-     * 用户手机号
+     * 最后登录时间
      */
-    private String telephone;
-
+    private Date lastLoginTime;
 
     /**
-     * 用户头像URL地址
+     * 头像URL
      */
-    private String avatar;
+    private String avatarUrl;
 
     /**
-     * 对密码进行hash计算 使用md5
+     * 创建用户实体
      *
-     * @param password 密码原文
-     * @return 密码hash值
+     * @param telephone   手机号
+     * @param passwordHash 密码哈希
+     * @param nickName    昵称
+     * @param inviteCode  邀请码
+     * @param inviterId   邀请人ID（可选）
+     * @return 用户实体
      */
-    public static String hashPassword(String password) {
-        return DigestUtil.md5Hex(password);
-    }
+    public static User create(String telephone, String passwordHash,
+                             String nickName, String inviteCode, String inviterId) {
 
-    /**
-     * 注册用户
-     * @param telephone 手机号
-     * @param inviteCode 邀请码
-     * @param nickName 用户昵称
-     * @param password 用户面膜
-     * @param inviterId 邀请人id
-     * @return 用户信息实体对象
-     */
-    public static User register(String telephone, String inviteCode, String nickName, String password, Long inviterId) {
-        return User.builder()
+        User user = User.builder()
                 .telephone(telephone)
-                .inviteCode(inviteCode)
+                .passwordHash(passwordHash)
                 .nickName(nickName)
-                .passwordHash(hashPassword(password))
+                .inviteCode(inviteCode)
                 .inviterId(inviterId)
-                .status(UserStatusEnum.ACTIVE)
                 .build();
+        user.setId(SnowflakeUtil.newSnowflakeId());
+        user.setStatus(UserStatus.ACTIVE);
+        user.setCreatedAt(new Date());
+        return user;
     }
 
     /**
-     * 更新用户基本信息
-     * @param nickName 新昵称（可选，为null时不更新）
-     * @param avatar 新头像URL（可选，为null时不更新）
-     * @param telephone 新手机号（可选，为null时不更新）
-     * @return 当前用户实体对象（用于链式调用）
+     * 修改昵称
+     *
+     * @param newNickName 新昵称
+     * @throws IllegalStateException 如果用户状态不允许修改
      */
-    public User updateBasicInfo(String nickName, String avatar, String telephone) {
-        if (nickName != null) {
-            this.nickName = nickName;
+    public void changeNickName(String newNickName) {
+        if (!status.canModify()) {
+            throw new IllegalStateException("用户当前状态不允许修改信息");
         }
-        if (StrUtil.isNotBlank(avatar)) {
-            this.avatar = avatar;
-        }
-        if (StrUtil.isNotBlank(telephone)) {
-            this.telephone = telephone;
-        }
-        return this;
+        this.nickName = newNickName;
     }
 
+    /**
+     * 冻结用户
+     *
+     * @throws IllegalStateException 如果用户状态不允许冻结
+     */
+    public void freeze() {
+        if (status.isDeleted()) {
+            throw new IllegalStateException("已删除的用户不能冻结");
+        }
+        if (status.isFrozen()) {
+            throw new IllegalStateException("用户已经是冻结状态");
+        }
+        this.status = UserStatus.FROZEN;
+    }
+
+    /**
+     * 解冻用户
+     *
+     * @throws IllegalStateException 如果用户状态不允许解冻
+     */
+    public void unfreeze() {
+        if (status.isDeleted()) {
+            throw new IllegalStateException("已删除的用户不能解冻");
+        }
+        if (!status.isFrozen()) {
+            throw new IllegalStateException("只有冻结状态的用户才能解冻");
+        }
+        this.status = UserStatus.ACTIVE;
+    }
+
+    /**
+     * 软删除用户
+     *
+     * @throws IllegalStateException 如果用户状态不允许删除
+     */
+    public void delete() {
+        if (status.isDeleted()) {
+            throw new IllegalStateException("用户已经是删除状态");
+        }
+        this.status = UserStatus.DELETED;
+    }
+
+    /**
+     * 验证密码
+     *
+     * @param passwordHash 待验证的密码哈希
+     * @return 是否匹配
+     */
+    public boolean verifyPassword(String passwordHash) {
+        return this.passwordHash.equals(passwordHash);
+    }
+
+    /**
+     * 更新最后登录时间
+     */
+    public void updateLastLoginTime() {
+        this.lastLoginTime = new Date();
+    }
+
+    /**
+     * 更新头像
+     *
+     * @param avatarUrl 头像URL
+     * @throws IllegalStateException 如果用户状态不允许修改
+     */
+    public void updateAvatar(String avatarUrl) {
+        if (!status.canModify()) {
+            throw new IllegalStateException("用户当前状态不允许修改信息");
+        }
+        this.avatarUrl = avatarUrl;
+    }
+
+    /**
+     * 判断用户是否可操作
+     *
+     * @return 是否可操作
+     */
+    public boolean isOperable() {
+        return status.isOperable();
+    }
+
+    /**
+     * 判断用户是否活跃
+     *
+     * @return 是否活跃
+     */
+    public boolean isActive() {
+        return status.isActive();
+    }
+
+    /**
+     * 判断用户是否冻结
+     *
+     * @return 是否冻结
+     */
+    public boolean isFrozen() {
+        return status.isFrozen();
+    }
+
+    /**
+     * 判断用户是否删除
+     *
+     * @return 是否删除
+     */
+    public boolean isDeleted() {
+        return status.isDeleted();
+    }
 }
