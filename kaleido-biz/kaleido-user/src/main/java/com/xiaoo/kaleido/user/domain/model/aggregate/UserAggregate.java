@@ -130,6 +130,11 @@ public class UserAggregate {
         addOperateStream(UserOperateType.UPDATE_AVATAR, "更新头像");
     }
 
+    public void updateLastLoginTime(){
+        user.updateLastLoginTime();
+        addOperateStream(UserOperateType.LOGIN, "登录");
+    }
+
     /**
      * 验证密码
      *

@@ -3,10 +3,8 @@ package com.xiaoo.kaleido.user.domain.model.entity;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.user.domain.constant.UserStatus;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
@@ -65,27 +63,25 @@ public class User extends BaseEntity {
     /**
      * 创建用户实体
      *
-     * @param telephone   手机号
+     * @param telephone    手机号
      * @param passwordHash 密码哈希
-     * @param nickName    昵称
-     * @param inviteCode  邀请码
-     * @param inviterId   邀请人ID（可选）
+     * @param nickName     昵称
+     * @param inviteCode   邀请码
+     * @param inviterId    邀请人ID（可选）
      * @return 用户实体
      */
     public static User create(String telephone, String passwordHash,
-                             String nickName, String inviteCode, String inviterId) {
+                              String nickName, String inviteCode, String inviterId) {
 
-        User user = User.builder()
+        return User.builder()
+                .id(SnowflakeUtil.newSnowflakeId())
                 .telephone(telephone)
                 .passwordHash(passwordHash)
                 .nickName(nickName)
                 .inviteCode(inviteCode)
                 .inviterId(inviterId)
+                .status(UserStatus.ACTIVE)
                 .build();
-        user.setId(SnowflakeUtil.newSnowflakeId());
-        user.setStatus(UserStatus.ACTIVE);
-        user.setCreatedAt(new Date());
-        return user;
     }
 
     /**

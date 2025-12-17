@@ -36,19 +36,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public UserAggregate save(UserAggregate userAggregate) {
+
+        //保存用户
         User user = userAggregate.getUser();
         UserPO userPO = convertToPO(user);
-        
-        // 根据业务主键userId查找现有记录
-        UserPO existingPO = userMapper.findByUserId(user.getId());
-        if (existingPO != null) {
-            // 设置数据库主键id，以便更新
-            userPO.setId(existingPO.getId());
-            userMapper.updateById(userPO);
-        } else {
-            userMapper.insert(userPO);
-        }
-        
+        userMapper.insert(userPO);
+
         // 保存操作流水
         List<UserOperateStream> streams = userAggregate.getAndClearOperateStreams();
         for (UserOperateStream stream : streams) {

@@ -31,7 +31,6 @@ public class UserCommandService {
      * @param command 创建用户命令
      * @return 用户ID
      */
-    @Transactional
     public String createUser(AddUserCommand command) {
         // 验证手机号是否已存在
         if (userRepository.existsByTelephone(command.getTelephone())) {
@@ -65,11 +64,10 @@ public class UserCommandService {
      *
      * @param command 修改昵称命令
      */
-    @Transactional
     public void changeNickName(ChangeNickNameCommand command) {
         // 权限验证：用户只能修改自己的信息
         if (!command.getUserId().equals(command.getOperatorId())) {
-            throw UserException.of(UserErrorCode.USER_OPERATE_FAILED);
+            throw UserException.of(UserErrorCode.USER_OPERATE_FAILED, "只能修改自己的昵称");
         }
 
         // 验证昵称是否已存在
@@ -94,7 +92,6 @@ public class UserCommandService {
      *
      * @param command 冻结用户命令
      */
-    @Transactional
     public void freezeUser(FreezeUserCommand command) {
         // 权限验证：用户只能冻结自己（或管理员权限，这里简化处理）
         if (!command.getUserId().equals(command.getOperatorId())) {
@@ -115,7 +112,6 @@ public class UserCommandService {
      *
      * @param command 解冻用户命令
      */
-    @Transactional
     public void unfreezeUser(UnfreezeUserCommand command) {
         // 权限验证：用户只能解冻自己
         if (!command.getUserId().equals(command.getOperatorId())) {
@@ -137,7 +133,6 @@ public class UserCommandService {
      * @param userId     用户ID
      * @param operatorId 操作者ID
      */
-    @Transactional
     public void deleteUser(String userId, String operatorId) {
         // 权限验证：用户只能删除自己
         if (!userId.equals(operatorId)) {
@@ -160,7 +155,6 @@ public class UserCommandService {
      * @param avatarUrl  头像URL
      * @param operatorId 操作者ID
      */
-    @Transactional
     public void updateAvatar(String userId, String avatarUrl, String operatorId) {
         // 权限验证：用户只能更新自己的头像
         if (!userId.equals(operatorId)) {
@@ -177,43 +171,31 @@ public class UserCommandService {
     }
 
     /**
-     * 更新用户信息
+     * 记录用户登录
+     * - 更新用户最后登录时间
+     * - 记录登录日志
      *
-     * @param command 更新用户信息命令
+     * @param userId 用户ID
      */
     @Transactional
-    public void updateUserInfo(UpdateUserInfoCommand command) {
-        // 权限验证：用户只能修改自己的信息
-        if (!command.getUserId().equals(command.getOperatorId())) {
-            throw UserException.of(UserErrorCode.USER_OPERATE_FAILED);
-        }
+    public void login(String userId) {
+        // 调用领域服务更新最后登录时间
+        UserAggregate userAggregate = userDomainService.updateLastLoginTime(userId);
 
-        // 获取用户聚合根
-        UserAggregate userAggregate = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_EXIST));
-
-        // 更新昵称（如果提供）
-        if (command.getNickName() != null && !command.getNickName().trim().isEmpty()) {
-            // 验证昵称是否已存在（排除自己）
-            if (userRepository.existsByNickNameAndIdNot(command.getNickName(), command.getUserId())) {
-                throw new UserException(UserErrorCode.NICK_NAME_EXIST);
-            }
-            userAggregate = userDomainService.changeNickName(command.getUserId(), command.getNickName());
-        }
-
-        // 更新头像（如果提供）
-        if (command.getAvatarUrl() != null && !command.getAvatarUrl().trim().isEmpty()) {
-            userAggregate = userDomainService.updateAvatar(command.getUserId(), command.getAvatarUrl());
-        }
-
-        // 更新扩展信息（如果提供）
-        if (command.getExtraInfo() != null && !command.getExtraInfo().trim().isEmpty()) {
-            userAggregate = userDomainService.updateExtraInfo(command.getUserId(), command.getExtraInfo());
-        }
-
-        // 保存用户
+        // 保存更新后的用户
         userRepository.save(userAggregate);
 
-        log.info("用户信息更新成功，用户ID: {}", command.getUserId());
+        log.info("用户登录记录成功，userId={}", userId);
+    }
+
+    /**
+     * 记录用户登出
+     * - 记录登出日志
+     *
+     * @param userId 用户ID
+     */
+    public void logout(String userId) {
+        // 仅记录登出日志，无状态变更
+        log.info("用户登出记录成功，userId={}", userId);
     }
 }

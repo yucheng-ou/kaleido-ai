@@ -28,5 +28,25 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-doc</artifactId>
         </dependency>
+        <!-- Dubbo API依赖（provided scope，仅用于注解） -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 验证API (Spring Boot 3使用Jakarta EE 9+) -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
