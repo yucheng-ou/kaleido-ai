@@ -23,16 +23,6 @@ public interface UserConvertor {
     /**
      * 将UserPO转换为UserDTO
      */
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "telephone", target = "telephone")
-    @Mapping(source = "nickName", target = "nickName")
-    @Mapping(source = "status", target = "status")
-    @Mapping(source = "inviteCode", target = "inviteCode")
-    @Mapping(source = "inviterId", target = "inviterId")
-    @Mapping(source = "lastLoginTime", target = "lastLoginTime")
-    @Mapping(source = "avatarUrl", target = "avatarUrl")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
     UserDTO toDTO(UserPO userPO);
 
     /**

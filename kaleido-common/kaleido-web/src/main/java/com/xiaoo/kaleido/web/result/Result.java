@@ -56,8 +56,7 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(BizException bizException) {
-        ErrorCode errorCode = bizException.getErrorCode();
-        return error(errorCode);
+        return error(bizException.getErrorCode(), bizException.getMessage());
     }
 
     public static <T> Result<T> error(ErrorCode errorCode) {

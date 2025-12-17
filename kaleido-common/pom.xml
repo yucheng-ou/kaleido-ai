@@ -24,6 +24,7 @@
         <module>kaleido-rpc</module>
         <module>kaleido-distribute</module>
         <module>kaleido-aop</module>
+        <module>kaleido-sms</module>
     </modules>
 
     <dependencies>

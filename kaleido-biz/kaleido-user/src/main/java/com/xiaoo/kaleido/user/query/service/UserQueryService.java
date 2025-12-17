@@ -1,7 +1,10 @@
 package com.xiaoo.kaleido.user.query.service;
 
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.constant.UserStatus;
 import com.xiaoo.kaleido.user.query.dto.UserDTO;
+import com.xiaoo.kaleido.user.query.request.PageUserQueryRequest;
+import com.xiaoo.kaleido.user.query.request.UserQueryRequest;
 
 import java.util.List;
 
@@ -125,7 +128,7 @@ public interface UserQueryService {
      * @param queryRequest 查询条件
      * @return 用户DTO列表
      */
-    List<UserDTO> queryUsers(com.xiaoo.kaleido.user.query.request.UserQueryRequest queryRequest);
+    List<UserDTO> queryUsers(UserQueryRequest queryRequest);
 
     /**
      * 分页查询用户列表
@@ -133,5 +136,5 @@ public interface UserQueryService {
      * @param queryRequest 分页查询条件
      * @return 分页结果
      */
-    com.xiaoo.kaleido.base.response.PageResp<UserDTO> pageQueryUsers(com.xiaoo.kaleido.user.query.request.PageUserQueryRequest queryRequest);
+    PageResp<UserDTO> pageQueryUsers(PageUserQueryRequest queryRequest);
 }

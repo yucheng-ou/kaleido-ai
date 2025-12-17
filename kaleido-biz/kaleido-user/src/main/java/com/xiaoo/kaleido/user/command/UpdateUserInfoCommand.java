@@ -1,6 +1,9 @@
 package com.xiaoo.kaleido.user.command;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 更新用户信息命令
@@ -9,6 +12,9 @@ import lombok.Data;
  * @date 2025/12/16
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UpdateUserInfoCommand {
 
     /**

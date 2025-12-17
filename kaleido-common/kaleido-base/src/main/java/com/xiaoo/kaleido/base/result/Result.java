@@ -61,13 +61,13 @@ public class Result<T> implements Serializable {
         return new Result<>(ResponseCode.SUCCESS.name(), ResponseCode.SUCCESS.name(), true, data);
     }
 
-    public static <T> Result<T> error(BizException bizException) {
-        ErrorCode errorCode = bizException.getErrorCode();
-        return error(errorCode);
-    }
 
     public static <T> Result<T> error(ErrorCode errorCode) {
         return error(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    public static <T> Result<T> error(ErrorCode errorCode, String errorMsg) {
+        return new Result<>(errorCode.getCode(), errorMsg, false);
     }
 
     public static <T> Result<T> error(String errorCode, String errorMsg) {

@@ -41,4 +41,8 @@ public class BizException extends RuntimeException {
     public static BizException of(String errorCode, String errorMessage) {
         return new BizException(errorCode, errorMessage);
     }
+
+    public static BizException of(ErrorCode errorCode, String errorMessage) {
+        return new BizException(errorCode.getCode(), errorMessage);
+    }
 }

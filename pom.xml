@@ -23,6 +23,7 @@
         <module>kaleido-gateway</module>
         <module>kaleido-auth</module>
         <module>kaleido-biz</module>
+        <module>kaleido-notice</module>
     </modules>
 
     <properties>
@@ -222,6 +223,12 @@
             <dependency>
                 <groupId>com.xiaoo</groupId>
                 <artifactId>kaleido-aop</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-sms</artifactId>
                 <version>${kaleido.version}</version>
             </dependency>
 
