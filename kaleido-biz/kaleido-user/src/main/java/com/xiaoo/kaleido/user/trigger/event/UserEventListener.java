@@ -1,19 +1,15 @@
 package com.xiaoo.kaleido.user.trigger.event;
 
-import com.xiaoo.kaleido.user.domain.adapter.port.UserOperateStreamRepository;
+import com.xiaoo.kaleido.user.domain.adapter.repository.UserOperateStreamRepository;
 import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
 import com.xiaoo.kaleido.user.domain.event.UserCreatedEvent;
 import com.xiaoo.kaleido.user.domain.event.UserNickNameChangedEvent;
 import com.xiaoo.kaleido.user.domain.event.UserStatusChangedEvent;
-import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateStreamAggregate;
-import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * 用户事件监听器

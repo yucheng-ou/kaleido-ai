@@ -1,0 +1,24 @@
+package com.xiaoo.kaleido.notice.domain.adapter.port;
+
+
+import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
+
+/**
+ * 短信服务接口（领域层定义）
+ * 负责短信发送功能
+ *
+ * @author ouyucheng
+ * @date 2025/12/18
+ */
+public interface INoticeAdapterService {
+
+    /**
+     * 发送短信
+     *
+     * @param noticeType 通知类型
+     * @param target 通知目标
+     * @param content 通知内容
+     * @return 是否发送成功
+     */
+    boolean sendNotice(NoticeTypeEnum noticeType, String target, String content);
+}

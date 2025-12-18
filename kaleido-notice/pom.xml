@@ -28,5 +28,20 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sms</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-distribute</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-ds</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-redis</artifactId>
+        </dependency>
     </dependencies>
 </project>

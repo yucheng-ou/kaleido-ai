@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.user.domain.adapter.port;
+package com.xiaoo.kaleido.user.domain.adapter.repository;
 
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 
