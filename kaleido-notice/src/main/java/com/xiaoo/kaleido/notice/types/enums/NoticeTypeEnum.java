@@ -31,8 +31,4 @@ public enum NoticeTypeEnum {
         this.description = description;
     }
 
-    public static String geta(){
-        return "xxx";
-    }
-
 }

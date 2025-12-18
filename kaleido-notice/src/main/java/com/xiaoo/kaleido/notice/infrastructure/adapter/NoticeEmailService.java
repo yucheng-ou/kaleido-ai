@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * @date 2025/12/18
  * @description
  */
-@Service
+@Service("noticeEmailService")
 @RequiredArgsConstructor
 public class NoticeEmailService extends AbstractNoticeAdapterService{
     

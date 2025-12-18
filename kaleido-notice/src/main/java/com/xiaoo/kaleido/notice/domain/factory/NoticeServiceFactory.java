@@ -15,6 +15,14 @@ import java.util.Map;
 @Component
 public class NoticeServiceFactory {
 
+    public static Map<String, String> beanNameMaps;
+
+    static {
+        for (NoticeTypeEnum noticeTypeEnum : NoticeTypeEnum.values()) {
+            beanNameMaps.put(noticeTypeEnum.name(), "notice" + noticeTypeEnum.name() + "Service");
+        }
+    }
+
     @Resource
     private Map<String, INoticeAdapterService> noticeAdapterServiceMap;
 
