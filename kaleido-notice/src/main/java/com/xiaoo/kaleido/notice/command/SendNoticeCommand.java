@@ -1,6 +1,6 @@
-package com.xiaoo.kaleido.sms.command;
+package com.xiaoo.kaleido.notice.command;
 
-import com.xiaoo.kaleido.sms.types.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
 import lombok.Data;
 
 /**

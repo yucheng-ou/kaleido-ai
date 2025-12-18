@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.sms.types.enums;
+package com.xiaoo.kaleido.notice.types.enums;
 
 import lombok.Getter;
 
