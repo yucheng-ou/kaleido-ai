@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * @date 2025/12/18
  * @description
  */
-@Service
+@Service("noticeWechatService")
 @RequiredArgsConstructor
 public class NoticeWeChatService extends AbstractNoticeAdapterService{
 

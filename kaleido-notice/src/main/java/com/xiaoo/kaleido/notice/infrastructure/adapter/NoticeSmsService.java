@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * @date 2025/12/18
  * @description
  */
-@Service
+@Service("noticeSmsService")
 @RequiredArgsConstructor
 public class NoticeSmsService extends AbstractNoticeAdapterService{
 
