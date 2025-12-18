@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.sms.command;
+package com.xiaoo.kaleido.notice.command;
 
 import lombok.Data;
 

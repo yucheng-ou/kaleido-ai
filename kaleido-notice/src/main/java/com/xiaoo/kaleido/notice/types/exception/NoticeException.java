@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.sms.types.exception;
+package com.xiaoo.kaleido.notice.types.exception;
 
 import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.base.exception.ErrorCode;
