@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.notice;
+package com.xiaoo.kaleido.sms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  */
 
-@SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.notice")
+@SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.sms")
 public class KaleidoNoticeApplication {
 
     public static void main(String[] args) {

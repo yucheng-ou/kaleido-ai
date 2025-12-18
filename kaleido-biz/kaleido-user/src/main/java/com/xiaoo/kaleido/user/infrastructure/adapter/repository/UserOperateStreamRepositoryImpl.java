@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository;
 
-import com.xiaoo.kaleido.user.domain.adapter.port.UserOperateStreamRepository;
+import com.xiaoo.kaleido.user.domain.adapter.repository.UserOperateStreamRepository;
 import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserOperateStreamAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;

@@ -1,6 +1,7 @@
-package com.xiaoo.kaleido.notice.types.exception;
+package com.xiaoo.kaleido.sms.types.exception;
 
 import com.xiaoo.kaleido.base.exception.BizException;
+import com.xiaoo.kaleido.base.exception.ErrorCode;
 
 /**
  * 通知服务业务异常
@@ -10,40 +11,16 @@ import com.xiaoo.kaleido.base.exception.BizException;
  */
 public class NoticeException extends BizException {
 
-    public NoticeException(String message) {
-        super(message);
+    public NoticeException(ErrorCode errorCode) {
+        super(errorCode);
     }
 
-    public NoticeException(String code, String message) {
-        super(code, message);
+    public NoticeException(String errorCode, String message) {
+        super(errorCode, message);
     }
 
-    public NoticeException(String message, Throwable cause) {
-        super(message, cause);
+    public static NoticeException of(String errorCode, String message) {
+        return new NoticeException(errorCode, message);
     }
 
-    public NoticeException(String code, String message, Throwable cause) {
-        super(code, message, cause);
-    }
-
-    /**
-     * 创建通知异常
-     *
-     * @param errorCode 错误码
-     * @return 通知异常
-     */
-    public static NoticeException of(NoticeErrorCode errorCode) {
-        return new NoticeException(errorCode.getCode(), errorCode.getMessage());
-    }
-
-    /**
-     * 创建通知异常
-     *
-     * @param errorCode 错误码
-     * @param message   错误信息
-     * @return 通知异常
-     */
-    public static NoticeException of(NoticeErrorCode errorCode, String message) {
-        return new NoticeException(errorCode.getCode(), message);
-    }
 }

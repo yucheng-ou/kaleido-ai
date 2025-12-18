@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.notice.types.exception;
+package com.xiaoo.kaleido.sms.types.exception;
 
 import com.xiaoo.kaleido.base.exception.ErrorCode;
 import lombok.Getter;
@@ -27,8 +27,7 @@ public enum NoticeErrorCode implements ErrorCode {
     VERIFICATION_CODE_MAX_ATTEMPTS("VERIFICATION_CODE_MAX_ATTEMPTS", "验证码验证次数超限"),
     
     // 参数验证错误
-    MOBILE_EMPTY("MOBILE_EMPTY", "手机号不能为空"),
-    MOBILE_FORMAT_ERROR("MOBILE_FORMAT_ERROR", "手机号格式错误"),
+    TARGET_USER_EMPTY("TARGET_USER_EMPTY", "目标用户不能为空"),
     BUSINESS_TYPE_EMPTY("BUSINESS_TYPE_EMPTY", "业务类型不能为空"),
     NOTICE_CONTENT_EMPTY("NOTICE_CONTENT_EMPTY", "通知内容不能为空"),
     NOTICE_TARGET_EMPTY("NOTICE_TARGET_EMPTY", "通知目标不能为空"),

@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.user.command;
 
-import com.xiaoo.kaleido.user.domain.adapter.port.UserRepository;
+import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.service.UserDomainService;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
