@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
 public abstract class AbstractNoticeAdapterService implements INoticeAdapterService {
 
     @Override
-    public boolean sendNotice(NoticeTypeEnum noticeType, String target, String content) {
+    public boolean sendNotice(String target, String content) {
         try {
-            log.info("{}: 接收人={}, 内容长度={}", noticeType.getDescription(), target, content.length());
+            log.info("接收人={}, 内容长度={}",target, content.length());
             return sendNoticeByType(target, content);
         } catch (Exception e) {
-            log.error("{}失败: 接收人={}, 错误={}", noticeType.getDescription(), target, e.getMessage(), e);
+            log.error("接收人={}, 错误={}",target, e.getMessage(), e);
             return false;
         }
     }

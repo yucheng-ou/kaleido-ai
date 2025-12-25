@@ -15,10 +15,9 @@ public interface INoticeAdapterService {
     /**
      * 发送短信
      *
-     * @param noticeType 通知类型
-     * @param target 通知目标
+     * @param target  通知目标
      * @param content 通知内容
      * @return 是否发送成功
      */
-    boolean sendNotice(NoticeTypeEnum noticeType, String target, String content);
+    boolean sendNotice(String target, String content);
 }

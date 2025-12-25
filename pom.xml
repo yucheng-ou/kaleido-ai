@@ -24,6 +24,7 @@
         <module>kaleido-auth</module>
         <module>kaleido-biz</module>
         <module>kaleido-notice</module>
+        <module>kaleido-admin</module>
     </modules>
 
     <properties>

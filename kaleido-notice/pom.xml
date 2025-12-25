@@ -41,6 +41,21 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-rpc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-redis</artifactId>
         </dependency>
     </dependencies>
