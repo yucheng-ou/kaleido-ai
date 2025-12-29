@@ -1,13 +1,19 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
+import com.xiaoo.kaleido.user.infrastructure.adapter.repository.convertor.UserConvertor;
+import com.xiaoo.kaleido.user.infrastructure.adapter.repository.convertor.UserOperateStreamConvertor;
 import com.xiaoo.kaleido.user.infrastructure.dao.po.UserPO;
 import com.xiaoo.kaleido.user.infrastructure.dao.po.UserOperateStreamPO;
-import com.xiaoo.kaleido.user.infrastructure.mapper.UserMapper;
-import com.xiaoo.kaleido.user.infrastructure.mapper.UserOperateStreamMapper;
+import com.xiaoo.kaleido.user.infrastructure.dao.UserDao;
+import com.xiaoo.kaleido.user.infrastructure.dao.UserOperateStreamDao;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
 import lombok.RequiredArgsConstructor;
@@ -30,163 +36,133 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    private final UserMapper userMapper;
-    private final UserOperateStreamMapper userOperateStreamMapper;
+    private final UserDao userDao;
+    private final UserOperateStreamDao userOperateStreamDao;
 
     @Override
-    @Transactional
-    public UserAggregate save(UserAggregate userAggregate) {
-
-        //保存用户
+    @Transactional(rollbackFor = Exception.class)
+    public void save(UserAggregate userAggregate) {
+        // 保存用户
         User user = userAggregate.getUser();
-        UserPO userPO = convertToPO(user);
-        userMapper.insert(userPO);
+        UserPO userPO = UserConvertor.INSTANCE.toPO(user);
+        userDao.insert(userPO);
 
-        // 保存操作流水
-        List<UserOperateStream> streams = userAggregate.getAndClearOperateStreams();
-        for (UserOperateStream stream : streams) {
-            UserOperateStreamPO streamPO = convertToPO(stream);
-            userOperateStreamMapper.insert(streamPO);
-        }
-        
-        return userAggregate;
+        //保存用户操作流水
+        batchSaveOperateStream(userAggregate.getOperateStreams());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(UserAggregate userAggregate) {
+        // 修改用户信息
+        User user = userAggregate.getUser();
+        UserPO userPO = UserConvertor.INSTANCE.toPO(user);
+        userDao.updateById(userPO);
+
+        //保存用户操作流水
+        batchSaveOperateStream(userAggregate.getOperateStreams());
     }
 
     @Override
     public Optional<UserAggregate> findById(String id) {
-        return Optional.ofNullable(userMapper.findByUserId(id))
-                .map(this::convertToAggregate);
+        UserPO userPO = userDao.findByUserId(id);
+        if (userPO == null) {
+            return Optional.empty();
+        }
+        
+        // 转换用户实体
+        User user = UserConvertor.INSTANCE.toEntity(userPO);
+        
+        // 创建聚合根（不加载操作流水，按需加载）
+        UserAggregate aggregate = UserAggregate.create(user);
+        return Optional.of(aggregate);
+    }
+
+    @Override
+    public Optional<UserAggregate> findUserAndStreamById(String id) {
+        UserPO userPO = userDao.findByUserId(id);
+        if (userPO == null) {
+            return Optional.empty();
+        }
+        
+        // 转换用户实体
+        User user = UserConvertor.INSTANCE.toEntity(userPO);
+        
+        // 加载操作流水（最近100条）
+        List<UserOperateStreamPO> streamPOs = userOperateStreamDao.findByUserIdWithLimit(userPO.getUserId(), 100);
+        List<UserOperateStream> streams = streamPOs.stream()
+                .map(UserOperateStreamConvertor.INSTANCE::toEntity)
+                .toList();
+
+        UserAggregate aggregate = UserAggregate.create(user);
+        aggregate.getOperateStreams().addAll(streams);
+        return Optional.of(aggregate);
     }
 
     @Override
     public Optional<UserAggregate> findByTelephone(String telephone) {
-        UserPO po = userMapper.findByTelephone(telephone);
-        return po != null ? Optional.of(convertToAggregate(po)) : Optional.empty();
+        UserPO po = userDao.findByTelephone(telephone);
+        return po != null ? Optional.of(UserAggregate.create(UserConvertor.INSTANCE.toEntity(po))) : Optional.empty();
     }
 
     @Override
     public Optional<UserAggregate> findByInviteCode(String inviteCode) {
-        UserPO po = userMapper.findByInviteCode(inviteCode);
-        return po != null ? Optional.of(convertToAggregate(po)) : Optional.empty();
+        UserPO po = userDao.findByInviteCode(inviteCode);
+        return po != null ? Optional.of(UserAggregate.create(UserConvertor.INSTANCE.toEntity(po))) : Optional.empty();
     }
 
     @Override
     public boolean existsByTelephone(String telephone) {
-        return userMapper.existsByTelephone(telephone);
+        return userDao.existsByTelephone(telephone);
     }
 
     @Override
     public boolean existsByInviteCode(String inviteCode) {
-        return userMapper.existsByInviteCode(inviteCode);
-    }
-
-    @Override
-    public boolean existsByNickName(String nickName) {
-        return userMapper.existsByNickName(nickName);
+        return userDao.existsByInviteCode(inviteCode);
     }
 
     @Override
     public UserAggregate findByIdOrThrow(String id) {
         return findById(id)
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_EXIST));
+                .orElseThrow(() -> UserException.of(UserErrorCode.USER_NOT_EXIST));
     }
 
     @Override
-    public UserAggregate findByTelephoneOrThrow(String telephone) {
-        return findByTelephone(telephone)
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_EXIST));
-    }
-
-    @Override
-    public UserAggregate findByInviteCodeOrThrow(String inviteCode) {
-        return findByInviteCode(inviteCode)
-                .orElseThrow(() -> new UserException(UserErrorCode.INVALID_INVITE_CODE));
-    }
-
-    /**
-     * 将用户实体转换为持久化对象
-     */
-    private UserPO convertToPO(User user) {
-        UserPO po = new UserPO();
-        // 注意：UserPO的id是数据库主键（Long），在插入时由数据库生成，更新时使用existingPO的id
-        // 业务主键userId存储在UserPO的userId字段中
-        po.setUserId(user.getId());
-        po.setTelephone(user.getTelephone());
-        po.setPasswordHash(user.getPasswordHash());
-        po.setNickName(user.getNickName());
-        po.setStatus(user.getStatus() != null ? user.getStatus().getCode() : null);
-        po.setInviteCode(user.getInviteCode());
-        po.setInviterId(user.getInviterId());
-        po.setLastLoginTime(user.getLastLoginTime());
-        po.setAvatarUrl(user.getAvatarUrl());
-        po.setCreatedAt(user.getCreatedAt());
-        po.setUpdatedAt(user.getUpdatedAt());
-        po.setDeleted(user.getDeleted());
-        return po;
-    }
-
-    /**
-     * 将操作流水实体转换为持久化对象
-     */
-    private UserOperateStreamPO convertToPO(UserOperateStream stream) {
-        UserOperateStreamPO po = new UserOperateStreamPO();
-        po.setUserId(stream.getUserId());
-        po.setOperateType(stream.getOperateType() != null ? stream.getOperateType().name() : null);
-        po.setOperateDetail(stream.getOperateDetail());
-        po.setOperatorId(stream.getOperatorId());
-        po.setOperateTime(stream.getOperateTime());
-        po.setCreatedAt(stream.getCreatedAt());
-        po.setUpdatedAt(stream.getUpdatedAt());
-        po.setDeleted(stream.getDeleted());
-        return po;
-    }
-
-    /**
-     * 将持久化对象转换为用户聚合根
-     */
-    private UserAggregate convertToAggregate(UserPO po) {
-        User user = User.builder()
-                .telephone(po.getTelephone())
-                .passwordHash(po.getPasswordHash())
-                .nickName(po.getNickName())
-                .status(com.xiaoo.kaleido.user.domain.constant.UserStatus.fromCode(po.getStatus()))
-                .inviteCode(po.getInviteCode())
-                .inviterId(po.getInviterId())
-                .lastLoginTime(po.getLastLoginTime())
-                .avatarUrl(po.getAvatarUrl())
-                .build();
-
-        user.setId(po.getUserId());
-        user.setCreatedAt(po.getCreatedAt());
-        user.setUpdatedAt(po.getUpdatedAt());
-        user.setDeleted(po.getDeleted());
+    public PageResp<UserAggregate> pageQuery(UserPageQueryReq req) {
+        // 使用PageHelper进行分页
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
         
-        // 加载操作流水（最近100条）
-        List<UserOperateStreamPO> streamPOs = userOperateStreamMapper.findByUserIdWithLimit(po.getUserId(), 100);
-        List<UserOperateStream> streams = streamPOs.stream()
-                .map(this::convertToEntity)
+        // 执行查询
+        List<UserPO> userPOList = userDao.selectByCondition(req);
+        
+        // 转换为PageInfo获取分页信息
+        PageInfo<UserPO> pageInfo = new PageInfo<>(userPOList);
+        
+        // 转换为聚合根列表
+        List<UserAggregate> aggregateList = userPOList.stream()
+                .map(userPO -> {
+                    User user = UserConvertor.INSTANCE.toEntity(userPO);
+                    return UserAggregate.create(user);
+                })
                 .collect(Collectors.toList());
         
-        UserAggregate aggregate = UserAggregate.create(user);
-        aggregate.getOperateStreams().addAll(streams);
-        return aggregate;
+        // 构建分页响应
+        return PageResp.success(
+                aggregateList,
+                pageInfo.getTotal(),
+                pageInfo.getPageNum(),
+                pageInfo.getPageSize()
+        );
     }
 
     /**
-     * 将操作流水持久化对象转换为实体
+     * 批量保存用户操作流水
+     * @param userOperateStreamList 用户操作流水列表
      */
-    private UserOperateStream convertToEntity(UserOperateStreamPO po) {
-        UserOperateStream stream = UserOperateStream.builder()
-                .userId(po.getUserId())
-                .operateType(com.xiaoo.kaleido.user.domain.constant.UserOperateType.valueOf(po.getOperateType()))
-                .operateDetail(po.getOperateDetail())
-                .operatorId(po.getOperatorId())
-                .operateTime(po.getOperateTime())
-                .build();
-        stream.setId(po.getId() != null ? po.getId().toString() : null);
-        stream.setCreatedAt(po.getCreatedAt());
-        stream.setUpdatedAt(po.getUpdatedAt());
-        stream.setDeleted(po.getDeleted());
-        return stream;
+    private void batchSaveOperateStream(List<UserOperateStream> userOperateStreamList){
+        for (UserOperateStream stream : userOperateStreamList) {
+            UserOperateStreamPO streamPO = UserOperateStreamConvertor.INSTANCE.toPO(stream);
+            userOperateStreamDao.insert(streamPO);
+        }
     }
 }

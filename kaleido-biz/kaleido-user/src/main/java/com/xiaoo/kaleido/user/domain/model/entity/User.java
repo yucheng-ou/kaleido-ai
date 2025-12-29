@@ -1,8 +1,11 @@
 package com.xiaoo.kaleido.user.domain.model.entity;
 
+import com.xiaoo.kaleido.base.constant.enums.UserGenderEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.user.domain.constant.UserStatus;
+import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
+import com.xiaoo.kaleido.user.types.exception.UserException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -23,7 +26,7 @@ public class User extends BaseEntity {
     /**
      * 手机号（唯一）
      */
-    private String telephone;
+    private String mobile;
 
     /**
      * 密码哈希值
@@ -34,11 +37,6 @@ public class User extends BaseEntity {
      * 昵称
      */
     private String nickName;
-
-    /**
-     * 用户状态
-     */
-    private UserStatus status;
 
     /**
      * 用户邀请码（唯一）
@@ -58,7 +56,17 @@ public class User extends BaseEntity {
     /**
      * 头像URL
      */
-    private String avatarUrl;
+    private String avatar;
+
+    /**
+     * 性别
+     */
+    private UserGenderEnum gender;
+
+    /**
+     * 用户状态
+     */
+    private UserStatus status;
 
     /**
      * 创建用户实体
@@ -75,7 +83,7 @@ public class User extends BaseEntity {
 
         return User.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
-                .telephone(telephone)
+                .mobile(telephone)
                 .passwordHash(passwordHash)
                 .nickName(nickName)
                 .inviteCode(inviteCode)
@@ -92,10 +100,24 @@ public class User extends BaseEntity {
      */
     public void changeNickName(String newNickName) {
         if (!status.canModify()) {
-            throw new IllegalStateException("用户当前状态不允许修改信息");
+            throw UserException.of(UserErrorCode.USER_IS_FROZEN);
         }
         this.nickName = newNickName;
     }
+
+
+    /**
+     * 更新头像
+     *
+     * @param avatarUrl 头像URL
+     * @throws IllegalStateException 如果用户状态不允许修改
+     */
+    public void updateAvatar(String avatarUrl) {
+        if(checkUserStatusIsActive()){
+            this.avatar = avatarUrl;
+        }
+    }
+
 
     /**
      * 冻结用户
@@ -103,38 +125,30 @@ public class User extends BaseEntity {
      * @throws IllegalStateException 如果用户状态不允许冻结
      */
     public void freeze() {
-        if (status.isDeleted()) {
-            throw new IllegalStateException("已删除的用户不能冻结");
+        if(checkUserStatusIsActive()){
+            this.status = UserStatus.FROZEN;
         }
-        if (status.isFrozen()) {
-            throw new IllegalStateException("用户已经是冻结状态");
-        }
-        this.status = UserStatus.FROZEN;
     }
+
 
     /**
      * 解冻用户
      *
-     * @throws IllegalStateException 如果用户状态不允许解冻
      */
     public void unfreeze() {
-        if (status.isDeleted()) {
-            throw new IllegalStateException("已删除的用户不能解冻");
+        if(checkUserStatusIsActive()){
+            this.status = UserStatus.ACTIVE;
         }
-        if (!status.isFrozen()) {
-            throw new IllegalStateException("只有冻结状态的用户才能解冻");
-        }
-        this.status = UserStatus.ACTIVE;
     }
 
     /**
-     * 软删除用户
+     * 删除用户
      *
      * @throws IllegalStateException 如果用户状态不允许删除
      */
     public void delete() {
         if (status.isDeleted()) {
-            throw new IllegalStateException("用户已经是删除状态");
+            throw UserException.of(UserErrorCode.USER_IS_DELETED);
         }
         this.status = UserStatus.DELETED;
     }
@@ -157,19 +171,6 @@ public class User extends BaseEntity {
     }
 
     /**
-     * 更新头像
-     *
-     * @param avatarUrl 头像URL
-     * @throws IllegalStateException 如果用户状态不允许修改
-     */
-    public void updateAvatar(String avatarUrl) {
-        if (!status.canModify()) {
-            throw new IllegalStateException("用户当前状态不允许修改信息");
-        }
-        this.avatarUrl = avatarUrl;
-    }
-
-    /**
      * 判断用户是否可操作
      *
      * @return 是否可操作
@@ -177,6 +178,7 @@ public class User extends BaseEntity {
     public boolean isOperable() {
         return status.isOperable();
     }
+
 
     /**
      * 判断用户是否活跃
@@ -203,5 +205,27 @@ public class User extends BaseEntity {
      */
     public boolean isDeleted() {
         return status.isDeleted();
+    }
+
+    public boolean checkUserStatusIsActive() {
+        if (isFrozen()) {
+            throw UserException.of(UserErrorCode.USER_IS_FROZEN);
+        }
+        if (isDeleted()) {
+            throw UserException.of(UserErrorCode.USER_IS_DELETED);
+        }
+
+        return isActive();
+    }
+
+    public boolean checkUserStatusIsFrozen() {
+        if (isActive()) {
+            throw UserException.of(UserErrorCode.USER_IS_ACTIVE);
+        }
+        if (isDeleted()) {
+            throw UserException.of(UserErrorCode.USER_IS_DELETED);
+        }
+
+        return isFrozen();
     }
 }

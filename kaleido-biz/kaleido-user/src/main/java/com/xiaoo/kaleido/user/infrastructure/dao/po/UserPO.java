@@ -2,7 +2,9 @@ package com.xiaoo.kaleido.user.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.xiaoo.kaleido.base.constant.enums.UserGenderEnum;
 import com.xiaoo.kaleido.ds.po.BasePO;
+import com.xiaoo.kaleido.user.domain.constant.UserStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,7 +30,8 @@ public class UserPO extends BasePO {
     /**
      * 手机号
      */
-    private String telephone;
+    @TableField("mobile")
+    private String mobile;
 
     /**
      * 密码哈希
@@ -43,9 +46,10 @@ public class UserPO extends BasePO {
     private String nickName;
 
     /**
-     * 状态：0-正常，1-冻结，2-删除
+     * 状态
      */
-    private Integer status;
+    @TableField("status")
+    private UserStatus status;
 
     /**
      * 邀请码
@@ -68,6 +72,11 @@ public class UserPO extends BasePO {
     /**
      * 头像URL
      */
-    @TableField("avatar_url")
-    private String avatarUrl;
+    @TableField("avatar")
+    private String avatar;
+
+    /**
+     * 性别
+     */
+    private UserGenderEnum gender;
 }

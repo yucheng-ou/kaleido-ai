@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.notice.command;
 
 import com.xiaoo.kaleido.api.admin.IRpcAdminSysService;
 import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.base.constant.DictConstant;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.notice.domain.adapter.port.INoticeAdapterService;

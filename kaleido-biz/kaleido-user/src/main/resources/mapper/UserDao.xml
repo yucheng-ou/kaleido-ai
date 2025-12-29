@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.user.infrastructure.dao.UserDao">
+
+    <resultMap id="UserMap" type="com.xiaoo.kaleido.user.infrastructure.dao.po.UserPO">
+        <!-- BasePO字段 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- UserPO特有字段 -->
+        <result property="userId" column="user_id"/>
+        <result property="mobile" column="mobile"/>
+        <result property="passwordHash" column="password_hash"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="status" column="status"/>
+        <result property="inviteCode" column="invite_code"/>
+        <result property="inviterId" column="inviter_id"/>
+        <result property="lastLoginTime" column="last_login_time"/>
+        <result property="avatar" column="avatar"/>
+        <result property="gender" column="gender"/>
+    </resultMap>
+
+    <!-- 用户表字段列表 -->
+    <sql id="UserColumns">
+        id, user_id, mobile, password_hash, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
+    </sql>
+
+    <!-- 根据用户ID（业务主键）查找用户 -->
+    <select id="findByUserId" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE user_id = #{userId} AND deleted = 0
+    </select>
+
+    <!-- 根据手机号查找用户 -->
+    <select id="findByTelephone" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE mobile = #{telephone} AND deleted = 0
+    </select>
+
+    <!-- 根据邀请码查找用户 -->
+    <select id="findByInviteCode" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE invite_code = #{inviteCode} AND deleted = 0
+    </select>
+
+    <!-- 检查用户ID是否存在 -->
+    <select id="existsByUserId" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE user_id = #{userId} AND deleted = 0
+    </select>
+
+    <!-- 检查手机号是否存在 -->
+    <select id="existsByTelephone" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE mobile = #{telephone} AND deleted = 0
+    </select>
+
+    <!-- 检查邀请码是否存在 -->
+    <select id="existsByInviteCode" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE invite_code = #{inviteCode} AND deleted = 0
+    </select>
+
+    <!-- 检查昵称是否存在 -->
+    <select id="existsByNickName" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM user
+        WHERE nick_name = #{nickName} AND deleted = 0
+    </select>
+
+    <!-- 用户查询条件片段 -->
+    <sql id="UserQueryConditions">
+        <if test="req.nickName != null and req.nickName != ''">AND nick_name LIKE CONCAT('%', #{req.nickName}, '%')</if>
+        <if test="req.telephone != null and req.telephone != ''">AND mobile LIKE CONCAT('%', #{req.telephone}, '%')</if>
+        <if test="req.status != null">AND status = #{req.status}</if>
+        <if test="req.gender != null">AND gender = #{req.gender}</if>
+    </sql>
+
+    <!-- 通用查询 -->
+    <select id="query" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE deleted = 0
+        <include refid="UserQueryConditions"/>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据条件查询用户 -->
+    <select id="selectByCondition" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE deleted = 0
+        <include refid="UserQueryConditions"/>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据ID列表查询 -->
+    <select id="getByIds" resultMap="UserMap">
+        SELECT <include refid="UserColumns"/>
+        FROM user
+        WHERE deleted = 0
+        AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY id DESC
+    </select>
+</mapper>

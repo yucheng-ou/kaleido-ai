@@ -1,0 +1,172 @@
+package com.xiaoo.kaleido.notice.infrastructure.adapter.repository;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.xiaoo.kaleido.api.notice.query.NoticeTemplatePageQueryReq;
+import com.xiaoo.kaleido.base.response.PageResp;
+import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeTemplateRepository;
+import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
+import com.xiaoo.kaleido.notice.infrastructure.adapter.repository.convertor.NoticeTemplateConvertor;
+import com.xiaoo.kaleido.notice.infrastructure.dao.NoticeTemplateDao;
+import com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticeTemplatePO;
+import com.xiaoo.kaleido.notice.types.exception.NoticeErrorCode;
+import com.xiaoo.kaleido.notice.types.exception.NoticeException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * 通知模板仓储实现（基础设施层）
+ *
+ * @author ouyucheng
+ * @date 2025/12/29
+ */
+@Slf4j
+@Repository
+@RequiredArgsConstructor
+public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
+
+    private final NoticeTemplateDao noticeTemplateDao;
+
+    @Override
+    public Optional<NoticeTemplateAggregate> findById(String id) {
+        NoticeTemplatePO templatePO = noticeTemplateDao.selectById(id);
+        if (templatePO == null) {
+            return Optional.empty();
+        }
+        return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
+    }
+
+    @Override
+    public Optional<NoticeTemplateAggregate> findByCode(String code) {
+        NoticeTemplatePO templatePO = noticeTemplateDao.findByTemplateCode(code);
+        if (templatePO == null) {
+            return Optional.empty();
+        }
+        return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
+    }
+
+    @Override
+    public NoticeTemplateAggregate save(NoticeTemplateAggregate template) {
+        NoticeTemplatePO templatePO = NoticeTemplateConvertor.INSTANCE.toPO(template);
+        if (templatePO.getId() == null) {
+            // 新增
+            noticeTemplateDao.insert(templatePO);
+        } else {
+            // 更新
+            noticeTemplateDao.updateById(templatePO);
+        }
+        // 重新加载并返回
+        return NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        noticeTemplateDao.deleteById(id);
+    }
+
+    /**
+     * 根据ID查找模板聚合根，如果不存在则抛出异常
+     *
+     * @param id 模板ID
+     * @return 模板聚合根
+     */
+    public NoticeTemplateAggregate findByIdOrThrow(String id) {
+        return findById(id)
+                .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
+    }
+
+    /**
+     * 根据编码查找模板聚合根，如果不存在则抛出异常
+     *
+     * @param code 模板编码
+     * @return 模板聚合根
+     */
+    public NoticeTemplateAggregate findByCodeOrThrow(String code) {
+        return findByCode(code)
+                .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
+    }
+
+    /**
+     * 检查模板编码是否存在
+     *
+     * @param code 模板编码
+     * @return 是否存在
+     */
+    public boolean existsByCode(String code) {
+        return noticeTemplateDao.existsByTemplateCode(code);
+    }
+
+    /**
+     * 根据通知类型查找模板列表
+     *
+     * @param noticeType 通知类型
+     * @return 模板列表
+     */
+    public List<NoticeTemplateAggregate> findByNoticeType(String noticeType) {
+        List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findByNoticeType(noticeType);
+        return templatePOs.stream()
+                .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 根据业务类型查找模板列表
+     *
+     * @param businessType 业务类型
+     * @return 模板列表
+     */
+    public List<NoticeTemplateAggregate> findByBusinessType(String businessType) {
+        List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findByBusinessType(businessType);
+        return templatePOs.stream()
+                .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 分页查询模板
+     *
+     * @param req 查询条件
+     * @return 分页结果
+     */
+    public PageResp<NoticeTemplateAggregate> pageQuery(NoticeTemplatePageQueryReq req) {
+        // 使用PageHelper进行分页
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        
+        // 执行查询
+        List<NoticeTemplatePO> templatePOList = noticeTemplateDao.selectByCondition(req);
+        
+        // 转换为PageInfo获取分页信息
+        PageInfo<NoticeTemplatePO> pageInfo = new PageInfo<>(templatePOList);
+        
+        // 转换为聚合根列表
+        List<NoticeTemplateAggregate> aggregateList = templatePOList.stream()
+                .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
+                .collect(Collectors.toList());
+        
+        // 构建分页响应
+        return PageResp.success(
+                aggregateList,
+                pageInfo.getTotal(),
+                pageInfo.getPageNum(),
+                pageInfo.getPageSize()
+        );
+    }
+
+    /**
+     * 查找启用的模板列表
+     *
+     * @return 启用的模板列表
+     */
+    public List<NoticeTemplateAggregate> findEnabledTemplates() {
+        List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findEnabledTemplates();
+        return templatePOs.stream()
+                .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
+                .collect(Collectors.toList());
+    }
+}

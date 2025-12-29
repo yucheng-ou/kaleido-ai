@@ -7,9 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
- * 用户操作流水实体
+ * 用户操作流水实体 该日志只记录用户自己的操作流水信息
  *
  * @author ouyucheng
  * @date 2025/12/16
@@ -30,19 +31,14 @@ public class UserOperateStream extends BaseEntity {
     private UserOperateType operateType;
 
     /**
-     * 操作详情（JSON格式）
+     * 操作详情
      */
     private String operateDetail;
 
     /**
-     * 操作者ID
-     */
-    private String operatorId;
-
-    /**
      * 操作时间
      */
-    private LocalDateTime operateTime;
+    private Date operateTime;
 
     /**
      * 创建用户操作流水实体
@@ -50,47 +46,16 @@ public class UserOperateStream extends BaseEntity {
      * @param userId        用户ID
      * @param operateType   操作类型
      * @param operateDetail 操作详情
-     * @param operatorId    操作者ID
      * @return 用户操作流水实体
      */
     public static UserOperateStream create(String userId, UserOperateType operateType,
-                                           String operateDetail, String operatorId) {
-        UserOperateStream stream = UserOperateStream.builder()
+                                           String operateDetail) {
+        return UserOperateStream.builder()
                 .userId(userId)
                 .operateType(operateType)
                 .operateDetail(operateDetail)
-                .operatorId(operatorId)
-                .operateTime(LocalDateTime.now())
+                .operateTime(new Date())
                 .build();
-        stream.setCreatedAt(new java.util.Date());
-        return stream;
     }
 
-    /**
-     * 创建用户操作流水实体（操作者为用户自己）
-     *
-     * @param userId        用户ID
-     * @param operateType   操作类型
-     * @param operateDetail 操作详情
-     * @return 用户操作流水实体
-     */
-    public static UserOperateStream createBySelf(String userId, UserOperateType operateType,
-                                                 String operateDetail) {
-        return create(userId, operateType, operateDetail, userId);
-    }
-
-    /**
-     * 验证操作流水是否有效
-     */
-    public void validate() {
-        if (userId == null || userId.trim().isEmpty()) {
-            throw new IllegalArgumentException("用户ID不能为空");
-        }
-        if (operateType == null) {
-            throw new IllegalArgumentException("操作类型不能为空");
-        }
-        if (operateTime == null) {
-            throw new IllegalArgumentException("操作时间不能为空");
-        }
-    }
 }

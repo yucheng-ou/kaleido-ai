@@ -57,14 +57,6 @@ public interface DictQueryService {
     List<DictDTO> queryDicts(DictQueryRequest queryRequest);
 
     /**
-     * 分页查询字典列表
-     *
-     * @param queryRequest 分页查询条件
-     * @return 分页结果
-     */
-    PageResp<DictDTO> pageQueryDicts(DictQueryRequest queryRequest);
-
-    /**
      * 根据ID查询字典（别名方法，用于门面层）
      *
      * @param dictId 字典ID

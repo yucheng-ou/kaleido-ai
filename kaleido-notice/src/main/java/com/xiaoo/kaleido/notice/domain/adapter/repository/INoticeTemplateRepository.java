@@ -1,10 +1,6 @@
 package com.xiaoo.kaleido.notice.domain.adapter.repository;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
-import com.xiaoo.kaleido.notice.types.exception.NoticeErrorCode;
-
-import java.util.List;
 import java.util.Optional;
 
 /**

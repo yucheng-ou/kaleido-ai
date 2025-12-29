@@ -1,11 +1,15 @@
 package com.xiaoo.kaleido.user.domain.constant;
 
+
+import lombok.Getter;
+
 /**
  * 用户状态枚举
  *
  * @author ouyucheng
  * @date 2025/12/16
  */
+@Getter
 public enum UserStatus {
 
     /**
@@ -29,14 +33,6 @@ public enum UserStatus {
     UserStatus(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getDesc() {
-        return desc;
     }
 
     /**

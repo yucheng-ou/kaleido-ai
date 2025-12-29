@@ -1,9 +1,11 @@
 package com.xiaoo.kaleido.user.domain.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 import com.xiaoo.kaleido.user.domain.model.valobj.InvitationCode;
+import com.xiaoo.kaleido.user.domain.model.valobj.UserInfoVO;
 import com.xiaoo.kaleido.user.domain.service.UserDomainService;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
@@ -27,36 +29,39 @@ public class UserDomainServiceImpl implements UserDomainService {
     private final UserRepository userRepository;
 
     @Override
-    public UserAggregate createUser(String telephone, String passwordHash, String inviterId) {
-        
+    public UserAggregate createUser(String telephone, String passwordHash, String inviteCode) {
+
+        // 验证手机号是否已存在
+        if (userRepository.existsByTelephone(telephone)) {
+            throw UserException.of(UserErrorCode.DUPLICATE_TELEPHONE);
+        }
+
+        // 验证邀请码
+        String inviterId = null;
+        if (StrUtil.isNotBlank(inviteCode)) {
+            UserAggregate inviter = userRepository.findByInviteCode(inviteCode)
+                    .orElseThrow(() -> UserException.of(UserErrorCode.INVALID_INVITE_CODE));
+            inviterId = inviter.getId();
+        }
+
         // 生成邀请码
         InvitationCode invitationCode = generateInvitationCode();
-        
+
         // 生成默认昵称（用户+手机号后4位）
         String defaultNickName = "用户" + telephone.substring(telephone.length() - 4);
-        
-        // 创建用户实体
-        User user = User.create(
-                telephone,
+
+
+        // 创建用户聚合根并返回
+        return UserAggregate.create(telephone,
                 passwordHash,
                 defaultNickName,
                 invitationCode.getValue(),
-                inviterId
-        );
-        
-        // 创建用户聚合根并添加创建操作流水
-        UserAggregate userAggregate = UserAggregate.createWithOperateStream(user, inviterId);
-        
-        log.info("用户领域服务创建用户，用户ID: {}, 手机号: {}, 邀请码: {}",
-                user.getId(), telephone, invitationCode.getValue());
-        
-        return userAggregate;
+                inviterId);
     }
 
     @Override
-    public User findByIdOrThrow(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
-        return aggregate.getUser();
+    public UserAggregate findByIdOrThrow(String userId) {
+        return userRepository.findByIdOrThrow(userId);
     }
 
     @Override
@@ -101,9 +106,16 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public UserAggregate updateLastLoginTime(String userId) {
+    public UserAggregate login(String userId) {
         UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
-        aggregate.updateLastLoginTime();
+        aggregate.login();
+        return aggregate;
+    }
+
+    @Override
+    public UserAggregate logout(String userId) {
+        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        aggregate.logout();
         return aggregate;
     }
 
@@ -112,35 +124,16 @@ public class UserDomainServiceImpl implements UserDomainService {
         // 生成唯一邀请码
         InvitationCode invitationCode;
         int maxRetry = 10;
-        
+
         for (int i = 0; i < maxRetry; i++) {
             invitationCode = InvitationCode.generate();
             if (!userRepository.existsByInviteCode(invitationCode.getValue())) {
                 return invitationCode;
             }
         }
-        
+
         // 如果多次尝试后仍然冲突，使用基于UUID的确定性生成
         String uuid = UUID.randomUUID().toString().replace("-", "");
         return InvitationCode.fromUserId(uuid);
-    }
-
-    @Override
-    public boolean validateInvitationCode(String inviteCode) {
-        // 验证邀请码格式
-        if (!InvitationCode.isValidFormat(inviteCode)) {
-            return false;
-        }
-        
-        // 验证邀请码是否存在
-        return userRepository.findByInviteCode(inviteCode).isPresent();
-    }
-
-    @Override
-    public User findInviterByInviteCode(String inviteCode) {
-        UserAggregate inviterAggregate = userRepository.findByInviteCode(inviteCode)
-                .orElseThrow(() -> new UserException(UserErrorCode.INVALID_INVITE_CODE));
-        
-        return inviterAggregate.getUser();
     }
 }

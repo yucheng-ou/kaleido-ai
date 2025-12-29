@@ -109,32 +109,8 @@ public class InvitationCode {
         return value;
     }
 
-    /**
-     * 判断是否相等
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InvitationCode that = (InvitationCode) o;
-        return value.equals(that.value);
-    }
 
-    /**
-     * 哈希码
-     */
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
 
-    /**
-     * 字符串表示
-     */
-    @Override
-    public String toString() {
-        return value;
-    }
 
     /**
      * 判断邀请码是否有效格式（静态方法，用于验证）
