@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.user.infrastructure.dao.UserOperateStreamDao">
+
+    <resultMap id="UserOperateStreamMap" type="com.xiaoo.kaleido.user.infrastructure.dao.po.UserOperateStreamPO">
+        <!-- BasePO字段 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- UserOperateStreamPO特有字段 -->
+        <result property="userId" column="user_id"/>
+        <result property="operateType" column="operate_type"/>
+        <result property="operateDetail" column="operate_detail"/>
+        <result property="operatorId" column="operator_id"/>
+        <result property="operateTime" column="operate_time"/>
+    </resultMap>
+
+    <!-- 用户操作流水表字段列表 -->
+    <sql id="UserOperateStreamColumns">
+        id, user_id, operate_type, operate_detail, operator_id, operate_time, created_at, updated_at, deleted, lock_version
+    </sql>
+
+    <!-- 根据用户ID查找用户操作流水列表 -->
+    <select id="findByUserId" resultMap="UserOperateStreamMap">
+        SELECT <include refid="UserOperateStreamColumns"/>
+        FROM user_operate_stream
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY operate_time DESC
+    </select>
+
+    <!-- 根据用户ID和操作类型查找用户操作流水列表 -->
+    <select id="findByUserIdAndOperateType" resultMap="UserOperateStreamMap">
+        SELECT <include refid="UserOperateStreamColumns"/>
+        FROM user_operate_stream
+        WHERE user_id = #{userId} AND operate_type = #{operateType} AND deleted = 0
+        ORDER BY operate_time DESC
+    </select>
+
+    <!-- 根据操作者ID查找用户操作流水列表 -->
+    <select id="findByOperatorId" resultMap="UserOperateStreamMap">
+        SELECT <include refid="UserOperateStreamColumns"/>
+        FROM user_operate_stream
+        WHERE operator_id = #{operatorId} AND deleted = 0
+        ORDER BY operate_time DESC
+    </select>
+
+    <!-- 根据用户ID分页查询操作流水 -->
+    <select id="findByUserIdWithPage" resultMap="UserOperateStreamMap">
+        SELECT <include refid="UserOperateStreamColumns"/>
+        FROM user_operate_stream
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY operate_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 根据用户ID查询操作流水（限制条数） -->
+    <select id="findByUserIdWithLimit" resultMap="UserOperateStreamMap">
+        SELECT <include refid="UserOperateStreamColumns"/>
+        FROM user_operate_stream
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY operate_time DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 统计用户操作流水数量 -->
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM user_operate_stream
+        WHERE user_id = #{userId} AND deleted = 0
+    </select>
+</mapper>

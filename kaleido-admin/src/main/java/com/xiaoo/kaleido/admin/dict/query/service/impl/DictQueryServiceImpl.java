@@ -76,30 +76,6 @@ public class DictQueryServiceImpl implements DictQueryService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public PageResp<DictDTO> pageQueryDicts(DictQueryRequest queryRequest) {
-        log.debug("分页查询字典列表，queryRequest={}", queryRequest);
-        
-        // 简单实现：先查询所有符合条件的，然后内存分页
-        List<DictDTO> allDicts = queryDicts(queryRequest);
-        
-        // 这里需要从queryRequest中获取分页参数
-        // 由于DictQueryRequest没有分页参数，这里使用默认值
-        int pageNum = 1;
-        int pageSize = 10;
-        
-        int start = (pageNum - 1) * pageSize;
-        int end = Math.min(start + pageSize, allDicts.size());
-        
-        if (start >= allDicts.size()) {
-            return PageResp.empty();
-        }
-        
-        List<DictDTO> pageData = allDicts.subList(start, end);
-        
-        return PageResp.of(pageData, allDicts.size(), pageNum, pageSize);
-    }
-
     /**
      * 判断字典是否匹配查询条件
      */

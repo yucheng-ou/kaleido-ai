@@ -63,6 +63,7 @@
         <knife4j.version>4.5.0</knife4j.version>
         <springdoc.version>2.7.0</springdoc.version>
         <dubbo.version>3.3.0</dubbo.version>
+        <pagehelper.version>1.4.7</pagehelper.version>
 
     </properties>
 
@@ -248,6 +249,12 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
             </dependency>
 
         </dependencies>

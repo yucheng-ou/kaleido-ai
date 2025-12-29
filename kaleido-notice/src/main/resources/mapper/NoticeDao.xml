@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.notice.infrastructure.dao.NoticeDao">
+
+    <resultMap id="NoticeMap" type="com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticePO">
+        <!-- BasePO字段 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- NoticePO特有字段 -->
+        <result property="noticeType" column="notice_type"/>
+        <result property="targetAddress" column="target_address"/>
+        <result property="status" column="status"/>
+        <result property="businessType" column="business_type"/>
+        <result property="content" column="content"/>
+        <result property="resultMessage" column="result_message"/>
+        <result property="sentAt" column="sent_at"/>
+        <result property="retryNum" column="retry_num"/>
+        <result property="nextRetryAt" column="next_retry_at"/>
+        <result property="maxRetryNum" column="max_retry_num"/>
+    </resultMap>
+
+    <!-- 通知表字段列表 -->
+    <sql id="NoticeColumns">
+        id, notice_type, target_address, status, business_type, content, result_message, sent_at, retry_num, next_retry_at, max_retry_num, created_at, updated_at, deleted, lock_version
+    </sql>
+
+    <!-- 根据目标地址查找通知列表 -->
+    <select id="findByTargetAddress" resultMap="NoticeMap">
+        SELECT <include refid="NoticeColumns"/>
+        FROM notice
+        WHERE target_address = #{targetAddress} AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据状态查找通知列表 -->
+    <select id="findByStatus" resultMap="NoticeMap">
+        SELECT <include refid="NoticeColumns"/>
+        FROM notice
+        WHERE status = #{status} AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据业务类型查找通知列表 -->
+    <select id="findByBusinessType" resultMap="NoticeMap">
+        SELECT <include refid="NoticeColumns"/>
+        FROM notice
+        WHERE business_type = #{businessType} AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 通知查询条件片段 -->
+    <sql id="NoticeQueryConditions">
+        <if test="req.noticeType != null">AND notice_type = #{req.noticeType}</if>
+        <if test="req.targetAddress != null and req.targetAddress != ''">AND target_address LIKE CONCAT('%', #{req.targetAddress}, '%')</if>
+        <if test="req.status != null">AND status = #{req.status}</if>
+        <if test="req.businessType != null and req.businessType != ''">AND business_type = #{req.businessType}</if>
+        <if test="req.startTime != null">AND created_at >= #{req.startTime}</if>
+        <if test="req.endTime != null">AND created_at <= #{req.endTime}</if>
+    </sql>
+
+    <!-- 根据条件分页查询通知 -->
+    <select id="selectByCondition" resultMap="NoticeMap">
+        SELECT <include refid="NoticeColumns"/>
+        FROM notice
+        WHERE deleted = 0
+        <include refid="NoticeQueryConditions"/>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 查找需要重试的通知列表 -->
+    <select id="findRetryNotices" resultMap="NoticeMap">
+        SELECT <include refid="NoticeColumns"/>
+        FROM notice
+        WHERE deleted = 0
+        AND status = 'FAILED'
+        AND retry_num < max_retry_num
+        AND (next_retry_at IS NULL OR next_retry_at <= NOW())
+        ORDER BY created_at ASC
+        LIMIT #{maxRetryNum}
+    </select>
+</mapper>

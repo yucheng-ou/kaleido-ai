@@ -1,6 +1,9 @@
 package com.xiaoo.kaleido.user.domain.adapter.repository;
 
+import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
+import com.xiaoo.kaleido.user.domain.model.valobj.UserInfoVO;
 
 import java.util.Optional;
 
@@ -14,20 +17,37 @@ import java.util.Optional;
 public interface UserRepository {
 
     /**
-     * 保存用户聚合根
+     * 保存用户
      *
      * @param userAggregate 用户聚合根
-     * @return 保存后的用户聚合根
      */
-    UserAggregate save(UserAggregate userAggregate);
+    void save(UserAggregate userAggregate);
 
     /**
-     * 根据ID查找用户聚合根
+     * 需改用户信息
+     * @param userAggregate 用户聚合根
+     */
+    void update(UserAggregate userAggregate);
+
+
+    /**
+     * 根据ID查找用户聚合根（命令用途）
      *
      * @param id 用户ID
      * @return 用户聚合根（如果存在）
      */
     Optional<UserAggregate> findById(String id);
+
+    Optional<UserAggregate> findUserAndStreamById(String id);
+
+    /**
+     * 根据ID查找用户聚合根，如果不存在则抛出异常（命令用途）
+     *
+     * @param id 用户ID
+     * @return 用户聚合根
+     */
+    UserAggregate findByIdOrThrow(String id);
+
 
     /**
      * 根据手机号查找用户聚合根
@@ -35,7 +55,7 @@ public interface UserRepository {
      * @param telephone 手机号
      * @return 用户聚合根（如果存在）
      */
-    Optional<UserAggregate> findByTelephone(String telephone);
+    Optional<UserAggregate>  findByTelephone(String telephone);
 
     /**
      * 根据邀请码查找用户聚合根
@@ -43,7 +63,7 @@ public interface UserRepository {
      * @param inviteCode 邀请码
      * @return 用户聚合根（如果存在）
      */
-    Optional<UserAggregate> findByInviteCode(String inviteCode);
+    Optional<UserAggregate>  findByInviteCode(String inviteCode);
 
     /**
      * 检查手机号是否已存在
@@ -62,37 +82,11 @@ public interface UserRepository {
     boolean existsByInviteCode(String inviteCode);
 
     /**
-     * 检查昵称是否已存在
+     * 分页查询用户
      *
-     * @param nickName 昵称
-     * @return 是否存在
+     * @param req 查询条件
+     * @return 分页结果
      */
-    boolean existsByNickName(String nickName);
+    PageResp<UserAggregate> pageQuery(UserPageQueryReq req);
 
-    /**
-     * 根据ID查找用户聚合根，如果不存在则抛出异常
-     *
-     * @param id 用户ID
-     * @return 用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 如果用户不存在
-     */
-    UserAggregate findByIdOrThrow(String id);
-
-    /**
-     * 根据手机号查找用户聚合根，如果不存在则抛出异常
-     *
-     * @param telephone 手机号
-     * @return 用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 如果用户不存在
-     */
-    UserAggregate findByTelephoneOrThrow(String telephone);
-
-    /**
-     * 根据邀请码查找用户聚合根，如果不存在则抛出异常
-     *
-     * @param inviteCode 邀请码
-     * @return 用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 如果用户不存在
-     */
-    UserAggregate findByInviteCodeOrThrow(String inviteCode);
 }

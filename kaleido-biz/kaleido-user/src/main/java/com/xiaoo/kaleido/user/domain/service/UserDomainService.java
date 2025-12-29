@@ -18,18 +18,18 @@ public interface UserDomainService {
      *
      * @param telephone    手机号
      * @param passwordHash 密码哈希
-     * @param inviterId    邀请人ID（可选）
+     * @param inviteCode    邀请人邀请码
      * @return 用户聚合根
      */
-    UserAggregate createUser(String telephone, String passwordHash, String inviterId);
+    UserAggregate createUser(String telephone, String passwordHash, String inviteCode);
 
     /**
      * 根据ID查找用户，如果不存在则抛出异常
      *
      * @param userId 用户ID
-     * @return 用户实体
+     * @return 用户聚合根
      */
-    User findByIdOrThrow(String userId);
+    UserAggregate findByIdOrThrow(String userId);
 
     /**
      * 修改用户昵称
@@ -83,12 +83,21 @@ public interface UserDomainService {
     boolean verifyPassword(String userId, String passwordHash);
 
     /**
-     * 更新最后登录时间
+     * 用户登录
      *
      * @param userId 用户ID
      * @return 用户聚合根
      */
-    UserAggregate updateLastLoginTime(String userId);
+    UserAggregate login(String userId);
+
+
+    /**
+     * 用户登出
+     *
+     * @param userId 用户ID
+     * @return 用户聚合根
+     */
+    UserAggregate logout(String userId);
 
     /**
      * 生成邀请码
@@ -97,19 +106,4 @@ public interface UserDomainService {
      */
     InvitationCode generateInvitationCode();
 
-    /**
-     * 验证邀请码有效性
-     *
-     * @param inviteCode 邀请码
-     * @return 是否有效
-     */
-    boolean validateInvitationCode(String inviteCode);
-
-    /**
-     * 根据邀请码查找邀请人
-     *
-     * @param inviteCode 邀请码
-     * @return 邀请人用户实体（如果存在）
-     */
-    User findInviterByInviteCode(String inviteCode);
 }

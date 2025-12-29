@@ -1,11 +1,9 @@
 package com.xiaoo.kaleido.user.trigger.event;
 
-import com.xiaoo.kaleido.user.domain.adapter.repository.UserOperateStreamRepository;
 import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
 import com.xiaoo.kaleido.user.domain.event.UserCreatedEvent;
 import com.xiaoo.kaleido.user.domain.event.UserNickNameChangedEvent;
 import com.xiaoo.kaleido.user.domain.event.UserStatusChangedEvent;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -20,10 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class UserEventListener {
-
-    private final UserOperateStreamRepository userOperateStreamRepository;
 
     /**
      * 处理用户创建事件

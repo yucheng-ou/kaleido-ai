@@ -1,18 +1,32 @@
 package com.xiaoo.kaleido.api.notice;
 
-import com.xiaoo.kaleido.api.notice.request.AddNoticeTemplateRequest;
-import com.xiaoo.kaleido.api.notice.request.CheckSmsVerifyCodeRequest;
-import com.xiaoo.kaleido.api.notice.request.SendSmsVerifyCodeRequest;
+import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
+import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.base.result.Result;
+import org.apache.dubbo.config.annotation.DubboService;
 
 /**
+ * 通知RPC服务接口
+ *
  * @author ouyucheng
  * @date 2025/12/17
- * @description
  */
+@DubboService
 public interface IRpcNoticeService {
 
-    Result<String> generateAndSendSmsVerifyCode(SendSmsVerifyCodeRequest request);
+    /**
+     * 生成并发送短信验证码
+     *
+     * @param command 发送短信验证码命令
+     * @return 验证码
+     */
+    Result<String> generateAndSendSmsVerifyCode(SendSmsVerifyCodeCommand command);
 
-    Result<Boolean> checkSmsVerifyCode(CheckSmsVerifyCodeRequest request);
+    /**
+     * 校验短信验证码
+     *
+     * @param command 校验短信验证码命令
+     * @return 校验结果
+     */
+    Result<Boolean> checkSmsVerifyCode(CheckSmsVerifyCodeCommand command);
 }
