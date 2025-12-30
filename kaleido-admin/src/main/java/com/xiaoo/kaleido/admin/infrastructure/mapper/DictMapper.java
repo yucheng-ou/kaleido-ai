@@ -1,10 +1,12 @@
 package com.xiaoo.kaleido.admin.infrastructure.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
+import com.xiaoo.kaleido.api.admin.query.DictQueryReq;
+import com.xiaoo.kaleido.api.admin.query.DictPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,7 +26,6 @@ public interface DictMapper extends BaseMapper<DictPO> {
      * @param dictCode 字典编码
      * @return 字典持久化对象
      */
-    @Select("SELECT * FROM t_dict WHERE type_code = #{typeCode} AND dict_code = #{dictCode} AND deleted = 0")
     DictPO findByTypeCodeAndDictCode(@Param("typeCode") String typeCode, @Param("dictCode") String dictCode);
 
     /**
@@ -33,7 +34,6 @@ public interface DictMapper extends BaseMapper<DictPO> {
      * @param typeCode 字典类型编码
      * @return 字典持久化对象列表
      */
-    @Select("SELECT * FROM t_dict WHERE type_code = #{typeCode} AND deleted = 0 ORDER BY sort ASC")
     List<DictPO> findByTypeCode(@Param("typeCode") String typeCode);
 
     /**
@@ -43,7 +43,6 @@ public interface DictMapper extends BaseMapper<DictPO> {
      * @param status 状态
      * @return 启用的字典持久化对象列表
      */
-    @Select("SELECT * FROM t_dict WHERE type_code = #{typeCode} AND status = #{status} AND deleted = 0 ORDER BY sort ASC")
     List<DictPO> findEnabledByTypeCode(@Param("typeCode") String typeCode, @Param("status") String status);
 
     /**
@@ -53,7 +52,6 @@ public interface DictMapper extends BaseMapper<DictPO> {
      * @param dictCode 字典编码
      * @return 是否存在
      */
-    @Select("SELECT COUNT(*) > 0 FROM t_dict WHERE type_code = #{typeCode} AND dict_code = #{dictCode} AND deleted = 0")
     boolean existsByTypeCodeAndDictCode(@Param("typeCode") String typeCode, @Param("dictCode") String dictCode);
 
     /**
@@ -62,6 +60,22 @@ public interface DictMapper extends BaseMapper<DictPO> {
      * @param typeCode 字典类型编码
      * @return 是否存在
      */
-    @Select("SELECT COUNT(*) > 0 FROM t_dict WHERE type_code = #{typeCode} AND deleted = 0")
     boolean existsByTypeCode(@Param("typeCode") String typeCode);
+
+    /**
+     * 根据条件查询字典列表
+     *
+     * @param queryReq 查询条件
+     * @return 字典持久化对象列表
+     */
+    List<DictPO> selectByCondition(@Param("queryReq") DictQueryReq queryReq);
+
+    /**
+     * 根据条件分页查询字典
+     *
+     * @param page 分页对象
+     * @param pageQueryReq 分页查询条件
+     * @return 分页结果
+     */
+    IPage<DictPO> selectByPageCondition(IPage<DictPO> page, @Param("pageQueryReq") DictPageQueryReq pageQueryReq);
 }
