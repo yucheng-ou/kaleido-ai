@@ -1,7 +1,9 @@
 package com.xiaoo.kaleido.notice.domain.adapter.repository;
 
+import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
+import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
-import com.xiaoo.kaleido.notice.types.enums.NoticeStatusEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,14 @@ public interface INoticeRepository {
      * @return 通知聚合根（如果存在）
      */
     Optional<NoticeAggregate> findById(String id);
+
+    /**
+     * 根据ID查找通知聚合根，如果不存在则抛出异常
+     *
+     * @param id 通知ID
+     * @return 通知聚合根
+     */
+    NoticeAggregate findByIdOrThrow(String id);
 
     /**
      * 保存通知聚合根
@@ -61,4 +71,12 @@ public interface INoticeRepository {
      * @return 通知列表
      */
     List<NoticeAggregate> findByBusinessType(String businessType);
+
+    /**
+     * 分页查询通知
+     *
+     * @param req 查询条件
+     * @return 分页结果
+     */
+    PageResp<NoticeAggregate> pageQuery(NoticePageQueryReq req);
 }

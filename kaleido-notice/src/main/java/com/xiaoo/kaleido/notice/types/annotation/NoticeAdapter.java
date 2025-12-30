@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.notice.types.annotation;
 
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;

@@ -34,10 +34,9 @@ public class MultipleResp<T> extends BaseResp {
      * @return 数据对象
      * @param <T> 数据类型
      */
-    public static <T> MultipleResp<T> success(List<T> list) {
+    public static <T> MultipleResp<T> of(List<T> list) {
         MultipleResp<T> multipleResp = new MultipleResp<>();
         multipleResp.setList(list);
-        multipleResp.setSuccess(true);
         return multipleResp;
     }
 

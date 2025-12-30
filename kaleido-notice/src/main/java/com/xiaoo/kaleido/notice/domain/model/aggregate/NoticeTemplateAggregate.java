@@ -56,6 +56,9 @@ public class NoticeTemplateAggregate extends BaseEntity {
         if (name == null || name.trim().isEmpty()) {
             throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND);
         }
+        if (code == null || code.trim().isEmpty()) {
+            throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND);
+        }
         if (content == null || content.trim().isEmpty()) {
             throw NoticeException.of(NoticeErrorCode.NOTICE_CONTENT_EMPTY);
         }

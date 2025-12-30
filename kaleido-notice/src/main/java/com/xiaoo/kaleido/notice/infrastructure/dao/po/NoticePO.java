@@ -3,9 +3,9 @@ package com.xiaoo.kaleido.notice.infrastructure.dao.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xiaoo.kaleido.ds.po.BasePO;
-import com.xiaoo.kaleido.notice.types.enums.BusinessTypeEnum;
-import com.xiaoo.kaleido.notice.types.enums.NoticeStatusEnum;
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

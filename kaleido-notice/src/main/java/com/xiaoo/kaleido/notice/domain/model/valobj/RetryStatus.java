@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.notice.domain.model.valobj;
 
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -12,7 +12,6 @@
         <result property="lockVersion" column="lock_version"/>
         
         <!-- UserOperateStreamPO特有字段 -->
-        <result property="userId" column="user_id"/>
         <result property="operateType" column="operate_type"/>
         <result property="operateDetail" column="operate_detail"/>
         <result property="operatorId" column="operator_id"/>
@@ -21,22 +20,22 @@
 
     <!-- 用户操作流水表字段列表 -->
     <sql id="UserOperateStreamColumns">
-        id, user_id, operate_type, operate_detail, operator_id, operate_time, created_at, updated_at, deleted, lock_version
+        id, operate_type, operate_detail, operator_id, operate_time, created_at, updated_at, deleted, lock_version
     </sql>
 
     <!-- 根据用户ID查找用户操作流水列表 -->
-    <select id="findByUserId" resultMap="UserOperateStreamMap">
+    <select id="findById" resultMap="UserOperateStreamMap">
         SELECT <include refid="UserOperateStreamColumns"/>
         FROM user_operate_stream
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
         ORDER BY operate_time DESC
     </select>
 
     <!-- 根据用户ID和操作类型查找用户操作流水列表 -->
-    <select id="findByUserIdAndOperateType" resultMap="UserOperateStreamMap">
+    <select id="findByIdAndOperateType" resultMap="UserOperateStreamMap">
         SELECT <include refid="UserOperateStreamColumns"/>
         FROM user_operate_stream
-        WHERE user_id = #{userId} AND operate_type = #{operateType} AND deleted = 0
+        WHERE id = #{id} AND operate_type = #{operateType} AND deleted = 0
         ORDER BY operate_time DESC
     </select>
 
@@ -49,27 +48,27 @@
     </select>
 
     <!-- 根据用户ID分页查询操作流水 -->
-    <select id="findByUserIdWithPage" resultMap="UserOperateStreamMap">
+    <select id="findByIdWithPage" resultMap="UserOperateStreamMap">
         SELECT <include refid="UserOperateStreamColumns"/>
         FROM user_operate_stream
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
         ORDER BY operate_time DESC
         LIMIT #{offset}, #{pageSize}
     </select>
 
     <!-- 根据用户ID查询操作流水（限制条数） -->
-    <select id="findByUserIdWithLimit" resultMap="UserOperateStreamMap">
+    <select id="findByIdWithLimit" resultMap="UserOperateStreamMap">
         SELECT <include refid="UserOperateStreamColumns"/>
         FROM user_operate_stream
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
         ORDER BY operate_time DESC
         LIMIT #{limit}
     </select>
 
     <!-- 统计用户操作流水数量 -->
-    <select id="countByUserId" resultType="long">
+    <select id="countById" resultType="long">
         SELECT COUNT(*)
         FROM user_operate_stream
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
     </select>
 </mapper>

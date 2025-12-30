@@ -3,7 +3,10 @@ package com.xiaoo.kaleido.admin.infrastructure.dao.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
+import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -14,14 +17,9 @@ import java.util.Date;
  * @date 2025/12/25
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName("t_dict")
-public class DictPO {
-
-    /**
-     * 主键ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
+public class DictPO extends BasePO {
 
     /**
      * 字典类型编码
@@ -56,20 +54,6 @@ public class DictPO {
     /**
      * 状态：ENABLE/DISABLE
      */
-    private String status;
+    private DataStatusEnum status;
 
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
-
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
-
-    /**
-     * 删除标志：0-未删除，1-已删除
-     */
-    private Integer deleted;
 }

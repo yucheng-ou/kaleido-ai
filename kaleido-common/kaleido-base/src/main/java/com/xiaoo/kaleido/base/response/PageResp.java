@@ -51,9 +51,8 @@ public class PageResp<T> extends MultipleResp<T> {
      * @param <T>      数据类型
      * @return 分页响应对象
      */
-    public static <T> PageResp<T> success(List<T> list, long total, long pageNum, long pageSize) {
+    public static <T> PageResp<T> of(List<T> list, long total, long pageNum, long pageSize) {
         PageResp<T> pageResp = new PageResp<>();
-        pageResp.setSuccess(true);
         pageResp.setTotal(total);
         pageResp.setPageNum(pageNum);
         pageResp.setPageSize(pageSize);

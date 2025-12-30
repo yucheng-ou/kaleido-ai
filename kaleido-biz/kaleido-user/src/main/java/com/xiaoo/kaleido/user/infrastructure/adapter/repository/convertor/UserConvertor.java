@@ -20,13 +20,11 @@ public interface UserConvertor {
     /**
      * 将 User 实体转换为 UserPO
      */
-    @Mapping(source = "id", target = "userId")
     UserPO toPO(User user);
 
     /**
      * 将 UserPO 转换为 User 实体
      */
-    @Mapping(source = "userId", target = "id")
     User toEntity(UserPO po);
 
 }

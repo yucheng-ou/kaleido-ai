@@ -9,13 +9,12 @@ import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.infrastructure.adapter.repository.convertor.NoticeConvertor;
 import com.xiaoo.kaleido.notice.infrastructure.dao.NoticeDao;
 import com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticePO;
-import com.xiaoo.kaleido.notice.types.enums.NoticeStatusEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 import com.xiaoo.kaleido.notice.types.exception.NoticeErrorCode;
 import com.xiaoo.kaleido.notice.types.exception.NoticeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -119,7 +118,7 @@ public class NoticeRepositoryImpl implements INoticeRepository {
                 .collect(Collectors.toList());
         
         // 构建分页响应
-        return PageResp.success(
+        return PageResp.of(
                 aggregateList,
                 pageInfo.getTotal(),
                 pageInfo.getPageNum(),

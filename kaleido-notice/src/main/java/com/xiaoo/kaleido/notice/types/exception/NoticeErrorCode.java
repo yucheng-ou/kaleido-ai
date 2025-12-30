@@ -35,6 +35,7 @@ public enum NoticeErrorCode implements ErrorCode {
     NOTICE_TYPE_EMPTY("NOTICE_TYPE_EMPTY", "通知类型不能为空"),
     
     // 模板相关错误
+    NOTICE_TEMPLATE_CODE_EXISTS("NOTICE_TEMPLATE_CODE_EXISTS", "通知模板编码已存在"),
     TEMPLATE_VARIABLE_MISMATCH("TEMPLATE_VARIABLE_MISMATCH", "模板变量不匹配"),
     TEMPLATE_RENDER_FAILED("TEMPLATE_RENDER_FAILED", "模板渲染失败"),
     

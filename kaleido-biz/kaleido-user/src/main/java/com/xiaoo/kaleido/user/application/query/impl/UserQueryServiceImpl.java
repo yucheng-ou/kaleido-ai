@@ -54,7 +54,7 @@ public class UserQueryServiceImpl implements UserQueryService {
                 userRepository.pageQuery(req);
         
         // 转换为响应类型
-        return PageResp.success(
+        return PageResp.of(
                 pageResult.getList().stream()
                         .map(userConvertor::toResponse)
                         .collect(Collectors.toList()),

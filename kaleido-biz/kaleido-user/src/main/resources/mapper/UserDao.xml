@@ -12,7 +12,6 @@
         <result property="lockVersion" column="lock_version"/>
         
         <!-- UserPO特有字段 -->
-        <result property="userId" column="user_id"/>
         <result property="mobile" column="mobile"/>
         <result property="passwordHash" column="password_hash"/>
         <result property="nickName" column="nick_name"/>
@@ -26,14 +25,14 @@
 
     <!-- 用户表字段列表 -->
     <sql id="UserColumns">
-        id, user_id, mobile, password_hash, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
+        id, mobile, password_hash, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
     </sql>
 
-    <!-- 根据用户ID（业务主键）查找用户 -->
-    <select id="findByUserId" resultMap="UserMap">
+    <!-- 根据ID查找用户 -->
+    <select id="findById" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
         FROM user
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
     </select>
 
     <!-- 根据手机号查找用户 -->
@@ -51,10 +50,10 @@
     </select>
 
     <!-- 检查用户ID是否存在 -->
-    <select id="existsByUserId" resultType="boolean">
+    <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM user
-        WHERE user_id = #{userId} AND deleted = 0
+        WHERE id = #{id} AND deleted = 0
     </select>
 
     <!-- 检查手机号是否存在 -->

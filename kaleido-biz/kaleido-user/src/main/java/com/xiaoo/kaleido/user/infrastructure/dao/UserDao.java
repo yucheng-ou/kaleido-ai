@@ -18,12 +18,12 @@ import java.util.List;
 public interface UserDao extends BaseMapper<UserPO> {
 
     /**
-     * 根据用户ID查找用户
+     * 根据ID查找用户
      *
-     * @param userId 用户ID（业务主键）
+     * @param id 用户ID
      * @return 用户持久化对象
      */
-    UserPO findByUserId(@Param("userId") String userId);
+    UserPO findById(@Param("id") String id);
 
     /**
      * 根据手机号查找用户
@@ -44,10 +44,10 @@ public interface UserDao extends BaseMapper<UserPO> {
     /**
      * 检查用户ID是否存在
      *
-     * @param userId 用户ID（业务主键）
+     * @param id 用户ID
      * @return 是否存在
      */
-    boolean existsByUserId(@Param("userId") String userId);
+    boolean existsById(@Param("id") String id);
 
     /**
      * 检查手机号是否存在
