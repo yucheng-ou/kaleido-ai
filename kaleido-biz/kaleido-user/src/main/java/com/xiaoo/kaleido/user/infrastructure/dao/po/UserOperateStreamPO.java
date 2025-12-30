@@ -21,12 +21,6 @@ import java.util.Date;
 public class UserOperateStreamPO extends BasePO {
 
     /**
-     * 用户ID
-     */
-    @TableField("user_id")
-    private String userId;
-
-    /**
      * 操作类型
      */
     @TableField("operate_type")

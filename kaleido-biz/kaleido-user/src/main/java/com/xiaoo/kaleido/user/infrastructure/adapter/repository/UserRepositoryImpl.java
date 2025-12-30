@@ -65,7 +65,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserAggregate> findById(String id) {
-        UserPO userPO = userDao.findByUserId(id);
+        UserPO userPO = userDao.findById(id);
         if (userPO == null) {
             return Optional.empty();
         }
@@ -80,7 +80,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserAggregate> findUserAndStreamById(String id) {
-        UserPO userPO = userDao.findByUserId(id);
+        UserPO userPO = userDao.findById(id);
         if (userPO == null) {
             return Optional.empty();
         }
@@ -89,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository {
         User user = UserConvertor.INSTANCE.toEntity(userPO);
         
         // 加载操作流水（最近100条）
-        List<UserOperateStreamPO> streamPOs = userOperateStreamDao.findByUserIdWithLimit(userPO.getUserId(), 100);
+        List<UserOperateStreamPO> streamPOs = userOperateStreamDao.findByIdWithLimit(userPO.getId(), 100);
         List<UserOperateStream> streams = streamPOs.stream()
                 .map(UserOperateStreamConvertor.INSTANCE::toEntity)
                 .toList();
@@ -147,7 +147,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .collect(Collectors.toList());
         
         // 构建分页响应
-        return PageResp.success(
+        return PageResp.of(
                 aggregateList,
                 pageInfo.getTotal(),
                 pageInfo.getPageNum(),

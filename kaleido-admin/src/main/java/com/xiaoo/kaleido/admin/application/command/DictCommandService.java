@@ -1,6 +1,8 @@
 package com.xiaoo.kaleido.admin.application.command;
 
-import com.xiaoo.kaleido.admin.domain.dict.repository.DictRepository;
+import com.xiaoo.kaleido.api.admin.command.AddDictCommand;
+import com.xiaoo.kaleido.api.admin.command.UpdateDictCommand;
+import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.admin.domain.dict.service.DictDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
@@ -22,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DictCommandService {
 
-    private final DictRepository dictRepository;
+    private final IDictRepository dictRepository;
     private final DictDomainService dictDomainService;
 
     /**
@@ -33,16 +35,6 @@ public class DictCommandService {
      */
     @Transactional
     public String createDict(AddDictCommand command) {
-        // 验证参数
-        if (command.getTypeCode() == null || command.getTypeCode().trim().isEmpty()) {
-            throw AdminException.of(AdminErrorCode.DICT_TYPE_CODE_EMPTY.getCode(), AdminErrorCode.DICT_TYPE_CODE_EMPTY.getMessage());
-        }
-        if (command.getDictCode() == null || command.getDictCode().trim().isEmpty()) {
-            throw AdminException.of(AdminErrorCode.DICT_CODE_EMPTY.getCode(), AdminErrorCode.DICT_CODE_EMPTY.getMessage());
-        }
-        if (command.getDictName() == null || command.getDictName().trim().isEmpty()) {
-            throw AdminException.of(AdminErrorCode.DICT_NAME_EMPTY.getCode(), AdminErrorCode.DICT_NAME_EMPTY.getMessage());
-        }
 
         // 调用领域服务创建字典
         DictAggregate dictAggregate = dictDomainService.createDict(
@@ -69,25 +61,21 @@ public class DictCommandService {
      */
     @Transactional
     public void updateDict(UpdateDictCommand command) {
-        // 验证参数
-        if (command.getDictId() == null || command.getDictId().trim().isEmpty()) {
-            throw AdminException.of(AdminErrorCode.DICT_NOT_EXIST.getCode(), "字典ID不能为空");
-        }
 
         DictAggregate dictAggregate;
         if (command.getTypeName() != null && !command.getTypeName().trim().isEmpty()) {
             // 更新字典类型信息
-            dictAggregate = dictDomainService.updateDictTypeInfo(command.getDictId(), command.getTypeName());
+            dictAggregate = dictDomainService.updateDictTypeInfo(command.getId(), command.getTypeName());
         } else {
             // 更新字典信息
-            dictAggregate = dictDomainService.updateDict(command.getDictId(),
+            dictAggregate = dictDomainService.updateDict(command.getId(),
                     command.getDictName(), command.getDictValue(), command.getSort());
         }
 
         // 保存字典
         dictRepository.save(dictAggregate);
 
-        log.info("字典更新成功，字典ID: {}", command.getDictId());
+        log.info("字典更新成功，字典ID: {}", command.getId());
     }
 
     /**

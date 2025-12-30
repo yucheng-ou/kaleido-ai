@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.dict.service.impl;
 
-import com.xiaoo.kaleido.admin.domain.dict.repository.DictRepository;
+import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.admin.domain.dict.service.DictDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DictDomainServiceImpl implements DictDomainService {
 
-    private final DictRepository dictRepository;
+    private final IDictRepository dictRepository;
 
     @Override
     public DictAggregate createDict(String typeCode, String typeName, String dictCode,

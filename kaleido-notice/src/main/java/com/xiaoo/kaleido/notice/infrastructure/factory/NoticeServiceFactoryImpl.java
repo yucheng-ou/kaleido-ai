@@ -3,7 +3,7 @@ package com.xiaoo.kaleido.notice.infrastructure.factory;
 import com.xiaoo.kaleido.notice.domain.adapter.port.INoticeAdapterService;
 import com.xiaoo.kaleido.notice.domain.factory.INoticeServiceFactory;
 import com.xiaoo.kaleido.notice.types.annotation.NoticeAdapter;
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 import com.xiaoo.kaleido.notice.types.exception.NoticeErrorCode;
 import com.xiaoo.kaleido.notice.types.exception.NoticeException;
 import lombok.extern.slf4j.Slf4j;

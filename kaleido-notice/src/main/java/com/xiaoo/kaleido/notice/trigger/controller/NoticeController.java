@@ -1,23 +1,22 @@
 package com.xiaoo.kaleido.notice.trigger.controller;
 
 import com.xiaoo.kaleido.api.notice.command.AddNoticeTemplateCommand;
-import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
-import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
 import com.xiaoo.kaleido.api.notice.query.NoticeTemplatePageQueryReq;
+import com.xiaoo.kaleido.api.notice.response.NoticeResponse;
+import com.xiaoo.kaleido.api.notice.response.NoticeTemplateResponse;
 import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.base.result.Result;
-import com.xiaoo.kaleido.notice.command.NoticeCommandService;
-import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
-import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
-import com.xiaoo.kaleido.notice.query.NoticeQueryService;
-import com.xiaoo.kaleido.notice.trigger.rpc.RpcNoticeServiceImpl;
+import com.xiaoo.kaleido.notice.application.NoticeCommandService;
+import com.xiaoo.kaleido.notice.application.NoticeQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 通知控制器
@@ -34,59 +33,42 @@ public class NoticeController {
 
     private final NoticeCommandService noticeCommandService;
     private final NoticeQueryService noticeQueryService;
-    private final RpcNoticeServiceImpl rpcNoticeService;
 
-    @PostMapping("/sms/verify-code/send")
-    @Operation(summary = "发送短信验证码")
-    public Result<String> sendSmsVerifyCode(@Valid @RequestBody SendSmsVerifyCodeCommand command) {
-        return rpcNoticeService.generateAndSendSmsVerifyCode(command);
-    }
-
-    @PostMapping("/sms/verify-code/check")
-    @Operation(summary = "校验短信验证码")
-    public Result<Boolean> checkSmsVerifyCode(@Valid @RequestBody CheckSmsVerifyCodeCommand command) {
-        return rpcNoticeService.checkSmsVerifyCode(command);
-    }
 
     @PostMapping("/template")
     @Operation(summary = "添加通知模板")
     public Result<String> addNoticeTemplate(@Valid @RequestBody AddNoticeTemplateCommand command) {
-        // TODO: 实现添加通知模板逻辑
-        // 目前返回成功，待业务逻辑完善后实现
-        return Result.success("模板添加成功");
+        String templateId = noticeCommandService.addNoticeTemplate(command);
+        return Result.success(templateId);
     }
 
     @GetMapping("/template/{code}")
     @Operation(summary = "根据编码查询通知模板")
-    public Result<NoticeTemplateAggregate> getTemplateByCode(@PathVariable String code) {
-        return noticeQueryService.findTemplateByCode(code)
-                .map(Result::success)
-                .orElse(Result.error("NOTICE_TEMPLATE_NOT_FOUND", "模板不存在"));
+    public Result<NoticeTemplateResponse> getTemplateByCode(@PathVariable String code) {
+        return Result.success(noticeQueryService.findTemplateByCode(code));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "根据ID查询通知")
-    public Result<NoticeAggregate> getNoticeById(@PathVariable String id) {
-        return noticeQueryService.findNoticeById(id)
-                .map(Result::success)
-                .orElse(Result.error("NOTICE_NOT_FOUND", "通知不存在"));
+    public Result<NoticeResponse> getNoticeById(@PathVariable String id) {
+        return Result.success(noticeQueryService.findNoticeById(id));
     }
 
     @GetMapping("/target/{target}")
     @Operation(summary = "根据目标地址查询通知列表")
-    public Result<java.util.List<NoticeAggregate>> getNoticesByTarget(@PathVariable String target) {
+    public Result<List<NoticeResponse>> getNoticesByTarget(@PathVariable String target) {
         return Result.success(noticeQueryService.findNoticesByTarget(target));
     }
 
     @PostMapping("/page")
     @Operation(summary = "分页查询通知")
-    public Result<PageResp<NoticeAggregate>> pageQueryNotices(@Valid @RequestBody NoticePageQueryReq req) {
+    public Result<PageResp<NoticeResponse>> pageQueryNotices(@Valid @RequestBody NoticePageQueryReq req) {
         return Result.success(noticeQueryService.pageQueryNotices(req));
     }
 
     @PostMapping("/template/page")
     @Operation(summary = "分页查询通知模板")
-    public Result<PageResp<NoticeTemplateAggregate>> pageQueryTemplates(@Valid @RequestBody NoticeTemplatePageQueryReq req) {
+    public Result<PageResp<NoticeTemplateResponse>> pageQueryTemplates(@Valid @RequestBody NoticeTemplatePageQueryReq req) {
         return Result.success(noticeQueryService.pageQueryTemplates(req));
     }
 }

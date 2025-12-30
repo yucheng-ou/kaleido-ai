@@ -5,8 +5,8 @@ import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.domain.model.valobj.TargetAddress;
 import com.xiaoo.kaleido.notice.domain.service.INoticeDomainService;
 import com.xiaoo.kaleido.notice.domain.service.INoticeTemplateDomainService;
-import com.xiaoo.kaleido.notice.types.enums.BusinessTypeEnum;
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,7 @@ package com.xiaoo.kaleido.notice.infrastructure.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
 import com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticePO;
-import com.xiaoo.kaleido.notice.types.enums.NoticeStatusEnum;
+import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

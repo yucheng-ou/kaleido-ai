@@ -19,8 +19,20 @@ public class NoticeException extends BizException {
         super(errorCode, message);
     }
 
+    public static NoticeException of(NoticeErrorCode errorCode) {
+        return new NoticeException(errorCode);
+    }
+
     public static NoticeException of(String errorCode, String message) {
         return new NoticeException(errorCode, message);
+    }
+
+    public static NoticeException of(NoticeErrorCode errorCode, String message) {
+        return new NoticeException(errorCode.getCode(), message);
+    }
+
+    public static NoticeException of(NoticeErrorCode errorCode, Throwable cause) {
+        return new NoticeException(errorCode.getCode(), errorCode.getMessage());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.notice.infrastructure.adapter.repository.convertor;
 
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.domain.model.valobj.TargetAddress;
 import com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticePO;
@@ -63,6 +64,6 @@ public interface NoticeConvertor {
         }
         // 这里需要根据实际情况解析地址类型
         // 暂时简单处理，假设是手机号（SMS类型）
-        return TargetAddress.create(address, com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum.SMS);
+        return TargetAddress.create(address, NoticeTypeEnum.SMS);
     }
 }

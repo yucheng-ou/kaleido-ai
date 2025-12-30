@@ -1,8 +1,6 @@
 package com.xiaoo.kaleido.notice.domain.adapter.port;
 
 
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
-
 /**
  * 短信服务接口（领域层定义）
  * 负责短信发送功能

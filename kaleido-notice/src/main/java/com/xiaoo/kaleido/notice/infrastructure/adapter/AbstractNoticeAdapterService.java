@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.notice.infrastructure.adapter;
 
 import com.xiaoo.kaleido.notice.domain.adapter.port.INoticeAdapterService;
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

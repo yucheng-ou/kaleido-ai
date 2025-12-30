@@ -1,9 +1,7 @@
 package com.xiaoo.kaleido.notice.domain.factory;
 
 import com.xiaoo.kaleido.notice.domain.adapter.port.INoticeAdapterService;
-import com.xiaoo.kaleido.notice.types.enums.NoticeTypeEnum;
-
-import java.util.List;
+import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
 
 /**
  * 通知服务工厂接口

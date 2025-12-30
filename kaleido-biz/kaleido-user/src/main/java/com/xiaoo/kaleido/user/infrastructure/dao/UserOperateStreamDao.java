@@ -19,19 +19,19 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
     /**
      * 根据用户ID查找用户操作流水列表
      *
-     * @param userId 用户ID
+     * @param id 用户ID
      * @return 用户操作流水列表
      */
-    List<UserOperateStreamPO> findByUserId(@Param("userId") String userId);
+    List<UserOperateStreamPO> findById(@Param("id") String id);
 
     /**
      * 根据用户ID和操作类型查找用户操作流水列表
      *
-     * @param userId      用户ID
+     * @param id          用户ID
      * @param operateType 操作类型
      * @return 用户操作流水列表
      */
-    List<UserOperateStreamPO> findByUserIdAndOperateType(@Param("userId") String userId, @Param("operateType") String operateType);
+    List<UserOperateStreamPO> findByIdAndOperateType(@Param("id") String id, @Param("operateType") String operateType);
 
     /**
      * 根据操作者ID查找用户操作流水列表
@@ -44,27 +44,27 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
     /**
      * 根据用户ID分页查询操作流水
      *
-     * @param userId   用户ID
+     * @param id       用户ID
      * @param offset   偏移量
      * @param pageSize 每页大小
      * @return 用户操作流水列表
      */
-    List<UserOperateStreamPO> findByUserIdWithPage(@Param("userId") String userId, @Param("offset") int offset, @Param("pageSize") int pageSize);
+    List<UserOperateStreamPO> findByIdWithPage(@Param("id") String id, @Param("offset") int offset, @Param("pageSize") int pageSize);
 
     /**
      * 根据用户ID查询操作流水（限制条数）
      *
-     * @param userId 用户ID
-     * @param limit  限制条数
+     * @param id    用户ID
+     * @param limit 限制条数
      * @return 用户操作流水列表
      */
-    List<UserOperateStreamPO> findByUserIdWithLimit(@Param("userId") String userId, @Param("limit") int limit);
+    List<UserOperateStreamPO> findByIdWithLimit(@Param("id") String id, @Param("limit") int limit);
 
     /**
      * 统计用户操作流水数量
      *
-     * @param userId 用户ID
+     * @param id 用户ID
      * @return 操作流水数量
      */
-    long countByUserId(@Param("userId") String userId);
+    long countById(@Param("id") String id);
 }

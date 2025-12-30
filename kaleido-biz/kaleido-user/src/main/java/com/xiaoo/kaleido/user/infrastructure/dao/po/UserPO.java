@@ -22,12 +22,6 @@ import java.util.Date;
 public class UserPO extends BasePO {
 
     /**
-     * 用户ID（业务主键）
-     */
-    @TableField("user_id")
-    private String userId;
-
-    /**
      * 手机号
      */
     @TableField("mobile")

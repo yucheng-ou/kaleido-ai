@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.mapper.DictMapper">
+    
+    <!-- 1. ResultMap定义 -->
+    <resultMap id="DictMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO">
+        <!-- 继承BasePO的字段映射 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- DictPO特有字段 -->
+        <result property="typeCode" column="type_code"/>
+        <result property="typeName" column="type_name"/>
+        <result property="dictCode" column="dict_code"/>
+        <result property="dictName" column="dict_name"/>
+        <result property="dictValue" column="dict_value"/>
+        <result property="sort" column="sort"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <!-- 2. 可重用SQL片段 -->
+    <sql id="DictColumns">
+        id, type_code, type_name, dict_code, dict_name, dict_value, sort, status,
+        created_at, updated_at, deleted, lock_version
+    </sql>
+    
+    <!-- 3. 查询条件片段 -->
+    <sql id="DictQueryConditions">
+        <!-- 软删除条件（所有查询必须包含） -->
+        AND deleted = 0
+        
+        <!-- 动态条件 -->
+        <if test="queryReq.typeCode != null and queryReq.typeCode != ''">
+            AND type_code = #{queryReq.typeCode}
+        </if>
+        <if test="queryReq.typeName != null and queryReq.typeName != ''">
+            AND type_name LIKE CONCAT('%', #{queryReq.typeName}, '%')
+        </if>
+        <if test="queryReq.dictCode != null and queryReq.dictCode != ''">
+            AND dict_code = #{queryReq.dictCode}
+        </if>
+        <if test="queryReq.dictName != null and queryReq.dictName != ''">
+            AND dict_name LIKE CONCAT('%', #{queryReq.dictName}, '%')
+        </if>
+        <if test="queryReq.dictValue != null and queryReq.dictValue != ''">
+            AND dict_value LIKE CONCAT('%', #{queryReq.dictValue}, '%')
+        </if>
+        <if test="queryReq.status != null">
+            AND status = #{queryReq.status}
+        </if>
+    </sql>
+    
+    <!-- 4. 分页查询条件片段 -->
+    <sql id="DictPageQueryConditions">
+        <!-- 软删除条件（所有查询必须包含） -->
+        AND deleted = 0
+        
+        <!-- 动态条件 -->
+        <if test="pageQueryReq.typeCode != null and pageQueryReq.typeCode != ''">
+            AND type_code = #{pageQueryReq.typeCode}
+        </if>
+        <if test="pageQueryReq.typeName != null and pageQueryReq.typeName != ''">
+            AND type_name LIKE CONCAT('%', #{pageQueryReq.typeName}, '%')
+        </if>
+        <if test="pageQueryReq.dictCode != null and pageQueryReq.dictCode != ''">
+            AND dict_code = #{pageQueryReq.dictCode}
+        </if>
+        <if test="pageQueryReq.dictName != null and pageQueryReq.dictName != ''">
+            AND dict_name LIKE CONCAT('%', #{pageQueryReq.dictName}, '%')
+        </if>
+        <if test="pageQueryReq.dictValue != null and pageQueryReq.dictValue != ''">
+            AND dict_value LIKE CONCAT('%', #{pageQueryReq.dictValue}, '%')
+        </if>
+        <if test="pageQueryReq.status != null">
+            AND status = #{pageQueryReq.status}
+        </if>
+    </sql>
+    
+    <!-- 5. 查询语句 -->
+    
+    <!-- 根据字典类型编码和字典编码查询字典 -->
+    <select id="findByTypeCodeAndDictCode" resultMap="DictMap">
+        SELECT <include refid="DictColumns"/>
+        FROM t_dict
+        WHERE type_code = #{typeCode} 
+          AND dict_code = #{dictCode} 
+          AND deleted = 0
+    </select>
+    
+    <!-- 根据字典类型编码查询字典列表 -->
+    <select id="findByTypeCode" resultMap="DictMap">
+        SELECT <include refid="DictColumns"/>
+        FROM t_dict
+        WHERE type_code = #{typeCode} 
+          AND deleted = 0
+        ORDER BY sort ASC
+    </select>
+    
+    <!-- 根据字典类型编码查询启用的字典列表 -->
+    <select id="findEnabledByTypeCode" resultMap="DictMap">
+        SELECT <include refid="DictColumns"/>
+        FROM t_dict
+        WHERE type_code = #{typeCode} 
+          AND status = #{status} 
+          AND deleted = 0
+        ORDER BY sort ASC
+    </select>
+    
+    <!-- 检查字典类型编码和字典编码是否已存在 -->
+    <select id="existsByTypeCodeAndDictCode" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM t_dict
+        WHERE type_code = #{typeCode} 
+          AND dict_code = #{dictCode} 
+          AND deleted = 0
+    </select>
+    
+    <!-- 检查字典类型编码是否已存在 -->
+    <select id="existsByTypeCode" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM t_dict
+        WHERE type_code = #{typeCode} 
+          AND deleted = 0
+    </select>
+    
+    <!-- 根据条件查询字典列表 -->
+    <select id="selectByCondition" resultMap="DictMap">
+        SELECT <include refid="DictColumns"/>
+        FROM t_dict
+        WHERE 1=1
+        <include refid="DictQueryConditions"/>
+        ORDER BY sort ASC
+    </select>
+    
+    <!-- 根据条件分页查询字典 -->
+    <select id="selectByPageCondition" resultMap="DictMap">
+        SELECT <include refid="DictColumns"/>
+        FROM t_dict
+        WHERE 1=1
+        <include refid="DictPageQueryConditions"/>
+        ORDER BY sort ASC
+    </select>
+</mapper>

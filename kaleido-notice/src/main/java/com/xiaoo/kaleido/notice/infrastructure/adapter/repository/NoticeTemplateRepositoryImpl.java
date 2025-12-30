@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Repository
+@Transactional
 @RequiredArgsConstructor
 public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
 
@@ -52,17 +53,9 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
     }
 
     @Override
-    public NoticeTemplateAggregate save(NoticeTemplateAggregate template) {
+    public void save(NoticeTemplateAggregate template) {
         NoticeTemplatePO templatePO = NoticeTemplateConvertor.INSTANCE.toPO(template);
-        if (templatePO.getId() == null) {
-            // 新增
-            noticeTemplateDao.insert(templatePO);
-        } else {
-            // 更新
-            noticeTemplateDao.updateById(templatePO);
-        }
-        // 重新加载并返回
-        return NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO);
+        noticeTemplateDao.insert(templatePO);
     }
 
     @Override
@@ -70,34 +63,19 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
         noticeTemplateDao.deleteById(id);
     }
 
-    /**
-     * 根据ID查找模板聚合根，如果不存在则抛出异常
-     *
-     * @param id 模板ID
-     * @return 模板聚合根
-     */
+    @Override
     public NoticeTemplateAggregate findByIdOrThrow(String id) {
         return findById(id)
                 .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
     }
 
-    /**
-     * 根据编码查找模板聚合根，如果不存在则抛出异常
-     *
-     * @param code 模板编码
-     * @return 模板聚合根
-     */
+    @Override
     public NoticeTemplateAggregate findByCodeOrThrow(String code) {
         return findByCode(code)
                 .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
     }
 
-    /**
-     * 检查模板编码是否存在
-     *
-     * @param code 模板编码
-     * @return 是否存在
-     */
+    @Override
     public boolean existsByCode(String code) {
         return noticeTemplateDao.existsByTemplateCode(code);
     }
@@ -128,29 +106,24 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 分页查询模板
-     *
-     * @param req 查询条件
-     * @return 分页结果
-     */
+    @Override
     public PageResp<NoticeTemplateAggregate> pageQuery(NoticeTemplatePageQueryReq req) {
         // 使用PageHelper进行分页
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        
+
         // 执行查询
         List<NoticeTemplatePO> templatePOList = noticeTemplateDao.selectByCondition(req);
-        
+
         // 转换为PageInfo获取分页信息
         PageInfo<NoticeTemplatePO> pageInfo = new PageInfo<>(templatePOList);
-        
+
         // 转换为聚合根列表
         List<NoticeTemplateAggregate> aggregateList = templatePOList.stream()
                 .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
-        
+
         // 构建分页响应
-        return PageResp.success(
+        return PageResp.of(
                 aggregateList,
                 pageInfo.getTotal(),
                 pageInfo.getPageNum(),
