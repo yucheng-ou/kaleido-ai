@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.admin.application.query;
 
-import com.xiaoo.kaleido.api.admin.query.DictPageQueryReq;
-import com.xiaoo.kaleido.api.admin.query.DictQueryReq;
-import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.base.response.PageResp;
 
 import java.util.List;

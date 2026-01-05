@@ -36,3 +36,28 @@ spring:
         group: ${spring.application.name}
       config:
         group: ${spring.application.name}
+
+# 网关认证策略配置
+# 配置说明：
+# 1. 列表顺序即为匹配优先级，先配置的优先级更高
+# 2. 策略类型：PUBLIC（公共路径，无需认证）、USER（用户路径，需要用户登录）、ADMIN（管理员路径，需要管理员登录）
+# 3. 路径模式支持 Ant 风格通配符
+# 4. 默认策略：当没有路径匹配时使用的策略
+gateway:
+  auth:
+    strategies:
+      # 公共路径（无需认证）
+      - pattern: "/kaleido-auth/public/**"
+        strategy: "PUBLIC"
+
+      # 管理员认证路径
+      - pattern: "/kaleido-admin/**"
+        strategy: "ADMIN"
+      - pattern: "/kaleido-notice/**"
+        strategy: "ADMIN"
+      
+      # 用户认证路径
+      - pattern: "/kaleido-user/**"
+        strategy: "USER"
+    
+    default-strategy: "PUBLIC"

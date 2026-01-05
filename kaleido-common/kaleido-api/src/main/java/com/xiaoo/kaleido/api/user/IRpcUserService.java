@@ -14,6 +14,8 @@ public interface IRpcUserService {
 
     Result<UserInfoResponse> getById(String userId);
 
+    Result<UserInfoResponse> getByTelephone(String telephone);
+
     Result<String> register(AddUserCommand command);
 
     /**

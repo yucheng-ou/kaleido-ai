@@ -25,6 +25,7 @@
         <module>kaleido-distribute</module>
         <module>kaleido-aop</module>
         <module>kaleido-sms</module>
+        <module>kaleido-sa-token</module>
     </modules>
 
     <dependencies>

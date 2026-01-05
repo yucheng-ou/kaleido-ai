@@ -64,6 +64,7 @@
         <springdoc.version>2.7.0</springdoc.version>
         <dubbo.version>3.3.0</dubbo.version>
         <pagehelper.version>1.4.7</pagehelper.version>
+        <sa-token.version>1.44.0</sa-token.version>
 
     </properties>
 
@@ -235,6 +236,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-sa-token</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
@@ -244,6 +251,7 @@
                 <artifactId>dubbo-registry-nacos</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
+
 
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -255,6 +263,18 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-jackson</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
         </dependencies>

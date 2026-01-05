@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.RolePermissionDao">
+    
+    <!-- 1. ResultMap定义 -->
+    <resultMap id="RolePermissionMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePermissionPO">
+        <!-- 继承BasePO的字段映射 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- RolePermissionPO特有字段 -->
+        <result property="roleId" column="role_id"/>
+        <result property="permissionId" column="permission_id"/>
+    </resultMap>
+    
+    <!-- 2. 可重用SQL片段 -->
+    <sql id="RolePermissionColumns">
+        id, role_id, permission_id,
+        created_at, updated_at, deleted, lock_version
+    </sql>
+    
+    <!-- 3. 查询语句 -->
+    
+    <!-- 根据角色ID查找关联记录 -->
+    <select id="findByRoleId" resultMap="RolePermissionMap">
+        SELECT <include refid="RolePermissionColumns"/>
+        FROM role_permission
+        WHERE deleted = 0 AND role_id = #{roleId}
+        ORDER BY created_at ASC
+    </select>
+    
+    <!-- 根据权限ID查找关联记录 -->
+    <select id="findByPermissionId" resultMap="RolePermissionMap">
+        SELECT <include refid="RolePermissionColumns"/>
+        FROM role_permission
+        WHERE deleted = 0 AND permission_id = #{permissionId}
+        ORDER BY created_at ASC
+    </select>
+    
+    <!-- 根据角色ID列表查找关联记录 -->
+    <select id="findByRoleIds" resultMap="RolePermissionMap">
+        SELECT <include refid="RolePermissionColumns"/>
+        FROM role_permission
+        WHERE deleted = 0 AND role_id IN
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+        ORDER BY role_id ASC, created_at ASC
+    </select>
+    
+    <!-- 根据权限ID列表查找关联记录 -->
+    <select id="findByPermissionIds" resultMap="RolePermissionMap">
+        SELECT <include refid="RolePermissionColumns"/>
+        FROM role_permission
+        WHERE deleted = 0 AND permission_id IN
+        <foreach collection="permissionIds" item="permissionId" open="(" separator="," close=")">
+            #{permissionId}
+        </foreach>
+        ORDER BY permission_id ASC, created_at ASC
+    </select>
+    
+    <!-- 删除角色的所有权限关联 -->
+    <delete id="deleteByRoleId">
+        DELETE FROM role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+    
+    <!-- 删除权限的所有角色关联 -->
+    <delete id="deleteByPermissionId">
+        DELETE FROM role_permission
+        WHERE permission_id = #{permissionId}
+    </delete>
+    
+    <!-- 批量插入关联记录 -->
+    <insert id="batchInsert" parameterType="list">
+        INSERT INTO role_permission (id, role_id, permission_id, created_at, updated_at, deleted, lock_version)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.id},
+            #{item.roleId},
+            #{item.permissionId},
+            #{item.createdAt},
+            #{item.updatedAt},
+            #{item.deleted},
+            #{item.lockVersion}
+            )
+        </foreach>
+    </insert>
+</mapper>

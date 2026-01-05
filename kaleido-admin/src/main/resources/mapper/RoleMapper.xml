@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.RoleDao">
+    
+    <!-- 1. ResultMap定义 -->
+    <resultMap id="RoleMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePO">
+        <!-- 继承BasePO的字段映射 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- RolePO特有字段 -->
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="isSystem" column="is_system"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    
+    <!-- 2. 可重用SQL片段 -->
+    <sql id="RoleColumns">
+        id, code, name, description, is_system, status,
+        created_at, updated_at, deleted, lock_version
+    </sql>
+    
+    <!-- 3. 查询语句 -->
+    
+    <!-- 根据ID查找角色 -->
+    <select id="findById" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE id = #{id} AND deleted = 0
+    </select>
+    
+    <!-- 根据编码查找角色 -->
+    <select id="findByCode" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE code = #{code} AND deleted = 0
+    </select>
+    
+    <!-- 根据状态查找角色列表 -->
+    <select id="findByStatus" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 查找系统角色 -->
+    <select id="findByIsSystem" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0
+        <if test="isSystem != null">
+            AND is_system = #{isSystem}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 查找所有角色 -->
+    <select id="findAll" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据ID列表查找角色 -->
+    <select id="findAllById" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0 AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据编码列表查找角色 -->
+    <select id="findAllByCode" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0 AND code IN
+        <foreach collection="codes" item="code" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 根据权限ID查找拥有该权限的角色 -->
+    <select id="findByPermissionId" resultMap="RoleMap">
+        SELECT r.*
+        FROM role r
+        INNER JOIN role_permission rp ON r.id = rp.role_id
+        WHERE r.deleted = 0 AND rp.permission_id = #{permissionId}
+        ORDER BY r.created_at DESC
+    </select>
+    
+    <!-- 根据条件查询角色列表 -->
+    <select id="findByCondition" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0
+        <if test="req.code != null and req.code != ''">
+            AND code LIKE CONCAT('%', #{req.code}, '%')
+        </if>
+        <if test="req.name != null and req.name != ''">
+            AND name LIKE CONCAT('%', #{req.name}, '%')
+        </if>
+        <if test="req.isSystem != null">
+            AND is_system = #{req.isSystem}
+        </if>
+        <if test="req.enabled != null">
+            AND status = #{req.enabled}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 查找启用的角色列表 -->
+    <select id="findEnabledRoles" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0 AND status = 1
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 查找系统角色列表 -->
+    <select id="findSystemRoles" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0 AND is_system = 1
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- 获取角色树 -->
+    <select id="getRoleTree" resultMap="RoleMap">
+        SELECT <include refid="RoleColumns"/>
+        FROM role
+        WHERE deleted = 0
+        ORDER BY is_system DESC, created_at ASC
+    </select>
+    
+    <!-- 检查角色是否存在 -->
+    <select id="existsById" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM role
+        WHERE id = #{id} AND deleted = 0
+    </select>
+    
+    <!-- 检查角色编码是否存在 -->
+    <select id="existsByCode" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM role
+        WHERE code = #{code} AND deleted = 0
+    </select>
+    
+    <!-- 统计角色数量 -->
+    <select id="count" resultType="long">
+        SELECT COUNT(*)
+        FROM role
+        WHERE deleted = 0
+    </select>
+    
+    <!-- 根据状态统计角色数量 -->
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(*)
+        FROM role
+        WHERE deleted = 0
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+    
+    <!-- 根据是否系统角色统计数量 -->
+    <select id="countByIsSystem" resultType="long">
+        SELECT COUNT(*)
+        FROM role
+        WHERE deleted = 0
+        <if test="isSystem != null">
+            AND is_system = #{isSystem}
+        </if>
+    </select>
+</mapper>

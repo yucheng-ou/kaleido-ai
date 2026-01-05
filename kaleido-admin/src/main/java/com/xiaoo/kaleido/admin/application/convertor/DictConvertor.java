@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.convertor;
 
-import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;

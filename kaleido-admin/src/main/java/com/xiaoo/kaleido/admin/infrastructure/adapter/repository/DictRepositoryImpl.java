@@ -7,9 +7,10 @@ import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.DictInfraConvertor;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
 import com.xiaoo.kaleido.admin.infrastructure.mapper.DictMapper;
+import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
-import com.xiaoo.kaleido.api.admin.query.DictQueryReq;
-import com.xiaoo.kaleido.api.admin.query.DictPageQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.response.PageResp;
 import lombok.RequiredArgsConstructor;
@@ -101,13 +102,13 @@ public class DictRepositoryImpl implements IDictRepository {
     @Override
     public DictAggregate findByIdOrThrow(String id) {
         return findById(id)
-                .orElseThrow(AdminException::dictNotExist);
+                .orElseThrow(() -> AdminException.of(AdminErrorCode.DICT_NOT_EXIST));
     }
 
     @Override
     public DictAggregate findByTypeCodeAndDictCodeOrThrow(String typeCode, String dictCode) {
         return findByTypeCodeAndDictCode(typeCode, dictCode)
-                .orElseThrow(AdminException::dictNotExist);
+                .orElseThrow(() -> AdminException.of(AdminErrorCode.DICT_NOT_EXIST));
     }
 
     @Override
@@ -122,15 +123,15 @@ public class DictRepositoryImpl implements IDictRepository {
     public PageResp<DictAggregate> pageQueryByCondition(DictPageQueryReq pageQueryReq) {
         // 创建MyBatis Plus分页对象
         Page<DictPO> page = new Page<>(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
-        
+
         // 执行分页查询
         IPage<DictPO> poPage = dictMapper.selectByPageCondition(page, pageQueryReq);
-        
+
         // 转换为聚合根列表
         List<DictAggregate> aggregateList = poPage.getRecords().stream()
                 .map(dictInfraConvertor::toEntity)
                 .collect(Collectors.toList());
-        
+
         // 构建分页响应
         PageResp<DictAggregate> pageResp = new PageResp<>();
         pageResp.setList(aggregateList);

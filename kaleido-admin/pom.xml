@@ -63,5 +63,10 @@
             <artifactId>kaleido-aop</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-sa-token</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

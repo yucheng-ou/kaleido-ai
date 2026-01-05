@@ -42,6 +42,11 @@
             <version>${jetcache.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-redis</artifactId>
+        </dependency>
+
 
     </dependencies>
 </project>

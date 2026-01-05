@@ -54,6 +54,10 @@
             <artifactId>kaleido-doc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-sa-token</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

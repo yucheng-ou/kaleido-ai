@@ -65,8 +65,9 @@ public interface DictDomainService {
      * 删除字典
      *
      * @param dictId 字典ID
+     * @return 要删除的字典对象
      */
-    void deleteDict(String dictId);
+    DictAggregate deleteDict(String dictId);
 
     /**
      * 根据字典类型编码和字典编码获取字典
@@ -76,13 +77,5 @@ public interface DictDomainService {
      * @return 字典
      */
     DictAggregate getDictByCode(String typeCode, String dictCode);
-
-    /**
-     * 验证字典是否存在且启用
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 是否有效
-     */
-    boolean isValidDict(String typeCode, String dictCode);
+    
 }

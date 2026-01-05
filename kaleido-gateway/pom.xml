@@ -48,5 +48,16 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-nacos</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-sa-token</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-redis</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

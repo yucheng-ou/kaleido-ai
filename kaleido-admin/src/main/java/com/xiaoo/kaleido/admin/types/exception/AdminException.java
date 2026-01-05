@@ -32,37 +32,4 @@ public class AdminException extends BizException {
     public static AdminException of(ErrorCode errorCode) {
         return new AdminException(errorCode.getCode(), errorCode.getMessage());
     }
-
-
-    public static AdminException dictNotExist() {
-        return new AdminException(AdminErrorCode.DICT_NOT_EXIST);
-    }
-
-    public static AdminException dictAlreadyExist() {
-        return new AdminException(AdminErrorCode.DICT_ALREADY_EXIST);
-    }
-
-    public static AdminException dictTypeCodeExist() {
-        return new AdminException(AdminErrorCode.DICT_TYPE_CODE_EXIST);
-    }
-
-    public static AdminException dictCodeExist() {
-        return new AdminException(AdminErrorCode.DICT_CODE_EXIST);
-    }
-
-    public static AdminException dictStatusInvalid() {
-        return new AdminException(AdminErrorCode.DICT_STATUS_INVALID);
-    }
-
-    public static AdminException dictOperateFailed() {
-        return new AdminException(AdminErrorCode.DICT_OPERATE_FAILED);
-    }
-
-    public static AdminException adminPermissionDenied() {
-        return new AdminException(AdminErrorCode.ADMIN_PERMISSION_DENIED);
-    }
-
-    public static AdminException adminOperationNotAllowed() {
-        return new AdminException(AdminErrorCode.ADMIN_OPERATION_NOT_ALLOWED);
-    }
 }

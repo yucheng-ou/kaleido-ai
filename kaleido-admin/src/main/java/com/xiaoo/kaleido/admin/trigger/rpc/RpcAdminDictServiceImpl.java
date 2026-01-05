@@ -1,9 +1,10 @@
 package com.xiaoo.kaleido.admin.trigger.rpc;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
-import com.xiaoo.kaleido.api.admin.IRpcAdminDictService;
-import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.admin.dict.IRpcAdminDictService;
+import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,10 @@ public class RpcAdminDictServiceImpl implements IRpcAdminDictService {
     public Result<DictResponse> getDictByCode(String typeCode, String dictCode) {
 
             // 参数验证
-            if (typeCode == null || typeCode.trim().isEmpty()) {
+            if (StrUtil.isBlank(typeCode)) {
                 return Result.error(AdminErrorCode.DICT_TYPE_CODE_EMPTY);
             }
-            if (dictCode == null || dictCode.trim().isEmpty()) {
+            if (StrUtil.isBlank(dictCode)) {
                 return Result.error(AdminErrorCode.DICT_CODE_EMPTY);
             }
 

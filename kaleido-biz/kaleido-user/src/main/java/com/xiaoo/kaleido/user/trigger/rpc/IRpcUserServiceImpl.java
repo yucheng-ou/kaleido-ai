@@ -50,6 +50,16 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     }
 
     @Override
+    @Operation(summary = "根据手机号查询用户", description = "根据用户手机号查询用户详细信息")
+    public Result<UserInfoResponse> getByTelephone(
+            @NotBlank(message = "用户手机号不能为空")
+            @Parameter(description = "用户手机号", example = "13066668888")
+            String telephone) {
+        UserInfoResponse data = userQueryService.findByTelephone(telephone);
+        return Result.success(data);
+    }
+
+    @Override
     @Operation(summary = "用户注册", description = "注册新用户")
     public Result<String> register(
             @Valid
