@@ -3,8 +3,8 @@ package com.xiaoo.kaleido.admin.infrastructure.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
-import com.xiaoo.kaleido.api.admin.query.DictQueryReq;
-import com.xiaoo.kaleido.api.admin.query.DictPageQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

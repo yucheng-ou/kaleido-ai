@@ -3,8 +3,6 @@ package com.xiaoo.kaleido.user.domain.adapter.repository;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
 import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
-import com.xiaoo.kaleido.user.domain.model.valobj.UserInfoVO;
-
 import java.util.Optional;
 
 /**

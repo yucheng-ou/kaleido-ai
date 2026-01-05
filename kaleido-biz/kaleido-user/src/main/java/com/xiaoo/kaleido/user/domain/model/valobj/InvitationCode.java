@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.user.domain.model.valobj;
 
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
+import lombok.Getter;
 import lombok.Value;
 
 import java.util.Random;
@@ -13,6 +14,7 @@ import java.util.Random;
  * @author ouyucheng
  * @date 2025/12/16
  */
+@Getter
 @Value
 public class InvitationCode {
 
@@ -33,6 +35,8 @@ public class InvitationCode {
 
     /**
      * 邀请码值
+     * -- GETTER --
+     *  获取邀请码字符串
      */
     String value;
 
@@ -101,15 +105,6 @@ public class InvitationCode {
             }
         }
     }
-
-    /**
-     * 获取邀请码字符串
-     */
-    public String getValue() {
-        return value;
-    }
-
-
 
 
     /**

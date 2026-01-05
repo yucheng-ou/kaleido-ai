@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository.convertor;
 
-import com.xiaoo.kaleido.user.domain.model.valobj.UserInfoVO;
 import com.xiaoo.kaleido.user.infrastructure.dao.po.UserPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

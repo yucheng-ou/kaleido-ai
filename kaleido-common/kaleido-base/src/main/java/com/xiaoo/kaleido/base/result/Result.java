@@ -1,9 +1,7 @@
 package com.xiaoo.kaleido.base.result;
 
-import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.base.exception.ErrorCode;
 import com.xiaoo.kaleido.base.response.ResponseCode;
-import com.xiaoo.kaleido.base.response.SingleResp;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,13 +42,6 @@ public class Result<T> implements Serializable {
         this.code = code;
         this.msg = msg;
         this.success = success;
-    }
-
-    public Result(SingleResp<T> singleResp) {
-        this.success = singleResp.getSuccess();
-        this.data = singleResp.getData();
-        this.code = singleResp.getResponseCode();
-        this.msg = singleResp.getResponseMsg();
     }
 
     public static <T> Result<T> success() {

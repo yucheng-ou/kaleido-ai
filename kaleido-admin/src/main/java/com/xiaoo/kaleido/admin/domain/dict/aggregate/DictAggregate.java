@@ -139,32 +139,4 @@ public class DictAggregate extends BaseEntity {
         return DataStatusEnum.DISABLE.equals(this.status);
     }
 
-    /**
-     * 验证字典编码是否匹配
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 是否匹配
-     */
-    public boolean matches(String typeCode, String dictCode) {
-        return this.typeCode.equals(typeCode) && this.dictCode.equals(dictCode);
-    }
-
-    /**
-     * 获取创建时间
-     *
-     * @return 创建时间
-     */
-    public Date getCreatedAt() {
-        return super.getCreatedAt();
-    }
-
-    /**
-     * 获取更新时间
-     *
-     * @return 更新时间
-     */
-    public Date getUpdatedAt() {
-        return super.getUpdatedAt();
-    }
 }

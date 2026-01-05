@@ -1,0 +1,94 @@
+package com.xiaoo.kaleido.admin.infrastructure.dao;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO;
+import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * 权限数据访问对象
+ *
+ * @author ouyucheng
+ * @date 2025/12/31
+ */
+@Mapper
+public interface PermissionDao extends BaseMapper<PermissionPO> {
+
+    /**
+     * 根据ID查找权限
+     */
+    PermissionPO findById(@Param("id") String id);
+
+    /**
+     * 根据编码查找权限
+     */
+    PermissionPO findByCode(@Param("code") String code);
+
+    /**
+     * 根据父权限ID查找子权限列表
+     */
+    List<PermissionPO> findByParentId(@Param("parentId") String parentId);
+
+    /**
+     * 查找根权限列表
+     */
+    List<PermissionPO> findRootPermissions();
+
+    /**
+     * 根据类型查找权限列表
+     */
+    List<PermissionPO> findByType(@Param("type") Integer type);
+
+    /**
+     * 查找所有权限
+     */
+    List<PermissionPO> findAll();
+
+    /**
+     * 根据ID列表查找权限
+     */
+    List<PermissionPO> findAllById(@Param("ids") List<String> ids);
+
+    /**
+     * 根据编码列表查找权限
+     */
+    List<PermissionPO> findAllByCode(@Param("codes") List<String> codes);
+
+    /**
+     * 根据条件查询权限列表
+     */
+    List<PermissionPO> findByCondition(@Param("req") PermissionPageQueryReq req);
+
+    /**
+     * 获取权限树
+     */
+    List<PermissionPO> getPermissionTree();
+
+    /**
+     * 检查权限是否存在
+     */
+    boolean existsById(@Param("id") String id);
+
+    /**
+     * 检查权限编码是否存在
+     */
+    boolean existsByCode(@Param("code") String code);
+
+    /**
+     * 统计权限数量
+     */
+    long count();
+
+    /**
+     * 根据父权限ID统计子权限数量
+     */
+    long countByParentId(@Param("parentId") String parentId);
+
+    /**
+     * 根据类型统计权限数量
+     */
+    long countByType(@Param("type") Integer type);
+}

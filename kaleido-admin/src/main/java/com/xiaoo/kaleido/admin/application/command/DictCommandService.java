@@ -1,12 +1,10 @@
 package com.xiaoo.kaleido.admin.application.command;
 
-import com.xiaoo.kaleido.api.admin.command.AddDictCommand;
-import com.xiaoo.kaleido.api.admin.command.UpdateDictCommand;
+import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
+import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
 import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.admin.domain.dict.service.DictDomainService;
-import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
-import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,6 @@ public class DictCommandService {
      * @param command 创建字典命令
      * @return 字典ID
      */
-    @Transactional
     public String createDict(AddDictCommand command) {
 
         // 调用领域服务创建字典
@@ -59,7 +56,6 @@ public class DictCommandService {
      *
      * @param command 更新字典命令
      */
-    @Transactional
     public void updateDict(UpdateDictCommand command) {
 
         DictAggregate dictAggregate;
@@ -83,7 +79,6 @@ public class DictCommandService {
      *
      * @param dictId 字典ID
      */
-    @Transactional
     public void enableDict(String dictId) {
         // 调用领域服务启用字典
         DictAggregate dictAggregate = dictDomainService.enableDict(dictId);
@@ -99,7 +94,6 @@ public class DictCommandService {
      *
      * @param dictId 字典ID
      */
-    @Transactional
     public void disableDict(String dictId) {
         // 调用领域服务禁用字典
         DictAggregate dictAggregate = dictDomainService.disableDict(dictId);
@@ -117,10 +111,13 @@ public class DictCommandService {
      */
     @Transactional
     public void deleteDict(String dictId) {
-        // 调用领域服务删除字典
-        dictDomainService.deleteDict(dictId);
+        // 调用领域服务获取要删除的字典对象
+        DictAggregate dictAggregate = dictDomainService.deleteDict(dictId);
 
-        log.info("字典删除成功，字典ID: {}", dictId);
+        // 执行软删除：标记为删除状态并更新
+        dictRepository.deleteById(dictAggregate.getId());
+
+        log.info("字典软删除成功，字典ID: {}", dictId);
     }
 
     /**
@@ -135,14 +132,4 @@ public class DictCommandService {
         return dictAggregate.getDictValue();
     }
 
-    /**
-     * 验证字典是否有效（存在且启用）
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 是否有效
-     */
-    public boolean isValidDict(String typeCode, String dictCode) {
-        return dictDomainService.isValidDict(typeCode, dictCode);
-    }
 }

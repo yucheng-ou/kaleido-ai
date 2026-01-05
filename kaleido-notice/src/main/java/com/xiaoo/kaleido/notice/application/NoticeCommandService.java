@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.notice.application;
 
-import com.xiaoo.kaleido.api.admin.IRpcAdminDictService;
-import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.admin.dict.IRpcAdminDictService;
+import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.api.notice.command.AddNoticeTemplateCommand;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;

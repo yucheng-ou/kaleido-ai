@@ -23,6 +23,8 @@ public enum BizErrorCode implements ErrorCode {
     DATA_FORMAT_ERROR("DATA_FORMAT_ERROR", "数据格式错误"),
     OPERATION_NOT_ALLOWED("OPERATION_NOT_ALLOWED", "操作不允许"),
     SYSTEM_BUSY("SYSTEM_BUSY", "系统繁忙，请稍后重试"),
+    ADMIN_NOT_LOGIN("ADMIN_NOT_LOGIN", "管理员未登录"),
+    USER_NOT_LOGIN("USER_NOT_LOGIN", "用户未登录"),
     SERVICE_UNAVAILABLE("SERVICE_UNAVAILABLE", "服务不可用");
 
     /**

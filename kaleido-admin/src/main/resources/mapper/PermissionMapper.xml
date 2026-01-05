@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.PermissionDao">
+    
+    <!-- 1. ResultMap定义 -->
+    <resultMap id="PermissionMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO">
+        <!-- 继承BasePO的字段映射 -->
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="deleted" column="deleted"/>
+        <result property="lockVersion" column="lock_version"/>
+        
+        <!-- PermissionPO特有字段 -->
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="sort" column="sort"/>
+        <result property="icon" column="icon"/>
+        <result property="path" column="path"/>
+        <result property="component" column="component"/>
+        <result property="isHidden" column="is_hidden"/>
+    </resultMap>
+    
+    <!-- 2. 可重用SQL片段 -->
+    <sql id="PermissionColumns">
+        id, code, name, type, parent_id, sort, icon, path, component, is_hidden,
+        created_at, updated_at, deleted, lock_version
+    </sql>
+    
+    <!-- 3. 查询语句 -->
+    
+    <!-- 根据ID查找权限 -->
+    <select id="findById" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE id = #{id} AND deleted = 0
+    </select>
+    
+    <!-- 根据编码查找权限 -->
+    <select id="findByCode" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE code = #{code} AND deleted = 0
+    </select>
+    
+    <!-- 根据父权限ID查找子权限列表 -->
+    <select id="findByParentId" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0
+        <choose>
+            <when test="parentId == null">
+                AND parent_id IS NULL
+            </when>
+            <otherwise>
+                AND parent_id = #{parentId}
+            </otherwise>
+        </choose>
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 查找根权限列表 -->
+    <select id="findRootPermissions" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0 AND parent_id IS NULL
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 根据类型查找权限列表 -->
+    <select id="findByType" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 查找所有权限 -->
+    <select id="findAll" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 根据ID列表查找权限 -->
+    <select id="findAllById" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0 AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 根据编码列表查找权限 -->
+    <select id="findAllByCode" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0 AND code IN
+        <foreach collection="codes" item="code" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 根据条件查询权限列表 -->
+    <select id="findByCondition" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0
+        <if test="req.code != null and req.code != ''">
+            AND code LIKE CONCAT('%', #{req.code}, '%')
+        </if>
+        <if test="req.name != null and req.name != ''">
+            AND name LIKE CONCAT('%', #{req.name}, '%')
+        </if>
+        <if test="req.type != null">
+            AND type = #{req.type}
+        </if>
+        <if test="req.parentId != null and req.parentId != ''">
+            AND parent_id = #{req.parentId}
+        </if>
+        ORDER BY sort ASC, created_at ASC
+    </select>
+    
+    <!-- 获取权限树 -->
+    <select id="getPermissionTree" resultMap="PermissionMap">
+        SELECT <include refid="PermissionColumns"/>
+        FROM permission
+        WHERE deleted = 0
+        ORDER BY parent_id IS NULL DESC, sort ASC, created_at ASC
+    </select>
+    
+    <!-- 检查权限是否存在 -->
+    <select id="existsById" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM permission
+        WHERE id = #{id} AND deleted = 0
+    </select>
+    
+    <!-- 检查权限编码是否存在 -->
+    <select id="existsByCode" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM permission
+        WHERE code = #{code} AND deleted = 0
+    </select>
+    
+    <!-- 统计权限数量 -->
+    <select id="count" resultType="long">
+        SELECT COUNT(*)
+        FROM permission
+        WHERE deleted = 0
+    </select>
+    
+    <!-- 根据父权限ID统计子权限数量 -->
+    <select id="countByParentId" resultType="long">
+        SELECT COUNT(*)
+        FROM permission
+        WHERE deleted = 0
+        <choose>
+            <when test="parentId == null">
+                AND parent_id IS NULL
+            </when>
+            <otherwise>
+                AND parent_id = #{parentId}
+            </otherwise>
+        </choose>
+    </select>
+    
+    <!-- 根据类型统计权限数量 -->
+    <select id="countByType" resultType="long">
+        SELECT COUNT(*)
+        FROM permission
+        WHERE deleted = 0
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+    </select>
+</mapper>

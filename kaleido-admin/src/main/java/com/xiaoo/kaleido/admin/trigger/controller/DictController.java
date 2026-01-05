@@ -1,10 +1,10 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
-import com.xiaoo.kaleido.api.admin.command.AddDictCommand;
-import com.xiaoo.kaleido.api.admin.command.UpdateDictCommand;
-import com.xiaoo.kaleido.api.admin.query.DictPageQueryReq;
-import com.xiaoo.kaleido.api.admin.query.DictQueryReq;
-import com.xiaoo.kaleido.api.admin.response.DictResponse;
+import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
+import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
+import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
+import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.command.DictCommandService;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
 import com.xiaoo.kaleido.base.response.PageResp;
@@ -119,22 +119,6 @@ public class DictController {
 
             dictCommandService.deleteDict(dictId);
             return Result.success();
-    }
-
-    /**
-     * 根据ID查询字典
-     *
-     * @param dictId 字典ID
-     * @return 字典信息
-     */
-    @Operation(summary = "查询字典信息", description = "根据字典ID查询字典信息")
-    @GetMapping("/{dictId}")
-    public Result<DictResponse> getDictById(
-            @Parameter(description = "字典ID", required = true)
-            @PathVariable String dictId) {
-
-            DictResponse dict = dictQueryService.getDictById(dictId);
-            return Result.success(dict);
     }
 
     /**
