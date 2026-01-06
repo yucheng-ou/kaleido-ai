@@ -1,10 +1,8 @@
 package com.xiaoo.kaleido.admin.application.query;
 
-import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
 import com.xiaoo.kaleido.api.admin.auth.response.PermissionInfoResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
-
 import java.util.List;
+import java.util.Set;
 
 /**
  * 权限查询服务接口
@@ -29,14 +27,6 @@ public interface PermissionQueryService {
      * @return 权限信息
      */
     PermissionInfoResponse findByCode(String code);
-    
-    /**
-     * 分页查询权限
-     *
-     * @param req 查询条件
-     * @return 分页结果
-     */
-    PageResp<PermissionInfoResponse> pageQuery(PermissionPageQueryReq req);
     
     /**
      * 根据父权限ID查询子权限列表
@@ -67,4 +57,11 @@ public interface PermissionQueryService {
      * @return 是否存在
      */
     boolean existsByCode(String code);
+
+    /**
+     * 根据管理员id查询所有拥有的权限编码
+     * @param adminId 管理员id
+     * @return 权限编码列表
+     */
+    Set<String> getPermCodesById(String adminId);
 }

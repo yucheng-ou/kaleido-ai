@@ -281,4 +281,20 @@ public class RoleRepositoryImpl implements IRoleRepository {
 
         return aggregates;
     }
+
+    @Override
+    public List<String> findCodesByIds(List<String> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        return roleDao.findCodesByIds(ids);
+    }
+
+    @Override
+    public List<String> findCodesByAdminId(String adminId) {
+        if (adminId == null || adminId.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return roleDao.findCodesByAdminId(adminId);
+    }
 }

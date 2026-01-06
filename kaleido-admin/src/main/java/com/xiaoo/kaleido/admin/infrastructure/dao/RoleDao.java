@@ -101,4 +101,14 @@ public interface RoleDao extends BaseMapper<RolePO> {
      * 根据是否系统角色统计数量
      */
     long countByIsSystem(@Param("isSystem") Boolean isSystem);
+
+    /**
+     * 根据ID列表查询角色编码
+     */
+    List<String> findCodesByIds(@Param("ids") List<String> ids);
+
+    /**
+     * 根据管理员ID查询角色编码
+     */
+    List<String> findCodesByAdminId(@Param("adminId") String adminId);
 }

@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.admin.application.query.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.admin.application.convertor.DictConvertor;
 import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
@@ -7,7 +9,6 @@ import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
-import com.xiaoo.kaleido.base.response.PageResp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,24 +75,21 @@ public class DictQueryServiceImpl implements DictQueryService {
     }
 
     @Override
-    public PageResp<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq) {
+    public PageInfo<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq) {
         log.debug("分页查询字典列表，pageQueryReq={}", pageQueryReq);
         
-        // 使用数据库分页查询（PageHelper）
-        PageResp<DictAggregate> pageResult = dictRepository.pageQueryByCondition(pageQueryReq);
+        // 启动PageHelper分页
+        PageHelper.startPage(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
+        
+        // 使用数据库分页查询
+        List<DictAggregate> aggregates = dictRepository.pageQueryByCondition(pageQueryReq);
         
         // 转换为响应对象
-        List<DictResponse> responseList = pageResult.getList().stream()
+        List<DictResponse> responseList = aggregates.stream()
                 .map(dictConvertor::toResponse)
                 .collect(Collectors.toList());
         
-        // 构建分页响应
-        PageResp<DictResponse> pageResp = new PageResp<>();
-        pageResp.setList(responseList);
-        pageResp.setTotal(pageResult.getTotal());
-        pageResp.setPageNum(pageResult.getPageNum());
-        pageResp.setPageSize(pageResult.getPageSize());
-        pageResp.setTotalPage(pageResult.getPageSize() == 0 ? 0 : (long) Math.ceil((double) pageResult.getTotal() / pageResult.getPageSize()));
-        return pageResp;
+        // 构建PageInfo分页响应
+        return new PageInfo<>(responseList);
     }
 }

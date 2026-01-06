@@ -5,7 +5,7 @@ import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.api.notice.command.AddNoticeTemplateCommand;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
-import com.xiaoo.kaleido.notice.domain.service.NoticeTemplateDomainService;
+import com.xiaoo.kaleido.notice.domain.service.INoticeTemplateDomainService;
 import com.xiaoo.kaleido.base.constant.DictConstant;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.notice.domain.adapter.port.INoticeAdapterService;
@@ -43,7 +43,7 @@ public class NoticeCommandService {
     private final INoticeServiceFactory noticeServiceFactory;
     private final INoticeTemplateRepository noticeTemplateRepository;
     private final INoticeRepository noticeRepository;
-    private final NoticeTemplateDomainService noticeTemplateDomainService;
+    private final INoticeTemplateDomainService noticeTemplateDomainService;
 
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcAdminDictService rpcAdminSysService;

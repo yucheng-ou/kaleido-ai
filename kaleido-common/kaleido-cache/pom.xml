@@ -9,10 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kaleido-redis</artifactId>
+    <artifactId>kaleido-cache</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kaleido-redis</name>
-    <description>kaleido-redis</description>
+    <name>kaleido-cache</name>
+    <description>kaleido-cache</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,14 +39,7 @@
         <dependency>
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redisson</artifactId>
-            <version>${jetcache.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-redis</artifactId>
-        </dependency>
-
 
     </dependencies>
 </project>

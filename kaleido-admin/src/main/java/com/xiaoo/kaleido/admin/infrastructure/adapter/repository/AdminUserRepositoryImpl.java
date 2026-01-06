@@ -1,7 +1,5 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminUserRepository;
 import com.xiaoo.kaleido.admin.domain.user.constant.AdminUserStatus;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
@@ -190,28 +188,18 @@ public class AdminUserRepositoryImpl implements IAdminUserRepository {
     }
 
     @Override
-    public IPage<AdminUserAggregate> pageQuery(AdminUserPageQueryReq pageQueryReq) {
+    public List<AdminUserAggregate> pageQuery(AdminUserPageQueryReq pageQueryReq) {
         log.debug("分页查询管理员，pageQueryReq={}", pageQueryReq);
 
-        // 创建MyBatis Plus分页对象
-        Page<AdminUserPO> page = new Page<>(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
+        // 执行分页查询（PageHelper已在Service层启动）
+        List<AdminUserPO> poList = adminUserDao.pageQuery(pageQueryReq);
 
-        // 执行分页查询
-        IPage<AdminUserPO> poPage = adminUserDao.pageQuery(page, pageQueryReq);
-
-        // 创建返回的分页对象
-        Page<AdminUserAggregate> resultPage = new Page<>(poPage.getCurrent(), poPage.getSize(), poPage.getTotal());
-
-        if (poPage == null || CollectionUtils.isEmpty(poPage.getRecords())) {
-            resultPage.setRecords(new ArrayList<>());
-            return resultPage;
+        if (CollectionUtils.isEmpty(poList)) {
+            return new ArrayList<>();
         }
 
         // 转换PO为聚合根并加载角色ID
-        List<AdminUserAggregate> aggregates = convertAndLoadRoleIds(poPage.getRecords());
-        resultPage.setRecords(aggregates);
-
-        return resultPage;
+        return convertAndLoadRoleIds(poList);
     }
 
     /**

@@ -2,7 +2,6 @@ package com.xiaoo.kaleido.admin.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,10 +31,10 @@ public class PermissionPO extends BasePO {
     private String name;
 
     /**
-     * 权限类型：1-菜单 2-按钮 3-接口
+     * 权限类型：MENU-菜单 BUTTON-按钮 API-接口
      */
     @TableField("type")
-    private PermissionType type;
+    private String type;
 
     /**
      * 父权限ID

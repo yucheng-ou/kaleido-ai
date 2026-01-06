@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.notice.domain.adapter.repository;
 
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 
@@ -76,7 +75,7 @@ public interface INoticeRepository {
      * 分页查询通知
      *
      * @param req 查询条件
-     * @return 分页结果
+     * @return 通知列表
      */
-    PageResp<NoticeAggregate> pageQuery(NoticePageQueryReq req);
+    List<NoticeAggregate> pageQuery(NoticePageQueryReq req);
 }

@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.notice.domain.service.impl;
 
 import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeTemplateRepository;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
-import com.xiaoo.kaleido.notice.domain.service.NoticeTemplateDomainService;
+import com.xiaoo.kaleido.notice.domain.service.INoticeTemplateDomainService;
 import com.xiaoo.kaleido.notice.types.exception.NoticeErrorCode;
 import com.xiaoo.kaleido.notice.types.exception.NoticeException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NoticeTemplateDomainServiceImpl implements NoticeTemplateDomainService {
+public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainService {
 
     private final INoticeTemplateRepository noticeTemplateRepository;
 

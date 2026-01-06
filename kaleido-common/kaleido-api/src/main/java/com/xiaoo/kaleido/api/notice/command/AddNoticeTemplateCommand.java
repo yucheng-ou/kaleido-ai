@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.notice.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "添加通知模板命令")
-public class AddNoticeTemplateCommand {
+public class AddNoticeTemplateCommand extends BaseCommand {
 
     /**
      * 模板名称

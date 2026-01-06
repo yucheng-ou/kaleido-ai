@@ -24,27 +24,12 @@ public interface RoleConvertor {
      * RoleAggregate 转换为 RoleInfoResponse
      */
     @Mapping(source = "id", target = "roleId")
-    @Mapping(source = "role.code", target = "code")
-    @Mapping(source = "role.name", target = "name")
-    @Mapping(source = "role.description", target = "description")
-    @Mapping(source = "role.isSystem", target = "isSystem")
-    @Mapping(source = "role.enabled", target = "enabled")
-    @Mapping(source = "role.createdAt", target = "createdAt")
-    @Mapping(source = "role.updatedAt", target = "updatedAt")
-    @Mapping(source = "permissionIds", target = "permissionIds")
-    @Mapping(source = "permissions", target = "permissions")
     RoleInfoResponse toResponse(RoleAggregate aggregate);
     
     /**
      * RoleAggregate 转换为 RoleTreeResponse
      */
     @Mapping(source = "id", target = "roleId")
-    @Mapping(source = "role.code", target = "code")
-    @Mapping(source = "role.name", target = "name")
-    @Mapping(source = "role.description", target = "description")
-    @Mapping(source = "role.isSystem", target = "isSystem")
-    @Mapping(source = "role.enabled", target = "enabled")
-    @Mapping(source = "children", target = "children")
     RoleTreeResponse toTreeResponse(RoleAggregate aggregate);
     
     /**

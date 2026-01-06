@@ -10,6 +10,7 @@ spring:
     import:
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
       - classpath:nacos.yml
+      - classpath:cache.yml
   cloud:
     gateway:
       server:
@@ -31,6 +32,10 @@ spring:
               uri: lb://kaleido-user
               predicates:
                 - Path=/kaleido-user/**
+            - id: kaleido-notice-server
+              uri: lb://kaleido-notice
+              predicates:
+                - Path=/kaleido-notice/**
     nacos:
       discovery:
         group: ${spring.application.name}

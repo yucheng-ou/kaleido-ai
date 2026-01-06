@@ -4,9 +4,9 @@ import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeRepository;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.domain.model.valobj.TargetAddress;
 import com.xiaoo.kaleido.notice.domain.service.INoticeDomainService;
-import com.xiaoo.kaleido.notice.domain.service.INoticeTemplateDomainService;
 import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
 import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.notice.domain.service.INoticeTemplateDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class NoticeDomainServiceImpl implements INoticeDomainService {
 
     private final INoticeRepository noticeRepository;
-    private final INoticeTemplateDomainService templateDomainService;
+    private final INoticeTemplateDomainService noticeTemplateDomainService;
 
     @Override
     public NoticeAggregate createSmsVerifyCodeAggregate(String mobile,String content) {

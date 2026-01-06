@@ -67,22 +67,8 @@ public class AuthStrategyConfig {
     }
 
     /**
-     * 获取默认策略配置（用于未匹配路径）
-     *
-     * @return 默认策略配置项
-     */
-    public StrategyItem getDefaultStrategyItem() {
-        StrategyItem defaultItem = new StrategyItem();
-        defaultItem.setPattern("**");
-        defaultItem.setStrategy(defaultStrategy);
-        return defaultItem;
-    }
-
-    /**
      * 验证配置是否有效
-     *
-     * @throws IllegalArgumentException 如果配置无效
-     */
+     **/
     public void validate() {
         if (strategies == null) {
             strategies = new ArrayList<>();

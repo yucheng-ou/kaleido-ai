@@ -1,8 +1,6 @@
-package com.xiaoo.kaleido.admin.infrastructure.mapper;
+package com.xiaoo.kaleido.admin.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,7 +15,7 @@ import java.util.List;
  * @date 2025/12/25
  */
 @Mapper
-public interface DictMapper extends BaseMapper<DictPO> {
+public interface DictDao extends BaseMapper<DictPO> {
 
     /**
      * 根据字典类型编码和字典编码查询字典
@@ -73,9 +71,8 @@ public interface DictMapper extends BaseMapper<DictPO> {
     /**
      * 根据条件分页查询字典
      *
-     * @param page 分页对象
      * @param pageQueryReq 分页查询条件
-     * @return 分页结果
+     * @return 字典列表
      */
-    IPage<DictPO> selectByPageCondition(IPage<DictPO> page, @Param("pageQueryReq") DictPageQueryReq pageQueryReq);
+    List<DictPO> selectByPageCondition(@Param("pageQueryReq") DictPageQueryReq pageQueryReq);
 }

@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.user.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "修改昵称命令")
-public class ChangeNickNameCommand {
+public class ChangeNickNameCommand extends BaseCommand {
 
     /**
      * 用户ID

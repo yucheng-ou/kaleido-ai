@@ -1,9 +1,9 @@
 package com.xiaoo.kaleido.admin.application.query;
 
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public interface DictQueryService {
      * @param pageQueryReq 分页查询条件
      * @return 分页结果
      */
-    PageResp<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq);
+    PageInfo<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq);
 
     /**
      * 根据ID查询字典（别名方法，用于门面层）

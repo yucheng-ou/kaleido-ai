@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.admin.application.query.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.admin.application.convertor.AdminUserConvertor;
 import com.xiaoo.kaleido.admin.application.query.AdminUserQueryService;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminUserRepository;
@@ -80,21 +80,22 @@ public class AdminUserQueryServiceImpl implements AdminUserQueryService {
     }
 
     @Override
-    public IPage<AdminUserInfoResponse> pageQuery(AdminUserPageQueryReq pageQueryReq) {
+    public PageInfo<AdminUserInfoResponse> pageQuery(AdminUserPageQueryReq pageQueryReq) {
         log.debug("分页查询管理员，pageQueryReq={}", pageQueryReq);
         
+        // 启动PageHelper分页
+        PageHelper.startPage(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
+        
         // 调用仓储分页查询
-        IPage<AdminUserAggregate> pageResult = adminUserRepository.pageQuery(pageQueryReq);
+        List<AdminUserAggregate> aggregates = adminUserRepository.pageQuery(pageQueryReq);
         
         // 转换为响应对象
-        List<AdminUserInfoResponse> responseList = pageResult.getRecords().stream()
+        List<AdminUserInfoResponse> responseList = aggregates.stream()
                 .map(adminUserConvertor::toResponse)
                 .collect(Collectors.toList());
         
-        // 构建分页响应
-        Page<AdminUserInfoResponse> resultPage = new Page<>(pageResult.getCurrent(), pageResult.getSize(), pageResult.getTotal());
-        resultPage.setRecords(responseList);
-        return resultPage;
+        // 构建PageInfo分页响应
+        return new PageInfo<>(responseList);
     }
 
     @Override
@@ -109,13 +110,6 @@ public class AdminUserQueryServiceImpl implements AdminUserQueryService {
         log.debug("检查手机号是否存在，mobile={}", mobile);
         
         return adminUserDomainService.existsByMobile(mobile);
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-        log.debug("检查邮箱是否存在，email={}", email);
-        
-        return adminUserDomainService.existsByEmail(email);
     }
 
     @Override

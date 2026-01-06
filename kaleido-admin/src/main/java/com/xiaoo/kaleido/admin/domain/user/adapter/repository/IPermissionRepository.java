@@ -161,4 +161,20 @@ public interface IPermissionRepository {
      * @return 权限数量
      */
     long countByType(PermissionType type);
+
+    /**
+     * 根据ID列表查询权限编码
+     *
+     * @param ids 权限ID列表
+     * @return 权限编码列表
+     */
+    List<String> findCodesByIds(List<String> ids);
+
+    /**
+     * 根据角色ID列表查询权限编码
+     *
+     * @param roleIds 角色ID列表
+     * @return 权限编码列表
+     */
+    List<String> findCodesByRoleIds(List<String> roleIds);
 }

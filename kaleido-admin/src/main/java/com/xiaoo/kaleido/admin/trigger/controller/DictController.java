@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
@@ -7,7 +8,6 @@ import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.command.DictCommandService;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.base.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -194,7 +194,7 @@ public class DictController {
      */
     @Operation(summary = "分页查询字典列表", description = "分页查询字典列表")
     @GetMapping("/page")
-    public Result<PageResp<DictResponse>> pageDicts(
+    public Result<PageInfo<DictResponse>> pageDicts(
             @Parameter(description = "分页查询条件")
             DictPageQueryReq pageQueryReq) {
 

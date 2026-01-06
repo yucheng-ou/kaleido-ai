@@ -1,0 +1,27 @@
+server:
+  port: 9013
+  servlet:
+    context-path: /kaleido-admin
+
+spring:
+  application:
+    name: kaleido-admin
+  profiles:
+    active: dev
+  config:
+    import:
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - classpath:nacos.yml
+      - classpath:ds.yml
+      - classpath:rpc.yml
+      - classpath:cache.yml
+
+  cloud:
+    nacos:
+      discovery:
+        group: ${spring.application.name}
+      config:
+        group: ${spring.application.name}
+dubbo:
+  application:
+    qos-port: 22223  # 添加此行，指定新的 QOS 端口

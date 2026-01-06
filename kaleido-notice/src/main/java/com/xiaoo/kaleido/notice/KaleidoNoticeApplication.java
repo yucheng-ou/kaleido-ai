@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.notice;
 
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,7 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description
  */
 
-@SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.sms")
+@SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.notice")
+@EnableDubbo
 public class KaleidoNoticeApplication {
 
     public static void main(String[] args) {

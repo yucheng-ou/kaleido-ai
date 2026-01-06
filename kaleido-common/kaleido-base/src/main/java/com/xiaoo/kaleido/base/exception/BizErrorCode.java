@@ -25,6 +25,7 @@ public enum BizErrorCode implements ErrorCode {
     SYSTEM_BUSY("SYSTEM_BUSY", "系统繁忙，请稍后重试"),
     ADMIN_NOT_LOGIN("ADMIN_NOT_LOGIN", "管理员未登录"),
     USER_NOT_LOGIN("USER_NOT_LOGIN", "用户未登录"),
+    REQUEST_URL_NOT_FOUND("REQUEST_URL_NOT_FOUNT", "请求路径不存在"),
     SERVICE_UNAVAILABLE("SERVICE_UNAVAILABLE", "服务不可用");
 
     /**

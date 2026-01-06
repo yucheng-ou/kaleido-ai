@@ -3,7 +3,6 @@ package com.xiaoo.kaleido.admin.domain.dict.adapter.repository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 
 import java.util.List;
 import java.util.Optional;
@@ -117,7 +116,7 @@ public interface IDictRepository {
      * 根据条件分页查询字典
      *
      * @param pageQueryReq 分页查询条件
-     * @return 分页结果
+     * @return 字典列表
      */
-    PageResp<DictAggregate> pageQueryByCondition(DictPageQueryReq pageQueryReq);
+    List<DictAggregate> pageQueryByCondition(DictPageQueryReq pageQueryReq);
 }

@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.admin.dict.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "更新字典命令")
-public class UpdateDictCommand {
+public class UpdateDictCommand extends BaseCommand {
 
     /**
      * 字典ID

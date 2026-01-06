@@ -30,11 +30,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@DubboService(
-        version = RpcConstants.DUBBO_VERSION,
-        group = RpcConstants.DUBBO_GROUP,
-        timeout = RpcConstants.DEFAULT_TIMEOUT
-)
+@DubboService(version = RpcConstants.DUBBO_VERSION)
 @Tag(name = "管理后台RPC服务", description = "管理后台认证相关的RPC接口")
 public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
 
@@ -44,7 +40,6 @@ public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
     @Override
     @Operation(summary = "管理员注册", description = "注册新的管理员账号")
     public Result<String> register(
-            @Valid
             @Parameter(description = "添加管理员命令")
             AddAdminUserCommand command) {
 
@@ -54,20 +49,18 @@ public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
     @Override
     @Operation(summary = "管理员登录", description = "管理员账号登录")
     public Result<Void> login(
-            @NotBlank(message = "用户ID不能为空")
             @Parameter(description = "用户ID", example = "1234567890123456789")
-            String adminId) {
+            String adminUserId) {
 
-        adminUserCommandService.login(adminId);
+        adminUserCommandService.login(adminUserId);
         return Result.success();
     }
 
     @Override
     public Result<AdminUserInfoResponse> findByMobile(
-            @NotBlank(message = "用户手机号不能为空")
             @Parameter(description = "用户手机号", example = "13066668888")
-            String mobile) {
+            String telephone) {
 
-        return Result.success(adminUserQueryService.findByMobile(mobile));
+        return Result.success(adminUserQueryService.findByMobile(telephone));
     }
 }

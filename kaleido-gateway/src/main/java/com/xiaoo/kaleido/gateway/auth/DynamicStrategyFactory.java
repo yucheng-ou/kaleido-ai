@@ -2,6 +2,8 @@ package com.xiaoo.kaleido.gateway.auth;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.xiaoo.kaleido.base.exception.BizErrorCode;
+import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.gateway.auth.config.AuthStrategyConfig;
 import com.xiaoo.kaleido.gateway.enums.AuthStrategyEnum;
 import jakarta.annotation.PostConstruct;
@@ -34,11 +36,6 @@ public class DynamicStrategyFactory {
      * 策略配置列表，保持配置顺序
      */
     private final List<PathStrategyPair> strategyPairs = new ArrayList<>();
-
-    /**
-     * 默认策略
-     */
-    private LoginCheckStrategy defaultStrategy;
 
     /**
      * 请求路径到策略的缓存
@@ -87,12 +84,6 @@ public class DynamicStrategyFactory {
                 log.info("加载策略配置: pattern={}, strategy={}", pattern, strategyType);
             }
         }
-
-        // 设置默认策略
-        AuthStrategyEnum defaultStrategyType = authStrategyConfig.getDefaultStrategy();
-        defaultStrategy = createStrategy(defaultStrategyType);
-        log.info("设置默认策略: {}", defaultStrategyType);
-
         log.info("动态策略工厂初始化完成，共加载 {} 个策略配置", strategyPairs.size());
     }
 
@@ -142,11 +133,8 @@ public class DynamicStrategyFactory {
                 return pair.strategy;
             }
         }
-
-        // 使用默认策略
-        log.debug("路径未匹配任何模式: requestPath={}, 使用默认策略: {}",
-                requestPath, defaultStrategy.getClass().getSimpleName());
-        return defaultStrategy;
+        log.warn("未知的请求路径:{}", requestPath);
+        throw BizException.of(BizErrorCode.REQUEST_URL_NOT_FOUND);
     }
 
     /**

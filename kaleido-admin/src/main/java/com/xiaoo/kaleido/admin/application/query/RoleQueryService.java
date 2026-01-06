@@ -3,9 +3,9 @@ package com.xiaoo.kaleido.admin.application.query;
 import com.xiaoo.kaleido.api.admin.auth.request.RolePageQueryReq;
 import com.xiaoo.kaleido.api.admin.auth.response.RoleInfoResponse;
 import com.xiaoo.kaleido.api.admin.auth.response.RoleTreeResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色查询服务接口
@@ -30,14 +30,6 @@ public interface RoleQueryService {
      * @return 角色信息
      */
     RoleInfoResponse findByCode(String code);
-    
-    /**
-     * 分页查询角色
-     *
-     * @param req 查询条件
-     * @return 分页结果
-     */
-    PageResp<RoleInfoResponse> pageQuery(RolePageQueryReq req);
     
     /**
      * 查询所有启用的角色
@@ -92,4 +84,11 @@ public interface RoleQueryService {
      * @return 是否拥有
      */
     boolean hasPermission(String roleId, String permissionId);
+
+    /**
+     * 根据管理员id查询所有拥有的角色编码
+     * @param adminId 管理员id
+     * @return 角色编码列表
+     */
+    Set<String> getRoleCodesId(String adminId);
 }

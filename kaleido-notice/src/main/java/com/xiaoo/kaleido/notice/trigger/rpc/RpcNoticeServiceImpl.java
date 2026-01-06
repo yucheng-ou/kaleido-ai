@@ -26,11 +26,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@DubboService(
-        version = RpcConstants.DUBBO_VERSION,
-        group = RpcConstants.DUBBO_GROUP,
-        timeout = RpcConstants.DEFAULT_TIMEOUT
-)
+@DubboService(version = RpcConstants.DUBBO_VERSION)
 @Tag(name = "通知RPC服务", description = "通知相关的RPC接口")
 public class RpcNoticeServiceImpl implements IRpcNoticeService {
 
@@ -39,7 +35,6 @@ public class RpcNoticeServiceImpl implements IRpcNoticeService {
     @Override
     @Operation(summary = "生成并发送短信验证码", description = "生成短信验证码并发送到指定手机号")
     public Result<String> generateAndSendSmsVerifyCode(
-            @Valid
             @Parameter(description = "发送短信验证码命令")
             SendSmsVerifyCodeCommand command) {
         return Result.success(noticeCommandService.sendSmsVerifyCode(command));
@@ -47,10 +42,7 @@ public class RpcNoticeServiceImpl implements IRpcNoticeService {
 
     @Override
     @Operation(summary = "校验短信验证码", description = "校验短信验证码是否正确且未过期")
-    public Result<Boolean> checkSmsVerifyCode(
-            @Valid
-            @Parameter(description = "校验短信验证码命令")
-            CheckSmsVerifyCodeCommand command) {
+    public Result<Boolean> checkSmsVerifyCode(CheckSmsVerifyCodeCommand command) {
         return Result.success(noticeCommandService.checkSmsVerifyCode(command));
     }
 }

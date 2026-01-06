@@ -63,8 +63,9 @@
         <knife4j.version>4.5.0</knife4j.version>
         <springdoc.version>2.7.0</springdoc.version>
         <dubbo.version>3.3.0</dubbo.version>
-        <pagehelper.version>1.4.7</pagehelper.version>
+        <pagehelper.version>2.1.1</pagehelper.version>
         <sa-token.version>1.44.0</sa-token.version>
+        <jsqlparser.version>4.9</jsqlparser.version>
 
     </properties>
 
@@ -183,7 +184,7 @@
 
             <dependency>
                 <groupId>com.xiaoo</groupId>
-                <artifactId>kaleido-redis</artifactId>
+                <artifactId>kaleido-cache</artifactId>
                 <version>${kaleido.version}</version>
             </dependency>
 
@@ -275,6 +276,18 @@
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-redis-jackson</artifactId>
                 <version>${sa-token.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.version}</version>
             </dependency>
 
         </dependencies>

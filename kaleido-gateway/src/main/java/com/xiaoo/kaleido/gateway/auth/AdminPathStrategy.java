@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.gateway.auth;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import lombok.extern.slf4j.Slf4j;
 

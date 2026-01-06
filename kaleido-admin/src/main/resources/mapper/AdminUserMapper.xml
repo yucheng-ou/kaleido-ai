@@ -163,10 +163,10 @@
             )
         </if>
         <if test="queryReq.startTime != null and queryReq.startTime != ''">
-            AND created_at >= #{queryReq.startTime}
+            AND created_at <![CDATA[ >= ]]> #{queryReq.startTime}
         </if>
         <if test="queryReq.endTime != null and queryReq.endTime != ''">
-            AND created_at <= #{queryReq.endTime}
+            AND created_at <![CDATA[ <= ]]> #{queryReq.endTime}
         </if>
         ORDER BY created_at DESC
     </select>

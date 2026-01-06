@@ -1,9 +1,6 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
@@ -128,31 +125,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public PageResp<UserAggregate> pageQuery(UserPageQueryReq req) {
-        // 使用PageHelper进行分页
-        PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        
-        // 执行查询
-        List<UserPO> userPOList = userDao.selectByCondition(req);
-        
-        // 转换为PageInfo获取分页信息
-        PageInfo<UserPO> pageInfo = new PageInfo<>(userPOList);
+    public List<UserAggregate> pageQuery(UserPageQueryReq req) {
+        // 执行分页查询（PageHelper已在Service层启动）
+        List<UserPO> poList = userDao.selectByCondition(req);
         
         // 转换为聚合根列表
-        List<UserAggregate> aggregateList = userPOList.stream()
+        return poList.stream()
                 .map(userPO -> {
                     User user = UserConvertor.INSTANCE.toEntity(userPO);
                     return UserAggregate.create(user);
                 })
                 .collect(Collectors.toList());
-        
-        // 构建分页响应
-        return PageResp.of(
-                aggregateList,
-                pageInfo.getTotal(),
-                pageInfo.getPageNum(),
-                pageInfo.getPageSize()
-        );
     }
 
     /**

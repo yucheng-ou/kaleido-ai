@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.user.domain.adapter.repository;
 
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,8 +83,8 @@ public interface UserRepository {
      * 分页查询用户
      *
      * @param req 查询条件
-     * @return 分页结果
+     * @return 用户列表
      */
-    PageResp<UserAggregate> pageQuery(UserPageQueryReq req);
+    List<UserAggregate> pageQuery(UserPageQueryReq req);
 
 }

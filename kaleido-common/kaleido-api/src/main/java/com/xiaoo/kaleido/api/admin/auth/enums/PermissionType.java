@@ -14,22 +14,22 @@ public enum PermissionType {
     /**
      * 菜单权限
      */
-    MENU(1, "菜单"),
+    MENU("MENU", "菜单"),
 
     /**
      * 按钮权限
      */
-    BUTTON(2, "按钮"),
+    BUTTON("BUTTON", "按钮"),
 
     /**
      * 接口权限
      */
-    API(3, "接口");
+    API("API", "接口");
 
-    private final Integer code;
+    private final String code;
     private final String description;
 
-    PermissionType(Integer code, String description) {
+    PermissionType(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -40,7 +40,7 @@ public enum PermissionType {
      * @param code 编码
      * @return 权限类型
      */
-    public static PermissionType fromCode(Integer code) {
+    public static PermissionType fromCode(String code) {
         for (PermissionType type : values()) {
             if (type.getCode().equals(code)) {
                 return type;
