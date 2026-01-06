@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.admin.auth.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "用户注册命令")
-public class RegisterCommand {
+public class RegisterCommand extends BaseCommand {
     
     /**
      * 手机号

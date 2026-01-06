@@ -23,44 +23,10 @@ public interface PermissionConvertor {
      * PermissionAggregate 转换为 PermissionInfoResponse
      */
     @Mapping(source = "id", target = "permissionId")
-    @Mapping(source = "permission.code", target = "code")
-    @Mapping(source = "permission.name", target = "name")
-    @Mapping(source = "permission.type", target = "type")
-    @Mapping(source = "permission.parentId", target = "parentId")
-    @Mapping(source = "permission.sort", target = "sort")
-    @Mapping(source = "permission.icon", target = "icon")
-    @Mapping(source = "permission.path", target = "path")
-    @Mapping(source = "permission.component", target = "component")
-    @Mapping(source = "permission.isHidden", target = "isHidden")
-    @Mapping(source = "permission.createdAt", target = "createdAt")
-    @Mapping(source = "permission.updatedAt", target = "updatedAt")
     PermissionInfoResponse toResponse(PermissionAggregate aggregate);
-    
-    /**
-     * PermissionAggregate 转换为树形 PermissionInfoResponse
-     */
-    @Mapping(source = "id", target = "permissionId")
-    @Mapping(source = "permission.code", target = "code")
-    @Mapping(source = "permission.name", target = "name")
-    @Mapping(source = "permission.type", target = "type")
-    @Mapping(source = "permission.parentId", target = "parentId")
-    @Mapping(source = "permission.sort", target = "sort")
-    @Mapping(source = "permission.icon", target = "icon")
-    @Mapping(source = "permission.path", target = "path")
-    @Mapping(source = "permission.component", target = "component")
-    @Mapping(source = "permission.isHidden", target = "isHidden")
-    @Mapping(source = "permission.createdAt", target = "createdAt")
-    @Mapping(source = "permission.updatedAt", target = "updatedAt")
-    @Mapping(source = "children", target = "children")
-    PermissionInfoResponse toTreeResponse(PermissionAggregate aggregate);
     
     /**
      * PermissionAggregate 列表转换为 PermissionInfoResponse 列表
      */
     List<PermissionInfoResponse> toResponseList(List<PermissionAggregate> aggregateList);
-    
-    /**
-     * PermissionAggregate 列表转换为树形 PermissionInfoResponse 列表
-     */
-    List<PermissionInfoResponse> toTreeResponseList(List<PermissionAggregate> aggregateList);
 }

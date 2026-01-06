@@ -176,4 +176,20 @@ public interface IRoleRepository {
      * @return 角色数量
      */
     long countByIsSystem(Boolean isSystem);
+
+    /**
+     * 根据ID列表查询角色编码
+     *
+     * @param ids 角色ID列表
+     * @return 角色编码列表
+     */
+    List<String> findCodesByIds(List<String> ids);
+
+    /**
+     * 根据管理员ID查询角色编码
+     *
+     * @param adminId 管理员ID
+     * @return 角色编码列表
+     */
+    List<String> findCodesByAdminId(String adminId);
 }

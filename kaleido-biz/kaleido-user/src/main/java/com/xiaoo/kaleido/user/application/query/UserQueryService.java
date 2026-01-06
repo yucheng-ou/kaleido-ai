@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.user.application.query;
 
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 
 /**
  * 用户查询服务接口
@@ -42,6 +42,6 @@ public interface UserQueryService {
      * @param req 查询条件
      * @return 分页结果
      */
-    PageResp<UserInfoResponse> pageQuery(UserPageQueryReq req);
+    PageInfo<UserInfoResponse> pageQuery(UserPageQueryReq req);
 
 }

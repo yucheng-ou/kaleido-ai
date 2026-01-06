@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.user.constant;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 /**
@@ -14,22 +15,23 @@ public enum AdminUserStatus {
     /**
      * 正常
      */
-    NORMAL(1, "正常"),
+    NORMAL("NORMAL", "正常"),
 
     /**
      * 冻结
      */
-    FROZEN(2, "冻结"),
+    FROZEN("FROZEN", "冻结"),
 
     /**
      * 删除
      */
-    DELETED(3, "删除");
+    DELETED("DELETED", "删除");
 
-    private final Integer code;
+    @EnumValue
+    private final String code;
     private final String description;
 
-    AdminUserStatus(Integer code, String description) {
+    AdminUserStatus(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -40,7 +42,7 @@ public enum AdminUserStatus {
      * @param code 编码
      * @return 管理员状态
      */
-    public static AdminUserStatus fromCode(Integer code) {
+    public static AdminUserStatus fromCode(String code) {
         for (AdminUserStatus status : values()) {
             if (status.getCode().equals(code)) {
                 return status;

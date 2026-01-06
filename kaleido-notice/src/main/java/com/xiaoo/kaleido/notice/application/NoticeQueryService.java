@@ -1,10 +1,11 @@
 package com.xiaoo.kaleido.notice.application;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
 import com.xiaoo.kaleido.api.notice.query.NoticeTemplatePageQueryReq;
 import com.xiaoo.kaleido.api.notice.response.NoticeResponse;
 import com.xiaoo.kaleido.api.notice.response.NoticeTemplateResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.notice.application.convertor.NoticeAppConvertor;
 import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeRepository;
 import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeTemplateRepository;
@@ -76,24 +77,22 @@ public class NoticeQueryService {
      * @param req 查询请求
      * @return 分页结果
      */
-    public PageResp<NoticeResponse> pageQueryNotices(NoticePageQueryReq req) {
+    public PageInfo<NoticeResponse> pageQueryNotices(NoticePageQueryReq req) {
         log.debug("分页查询通知，条件: {}", req);
         
+        // 启动PageHelper分页
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        
         // 调用仓储接口进行分页查询
-        PageResp<NoticeAggregate> pageResult = noticeRepository.pageQuery(req);
+        List<NoticeAggregate> aggregates = noticeRepository.pageQuery(req);
         
         // 使用MapStruct转换器将聚合根转换为Response对象
-        List<NoticeResponse> responseList = pageResult.getList().stream()
+        List<NoticeResponse> responseList = aggregates.stream()
                 .map(noticeAppConvertor::toResponse)
                 .collect(Collectors.toList());
         
-        // 构建分页响应
-        return PageResp.of(
-                responseList,
-                pageResult.getTotal(),
-                pageResult.getPageNum(),
-                pageResult.getPageSize()
-        );
+        // 构建PageInfo分页响应
+        return new PageInfo<>(responseList);
     }
 
     /**
@@ -102,23 +101,21 @@ public class NoticeQueryService {
      * @param req 查询请求
      * @return 分页结果
      */
-    public PageResp<NoticeTemplateResponse> pageQueryTemplates(NoticeTemplatePageQueryReq req) {
+    public PageInfo<NoticeTemplateResponse> pageQueryTemplates(NoticeTemplatePageQueryReq req) {
         log.debug("分页查询通知模板，条件: {}", req);
         
+        // 启动PageHelper分页
+        PageHelper.startPage(req.getPageNum(), req.getPageSize());
+        
         // 调用仓储接口进行分页查询
-        PageResp<NoticeTemplateAggregate> pageResult = noticeTemplateRepository.pageQuery(req);
+        List<NoticeTemplateAggregate> aggregates = noticeTemplateRepository.pageQuery(req);
         
         // 使用MapStruct转换器将聚合根转换为Response对象
-        List<NoticeTemplateResponse> responseList = pageResult.getList().stream()
+        List<NoticeTemplateResponse> responseList = aggregates.stream()
                 .map(noticeAppConvertor::toTemplateResponse)
                 .collect(Collectors.toList());
         
-        // 构建分页响应
-        return PageResp.of(
-                responseList,
-                pageResult.getTotal(),
-                pageResult.getPageNum(),
-                pageResult.getPageSize()
-        );
+        // 构建PageInfo分页响应
+        return new PageInfo<>(responseList);
     }
 }

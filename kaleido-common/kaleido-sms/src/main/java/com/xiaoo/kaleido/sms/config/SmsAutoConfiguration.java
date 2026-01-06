@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Import;
  */
 
 @AutoConfiguration
-@Import(SmsService.class)
+@Import({SmsService.class})
 public class SmsAutoConfiguration {
 }

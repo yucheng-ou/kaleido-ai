@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.auth.command.*;
 import com.xiaoo.kaleido.api.admin.auth.request.AdminUserPageQueryReq;
 import com.xiaoo.kaleido.api.admin.auth.response.AdminUserInfoResponse;
@@ -229,7 +229,7 @@ public class AdminUserController {
      */
     @Operation(summary = "分页查询管理员", description = "分页查询管理员列表")
     @GetMapping("/page")
-    public Result<IPage<AdminUserInfoResponse>> pageAdminUsers(
+    public Result<PageInfo<AdminUserInfoResponse>> pageAdminUsers(
             @Parameter(description = "分页查询条件")
             AdminUserPageQueryReq pageQueryReq) {
         return Result.success(adminUserQueryService.pageQuery(pageQueryReq));

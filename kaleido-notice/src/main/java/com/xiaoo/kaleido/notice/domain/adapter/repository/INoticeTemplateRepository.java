@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.notice.domain.adapter.repository;
 
 import com.xiaoo.kaleido.api.notice.query.NoticeTemplatePageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -72,8 +72,8 @@ public interface INoticeTemplateRepository {
      * 分页查询模板
      *
      * @param req 查询条件
-     * @return 分页结果
+     * @return 模板列表
      */
-    PageResp<NoticeTemplateAggregate> pageQuery(NoticeTemplatePageQueryReq req);
+    List<NoticeTemplateAggregate> pageQuery(NoticeTemplatePageQueryReq req);
 
 }

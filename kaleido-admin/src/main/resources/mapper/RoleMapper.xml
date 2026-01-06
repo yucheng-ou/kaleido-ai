@@ -187,4 +187,24 @@
             AND is_system = #{isSystem}
         </if>
     </select>
+
+    <!-- 根据ID列表查询角色编码 -->
+    <select id="findCodesByIds" resultType="string">
+        SELECT code
+        FROM role
+        WHERE deleted = 0 AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据管理员ID查询角色编码 -->
+    <select id="findCodesByAdminId" resultType="string">
+        SELECT r.code
+        FROM role r
+        INNER JOIN admin_user_role aur ON r.id = aur.role_id
+        WHERE r.deleted = 0 AND aur.deleted = 0 AND aur.admin_user_id = #{adminId}
+        ORDER BY r.created_at DESC
+    </select>
 </mapper>

@@ -28,11 +28,7 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 @RequiredArgsConstructor
-@DubboService(
-        version = RpcConstants.DUBBO_VERSION,
-        group = RpcConstants.DUBBO_GROUP,
-        timeout = RpcConstants.DEFAULT_TIMEOUT
-)
+@DubboService(version = RpcConstants.DUBBO_VERSION)
 @Tag(name = "用户RPC服务", description = "用户相关的RPC接口")
 public class IRpcUserServiceImpl implements IRpcUserService {
 
@@ -42,7 +38,6 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     @Override
     @Operation(summary = "根据ID查询用户", description = "根据用户ID查询用户详细信息")
     public Result<UserInfoResponse> getById(
-            @NotBlank(message = "用户ID不能为空")
             @Parameter(description = "用户ID", example = "1234567890123456789")
             String userId) {
         UserInfoResponse data = userQueryService.findById(userId);
@@ -52,7 +47,6 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     @Override
     @Operation(summary = "根据手机号查询用户", description = "根据用户手机号查询用户详细信息")
     public Result<UserInfoResponse> getByTelephone(
-            @NotBlank(message = "用户手机号不能为空")
             @Parameter(description = "用户手机号", example = "13066668888")
             String telephone) {
         UserInfoResponse data = userQueryService.findByTelephone(telephone);
@@ -62,7 +56,6 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     @Override
     @Operation(summary = "用户注册", description = "注册新用户")
     public Result<String> register(
-            @Valid
             @Parameter(description = "添加用户命令")
             AddUserCommand command) {
         String data = userCommandService.createUser(command);
@@ -72,7 +65,6 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     @Override
     @Operation(summary = "记录用户登录", description = "记录用户登录时间并更新最后登录时间")
     public Result<Void> login(
-            @NotBlank(message = "用户ID不能为空")
             @Parameter(description = "用户ID", example = "1234567890123456789")
             String userId) {
         userCommandService.login(userId);
@@ -82,7 +74,6 @@ public class IRpcUserServiceImpl implements IRpcUserService {
     @Override
     @Operation(summary = "记录用户登出", description = "记录用户登出日志")
     public Result<Void> logout(
-            @NotBlank(message = "用户ID不能为空")
             @Parameter(description = "用户ID", example = "1234567890123456789")
             String userId) {
         userCommandService.logout(userId);

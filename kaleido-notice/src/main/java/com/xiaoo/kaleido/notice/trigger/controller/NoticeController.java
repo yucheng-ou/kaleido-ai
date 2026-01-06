@@ -1,11 +1,11 @@
 package com.xiaoo.kaleido.notice.trigger.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.notice.command.AddNoticeTemplateCommand;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
 import com.xiaoo.kaleido.api.notice.query.NoticeTemplatePageQueryReq;
 import com.xiaoo.kaleido.api.notice.response.NoticeResponse;
 import com.xiaoo.kaleido.api.notice.response.NoticeTemplateResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.notice.application.NoticeCommandService;
 import com.xiaoo.kaleido.notice.application.NoticeQueryService;
@@ -62,13 +62,13 @@ public class NoticeController {
 
     @PostMapping("/page")
     @Operation(summary = "分页查询通知")
-    public Result<PageResp<NoticeResponse>> pageQueryNotices(@Valid @RequestBody NoticePageQueryReq req) {
+    public Result<PageInfo<NoticeResponse>> pageQueryNotices(@Valid @RequestBody NoticePageQueryReq req) {
         return Result.success(noticeQueryService.pageQueryNotices(req));
     }
 
     @PostMapping("/template/page")
     @Operation(summary = "分页查询通知模板")
-    public Result<PageResp<NoticeTemplateResponse>> pageQueryTemplates(@Valid @RequestBody NoticeTemplatePageQueryReq req) {
+    public Result<PageInfo<NoticeTemplateResponse>> pageQueryTemplates(@Valid @RequestBody NoticeTemplatePageQueryReq req) {
         return Result.success(noticeQueryService.pageQueryTemplates(req));
     }
 }

@@ -1,9 +1,6 @@
 package com.xiaoo.kaleido.notice.infrastructure.adapter.repository;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeRepository;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.infrastructure.adapter.repository.convertor.NoticeConvertor;
@@ -100,30 +97,16 @@ public class NoticeRepositoryImpl implements INoticeRepository {
      * 分页查询通知
      *
      * @param req 查询条件
-     * @return 分页结果
+     * @return 通知列表
      */
-    public PageResp<NoticeAggregate> pageQuery(NoticePageQueryReq req) {
-        // 使用PageHelper进行分页
-        PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        
-        // 执行查询
-        List<NoticePO> noticePOList = noticeDao.selectByCondition(req);
-        
-        // 转换为PageInfo获取分页信息
-        PageInfo<NoticePO> pageInfo = new PageInfo<>(noticePOList);
+    public List<NoticeAggregate> pageQuery(NoticePageQueryReq req) {
+        // 执行分页查询（PageHelper已在Service层启动）
+        List<NoticePO> poList = noticeDao.selectByCondition(req);
         
         // 转换为聚合根列表
-        List<NoticeAggregate> aggregateList = noticePOList.stream()
+        return poList.stream()
                 .map(NoticeConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
-        
-        // 构建分页响应
-        return PageResp.of(
-                aggregateList,
-                pageInfo.getTotal(),
-                pageInfo.getPageNum(),
-                pageInfo.getPageSize()
-        );
     }
 
     /**

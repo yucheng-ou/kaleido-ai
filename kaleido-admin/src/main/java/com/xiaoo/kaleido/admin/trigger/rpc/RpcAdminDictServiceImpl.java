@@ -21,11 +21,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@DubboService(
-        version = RpcConstants.DUBBO_VERSION,
-        group = RpcConstants.DUBBO_GROUP,
-        timeout = RpcConstants.DEFAULT_TIMEOUT
-)
+@DubboService(version = RpcConstants.DUBBO_VERSION)
 public class RpcAdminDictServiceImpl implements IRpcAdminDictService {
 
     private final DictQueryService dictQueryService;

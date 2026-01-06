@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.admin.domain.user.adapter.repository;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
 import com.xiaoo.kaleido.admin.domain.user.constant.AdminUserStatus;
 import com.xiaoo.kaleido.api.admin.auth.request.AdminUserPageQueryReq;
@@ -162,7 +161,7 @@ public interface IAdminUserRepository {
      * 分页查询管理员
      *
      * @param pageQueryReq 分页查询请求
-     * @return 分页结果
+     * @return 管理员列表
      */
-    IPage<AdminUserAggregate> pageQuery(AdminUserPageQueryReq pageQueryReq);
+    List<AdminUserAggregate> pageQuery(AdminUserPageQueryReq pageQueryReq);
 }

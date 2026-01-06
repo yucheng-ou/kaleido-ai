@@ -1,7 +1,7 @@
 spring:
   cloud:
     nacos:
-      server-addr: 10.4.135.208:8849
+      server-addr: ${NACOS_HOST}:${NACOS_PORT}
       discovery:
         namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
       config:

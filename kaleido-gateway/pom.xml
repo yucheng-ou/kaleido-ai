@@ -12,6 +12,18 @@
     <packaging>jar</packaging>
     <name>kaleido-gateway</name>
     <description>kaleido-gateway</description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
@@ -52,11 +64,17 @@
         <dependency>
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sa-token</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>cn.dev33</groupId>
+                    <artifactId>sa-token-spring-boot3-starter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        
+
         <dependency>
             <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-redis</artifactId>
+            <artifactId>kaleido-cache</artifactId>
         </dependency>
 
     </dependencies>

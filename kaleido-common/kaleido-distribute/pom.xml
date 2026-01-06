@@ -12,8 +12,8 @@
 
     <artifactId>kaleido-distribute</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>kaleido-redis</name>
-    <description>kaleido-redis</description>
+    <name>kaleido-cache</name>
+    <description>kaleido-cache</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -24,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-redis</artifactId>
+            <artifactId>kaleido-cache</artifactId>
         </dependency>
     </dependencies>
 

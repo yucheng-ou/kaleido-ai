@@ -1,5 +1,5 @@
 server:
-  port: 9012
+  port: 9014
   servlet:
     context-path: /kaleido-notice
 
@@ -11,7 +11,10 @@ spring:
   config:
     import:
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - classpath:nacos.yml
+      - classpath:ds.yml
       - classpath:rpc.yml
+      - classpath:cache.yml
 
   cloud:
     nacos:
@@ -21,4 +24,4 @@ spring:
         group: ${spring.application.name}
 dubbo:
   application:
-    qos-port: 22223  # 添加此行，指定新的 QOS 端口
+    qos-port: 22224  # 添加此行，指定新的 QOS 端口

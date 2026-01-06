@@ -1,14 +1,15 @@
 package com.xiaoo.kaleido.gateway.config;
 
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
-import cn.dev33.satoken.router.SaHttpMethod;
-import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.util.SaResult;
 import com.xiaoo.kaleido.gateway.auth.DynamicStrategyFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Objects;
 
 /**
  * Sa-Token 网关全局过滤器配置类
@@ -38,7 +39,6 @@ public class SaTokenConfig {
      * 2. 包含所有其他路径进行认证检查
      * 3. 使用动态策略工厂根据路径选择认证策略
      * 4. 全局异常处理
-     * 5. 跨域请求支持
      * </p>
      *
      * @return 配置好的 SaReactorFilter 实例
@@ -57,27 +57,16 @@ public class SaTokenConfig {
                     String path = SaHolder.getRequest().getRequestPath();
                     dynamicStrategyFactory.getStrategy(path).checkAuth();
                 })
-                // 设置全局异常处理
-                .setError(e -> {
-                    log.error("sa-token全局异常:", e);
-                    return SaResult.error(e.getMessage());
-                })
-                // 设置认证前的处理（主要用于跨域配置）
-                .setBeforeAuth(obj -> {
-                    SaHolder.getResponse()
-                            // 允许指定域访问跨域资源
-                            .setHeader("Access-Control-Allow-Origin", "*")
-                            // 允许所有请求方式
-                            .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD")
-                            // 有效时间
-                            .setHeader("Access-Control-Max-Age", "3600")
-                            // 允许的header参数
-                            .setHeader("Access-Control-Allow-Headers", "*");
-                    // 处理 OPTIONS 预检请求
-                    SaRouter.match(SaHttpMethod.OPTIONS)
-                            .free(r -> {
-                            })
-                            .back();
-                });
+                .setError(this::getSaResult);
+
+    }
+
+    private SaResult getSaResult(Throwable throwable) {
+        if (Objects.requireNonNull(throwable) instanceof NotLoginException) {
+            log.error("请先登录");
+            return SaResult.error("请先登录");
+        }
+        log.error("sa-token认证异常：", throwable);
+        return SaResult.error(throwable.getMessage());
     }
 }

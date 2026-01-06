@@ -1,19 +1,20 @@
 package com.xiaoo.kaleido.admin.application.query.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
 import com.xiaoo.kaleido.admin.application.convertor.PermissionConvertor;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
+import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
-import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
+import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.api.admin.auth.response.PermissionInfoResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class PermissionQueryServiceImpl implements PermissionQueryService {
 
     private final IPermissionRepository permissionRepository;
+    private final IRoleRepository roleRepository;
     private final PermissionConvertor permissionConvertor;
 
     @Override
@@ -46,33 +48,6 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         return permissionRepository.findByCode(code)
                 .map(permissionConvertor::toResponse)
                 .orElse(null);
-    }
-
-    @Override
-    public PageResp<PermissionInfoResponse> pageQuery(PermissionPageQueryReq req) {
-        log.debug("分页查询权限，条件: {}", req);
-        
-        // 使用PageHelper分页
-        PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        
-        // 执行查询
-        List<PermissionAggregate> aggregateList = permissionRepository.findByCondition(req);
-        
-        // 转换为PageInfo获取分页信息
-        PageInfo<PermissionAggregate> pageInfo = new PageInfo<>(aggregateList);
-        
-        // 转换为响应列表
-        List<PermissionInfoResponse> responseList = aggregateList.stream()
-                .map(permissionConvertor::toResponse)
-                .collect(Collectors.toList());
-        
-        // 构建分页响应
-        return PageResp.success(
-            responseList,
-            pageInfo.getTotal(),
-            pageInfo.getPageNum(),
-            pageInfo.getPageSize()
-        );
     }
 
     @Override
@@ -101,7 +76,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         
         List<PermissionAggregate> aggregateList = permissionRepository.getPermissionTree();
         return aggregateList.stream()
-                .map(permissionConvertor::toTreeResponse)
+                .map(permissionConvertor::toResponse)
                 .collect(Collectors.toList());
     }
 
@@ -110,5 +85,31 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         log.debug("检查权限编码是否存在，code={}", code);
         
         return permissionRepository.existsByCode(code);
+    }
+
+    @Override
+    public Set<String> getPermCodesById(String adminId) {
+        log.debug("根据管理员ID查询权限编码，adminId={}", adminId);
+        
+        // 1. 先查询管理员的角色编码
+        List<String> roleCodes = roleRepository.findCodesByAdminId(adminId);
+        if (CollectionUtils.isEmpty(roleCodes)) {
+            return Set.of();
+        }
+        
+        // 2. 查询角色ID（需要根据编码查询ID）
+        List<RoleAggregate> roles = roleRepository.findAllByCode(roleCodes);
+        List<String> roleIds = roles.stream()
+                .filter(RoleAggregate::isEnabled)
+                .map(RoleAggregate::getId)
+                .collect(Collectors.toList());
+        
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return Set.of();
+        }
+        
+        // 3. 直接调用仓储层的新接口查询权限编码
+        List<String> permCodes = permissionRepository.findCodesByRoleIds(roleIds);
+        return new HashSet<>(permCodes);
     }
 }

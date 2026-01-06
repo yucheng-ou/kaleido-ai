@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.user.trigger.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
-import com.xiaoo.kaleido.base.response.PageResp;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.api.user.command.AddUserCommand;
 import com.xiaoo.kaleido.api.user.command.ChangeNickNameCommand;
@@ -126,8 +126,8 @@ public class UserController {
 
     @Operation(summary = "分页查询用户", description = "根据昵称、手机号等条件分页查询用户")
     @GetMapping("/page")
-    public Result<PageResp<UserInfoResponse>> pageQuery(@Valid UserPageQueryReq req) {
-        PageResp<UserInfoResponse> pageResult = userQueryService.pageQuery(req);
+    public Result<PageInfo<UserInfoResponse>> pageQuery(@Valid UserPageQueryReq req) {
+        PageInfo<UserInfoResponse> pageResult = userQueryService.pageQuery(req);
         return Result.success(pageResult);
     }
 }

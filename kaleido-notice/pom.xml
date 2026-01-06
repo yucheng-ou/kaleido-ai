@@ -26,6 +26,11 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sms</artifactId>
         </dependency>
 
@@ -56,13 +61,13 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-redis</artifactId>
+            <artifactId>kaleido-nacos</artifactId>
         </dependency>
 
-        <!-- PageHelper分页插件 -->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-cache</artifactId>
         </dependency>
+
     </dependencies>
 </project>

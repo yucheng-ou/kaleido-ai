@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Import;
  */
 @AutoConfiguration
 @Import({MyMetaObjectHandler.class})
-@MapperScan(basePackages = "com.xiaoo.kaleido.*.infrastructure.mapper")
+@MapperScan(basePackages = "com.xiaoo.kaleido.*.infrastructure.dao")
 public class DataSourceAutoConfiguration {
 
     /**

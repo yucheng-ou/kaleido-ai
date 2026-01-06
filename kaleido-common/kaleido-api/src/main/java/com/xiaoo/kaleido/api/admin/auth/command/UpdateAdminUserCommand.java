@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.admin.auth.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "更新管理员信息命令")
-public class UpdateAdminUserCommand {
+public class UpdateAdminUserCommand extends BaseCommand {
     
     /**
      * 管理员ID

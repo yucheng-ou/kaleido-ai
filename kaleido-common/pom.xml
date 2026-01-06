@@ -15,7 +15,7 @@
 
     <modules>
         <module>kaleido-base</module>
-        <module>kaleido-redis</module>
+        <module>kaleido-cache</module>
         <module>kaleido-ds</module>
         <module>kaleido-nacos</module>
         <module>kaleido-web</module>

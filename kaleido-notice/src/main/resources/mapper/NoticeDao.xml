@@ -60,7 +60,7 @@
         <if test="req.status != null">AND status = #{req.status}</if>
         <if test="req.businessType != null and req.businessType != ''">AND business_type = #{req.businessType}</if>
         <if test="req.startTime != null">AND created_at >= #{req.startTime}</if>
-        <if test="req.endTime != null">AND created_at <= #{req.endTime}</if>
+        <if test="req.endTime != null">AND created_at <![CDATA[ <= ]]> #{req.endTime}</if>
     </sql>
 
     <!-- 根据条件分页查询通知 -->
@@ -78,8 +78,8 @@
         FROM notice
         WHERE deleted = 0
         AND status = 'FAILED'
-        AND retry_num < max_retry_num
-        AND (next_retry_at IS NULL OR next_retry_at <= NOW())
+        AND retry_num <![CDATA[ < ]]> max_retry_num
+        AND (next_retry_at IS NULL OR next_retry_at <![CDATA[ <= ]]> NOW())
         ORDER BY created_at ASC
         LIMIT #{maxRetryNum}
     </select>

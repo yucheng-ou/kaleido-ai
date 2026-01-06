@@ -38,11 +38,6 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
     List<PermissionPO> findRootPermissions();
 
     /**
-     * 根据类型查找权限列表
-     */
-    List<PermissionPO> findByType(@Param("type") Integer type);
-
-    /**
      * 查找所有权限
      */
     List<PermissionPO> findAll();
@@ -83,12 +78,27 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
     long count();
 
     /**
+     * 根据类型查找权限列表
+     */
+    List<PermissionPO> findByType(@Param("type") String type);
+
+    /**
+     * 根据类型统计权限数量
+     */
+    long countByType(@Param("type") String type);
+
+    /**
      * 根据父权限ID统计子权限数量
      */
     long countByParentId(@Param("parentId") String parentId);
 
     /**
-     * 根据类型统计权限数量
+     * 根据ID列表查询权限编码
      */
-    long countByType(@Param("type") Integer type);
+    List<String> findCodesByIds(@Param("ids") List<String> ids);
+
+    /**
+     * 根据角色ID列表查询权限编码
+     */
+    List<String> findCodesByRoleIds(@Param("roleIds") List<String> roleIds);
 }

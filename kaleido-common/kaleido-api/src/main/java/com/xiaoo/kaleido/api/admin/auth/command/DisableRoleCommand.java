@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.admin.auth.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "禁用角色命令")
-public class DisableRoleCommand {
+public class DisableRoleCommand extends BaseCommand {
     
     /**
      * 角色ID

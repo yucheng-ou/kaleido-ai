@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.api.admin.auth.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
+
 import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "更新权限命令")
-public class UpdatePermissionCommand {
+public class UpdatePermissionCommand extends BaseCommand {
     
     /**
      * 权限ID

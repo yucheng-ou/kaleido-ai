@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.admin.infrastructure.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserPO;
 import com.xiaoo.kaleido.api.admin.auth.request.AdminUserPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,11 +31,6 @@ public interface AdminUserDao extends BaseMapper<AdminUserPO> {
      * 根据手机号查找管理员
      */
     AdminUserPO findByMobile(@Param("mobile") String mobile);
-
-    /**
-     * 根据状态查找管理员列表
-     */
-    List<AdminUserPO> findByStatus(@Param("status") Integer status);
 
     /**
      * 查找所有管理员
@@ -74,17 +68,22 @@ public interface AdminUserDao extends BaseMapper<AdminUserPO> {
     boolean existsByMobile(@Param("mobile") String mobile);
 
     /**
+     * 根据状态查找管理员列表
+     */
+    List<AdminUserPO> findByStatus(@Param("status") String status);
+
+    /**
+     * 根据状态统计管理员数量
+     */
+    long countByStatus(@Param("status") String status);
+
+    /**
      * 统计管理员数量
      */
     long count();
 
     /**
-     * 根据状态统计管理员数量
-     */
-    long countByStatus(@Param("status") Integer status);
-
-    /**
      * 分页查询管理员
      */
-    IPage<AdminUserPO> pageQuery(IPage<AdminUserPO> page, @Param("queryReq") AdminUserPageQueryReq queryReq);
+    List<AdminUserPO> pageQuery(@Param("queryReq") AdminUserPageQueryReq queryReq);
 }

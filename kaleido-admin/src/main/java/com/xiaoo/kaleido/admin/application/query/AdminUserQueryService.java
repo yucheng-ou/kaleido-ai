@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.query;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.auth.request.AdminUserPageQueryReq;
 import com.xiaoo.kaleido.api.admin.auth.response.AdminUserInfoResponse;
 
@@ -39,14 +39,6 @@ public interface AdminUserQueryService {
     AdminUserInfoResponse findByMobile(String mobile);
     
     /**
-     * 根据邮箱查询管理员信息
-     *
-     * @param email 邮箱
-     * @return 管理员信息
-     */
-    AdminUserInfoResponse findByEmail(String email);
-    
-    /**
      * 查询所有正常的管理员
      *
      * @return 管理员列表
@@ -67,7 +59,7 @@ public interface AdminUserQueryService {
      * @param pageQueryReq 分页查询请求
      * @return 分页结果
      */
-    IPage<AdminUserInfoResponse> pageQuery(AdminUserPageQueryReq pageQueryReq);
+    PageInfo<AdminUserInfoResponse> pageQuery(AdminUserPageQueryReq pageQueryReq);
     
     /**
      * 检查管理员账号是否存在
@@ -84,15 +76,7 @@ public interface AdminUserQueryService {
      * @return 是否存在
      */
     boolean existsByMobile(String mobile);
-    
-    /**
-     * 检查邮箱是否存在
-     *
-     * @param email 邮箱
-     * @return 是否存在
-     */
-    boolean existsByEmail(String email);
-    
+
     /**
      * 获取管理员的所有权限（通过角色）
      *

@@ -79,7 +79,13 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
 
     @Override
     public List<PermissionAggregate> findByType(PermissionType type) {
-        List<PermissionPO> poList = permissionDao.findByType(type != null ? type.getCode() : null);
+        // 处理类型转换：如果type为null，传递null；否则传递code的字符串表示
+        String typeCode = null;
+        if (type != null) {
+            // 直接使用枚举的name()方法，因为code现在是字符串
+            typeCode = type.name();
+        }
+        List<PermissionPO> poList = permissionDao.findByType(typeCode);
         return convertList(poList);
     }
 
@@ -158,7 +164,13 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
 
     @Override
     public long countByType(PermissionType type) {
-        return permissionDao.countByType(type != null ? type.getCode() : null);
+        // 处理类型转换：如果type为null，传递null；否则传递code的字符串表示
+        String typeCode = null;
+        if (type != null) {
+            // 直接使用枚举的name()方法，因为code现在是字符串
+            typeCode = type.name();
+        }
+        return permissionDao.countByType(typeCode);
     }
 
     /**
@@ -171,5 +183,21 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
         return poList.stream()
                 .map(PermissionConvertor.INSTANCE::toEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findCodesByIds(List<String> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+        return permissionDao.findCodesByIds(ids);
+    }
+
+    @Override
+    public List<String> findCodesByRoleIds(List<String> roleIds) {
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return new ArrayList<>();
+        }
+        return permissionDao.findCodesByRoleIds(roleIds);
     }
 }

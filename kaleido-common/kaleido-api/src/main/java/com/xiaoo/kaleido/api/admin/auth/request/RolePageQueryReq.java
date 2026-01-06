@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.api.admin.auth.request;
 
 import com.xiaoo.kaleido.base.request.BasePageReq;
-import com.xiaoo.kaleido.base.request.PageReq;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
