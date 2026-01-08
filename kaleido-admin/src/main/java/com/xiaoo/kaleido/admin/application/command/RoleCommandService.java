@@ -1,9 +1,9 @@
 package com.xiaoo.kaleido.admin.application.command;
 
-import com.xiaoo.kaleido.api.admin.auth.command.*;
+import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
-import com.xiaoo.kaleido.admin.domain.user.service.RoleDomainService;
+import com.xiaoo.kaleido.admin.domain.user.service.IRoleDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.List;
 public class RoleCommandService {
 
     private final IRoleRepository roleRepository;
-    private final RoleDomainService roleDomainService;
+    private final IRoleDomainService roleDomainService;
 
     /**
      * 创建角色

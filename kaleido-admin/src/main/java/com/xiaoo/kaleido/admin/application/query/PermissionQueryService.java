@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.query;
 
-import com.xiaoo.kaleido.api.admin.auth.response.PermissionInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import java.util.List;
 import java.util.Set;
 

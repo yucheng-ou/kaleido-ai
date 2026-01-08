@@ -6,7 +6,7 @@ import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionReposit
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
-import com.xiaoo.kaleido.api.admin.auth.response.PermissionInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

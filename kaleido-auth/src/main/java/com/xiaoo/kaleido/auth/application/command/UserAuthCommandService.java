@@ -2,12 +2,11 @@ package com.xiaoo.kaleido.auth.application.command;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.xiaoo.kaleido.api.admin.auth.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.RegisterCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.SendSmsCodeCommand;
-import com.xiaoo.kaleido.api.admin.auth.response.AdminLoginResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.RegisterResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.SmsCodeResponse;
+import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
+import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
+import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
+import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
+import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
 import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;

@@ -32,28 +32,28 @@
     <!-- 根据ID查找管理员 -->
     <select id="findById" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 根据账号查找管理员 -->
     <select id="findByUsername" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE username = #{username} AND deleted = 0
     </select>
     
     <!-- 根据手机号查找管理员 -->
     <select id="findByMobile" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE mobile = #{mobile} AND deleted = 0
     </select>
     
     <!-- 根据状态查找管理员列表 -->
     <select id="findByStatus" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
@@ -64,7 +64,7 @@
     <!-- 查找所有管理员 -->
     <select id="findAll" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -72,7 +72,7 @@
     <!-- 根据ID列表查找管理员 -->
     <select id="findAllById" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -83,7 +83,7 @@
     <!-- 根据账号列表查找管理员 -->
     <select id="findAllByUsername" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0 AND username IN
         <foreach collection="usernames" item="username" open="(" separator="," close=")">
             #{username}
@@ -94,8 +94,8 @@
     <!-- 根据角色ID查找拥有该角色的管理员 -->
     <select id="findByRoleId" resultMap="AdminUserMap">
         SELECT au.*
-        FROM admin_user au
-        INNER JOIN admin_user_role aur ON au.id = aur.admin_user_id
+        FROM t_admin_user au
+        INNER JOIN t_admin_user_role aur ON au.id = aur.admin_user_id
         WHERE au.deleted = 0 AND aur.role_id = #{roleId}
         ORDER BY au.created_at DESC
     </select>
@@ -103,35 +103,35 @@
     <!-- 检查管理员是否存在 -->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM admin_user
+        FROM t_admin_user
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 检查管理员账号是否存在 -->
     <select id="existsByUsername" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM admin_user
+        FROM t_admin_user
         WHERE username = #{username} AND deleted = 0
     </select>
     
     <!-- 检查手机号是否存在 -->
     <select id="existsByMobile" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM admin_user
+        FROM t_admin_user
         WHERE mobile = #{mobile} AND deleted = 0
     </select>
     
     <!-- 统计管理员数量 -->
     <select id="count" resultType="long">
         SELECT COUNT(*)
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0
     </select>
     
     <!-- 根据状态统计管理员数量 -->
     <select id="countByStatus" resultType="long">
         SELECT COUNT(*)
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
@@ -141,7 +141,7 @@
     <!-- 分页查询管理员 -->
     <select id="pageQuery" resultMap="AdminUserMap">
         SELECT <include refid="AdminUserColumns"/>
-        FROM admin_user
+        FROM t_admin_user
         WHERE deleted = 0
         <if test="queryReq.username != null and queryReq.username != ''">
             AND username LIKE CONCAT('%', #{queryReq.username}, '%')
@@ -158,7 +158,7 @@
         <if test="queryReq.roleId != null and queryReq.roleId != ''">
             AND id IN (
                 SELECT admin_user_id 
-                FROM admin_user_role 
+                FROM t_admin_user_role 
                 WHERE role_id = #{queryReq.roleId}
             )
         </if>

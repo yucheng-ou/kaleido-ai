@@ -1,12 +1,12 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
+import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.PermissionConvertor;
 import com.xiaoo.kaleido.admin.infrastructure.dao.PermissionDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO;
-import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
+import com.xiaoo.kaleido.api.admin.user.request.PermissionPageQueryReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

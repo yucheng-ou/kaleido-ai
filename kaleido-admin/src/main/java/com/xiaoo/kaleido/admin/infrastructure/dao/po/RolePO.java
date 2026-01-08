@@ -9,14 +9,14 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 角色持久化对象
- * 对应数据库表：role
+ * 对应数据库表：t_role
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("role")
+@TableName("t_role")
 public class RolePO extends BasePO {
 
     /**

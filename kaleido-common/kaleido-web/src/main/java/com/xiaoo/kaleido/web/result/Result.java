@@ -49,7 +49,7 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(BizException bizException) {
-        return error(bizException.getErrorCode(), bizException.getMessage());
+        return error(bizException.getErrorCode(), bizException.getErrorMessage());
     }
 
     public static <T> Result<T> error(ErrorCode errorCode) {

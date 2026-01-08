@@ -8,9 +8,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>kaleido-userEntity</artifactId>
+    <artifactId>kaleido-user</artifactId>
     <packaging>jar</packaging>
-    <name>kaleido-userEntity</name>
+    <name>kaleido-user</name>
     <description>用户模块</description>
 
     <properties>
@@ -68,5 +68,11 @@
             <artifactId>kaleido-aop</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-doc</artifactId>
+        </dependency>
+
     </dependencies>
+
 </project>

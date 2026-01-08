@@ -11,15 +11,19 @@
     <artifactId>kaleido-doc</artifactId>
     <packaging>jar</packaging>
     <name>kaleido-doc</name>
+    <description>Kaleido 文档模块（基于 smart-doc）</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!-- smart-doc 核心依赖 -->
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <groupId>com.github.shalousun</groupId>
+            <artifactId>smart-doc</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
 </project>

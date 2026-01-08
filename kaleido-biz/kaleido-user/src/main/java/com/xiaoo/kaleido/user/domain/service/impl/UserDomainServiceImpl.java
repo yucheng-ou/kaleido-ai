@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.model.valobj.InvitationCode;
-import com.xiaoo.kaleido.user.domain.service.UserDomainService;
+import com.xiaoo.kaleido.user.domain.service.IUserDomainService;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserDomainServiceImpl implements UserDomainService {
+public class UserDomainServiceImpl implements IUserDomainService {
 
     private final UserRepository userRepository;
 

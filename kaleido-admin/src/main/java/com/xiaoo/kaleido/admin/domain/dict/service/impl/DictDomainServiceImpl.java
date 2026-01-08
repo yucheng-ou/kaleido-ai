@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.admin.domain.dict.service.impl;
 
 import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
-import com.xiaoo.kaleido.admin.domain.dict.service.DictDomainService;
+import com.xiaoo.kaleido.admin.domain.dict.service.IDictDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DictDomainServiceImpl implements DictDomainService {
+public class DictDomainServiceImpl implements IDictDomainService {
 
     private final IDictRepository dictRepository;
 

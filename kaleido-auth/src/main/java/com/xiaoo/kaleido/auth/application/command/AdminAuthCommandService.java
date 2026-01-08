@@ -2,13 +2,13 @@ package com.xiaoo.kaleido.auth.application.command;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import com.xiaoo.kaleido.api.admin.auth.IRpcAdminAuthService;
-import com.xiaoo.kaleido.api.admin.auth.command.AddAdminUserCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.RegisterCommand;
-import com.xiaoo.kaleido.api.admin.auth.response.AdminLoginResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.AdminUserInfoResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.RegisterResponse;
+import com.xiaoo.kaleido.api.admin.user.IRpcAdminAuthService;
+import com.xiaoo.kaleido.api.admin.user.command.AddAdminCommand;
+import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
+import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
+import com.xiaoo.kaleido.api.admin.user.response.AdminLoginResponse;
+import com.xiaoo.kaleido.api.admin.user.response.AdminUserInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.auth.types.exception.AuthErrorCode;
@@ -40,7 +40,7 @@ public class AdminAuthCommandService {
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcAdminAuthService rpcAdminAuthService;
 
-    
+
     /**
      * 管理员注册（需要验证码）
      *
@@ -49,24 +49,24 @@ public class AdminAuthCommandService {
      */
     public RegisterResponse register(RegisterCommand command) {
         log.info("管理员注册，手机号: {}", command.getTelephone());
-        
+
         // 1. 验证短信验证码
         verifySmsCode(command.getTelephone(), command.getVerificationCode());
-        
+
         // 2. 将RegisterCommand转换为AddAdminUserCommand
-        AddAdminUserCommand addAdminUserCommand = AddAdminUserCommand.builder()
-                .username(generateUsernameFromMobile(command.getTelephone()))
+        AddAdminCommand addAdminCommand = AddAdminCommand.builder()
+                .username("")
                 .password(command.getPassword())
                 .realName(command.getNickName() != null ? command.getNickName() : "管理员")
                 .mobile(command.getTelephone())
                 .build();
-        
+
         // 3. 调用管理员服务注册
-        Result<String> register = rpcAdminAuthService.register(addAdminUserCommand);
+        Result<String> register = rpcAdminAuthService.register(addAdminCommand);
 
         if (!Boolean.TRUE.equals(register.getSuccess())) {
             log.error("管理员注册失败，手机号: {}, 错误: {}", command.getTelephone(), register.getMsg());
-            throw new AuthException(AuthErrorCode.AUTH_LOGIN_FAILED);
+            throw AuthException.of(register.getCode(), register.getMsg());
         }
 
         // 3. 构建响应
@@ -110,27 +110,27 @@ public class AdminAuthCommandService {
         log.info("用户登录成功，用户ID: {}, 手机号: {}", user.getAdminUserId(), command.getTelephone());
         return response;
     }
-    
+
     /**
      * 验证短信验证码
      *
      * @param mobile 手机号
-     * @param code 验证码
+     * @param code   验证码
      */
     private void verifySmsCode(String mobile, String code) {
         CheckSmsVerifyCodeCommand checkCommand = CheckSmsVerifyCodeCommand.builder()
                 .mobile(mobile)
                 .verifyCode(code)
                 .build();
-        
+
         Result<Boolean> result = rpcNoticeService.checkSmsVerifyCode(checkCommand);
-        
+
         if (!Boolean.TRUE.equals(result.getSuccess()) || !Boolean.TRUE.equals(result.getData())) {
             log.error("短信验证码验证失败，手机号: {}, 验证码: {}", mobile, code);
             throw new AuthException(AuthErrorCode.AUTH_CAPTCHA_ERROR);
         }
     }
-    
+
     /**
      * 根据手机号生成用户名
      *

@@ -4,13 +4,11 @@ import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
 import com.xiaoo.kaleido.admin.application.convertor.RoleConvertor;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
-import com.xiaoo.kaleido.api.admin.auth.request.RolePageQueryReq;
-import com.xiaoo.kaleido.api.admin.auth.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.RoleTreeResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;

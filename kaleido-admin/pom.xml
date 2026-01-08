@@ -74,5 +74,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-doc</artifactId>
+        </dependency>
+
     </dependencies>
+
 </project>

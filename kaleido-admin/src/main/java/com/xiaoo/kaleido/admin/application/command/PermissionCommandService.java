@@ -1,11 +1,11 @@
 package com.xiaoo.kaleido.admin.application.command;
 
-import com.xiaoo.kaleido.api.admin.auth.command.AddPermissionCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.DeletePermissionCommand;
-import com.xiaoo.kaleido.api.admin.auth.command.UpdatePermissionCommand;
+import com.xiaoo.kaleido.api.admin.user.command.AddPermissionCommand;
+import com.xiaoo.kaleido.api.admin.user.command.DeletePermissionCommand;
+import com.xiaoo.kaleido.api.admin.user.command.UpdatePermissionCommand;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
-import com.xiaoo.kaleido.admin.domain.user.service.PermissionDomainService;
+import com.xiaoo.kaleido.admin.domain.user.service.IPermissionDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PermissionCommandService {
 
     private final IPermissionRepository permissionRepository;
-    private final PermissionDomainService permissionDomainService;
+    private final IPermissionDomainService IPermissionDomainService;
 
     /**
      * 创建权限
@@ -35,7 +35,7 @@ public class PermissionCommandService {
     @Transactional
     public String createPermission(AddPermissionCommand command) {
         // 调用领域服务创建权限
-        PermissionAggregate permissionAggregate = permissionDomainService.createPermission(
+        PermissionAggregate permissionAggregate = IPermissionDomainService.createPermission(
                 command.getCode(),
                 command.getName(),
                 command.getType(),
@@ -63,7 +63,7 @@ public class PermissionCommandService {
     @Transactional
     public void updatePermission(UpdatePermissionCommand command) {
         // 调用领域服务更新权限信息
-        PermissionAggregate permissionAggregate = permissionDomainService.updatePermission(
+        PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermission(
                 command.getPermissionId(),
                 command.getName(),
                 command.getType(),
@@ -90,7 +90,7 @@ public class PermissionCommandService {
     @Transactional
     public void updatePermissionCode(String permissionId, String code) {
         // 调用领域服务更新权限编码
-        PermissionAggregate permissionAggregate = permissionDomainService.updatePermissionCode(permissionId, code);
+        PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermissionCode(permissionId, code);
 
         // 保存权限
         permissionRepository.save(permissionAggregate);
@@ -106,7 +106,7 @@ public class PermissionCommandService {
     @Transactional
     public void deletePermission(DeletePermissionCommand command) {
         // 调用领域服务删除权限
-        permissionDomainService.deletePermission(command.getPermissionId());
+        IPermissionDomainService.deletePermission(command.getPermissionId());
 
         log.info("权限删除成功，权限ID: {}", command.getPermissionId());
     }
@@ -118,7 +118,7 @@ public class PermissionCommandService {
      * @return 是否可用
      */
     public boolean isCodeAvailable(String code) {
-        return permissionDomainService.isCodeAvailable(code);
+        return IPermissionDomainService.isCodeAvailable(code);
     }
 
     /**
@@ -128,6 +128,6 @@ public class PermissionCommandService {
      * @return 是否存在且有效
      */
     public boolean isValidPermission(String permissionId) {
-        return permissionDomainService.isValidPermission(permissionId);
+        return IPermissionDomainService.isValidPermission(permissionId);
     }
 }

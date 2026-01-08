@@ -8,14 +8,14 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 权限持久化对象
- * 对应数据库表：permission
+ * 对应数据库表：t_permission
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("permission")
+@TableName("t_permission")
 public class PermissionPO extends BasePO {
 
     /**

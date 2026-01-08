@@ -1,0 +1,13 @@
+{
+  "serverUrl": "http://localhost:8080",
+  "serverEnv": "开发环境",
+  "allInOne": true,
+  "outPath": "../../doc",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.admin.trigger.controller.*",
+  "projectName": "Kaleido 管理后台 API 文档",
+  "framework": "spring",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true
+}

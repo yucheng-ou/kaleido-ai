@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.admin.infrastructure.convertor;
 
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO;
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
+import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -49,15 +49,10 @@ public interface PermissionConvertor {
             return null;
         }
         try {
-            // 首先尝试使用fromCode方法
-            return PermissionType.fromCode(code);
-        } catch (IllegalArgumentException e1) {
-            try {
-                // 如果fromCode失败，尝试使用valueOf方法（枚举名称）
-                return PermissionType.valueOf(code);
-            } catch (IllegalArgumentException e2) {
-                return null;
-            }
+            // 直接使用valueOf方法（枚举名称）
+            return PermissionType.valueOf(code);
+        } catch (IllegalArgumentException e) {
+            return null;
         }
     }
 }

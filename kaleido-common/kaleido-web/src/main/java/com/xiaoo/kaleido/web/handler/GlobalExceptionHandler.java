@@ -5,7 +5,12 @@ import com.xiaoo.kaleido.base.response.ResponseCode;
 import com.xiaoo.kaleido.web.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 全局异常处理器
@@ -25,10 +30,24 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Result<Void> bizExceptionHandler(BizException bizException) {
         log.error("业务处理异常：", bizException);
         return Result.error(bizException);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public Result<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        log.error("请求参数异常：", ex);
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        Result<Map<String, String>> result = Result.error(ResponseCode.ILLEGAL_ARGUMENT.name(), "参数校验失败");
+        result.setData(errors);
+        return result;
     }
 
     /**
@@ -39,7 +58,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public Result<Void> throwableHandler(Throwable throwable) {
         log.error("系统异常：", throwable);
         return Result.error(ResponseCode.SERVER_INNER_ERROR.name(), "服务器忙碌，请稍后再试...");

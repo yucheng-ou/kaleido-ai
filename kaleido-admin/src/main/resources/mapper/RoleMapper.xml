@@ -31,21 +31,21 @@
     <!-- 根据ID查找角色 -->
     <select id="findById" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 根据编码查找角色 -->
     <select id="findByCode" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE code = #{code} AND deleted = 0
     </select>
     
     <!-- 根据状态查找角色列表 -->
     <select id="findByStatus" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
@@ -56,7 +56,7 @@
     <!-- 查找系统角色 -->
     <select id="findByIsSystem" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         <if test="isSystem != null">
             AND is_system = #{isSystem}
@@ -67,7 +67,7 @@
     <!-- 查找所有角色 -->
     <select id="findAll" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -75,7 +75,7 @@
     <!-- 根据ID列表查找角色 -->
     <select id="findAllById" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -86,7 +86,7 @@
     <!-- 根据编码列表查找角色 -->
     <select id="findAllByCode" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0 AND code IN
         <foreach collection="codes" item="code" open="(" separator="," close=")">
             #{code}
@@ -97,8 +97,8 @@
     <!-- 根据权限ID查找拥有该权限的角色 -->
     <select id="findByPermissionId" resultMap="RoleMap">
         SELECT r.*
-        FROM role r
-        INNER JOIN role_permission rp ON r.id = rp.role_id
+        FROM t_role r
+        INNER JOIN t_role_permission rp ON r.id = rp.role_id
         WHERE r.deleted = 0 AND rp.permission_id = #{permissionId}
         ORDER BY r.created_at DESC
     </select>
@@ -106,7 +106,7 @@
     <!-- 根据条件查询角色列表 -->
     <select id="findByCondition" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         <if test="req.code != null and req.code != ''">
             AND code LIKE CONCAT('%', #{req.code}, '%')
@@ -126,7 +126,7 @@
     <!-- 查找启用的角色列表 -->
     <select id="findEnabledRoles" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0 AND status = 1
         ORDER BY created_at DESC
     </select>
@@ -134,7 +134,7 @@
     <!-- 查找系统角色列表 -->
     <select id="findSystemRoles" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0 AND is_system = 1
         ORDER BY created_at DESC
     </select>
@@ -142,7 +142,7 @@
     <!-- 获取角色树 -->
     <select id="getRoleTree" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         ORDER BY is_system DESC, created_at ASC
     </select>
@@ -150,28 +150,28 @@
     <!-- 检查角色是否存在 -->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM role
+        FROM t_role
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 检查角色编码是否存在 -->
     <select id="existsByCode" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM role
+        FROM t_role
         WHERE code = #{code} AND deleted = 0
     </select>
     
     <!-- 统计角色数量 -->
     <select id="count" resultType="long">
         SELECT COUNT(*)
-        FROM role
+        FROM t_role
         WHERE deleted = 0
     </select>
     
     <!-- 根据状态统计角色数量 -->
     <select id="countByStatus" resultType="long">
         SELECT COUNT(*)
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
@@ -181,7 +181,7 @@
     <!-- 根据是否系统角色统计数量 -->
     <select id="countByIsSystem" resultType="long">
         SELECT COUNT(*)
-        FROM role
+        FROM t_role
         WHERE deleted = 0
         <if test="isSystem != null">
             AND is_system = #{isSystem}
@@ -191,7 +191,7 @@
     <!-- 根据ID列表查询角色编码 -->
     <select id="findCodesByIds" resultType="string">
         SELECT code
-        FROM role
+        FROM t_role
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -202,8 +202,8 @@
     <!-- 根据管理员ID查询角色编码 -->
     <select id="findCodesByAdminId" resultType="string">
         SELECT r.code
-        FROM role r
-        INNER JOIN admin_user_role aur ON r.id = aur.role_id
+        FROM t_role r
+        INNER JOIN t_admin_user_role aur ON r.id = aur.role_id
         WHERE r.deleted = 0 AND aur.deleted = 0 AND aur.admin_user_id = #{adminId}
         ORDER BY r.created_at DESC
     </select>

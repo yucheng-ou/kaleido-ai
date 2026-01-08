@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.admin.application.convertor;
 
-import com.xiaoo.kaleido.api.admin.auth.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.RoleTreeResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

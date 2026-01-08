@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.convertor;
 
-import com.xiaoo.kaleido.api.admin.auth.response.PermissionInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
