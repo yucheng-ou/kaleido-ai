@@ -4,7 +4,7 @@ import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionReposit
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
-import com.xiaoo.kaleido.admin.domain.user.service.RoleDomainService;
+import com.xiaoo.kaleido.admin.domain.user.service.IRoleDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoleDomainServiceImpl implements RoleDomainService {
+public class RoleDomainServiceImpl implements IRoleDomainService {
 
     private final IRoleRepository roleRepository;
     private final IPermissionRepository permissionRepository;

@@ -1,0 +1,22 @@
+{
+  "serverUrl": "http://localhost:8084",
+  "serverEnv": "管理后台服务",
+  "allInOne": true,
+  "outPath": "../doc/admin",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.admin.trigger.controller.*",
+  "projectName": "Kaleido 管理后台服务 API 文档",
+  "framework": "spring",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "style": "xt256",
+  "createDebugPage": true,
+  "sortByTitle": false,
+  "showAuthor": true,
+  "inlineEnum": true,
+  "recursionLimit": 7,
+  "allInOneDocFileName": "index.html",
+  "requestParamsTable": true,
+  "responseParamsTable": true
+}

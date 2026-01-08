@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.api.notice;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.base.result.Result;
+import jakarta.validation.Valid;
 import org.apache.dubbo.config.annotation.DubboService;
 
 /**
@@ -20,7 +21,7 @@ public interface IRpcNoticeService {
      * @param command 发送短信验证码命令
      * @return 验证码
      */
-    Result<String> generateAndSendSmsVerifyCode(SendSmsVerifyCodeCommand command);
+    Result<String> generateAndSendSmsVerifyCode(@Valid SendSmsVerifyCodeCommand command);
 
     /**
      * 校验短信验证码
@@ -28,5 +29,5 @@ public interface IRpcNoticeService {
      * @param command 校验短信验证码命令
      * @return 校验结果
      */
-    Result<Boolean> checkSmsVerifyCode(CheckSmsVerifyCodeCommand command);
+    Result<Boolean> checkSmsVerifyCode(@Valid CheckSmsVerifyCodeCommand command);
 }

@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.user.model.aggregate;
 
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
+import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.Data;

@@ -11,14 +11,14 @@ import java.util.Date;
 
 /**
  * 管理员持久化对象
- * 对应数据库表：admin_user
+ * 对应数据库表：t_admin_user
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("admin_user")
+@TableName("t_admin_user")
 public class AdminUserPO extends BasePO {
 
     /**

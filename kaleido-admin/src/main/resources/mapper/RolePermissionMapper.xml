@@ -28,7 +28,7 @@
     <!-- 根据角色ID查找关联记录 -->
     <select id="findByRoleId" resultMap="RolePermissionMap">
         SELECT <include refid="RolePermissionColumns"/>
-        FROM role_permission
+        FROM t_role_permission
         WHERE deleted = 0 AND role_id = #{roleId}
         ORDER BY created_at ASC
     </select>
@@ -36,7 +36,7 @@
     <!-- 根据权限ID查找关联记录 -->
     <select id="findByPermissionId" resultMap="RolePermissionMap">
         SELECT <include refid="RolePermissionColumns"/>
-        FROM role_permission
+        FROM t_role_permission
         WHERE deleted = 0 AND permission_id = #{permissionId}
         ORDER BY created_at ASC
     </select>
@@ -44,7 +44,7 @@
     <!-- 根据角色ID列表查找关联记录 -->
     <select id="findByRoleIds" resultMap="RolePermissionMap">
         SELECT <include refid="RolePermissionColumns"/>
-        FROM role_permission
+        FROM t_role_permission
         WHERE deleted = 0 AND role_id IN
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}
@@ -55,7 +55,7 @@
     <!-- 根据权限ID列表查找关联记录 -->
     <select id="findByPermissionIds" resultMap="RolePermissionMap">
         SELECT <include refid="RolePermissionColumns"/>
-        FROM role_permission
+        FROM t_role_permission
         WHERE deleted = 0 AND permission_id IN
         <foreach collection="permissionIds" item="permissionId" open="(" separator="," close=")">
             #{permissionId}
@@ -65,19 +65,19 @@
     
     <!-- 删除角色的所有权限关联 -->
     <delete id="deleteByRoleId">
-        DELETE FROM role_permission
+        DELETE FROM t_role_permission
         WHERE role_id = #{roleId}
     </delete>
     
     <!-- 删除权限的所有角色关联 -->
     <delete id="deleteByPermissionId">
-        DELETE FROM role_permission
+        DELETE FROM t_role_permission
         WHERE permission_id = #{permissionId}
     </delete>
     
     <!-- 批量插入关联记录 -->
     <insert id="batchInsert" parameterType="list">
-        INSERT INTO role_permission (id, role_id, permission_id, created_at, updated_at, deleted, lock_version)
+        INSERT INTO t_role_permission (id, role_id, permission_id, created_at, updated_at, deleted, lock_version)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (

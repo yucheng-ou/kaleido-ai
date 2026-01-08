@@ -28,7 +28,7 @@
     <!-- 根据管理员ID查找关联记录 -->
     <select id="findByAdminUserId" resultMap="AdminUserRoleMap">
         SELECT <include refid="AdminUserRoleColumns"/>
-        FROM admin_user_role
+        FROM t_admin_user_role
         WHERE deleted = 0 AND admin_user_id = #{adminUserId}
         ORDER BY created_at ASC
     </select>
@@ -36,7 +36,7 @@
     <!-- 根据角色ID查找关联记录 -->
     <select id="findByRoleId" resultMap="AdminUserRoleMap">
         SELECT <include refid="AdminUserRoleColumns"/>
-        FROM admin_user_role
+        FROM t_admin_user_role
         WHERE deleted = 0 AND role_id = #{roleId}
         ORDER BY created_at ASC
     </select>
@@ -44,7 +44,7 @@
     <!-- 根据管理员ID列表查找关联记录 -->
     <select id="findByAdminUserIds" resultMap="AdminUserRoleMap">
         SELECT <include refid="AdminUserRoleColumns"/>
-        FROM admin_user_role
+        FROM t_admin_user_role
         WHERE deleted = 0 AND admin_user_id IN
         <foreach collection="adminUserIds" item="adminUserId" open="(" separator="," close=")">
             #{adminUserId}
@@ -55,7 +55,7 @@
     <!-- 根据角色ID列表查找关联记录 -->
     <select id="findByRoleIds" resultMap="AdminUserRoleMap">
         SELECT <include refid="AdminUserRoleColumns"/>
-        FROM admin_user_role
+        FROM t_admin_user_role
         WHERE deleted = 0 AND role_id IN
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}
@@ -65,19 +65,19 @@
     
     <!-- 删除管理员的所有角色关联 -->
     <delete id="deleteByAdminUserId">
-        DELETE FROM admin_user_role
+        DELETE FROM t_admin_user_role
         WHERE admin_user_id = #{adminUserId}
     </delete>
     
     <!-- 删除角色的所有管理员关联 -->
     <delete id="deleteByRoleId">
-        DELETE FROM admin_user_role
+        DELETE FROM t_admin_user_role
         WHERE role_id = #{roleId}
     </delete>
     
     <!-- 批量插入关联记录 -->
     <insert id="batchInsert" parameterType="list">
-        INSERT INTO admin_user_role (id, admin_user_id, role_id, created_at, updated_at, deleted, lock_version)
+        INSERT INTO t_admin_user_role (id, admin_user_id, role_id, created_at, updated_at, deleted, lock_version)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (

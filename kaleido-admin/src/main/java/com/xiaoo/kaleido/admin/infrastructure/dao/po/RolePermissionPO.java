@@ -8,14 +8,14 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 角色权限关联持久化对象
- * 对应数据库表：role_permission
+ * 对应数据库表：t_role_permission
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("role_permission")
+@TableName("t_role_permission")
 public class RolePermissionPO extends BasePO {
 
     /**

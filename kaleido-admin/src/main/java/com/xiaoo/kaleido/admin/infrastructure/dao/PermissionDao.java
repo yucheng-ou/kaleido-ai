@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.admin.infrastructure.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO;
-import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
+import com.xiaoo.kaleido.api.admin.user.request.PermissionPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

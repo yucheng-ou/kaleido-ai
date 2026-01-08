@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.admin.domain.user.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
-import com.xiaoo.kaleido.api.admin.auth.request.PermissionPageQueryReq;
+import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
+import com.xiaoo.kaleido.api.admin.user.request.PermissionPageQueryReq;
 
 import java.util.List;
 import java.util.Optional;

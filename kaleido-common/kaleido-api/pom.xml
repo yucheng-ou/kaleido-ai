@@ -24,10 +24,6 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-base</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-doc</artifactId>
-        </dependency>
         <!-- Dubbo API依赖（provided scope，仅用于注解） -->
         <dependency>
             <groupId>org.apache.dubbo</groupId>

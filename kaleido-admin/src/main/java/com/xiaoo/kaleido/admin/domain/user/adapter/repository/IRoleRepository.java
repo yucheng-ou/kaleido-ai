@@ -2,7 +2,7 @@ package com.xiaoo.kaleido.admin.domain.user.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
-import com.xiaoo.kaleido.api.admin.auth.request.RolePageQueryReq;
+import com.xiaoo.kaleido.api.admin.user.request.RolePageQueryReq;
 
 import java.util.List;
 import java.util.Optional;

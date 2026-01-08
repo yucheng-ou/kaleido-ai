@@ -5,6 +5,7 @@ import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,10 +15,11 @@ import org.springframework.stereotype.Component;
  * @author ouyucheng
  * @date 2025/12/30
  */
-@Mapper(componentModel = "spring")
-@Component
+@Mapper
 public interface DictInfraConvertor {
-    
+
+    DictInfraConvertor INSTANCE = Mappers.getMapper(DictInfraConvertor.class);
+
     /**
      * DictAggregate 转换为 DictPO
      */

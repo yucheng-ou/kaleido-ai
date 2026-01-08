@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * @author ouyucheng
  * @date 2025/11/10
- * @description
+ * @description 统一结果封装
  */
 @Getter
 @Setter
@@ -20,12 +20,28 @@ public class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 响应码
+     * 200表示成功，其他表示失败
+     */
     private String code;
 
+    /**
+     * 响应消息
+     * 成功时为'成功'，失败时为错误信息
+     */
     private String msg;
 
+    /**
+     * 是否成功
+     * true表示成功，false表示失败
+     */
     private Boolean success;
 
+    /**
+     * 响应数据
+     * 成功时返回具体数据，失败时为null
+     */
     private T data;
 
     public Result() {

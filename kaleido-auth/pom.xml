@@ -66,12 +66,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-web</artifactId>
         </dependency>
     </dependencies>
+
 </project>

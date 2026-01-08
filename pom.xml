@@ -60,12 +60,11 @@
         <hutool.version>5.8.38</hutool.version>
         <aliyun-captcha.version>1.1.2</aliyun-captcha.version>
         <aliyun.oss.version>3.18.1</aliyun.oss.version>
-        <knife4j.version>4.5.0</knife4j.version>
-        <springdoc.version>2.7.0</springdoc.version>
         <dubbo.version>3.3.0</dubbo.version>
         <pagehelper.version>2.1.1</pagehelper.version>
         <sa-token.version>1.44.0</sa-token.version>
         <jsqlparser.version>4.9</jsqlparser.version>
+        <smart-doc.version>2.7.7</smart-doc.version>
 
     </properties>
 
@@ -162,12 +161,6 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>
@@ -290,6 +283,21 @@
                 <version>${jsqlparser.version}</version>
             </dependency>
 
+            <!-- smart-doc 核心依赖 -->
+            <dependency>
+                <groupId>com.github.shalousun</groupId>
+                <artifactId>smart-doc</artifactId>
+                <version>${smart-doc.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <!-- smart-doc Maven 插件 -->
+            <dependency>
+                <groupId>com.github.shalousun</groupId>
+                <artifactId>smart-doc-maven-plugin</artifactId>
+                <version>${smart-doc.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -342,6 +350,42 @@
                         <nonFilteredFileExtension>pem</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
                 </configuration>
+            </plugin>
+
+
+            <!-- smart-doc Maven 插件 -->
+            <plugin>
+                <groupId>com.github.shalousun</groupId>
+                <artifactId>smart-doc-maven-plugin</artifactId>
+                <version>${smart-doc.version}</version>
+                <configuration>
+                    <!-- 配置文件路径（相对于模块根目录） -->
+                    <configFile>src/main/resources/smart-doc-config.json</configFile>
+                    <!-- 项目名称 -->
+                    <projectName>Kaleido ${project.name} API 文档</projectName>
+                    <includes>
+                        <!-- 使用了mybatis-plus的Page分页需要include所使用的源码包 -->
+                        <include>com.baomidou:mybatis-plus-extension</include>
+                        <!-- 使用了mybatis-plus的IPage分页需要include mybatis-plus-core-->
+                        <include>com.baomidou:mybatis-plus-core</include>
+                        <!-- 使用了pagehelper的PageInfo分页需要include pagehelper-spring-boot-starter-->
+                        <include>com.github.pagehelper:pagehelper</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--如果不需要在执行编译时启动smart-doc，则将phase注释掉-->
+                        <phase>compile</phase>
+                        <goals>
+                            <!--smart-doc提供了html、openapi、markdown等goal，可按需配置-->
+                            <goal>html</goal>
+                            <goal>openapi</goal>
+                            <goal>markdown</goal>
+                            <goal>rpc-html</goal>
+                            <goal>rpc-markdown</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 

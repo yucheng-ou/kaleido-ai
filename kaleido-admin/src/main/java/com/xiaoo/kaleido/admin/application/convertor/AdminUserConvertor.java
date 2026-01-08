@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.convertor;
 
-import com.xiaoo.kaleido.api.admin.auth.response.AdminUserInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.AdminUserInfoResponse;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,0 +1,22 @@
+{
+  "serverUrl": "http://localhost:8082",
+  "serverEnv": "用户服务",
+  "allInOne": true,
+  "outPath": "../../doc/user",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.user.trigger.controller.*",
+  "projectName": "Kaleido 用户服务 API 文档",
+  "framework": "spring",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "style": "xt256",
+  "createDebugPage": true,
+  "sortByTitle": false,
+  "showAuthor": true,
+  "inlineEnum": true,
+  "recursionLimit": 7,
+  "allInOneDocFileName": "index.html",
+  "requestParamsTable": true,
+  "responseParamsTable": true
+}

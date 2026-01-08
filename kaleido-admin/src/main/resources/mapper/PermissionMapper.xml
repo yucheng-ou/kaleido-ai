@@ -35,21 +35,21 @@
     <!-- 根据ID查找权限 -->
     <select id="findById" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 根据编码查找权限 -->
     <select id="findByCode" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE code = #{code} AND deleted = 0
     </select>
     
     <!-- 根据父权限ID查找子权限列表 -->
     <select id="findByParentId" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         <choose>
             <when test="parentId == null">
@@ -65,7 +65,7 @@
     <!-- 查找根权限列表 -->
     <select id="findRootPermissions" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0 AND parent_id IS NULL
         ORDER BY sort ASC, created_at ASC
     </select>
@@ -73,7 +73,7 @@
     <!-- 根据类型查找权限列表 -->
     <select id="findByType" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         <if test="type != null">
             AND type = #{type}
@@ -84,7 +84,7 @@
     <!-- 查找所有权限 -->
     <select id="findAll" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         ORDER BY sort ASC, created_at ASC
     </select>
@@ -92,7 +92,7 @@
     <!-- 根据ID列表查找权限 -->
     <select id="findAllById" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -103,7 +103,7 @@
     <!-- 根据编码列表查找权限 -->
     <select id="findAllByCode" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0 AND code IN
         <foreach collection="codes" item="code" open="(" separator="," close=")">
             #{code}
@@ -114,7 +114,7 @@
     <!-- 根据条件查询权限列表 -->
     <select id="findByCondition" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         <if test="req.code != null and req.code != ''">
             AND code LIKE CONCAT('%', #{req.code}, '%')
@@ -134,7 +134,7 @@
     <!-- 获取权限树 -->
     <select id="getPermissionTree" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         ORDER BY parent_id IS NULL DESC, sort ASC, created_at ASC
     </select>
@@ -142,28 +142,28 @@
     <!-- 检查权限是否存在 -->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM permission
+        FROM t_permission
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 检查权限编码是否存在 -->
     <select id="existsByCode" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM permission
+        FROM t_permission
         WHERE code = #{code} AND deleted = 0
     </select>
     
     <!-- 统计权限数量 -->
     <select id="count" resultType="long">
         SELECT COUNT(*)
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
     </select>
     
     <!-- 根据父权限ID统计子权限数量 -->
     <select id="countByParentId" resultType="long">
         SELECT COUNT(*)
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         <choose>
             <when test="parentId == null">
@@ -178,7 +178,7 @@
     <!-- 根据类型统计权限数量 -->
     <select id="countByType" resultType="long">
         SELECT COUNT(*)
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0
         <if test="type != null">
             AND type = #{type}
@@ -188,7 +188,7 @@
     <!-- 根据ID列表查询权限编码 -->
     <select id="findCodesByIds" resultType="string">
         SELECT code
-        FROM permission
+        FROM t_permission
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -199,8 +199,8 @@
     <!-- 根据角色ID列表查询权限编码 -->
     <select id="findCodesByRoleIds" resultType="string">
         SELECT DISTINCT p.code
-        FROM permission p
-        INNER JOIN role_permission rp ON p.id = rp.permission_id
+        FROM t_permission p
+        INNER JOIN t_role_permission rp ON p.id = rp.permission_id
         WHERE p.deleted = 0 AND rp.deleted = 0 AND rp.role_id IN
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}

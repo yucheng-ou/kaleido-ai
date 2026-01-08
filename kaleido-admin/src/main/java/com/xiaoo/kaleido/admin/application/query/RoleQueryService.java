@@ -1,8 +1,7 @@
 package com.xiaoo.kaleido.admin.application.query;
 
-import com.xiaoo.kaleido.api.admin.auth.request.RolePageQueryReq;
-import com.xiaoo.kaleido.api.admin.auth.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.auth.response.RoleTreeResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 
 import java.util.List;
 import java.util.Set;

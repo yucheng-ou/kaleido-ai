@@ -8,7 +8,7 @@ import com.xiaoo.kaleido.admin.infrastructure.dao.RoleDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.RolePermissionDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePO;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePermissionPO;
-import com.xiaoo.kaleido.api.admin.auth.request.RolePageQueryReq;
+import com.xiaoo.kaleido.api.admin.user.request.RolePageQueryReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

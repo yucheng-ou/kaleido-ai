@@ -1,0 +1,22 @@
+{
+  "serverUrl": "http://localhost:8081",
+  "serverEnv": "认证服务",
+  "allInOne": true,
+  "outPath": "../doc/auth",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.auth.trigger.controller.*",
+  "projectName": "Kaleido 认证服务 API 文档",
+  "framework": "spring",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "style": "xt256",
+  "createDebugPage": true,
+  "sortByTitle": false,
+  "showAuthor": true,
+  "inlineEnum": true,
+  "recursionLimit": 7,
+  "allInOneDocFileName": "index.html",
+  "requestParamsTable": true,
+  "responseParamsTable": true
+}

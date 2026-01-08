@@ -2,8 +2,8 @@ package com.xiaoo.kaleido.admin.domain.user.service.impl;
 
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
-import com.xiaoo.kaleido.api.admin.auth.enums.PermissionType;
-import com.xiaoo.kaleido.admin.domain.user.service.PermissionDomainService;
+import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
+import com.xiaoo.kaleido.admin.domain.user.service.IPermissionDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PermissionDomainServiceImpl implements PermissionDomainService {
+public class PermissionDomainServiceImpl implements IPermissionDomainService {
 
     private final IPermissionRepository permissionRepository;
 

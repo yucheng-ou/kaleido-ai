@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @description
  */
 @AutoConfiguration
-@Import({GlobalExceptionHandler.class,JacksonConfiguration.class})
+@Import({GlobalExceptionHandler.class, JacksonConfiguration.class})
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
 

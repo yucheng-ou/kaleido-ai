@@ -4,7 +4,7 @@ import com.xiaoo.kaleido.api.user.command.AddUserCommand;
 import com.xiaoo.kaleido.api.user.command.ChangeNickNameCommand;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
-import com.xiaoo.kaleido.user.domain.service.UserDomainService;
+import com.xiaoo.kaleido.user.domain.service.IUserDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCommandService {
 
     private final UserRepository userRepository;
-    private final UserDomainService userDomainService;
+    private final IUserDomainService userDomainService;
 
     /**
      * 创建用户
