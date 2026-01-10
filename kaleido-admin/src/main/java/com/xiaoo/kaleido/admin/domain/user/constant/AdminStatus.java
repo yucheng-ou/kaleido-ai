@@ -10,7 +10,7 @@ import lombok.Getter;
  * @date 2025/12/31
  */
 @Getter
-public enum AdminUserStatus {
+public enum AdminStatus {
 
     /**
      * 正常
@@ -31,7 +31,7 @@ public enum AdminUserStatus {
     private final String code;
     private final String description;
 
-    AdminUserStatus(String code, String description) {
+    AdminStatus(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -41,14 +41,52 @@ public enum AdminUserStatus {
      *
      * @param code 编码
      * @return 管理员状态
+     * @throws IllegalArgumentException 如果编码不存在
      */
-    public static AdminUserStatus fromCode(String code) {
-        for (AdminUserStatus status : values()) {
+    public static AdminStatus fromCode(String code) {
+        for (AdminStatus status : values()) {
             if (status.getCode().equals(code)) {
                 return status;
             }
         }
         throw new IllegalArgumentException("未知的管理员状态编码: " + code);
+    }
+
+    /**
+     * 根据编码安全地获取管理员状态，如果编码不存在则返回null
+     *
+     * @param code 编码
+     * @return 管理员状态，如果编码不存在则返回null
+     */
+    public static AdminStatus fromCodeSafe(String code) {
+        if (code == null) {
+            return null;
+        }
+        for (AdminStatus status : values()) {
+            if (status.getCode().equals(code)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据编码获取管理员状态，如果编码不存在则返回默认值
+     *
+     * @param code 编码
+     * @param defaultValue 默认值
+     * @return 管理员状态，如果编码不存在则返回默认值
+     */
+    public static AdminStatus fromCodeOrDefault(String code, AdminStatus defaultValue) {
+        if (code == null) {
+            return defaultValue;
+        }
+        for (AdminStatus status : values()) {
+            if (status.getCode().equals(code)) {
+                return status;
+            }
+        }
+        return defaultValue;
     }
 
 

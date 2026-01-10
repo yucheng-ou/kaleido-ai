@@ -88,11 +88,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
     boolean existsByCode(@Param("code") String code);
 
     /**
-     * 统计角色数量
-     */
-    long count();
-
-    /**
      * 根据状态统计角色数量
      */
     long countByStatus(@Param("status") String status);

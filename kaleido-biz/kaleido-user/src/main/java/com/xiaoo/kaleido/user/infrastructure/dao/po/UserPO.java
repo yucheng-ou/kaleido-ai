@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("user")
+@TableName("t_user")
 public class UserPO extends BasePO {
 
     /**
@@ -26,12 +26,6 @@ public class UserPO extends BasePO {
      */
     @TableField("mobile")
     private String mobile;
-
-    /**
-     * 密码哈希
-     */
-    @TableField("password_hash")
-    private String passwordHash;
 
     /**
      * 昵称

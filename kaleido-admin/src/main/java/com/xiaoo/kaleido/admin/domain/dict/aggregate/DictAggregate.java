@@ -102,7 +102,8 @@ public class DictAggregate extends BaseEntity {
      * @param dictValue 字典值
      * @param sort      排序
      */
-    public void updateInfo(String dictName, String dictValue, Integer sort) {
+    public void updateInfo(String typeName, String dictName, String dictValue, Integer sort) {
+        this.typeName = typeName;
         this.dictName = dictName;
         this.dictValue = dictValue;
         if (sort != null) {

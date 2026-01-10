@@ -36,13 +36,7 @@ public class DictRepositoryImpl implements IDictRepository {
     @Transactional
     public void save(DictAggregate dictAggregate) {
         DictPO po = DictInfraConvertor.INSTANCE.toPO(dictAggregate);
-        if (po.getId() == null) {
-            // 插入
-            dictDao.insert(po);
-        } else {
-            // 更新
-            dictDao.updateById(po);
-        }
+        dictDao.insert(po);
     }
 
     @Override

@@ -1,16 +1,19 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
-import com.xiaoo.kaleido.admin.domain.user.constant.AdminUserStatus;
-import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
-import com.xiaoo.kaleido.admin.infrastructure.convertor.AdminUserConvertor;
-import com.xiaoo.kaleido.admin.infrastructure.dao.IAdminUserDao;
-import com.xiaoo.kaleido.admin.infrastructure.dao.AdminUserRoleDao;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserPO;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserRolePO;
-import com.xiaoo.kaleido.api.admin.user.request.AdminUserPageQueryReq;
+import com.xiaoo.kaleido.admin.domain.user.constant.AdminStatus;
+import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
+import com.xiaoo.kaleido.admin.infrastructure.convertor.AdminConvertor;
+import com.xiaoo.kaleido.admin.infrastructure.dao.AdminDao;
+import com.xiaoo.kaleido.admin.infrastructure.dao.AdminRoleDao;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminPO;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminRolePO;
+import com.xiaoo.kaleido.admin.types.exception.AdminException;
+import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
+import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,168 +34,122 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminRepositoryImpl implements IAdminRepository {
 
-    private final IAdminUserDao adminUserDao;
-    private final AdminUserRoleDao adminUserRoleDao;
+    private final AdminDao adminDao;
+    private final AdminRoleDao adminRoleDao;
 
     @Override
-    public AdminUserAggregate save(AdminUserAggregate adminUser) {
+    public AdminAggregate save(AdminAggregate admin) {
         // 转换并保存管理员
-        AdminUserPO po = AdminUserConvertor.INSTANCE.toPO(adminUser);
+        AdminPO po = AdminConvertor.INSTANCE.toPO(admin);
 
         //插入角色
-        adminUserDao.insert(po);
+        try {
+            adminDao.insert(po);
+        } catch (DuplicateKeyException e) {
+            throw AdminException.of(BizErrorCode.UNIQUE_INDEX_CONFLICT.getCode(), "手机号已存在");
+        }
 
-        // 保存角色关联
-        saveUserRoles(adminUser.getId(), adminUser.getRoleIds());
-
-        return AdminUserConvertor.INSTANCE.toEntity(po);
+        return AdminConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
-    public AdminUserAggregate update(AdminUserAggregate adminUser) {
+    public AdminAggregate update(AdminAggregate admin) {
         // 转换并保存管理员
-        AdminUserPO po = AdminUserConvertor.INSTANCE.toPO(adminUser);
+        AdminPO po = AdminConvertor.INSTANCE.toPO(admin);
 
         //更新管理员信息
-        adminUserDao.updateById(po);
+        adminDao.updateById(po);
 
-        // 保存角色关联
-        saveUserRoles(adminUser.getId(), adminUser.getRoleIds());
-
-        return AdminUserConvertor.INSTANCE.toEntity(po);
+        return AdminConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<AdminUserAggregate> saveAll(List<AdminUserAggregate> adminUsers) {
-        List<AdminUserAggregate> savedList = new ArrayList<>();
-        for (AdminUserAggregate adminUser : adminUsers) {
-            savedList.add(save(adminUser));
+    public List<AdminAggregate> saveAll(List<AdminAggregate> admins) {
+        List<AdminAggregate> savedList = new ArrayList<>();
+        for (AdminAggregate admin : admins) {
+            savedList.add(save(admin));
         }
         return savedList;
     }
 
     @Override
-    public Optional<AdminUserAggregate> findById(String id) {
-        AdminUserPO po = adminUserDao.findById(id);
+    public Optional<AdminAggregate> findById(String id) {
+        AdminPO po = adminDao.findById(id);
         if (po == null) {
             return Optional.empty();
         }
-        AdminUserAggregate aggregate = AdminUserConvertor.INSTANCE.toEntity(po);
+        AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         // 加载角色ID
         loadRoleIds(aggregate);
         return Optional.of(aggregate);
     }
 
     @Override
-    public Optional<AdminUserAggregate> findByUsername(String username) {
-        AdminUserPO po = adminUserDao.findByUsername(username);
+    public Optional<AdminAggregate> findByUsername(String username) {
+        AdminPO po = adminDao.findByUsername(username);
         if (po == null) {
             return Optional.empty();
         }
-        AdminUserAggregate aggregate = AdminUserConvertor.INSTANCE.toEntity(po);
+        AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         loadRoleIds(aggregate);
         return Optional.of(aggregate);
     }
 
     @Override
-    public Optional<AdminUserAggregate> findByMobile(String mobile) {
-        AdminUserPO po = adminUserDao.findByMobile(mobile);
+    public Optional<AdminAggregate> findByMobile(String mobile) {
+        AdminPO po = adminDao.findByMobile(mobile);
         if (po == null) {
             return Optional.empty();
         }
-        AdminUserAggregate aggregate = AdminUserConvertor.INSTANCE.toEntity(po);
+        AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         loadRoleIds(aggregate);
         return Optional.of(aggregate);
     }
 
     @Override
-    public List<AdminUserAggregate> findByStatus(AdminUserStatus status) {
-        List<AdminUserPO> poList = adminUserDao.findByStatus(status != null ? status.getCode() : null);
+    public List<AdminAggregate> findByStatus(AdminStatus status) {
+        List<AdminPO> poList = adminDao.findByStatus(status != null ? status.getCode() : null);
         return convertAndLoadRoleIds(poList);
     }
 
     @Override
-    public List<AdminUserAggregate> findAll() {
-        List<AdminUserPO> poList = adminUserDao.findAll();
+    public List<AdminAggregate> findAll() {
+        List<AdminPO> poList = adminDao.findAll();
         return convertAndLoadRoleIds(poList);
     }
 
     @Override
-    public List<AdminUserAggregate> findAllById(List<String> ids) {
+    public List<AdminAggregate> findAllById(List<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
         }
-        List<AdminUserPO> poList = adminUserDao.findAllById(ids);
+        List<AdminPO> poList = adminDao.findAllById(ids);
         return convertAndLoadRoleIds(poList);
     }
 
     @Override
-    public List<AdminUserAggregate> findAllByUsername(List<String> usernames) {
-        if (CollectionUtils.isEmpty(usernames)) {
-            return new ArrayList<>();
-        }
-        List<AdminUserPO> poList = adminUserDao.findAllByUsername(usernames);
+    public List<AdminAggregate> findByRoleId(String roleId) {
+        List<AdminPO> poList = adminDao.findByRoleId(roleId);
         return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    public List<AdminUserAggregate> findByRoleId(String roleId) {
-        List<AdminUserPO> poList = adminUserDao.findByRoleId(roleId);
-        return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteById(String id) {
-        // 删除角色关联
-        adminUserRoleDao.deleteByAdminUserId(id);
-        // 删除管理员
-        adminUserDao.deleteById(id);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteAllById(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        for (String id : ids) {
-            deleteById(id);
-        }
     }
 
     @Override
     public boolean existsById(String id) {
-        return adminUserDao.existsById(id);
+        return adminDao.existsById(id);
     }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return adminUserDao.existsByUsername(username);
-    }
-
+    
     @Override
     public boolean existsByMobile(String mobile) {
-        return adminUserDao.existsByMobile(mobile);
+        return adminDao.existsByMobile(mobile);
     }
-
+    
     @Override
-    public long count() {
-        return adminUserDao.count();
-    }
-
-    @Override
-    public long countByStatus(AdminUserStatus status) {
-        return adminUserDao.countByStatus(status != null ? status.getCode() : null);
-    }
-
-    @Override
-    public List<AdminUserAggregate> pageQuery(AdminUserPageQueryReq pageQueryReq) {
+    public List<AdminAggregate> pageQuery(AdminPageQueryReq pageQueryReq) {
         log.debug("分页查询管理员，pageQueryReq={}", pageQueryReq);
 
         // 执行分页查询（PageHelper已在Service层启动）
-        List<AdminUserPO> poList = adminUserDao.pageQuery(pageQueryReq);
+        List<AdminPO> poList = adminDao.pageQuery(pageQueryReq);
 
         if (CollectionUtils.isEmpty(poList)) {
             return new ArrayList<>();
@@ -205,19 +162,20 @@ public class AdminRepositoryImpl implements IAdminRepository {
     /**
      * 保存用户角色关联
      */
-    private void saveUserRoles(String adminUserId, List<String> roleIds) {
-        if (CollectionUtils.isEmpty(roleIds)) {
+    @Transactional(rollbackFor = Exception.class)
+    public void assignRoles(AdminAggregate admin) {
+        if (CollectionUtils.isEmpty(admin.getRoleIds())) {
             return;
         }
 
         // 删除旧的关联
-        adminUserRoleDao.deleteByAdminUserId(adminUserId);
+        adminRoleDao.deleteByAdminId(admin.getId());
 
         // 创建新的关联
-        List<AdminUserRolePO> rolePOs = roleIds.stream()
+        List<AdminRolePO> rolePOs = admin.getRoleIds().stream()
                 .map(roleId -> {
-                    AdminUserRolePO po = new AdminUserRolePO();
-                    po.setAdminUserId(adminUserId);
+                    AdminRolePO po = new AdminRolePO();
+                    po.setAdminId(admin.getId());
                     po.setRoleId(roleId);
                     return po;
                 })
@@ -225,20 +183,20 @@ public class AdminRepositoryImpl implements IAdminRepository {
 
         // 批量插入
         if (!CollectionUtils.isEmpty(rolePOs)) {
-            adminUserRoleDao.batchInsert(rolePOs);
+            adminRoleDao.batchInsert(rolePOs);
         }
     }
 
     /**
      * 加载用户的角色ID列表
      */
-    private void loadRoleIds(AdminUserAggregate aggregate) {
+    private void loadRoleIds(AdminAggregate aggregate) {
         if (aggregate == null || aggregate.getId() == null) {
             return;
         }
-        List<AdminUserRolePO> rolePOs = adminUserRoleDao.findByAdminUserId(aggregate.getId());
+        List<AdminRolePO> rolePOs = adminRoleDao.findByAdminId(aggregate.getId());
         List<String> roleIds = rolePOs.stream()
-                .map(AdminUserRolePO::getRoleId)
+                .map(AdminRolePO::getRoleId)
                 .collect(Collectors.toList());
         aggregate.setRoleIds(roleIds);
     }
@@ -246,34 +204,34 @@ public class AdminRepositoryImpl implements IAdminRepository {
     /**
      * 转换PO列表并加载角色ID
      */
-    private List<AdminUserAggregate> convertAndLoadRoleIds(List<AdminUserPO> poList) {
+    private List<AdminAggregate> convertAndLoadRoleIds(List<AdminPO> poList) {
         if (CollectionUtils.isEmpty(poList)) {
             return new ArrayList<>();
         }
 
         // 转换PO为聚合根
-        List<AdminUserAggregate> aggregates = poList.stream()
-                .map(AdminUserConvertor.INSTANCE::toEntity)
+        List<AdminAggregate> aggregates = poList.stream()
+                .map(AdminConvertor.INSTANCE::toEntity)
                 .collect(Collectors.toList());
 
         // 批量加载角色ID
         if (!CollectionUtils.isEmpty(aggregates)) {
-            List<String> adminUserIds = aggregates.stream()
-                    .map(AdminUserAggregate::getId)
+            List<String> adminIds = aggregates.stream()
+                    .map(AdminAggregate::getId)
                     .collect(Collectors.toList());
 
-            List<AdminUserRolePO> allRolePOs = adminUserRoleDao.findByAdminUserIds(adminUserIds);
+            List<AdminRolePO> allRolePOs = adminRoleDao.findByAdminIds(adminIds);
 
             // 按用户ID分组
             var roleMap = allRolePOs.stream()
-                    .collect(Collectors.groupingBy(AdminUserRolePO::getAdminUserId));
+                    .collect(Collectors.groupingBy(AdminRolePO::getAdminId));
 
             // 设置角色ID列表
-            for (AdminUserAggregate aggregate : aggregates) {
-                List<AdminUserRolePO> userRolePOs = roleMap.get(aggregate.getId());
+            for (AdminAggregate aggregate : aggregates) {
+                List<AdminRolePO> userRolePOs = roleMap.get(aggregate.getId());
                 if (userRolePOs != null) {
                     List<String> roleIds = userRolePOs.stream()
-                            .map(AdminUserRolePO::getRoleId)
+                            .map(AdminRolePO::getRoleId)
                             .collect(Collectors.toList());
                     aggregate.setRoleIds(roleIds);
                 } else {

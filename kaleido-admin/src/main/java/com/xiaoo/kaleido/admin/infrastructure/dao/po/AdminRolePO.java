@@ -8,21 +8,21 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 管理员角色关联持久化对象
- * 对应数据库表：t_admin_user_role
+ * 对应数据库表：t_admin_role
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("t_admin_user_role")
-public class AdminUserRolePO extends BasePO {
+@TableName("t_admin_role")
+public class AdminRolePO extends BasePO {
 
     /**
      * 管理员ID
      */
-    @TableField("admin_user_id")
-    private String adminUserId;
+    @TableField("admin_id")
+    private String adminId;
 
     /**
      * 角色ID

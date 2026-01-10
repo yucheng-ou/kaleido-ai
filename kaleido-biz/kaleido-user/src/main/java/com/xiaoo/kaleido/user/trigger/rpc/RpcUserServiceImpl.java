@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.user.trigger.rpc;
 
 import com.xiaoo.kaleido.api.user.IRpcUserService;
-import com.xiaoo.kaleido.api.user.command.AddUserCommand;
+import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
@@ -45,7 +45,7 @@ public class RpcUserServiceImpl implements IRpcUserService {
 
     @Override
     public Result<String> register(
-            AddUserCommand command) {
+            RegisterUserCommand command) {
         String data = userCommandService.createUser(command);
         return Result.success(data);
     }

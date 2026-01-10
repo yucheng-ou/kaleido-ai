@@ -40,28 +40,17 @@ public class DictDomainServiceImpl implements IDictDomainService {
     }
 
     @Override
-    public DictAggregate updateDict(String dictId, String dictName, String dictValue, Integer sort) {
+    public DictAggregate updateDict(String dictId, String typeName, String dictName, String dictValue, Integer sort) {
         // 获取字典
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
 
         // 更新字典信息
-        dictAggregate.updateInfo(dictName, dictValue, sort);
+        dictAggregate.updateInfo(typeName, dictName, dictValue, sort);
 
         log.info("字典领域服务更新字典，字典ID: {}, 字典名称: {}", dictId, dictName);
         return dictAggregate;
     }
 
-    @Override
-    public DictAggregate updateDictTypeInfo(String dictId, String typeName) {
-        // 获取字典
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
-
-        // 更新字典类型信息
-        dictAggregate.updateTypeInfo(typeName);
-
-        log.info("字典领域服务更新字典类型信息，字典ID: {}, 类型名称: {}", dictId, typeName);
-        return dictAggregate;
-    }
 
     @Override
     public DictAggregate enableDict(String dictId) {

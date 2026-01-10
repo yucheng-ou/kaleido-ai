@@ -14,7 +14,7 @@ import java.io.Serial;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AdminUserPageQueryReq extends BasePageReq {
+public class AdminPageQueryReq extends BasePageReq {
     
     @Serial
     private static final long serialVersionUID = 1L;

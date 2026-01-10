@@ -1,12 +1,13 @@
 package com.xiaoo.kaleido.api.admin.user.command;
 import com.xiaoo.kaleido.base.command.BaseCommand;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 /**
- * 鍚敤绠＄悊鍛樺懡浠?
+ * 鍒嗛厤瑙掕壊缁欑鐞嗗憳鍛戒护
  *
  * @author ouyucheng
  * @date 2025/12/31
@@ -15,10 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnableAdminUserCommand extends BaseCommand {
+public class AssignRolesToAdminCommand extends BaseCommand {
+    
     /**
-     * 管理员ID
+     * 角色ID列表
      */
-    @NotBlank(message = "管理员ID不能为空")
-    private String adminUserId;
+    @NotEmpty(message = "角色ID列表不能为空")
+    private List<String> roleIds;
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
 /**
- * 鍒嗛厤鏉冮檺缁欒鑹插懡浠?
+ * 为角色分配权限命令
  *
  * @author ouyucheng
  * @date 2025/12/31
@@ -18,12 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AssignPermissionsToRoleCommand extends BaseCommand {
-    
-    /**
-     * 角色ID
-     */
-    @NotBlank(message = "角色ID不能为空")
-    private String roleId;
     
     /**
      * 权限ID列表

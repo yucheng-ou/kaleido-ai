@@ -3,7 +3,6 @@ package com.xiaoo.kaleido.auth.application.command;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
@@ -11,7 +10,7 @@ import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.user.IRpcUserService;
-import com.xiaoo.kaleido.api.user.command.AddUserCommand;
+import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
 import com.xiaoo.kaleido.api.user.response.UserLoginResponse;
 import com.xiaoo.kaleido.auth.types.exception.AuthErrorCode;
@@ -82,21 +81,14 @@ public class UserAuthCommandService {
      * @param command 注册命令
      * @return 注册响应
      */
-    public RegisterResponse register(RegisterCommand command) {
+    public RegisterResponse register(RegisterUserCommand command) {
         log.info("用户注册，手机号: {}", command.getTelephone());
 
         // 1. 验证短信验证码
         verifySmsCode(command.getTelephone(), command.getVerificationCode());
 
         // 2. 调用用户服务注册
-        AddUserCommand addUserCommand = AddUserCommand.builder()
-                .telephone(command.getTelephone())
-                .password(command.getPassword())
-                .inviterCode(command.getInviterCode())
-                .nickName(command.getNickName())
-                .build();
-
-        Result<String> registerResult = rpcUserService.register(addUserCommand);
+        Result<String> registerResult = rpcUserService.register(command);
 
         if (!Boolean.TRUE.equals(registerResult.getSuccess())) {
             log.error("用户注册失败，手机号: {}, 错误: {}", command.getTelephone(), registerResult.getMsg());
@@ -122,21 +114,24 @@ public class UserAuthCommandService {
     public UserLoginResponse login(AdminLoginCommand command) {
         log.info("用户登录，手机号: {}", command.getTelephone());
 
-        //根据手机号查询用户信息
+        // 1. 验证短信验证码
+        verifySmsCode(command.getTelephone(), command.getVerificationCode());
+
+        // 2. 根据手机号查询用户信息
         UserInfoResponse user = rpcUserService.getByTelephone(command.getTelephone()).getData();
 
-        // 调用用户服务记录登录
+        // 3. 调用用户服务记录登录
         Result<Void> loginResult = rpcUserService.login(user.getUserId());
         if (!Boolean.TRUE.equals(loginResult.getSuccess())) {
             log.error("用户登录记录失败，用户ID: {}, 错误: {}", user.getUserId(), loginResult.getMsg());
             throw new AuthException(AuthErrorCode.AUTH_LOGIN_FAILED);
         }
 
-        // 使用Sa-Token登录
+        // 4. 使用Sa-Token登录
          StpUserUtil.login(user.getUserId());
          SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
 
-        // 构建响应
+        // 5. 构建响应
         UserLoginResponse response = new UserLoginResponse();
         response.setUserId(user.getUserId());
         response.setToken(tokenInfo.getTokenValue());

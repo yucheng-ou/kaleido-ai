@@ -22,12 +22,6 @@ import lombok.NoArgsConstructor;
 public class UpdateRoleCommand extends BaseCommand {
     
     /**
-     * 角色ID
-     */
-    @NotBlank(message = "角色ID不能为空")
-    private String roleId;
-    
-    /**
      * 角色名称
      */
     @NotBlank(message = "角色名称不能为空")

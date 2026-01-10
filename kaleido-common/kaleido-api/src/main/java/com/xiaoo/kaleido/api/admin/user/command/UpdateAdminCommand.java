@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.api.admin.user.command;
 import com.xiaoo.kaleido.base.command.BaseCommand;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,13 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateAdminUserCommand extends BaseCommand {
-    
-    /**
-     * 管理员ID
-     */
-    @NotBlank(message = "管理员ID不能为空")
-    private String adminUserId;
+public class UpdateAdminCommand extends BaseCommand {
     
     /**
      * 真实姓名

@@ -1,8 +1,7 @@
 package com.xiaoo.kaleido.admin.domain.user.model.aggregate;
 
-import com.xiaoo.kaleido.admin.domain.user.constant.AdminUserStatus;
-import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
-import com.xiaoo.kaleido.admin.types.exception.AdminException;
+import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.admin.domain.user.constant.AdminStatus;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.Builder;
@@ -24,17 +23,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class AdminUserAggregate extends BaseEntity {
-
-    /**
-     * 管理员账号（唯一）
-     */
-    private String username;
-
-    /**
-     * 密码哈希值
-     */
-    private String passwordHash;
+public class AdminAggregate extends BaseEntity {
 
     /**
      * 真实姓名
@@ -49,7 +38,7 @@ public class AdminUserAggregate extends BaseEntity {
     /**
      * 管理员状态
      */
-    private AdminUserStatus status;
+    private AdminStatus status;
 
     /**
      * 最后登录时间
@@ -65,21 +54,14 @@ public class AdminUserAggregate extends BaseEntity {
     /**
      * 创建管理员
      *
-     * @param username     管理员账号
-     * @param passwordHash 密码哈希值
-     * @param realName     真实姓名
-     * @param mobile       手机号
+     * @param mobile 手机号
      * @return 管理员对象
      */
-    public static AdminUserAggregate create(String username, String passwordHash,
-                                            String realName, String mobile) {
-        return AdminUserAggregate.builder()
+    public static AdminAggregate create(String mobile) {
+        return AdminAggregate.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
-                .username(username)
-                .passwordHash(passwordHash)
-                .realName(realName)
                 .mobile(mobile)
-                .status(AdminUserStatus.NORMAL)
+                .status(AdminStatus.NORMAL)
                 .lastLoginTime(null)
                 .roleIds(new ArrayList<>())
                 .build();
@@ -92,45 +74,29 @@ public class AdminUserAggregate extends BaseEntity {
      * @param mobile   手机号
      */
     public void updateInfo(String realName, String mobile) {
-        if (realName != null && !realName.trim().isEmpty()) {
+        if (StrUtil.isNotBlank(realName)) {
             this.realName = realName;
         }
-        if (mobile != null) {
+        if (StrUtil.isNotBlank(mobile)) {
             this.mobile = mobile;
         }
     }
 
-    /**
-     * 更新密码
-     *
-     * @param passwordHash 密码哈希值
-     */
-    public void updatePassword(String passwordHash) {
-        if (passwordHash != null && !passwordHash.trim().isEmpty()) {
-            this.passwordHash = passwordHash;
-        }
-    }
 
     /**
      * 启用管理员
      */
     public void enable() {
-        this.status = AdminUserStatus.NORMAL;
+        this.status = AdminStatus.NORMAL;
     }
 
     /**
      * 冻结管理员
      */
     public void freeze() {
-        this.status = AdminUserStatus.FROZEN;
+        this.status = AdminStatus.FROZEN;
     }
 
-    /**
-     * 删除管理员
-     */
-    public void delete() {
-        this.status = AdminUserStatus.DELETED;
-    }
 
     /**
      * 更新最后登录时间
@@ -165,16 +131,6 @@ public class AdminUserAggregate extends BaseEntity {
         }
     }
 
-    /**
-     * 移除角色
-     *
-     * @param roleId 角色ID
-     */
-    public void removeRole(String roleId) {
-        if (roleId != null) {
-            roleIds.remove(roleId);
-        }
-    }
 
     /**
      * 批量移除角色
@@ -204,15 +160,6 @@ public class AdminUserAggregate extends BaseEntity {
     }
 
     /**
-     * 判断管理员是否冻结
-     *
-     * @return 是否冻结
-     */
-    public boolean isFrozen() {
-        return status != null && status.isFrozen();
-    }
-
-    /**
      * 判断管理员是否删除
      *
      * @return 是否删除
@@ -230,36 +177,6 @@ public class AdminUserAggregate extends BaseEntity {
         return isNormal();
     }
 
-    /**
-     * 判断管理员是否可操作
-     *
-     * @return 是否可操作
-     */
-    public boolean isOperable() {
-        return status != null && status.isOperable();
-    }
-
-    /**
-     * 验证管理员账号是否匹配
-     *
-     * @param username 管理员账号
-     * @return 是否匹配
-     */
-    public boolean matches(String username) {
-        return this.username != null && this.username.equals(username);
-    }
-
-    /**
-     * 验证密码
-     *
-     * @param passwordHash 密码哈希值
-     */
-    public void verifyPassword(String passwordHash) {
-        boolean verify = this.passwordHash != null && this.passwordHash.equals(passwordHash);
-        if (verify) {
-            throw AdminException.of(AdminErrorCode.ADMIN_USER_PASSWORD_ERROR);
-        }
-    }
 
     /**
      * 判断是否拥有某个角色
@@ -269,15 +186,6 @@ public class AdminUserAggregate extends BaseEntity {
      */
     public boolean hasRole(String roleId) {
         return roleIds.contains(roleId);
-    }
-
-    /**
-     * 获取角色数量
-     *
-     * @return 角色数量
-     */
-    public int getRoleCount() {
-        return roleIds.size();
     }
 
 }

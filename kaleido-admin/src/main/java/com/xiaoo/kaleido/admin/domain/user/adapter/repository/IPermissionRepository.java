@@ -25,6 +25,14 @@ public interface IPermissionRepository {
     PermissionAggregate save(PermissionAggregate permission);
 
     /**
+     * 更新权限
+     *
+     * @param permission 权限
+     * @return 更新后的权限
+     */
+    PermissionAggregate update(PermissionAggregate permission);
+
+    /**
      * 批量保存权限
      *
      * @param permissions 权限列表

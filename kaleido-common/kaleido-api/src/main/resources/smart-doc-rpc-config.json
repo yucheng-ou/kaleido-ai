@@ -1,0 +1,28 @@
+{
+  "serverEnv": "RPC服务环境",
+  "allInOne": true,
+  "outPath": "./doc/rpc",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.api.*",
+  "projectName": "Kaleido RPC接口文档",
+  "description": "Kaleido微服务Dubbo RPC接口文档，包含用户、通知、管理后台等服务的接口定义",
+  "version": "0.0.1-SNAPSHOT",
+  "framework": "dubbo",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "style": "xt256",
+  "createDebugPage": true,
+  "sortByTitle": false,
+  "showAuthor": true,
+  "inlineEnum": true,
+  "recursionLimit": 7,
+  "allInOneDocFileName": "index.html",
+  "requestParamsTable": true,
+  "responseParamsTable": true,
+  "ignoreRequestParams": [
+    "javax.servlet.http.HttpServletRequest",
+    "javax.servlet.http.HttpServletResponse",
+    "org.springframework.ui.Model"
+  ]
+}

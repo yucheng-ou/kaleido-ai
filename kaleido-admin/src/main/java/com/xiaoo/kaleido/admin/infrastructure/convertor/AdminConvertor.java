@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.admin.infrastructure.convertor;
 
-import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserPO;
+import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,17 +13,17 @@ import org.mapstruct.factory.Mappers;
  * @date 2025/12/31
  */
 @Mapper
-public interface AdminUserConvertor {
+public interface AdminConvertor {
 
-    AdminUserConvertor INSTANCE = Mappers.getMapper(AdminUserConvertor.class);
+    AdminConvertor INSTANCE = Mappers.getMapper(AdminConvertor.class);
 
     /**
      * 将AdminUserAggregate转换为AdminUserPO
      */
-    AdminUserPO toPO(AdminUserAggregate aggregate);
+    AdminPO toPO(AdminAggregate aggregate);
 
     /**
      * 将AdminUserPO转换为AdminUserAggregate
      */
-    AdminUserAggregate toEntity(AdminUserPO po);
+    AdminAggregate toEntity(AdminPO po);
 }

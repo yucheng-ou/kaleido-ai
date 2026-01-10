@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.admin.application.convertor;
 
-import com.xiaoo.kaleido.api.admin.user.response.AdminUserInfoResponse;
-import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
+import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
+import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Component;
  */
 @Mapper(componentModel = "spring")
 @Component
-public interface AdminUserConvertor {
+public interface AdminConvertor {
     
     /**
-     * AdminUserAggregate 转换为 AdminUserInfoResponse
+     * AdminAggregate 转换为 AdminInfoResponse
      */
-    @Mapping(source = "id", target = "adminUserId")
+    @Mapping(source = "id", target = "adminId")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "roleIds", target = "roleIds")
-    AdminUserInfoResponse toResponse(AdminUserAggregate aggregate);
+    AdminInfoResponse toResponse(AdminAggregate aggregate);
 }

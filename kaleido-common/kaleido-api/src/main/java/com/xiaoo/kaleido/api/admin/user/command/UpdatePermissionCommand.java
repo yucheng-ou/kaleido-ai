@@ -22,12 +22,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdatePermissionCommand extends BaseCommand {
     /**
-     * 权限ID
-     */
-    @NotBlank(message = "权限ID不能为空")
-    private String permissionId;
-    
-    /**
      * 权限名称
      */
     @NotBlank(message = "权限名称不能为空")

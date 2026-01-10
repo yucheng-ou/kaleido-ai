@@ -2,7 +2,7 @@
   "serverUrl": "http://localhost:8082",
   "serverEnv": "用户服务",
   "allInOne": true,
-  "outPath": "../../doc/user",
+  "outPath": "../../doc/api/user",
   "coverOld": true,
   "packageFilters": "com.xiaoo.kaleido.user.trigger.controller.*",
   "projectName": "Kaleido 用户服务 API 文档",
@@ -10,6 +10,7 @@
   "skipTransientField": true,
   "requestExample": true,
   "responseExample": true,
+  "randomMock": true,
   "style": "xt256",
   "createDebugPage": true,
   "sortByTitle": false,
@@ -18,5 +19,15 @@
   "recursionLimit": 7,
   "allInOneDocFileName": "index.html",
   "requestParamsTable": true,
-  "responseParamsTable": true
+  "responseParamsTable": true,
+  "requestHeaders": [
+    {
+      "name": "Authorization",
+      "type": "string",
+      "desc": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。",
+      "value": "Bearer ",
+      "required": false,
+      "since": "-"
+    }
+  ]
 }

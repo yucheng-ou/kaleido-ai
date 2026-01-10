@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.AdminUserRoleDao">
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.AdminRoleDao">
     
     <!-- 1. ResultMap定义 -->
-    <resultMap id="AdminUserRoleMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserRolePO">
+    <resultMap id="AdminRoleMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminRolePO">
         <!-- 继承BasePO的字段映射 -->
         <result property="id" column="id"/>
         <result property="createdAt" column="created_at"/>
@@ -12,50 +12,50 @@
         <result property="deleted" column="deleted"/>
         <result property="lockVersion" column="lock_version"/>
         
-        <!-- AdminUserRolePO特有字段 -->
-        <result property="adminUserId" column="admin_user_id"/>
+        <!-- AdminRolePO特有字段 -->
+        <result property="adminId" column="admin_id"/>
         <result property="roleId" column="role_id"/>
     </resultMap>
     
     <!-- 2. 可重用SQL片段 -->
-    <sql id="AdminUserRoleColumns">
-        id, admin_user_id, role_id,
+    <sql id="AdminRoleColumns">
+        id, admin_id, role_id,
         created_at, updated_at, deleted, lock_version
     </sql>
     
     <!-- 3. 查询语句 -->
     
     <!-- 根据管理员ID查找关联记录 -->
-    <select id="findByAdminUserId" resultMap="AdminUserRoleMap">
-        SELECT <include refid="AdminUserRoleColumns"/>
-        FROM t_admin_user_role
-        WHERE deleted = 0 AND admin_user_id = #{adminUserId}
+    <select id="findByAdminId" resultMap="AdminRoleMap">
+        SELECT <include refid="AdminRoleColumns"/>
+        FROM t_admin_role
+        WHERE deleted = 0 AND admin_id = #{adminId}
         ORDER BY created_at ASC
     </select>
     
     <!-- 根据角色ID查找关联记录 -->
-    <select id="findByRoleId" resultMap="AdminUserRoleMap">
-        SELECT <include refid="AdminUserRoleColumns"/>
-        FROM t_admin_user_role
+    <select id="findByRoleId" resultMap="AdminRoleMap">
+        SELECT <include refid="AdminRoleColumns"/>
+        FROM t_admin_role
         WHERE deleted = 0 AND role_id = #{roleId}
         ORDER BY created_at ASC
     </select>
     
     <!-- 根据管理员ID列表查找关联记录 -->
-    <select id="findByAdminUserIds" resultMap="AdminUserRoleMap">
-        SELECT <include refid="AdminUserRoleColumns"/>
-        FROM t_admin_user_role
-        WHERE deleted = 0 AND admin_user_id IN
-        <foreach collection="adminUserIds" item="adminUserId" open="(" separator="," close=")">
-            #{adminUserId}
+    <select id="findByAdminIds" resultMap="AdminRoleMap">
+        SELECT <include refid="AdminRoleColumns"/>
+        FROM t_admin_role
+        WHERE deleted = 0 AND admin_id IN
+        <foreach collection="adminIds" item="adminId" open="(" separator="," close=")">
+            #{adminId}
         </foreach>
-        ORDER BY admin_user_id ASC, created_at ASC
+        ORDER BY admin_id ASC, created_at ASC
     </select>
     
     <!-- 根据角色ID列表查找关联记录 -->
-    <select id="findByRoleIds" resultMap="AdminUserRoleMap">
-        SELECT <include refid="AdminUserRoleColumns"/>
-        FROM t_admin_user_role
+    <select id="findByRoleIds" resultMap="AdminRoleMap">
+        SELECT <include refid="AdminRoleColumns"/>
+        FROM t_admin_role
         WHERE deleted = 0 AND role_id IN
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}
@@ -64,25 +64,25 @@
     </select>
     
     <!-- 删除管理员的所有角色关联 -->
-    <delete id="deleteByAdminUserId">
-        DELETE FROM t_admin_user_role
-        WHERE admin_user_id = #{adminUserId}
+    <delete id="deleteByAdminId">
+        DELETE FROM t_admin_role
+        WHERE admin_id = #{adminId}
     </delete>
     
     <!-- 删除角色的所有管理员关联 -->
     <delete id="deleteByRoleId">
-        DELETE FROM t_admin_user_role
+        DELETE FROM t_admin_role
         WHERE role_id = #{roleId}
     </delete>
     
     <!-- 批量插入关联记录 -->
     <insert id="batchInsert" parameterType="list">
-        INSERT INTO t_admin_user_role (id, admin_user_id, role_id, created_at, updated_at, deleted, lock_version)
+        INSERT INTO t_admin_role (id, admin_id, role_id, created_at, updated_at, deleted, lock_version)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (
             #{item.id},
-            #{item.adminUserId},
+            #{item.adminId},
             #{item.roleId},
             #{item.createdAt},
             #{item.updatedAt},

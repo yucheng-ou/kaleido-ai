@@ -24,5 +24,5 @@ public class AdminLoginResponse {
     /**
      * 用户信息
      */
-    private AdminUserInfoResponse userInfo;
+    private AdminInfoResponse userInfo;
 }

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterCommand extends BaseCommand {
+public class RegisterAdminCommand extends BaseCommand {
     
     /**
      * 手机号
@@ -30,30 +30,9 @@ public class RegisterCommand extends BaseCommand {
     private String telephone;
     
     /**
-     * 密码
-     */
-    @NotBlank(message = "密码不能为空")
-    @Size(min = 6, max = 20, message = "密码长度必须在6-20位之间")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$", message = "密码必须包含字母和数字")
-    private String password;
-    
-    /**
      * 短信验证码
      */
     @NotBlank(message = "验证码不能为空")
     @Size(min = 4, max = 8, message = "验证码长度必须在4-8位之间")
     private String verificationCode;
-    
-    /**
-     * 邀请码（可选）
-     */
-    @Size(min = 6, max = 20, message = "邀请码长度必须在6-20位之间")
-    private String inviterCode;
-    
-    /**
-     * 昵称（可选）
-     */
-    @Size(min = 2, max = 20, message = "昵称长度必须在2-20位之间")
-    @Pattern(regexp = "^[\\u4e00-\\u9fa5a-zA-Z0-9]+$", message = "昵称只能包含中文、英文和数字")
-    private String nickName;
 }

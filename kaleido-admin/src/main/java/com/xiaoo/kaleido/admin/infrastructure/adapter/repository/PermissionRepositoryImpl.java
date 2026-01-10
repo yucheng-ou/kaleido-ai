@@ -35,11 +35,14 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
     @Transactional(rollbackFor = Exception.class)
     public PermissionAggregate save(PermissionAggregate permission) {
         PermissionPO po = PermissionConvertor.INSTANCE.toPO(permission);
-        if (po.getId() == null) {
-            permissionDao.insert(po);
-        } else {
-            permissionDao.updateById(po);
-        }
+        permissionDao.insert(po);
+        return PermissionConvertor.INSTANCE.toEntity(po);
+    }
+
+    @Override
+    public PermissionAggregate update(PermissionAggregate permission) {
+        PermissionPO po = PermissionConvertor.INSTANCE.toPO(permission);
+        permissionDao.updateById(po);
         return PermissionConvertor.INSTANCE.toEntity(po);
     }
 

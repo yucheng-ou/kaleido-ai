@@ -18,7 +18,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        group: ${spring.application.name}
+        group: kaleido-gateway  # 修改为与网关相同的分组
       config:
         group: ${spring.application.name}
 dubbo:

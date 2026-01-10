@@ -168,14 +168,6 @@ public class RoleAggregate extends BaseEntity {
         return status != null && status == DataStatusEnum.ENABLE;
     }
 
-    /**
-     * 判断角色是否禁用
-     *
-     * @return 是否禁用
-     */
-    public boolean isDisabled() {
-        return status != null && status == DataStatusEnum.DISABLE;
-    }
 
     /**
      * 判断是否为系统角色
@@ -186,24 +178,6 @@ public class RoleAggregate extends BaseEntity {
         return isSystem != null && isSystem;
     }
 
-    /**
-     * 判断角色是否可用
-     *
-     * @return 是否可用
-     */
-    public boolean isAvailable() {
-        return isEnabled();
-    }
-
-    /**
-     * 验证角色编码是否匹配
-     *
-     * @param code 角色编码
-     * @return 是否匹配
-     */
-    public boolean matches(String code) {
-        return this.code != null && this.code.equals(code);
-    }
 
     /**
      * 判断是否拥有某个权限
@@ -213,14 +187,5 @@ public class RoleAggregate extends BaseEntity {
      */
     public boolean hasPermission(String permissionId) {
         return permissionIds.contains(permissionId);
-    }
-
-    /**
-     * 获取权限数量
-     *
-     * @return 权限数量
-     */
-    public int getPermissionCount() {
-        return permissionIds.size();
     }
 }

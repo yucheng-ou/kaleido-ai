@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.base.command;
 
+import lombok.Value;
+
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * @author ouyucheng
  * @date 2026/1/6
  */
-public abstract class BaseCommand implements Serializable {
+public  class BaseCommand implements Serializable {
     
     @Serial
     private static final long serialVersionUID = 1L;

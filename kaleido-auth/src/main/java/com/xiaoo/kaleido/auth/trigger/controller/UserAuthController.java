@@ -1,10 +1,10 @@
 package com.xiaoo.kaleido.auth.trigger.controller;
 
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
+import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.response.UserLoginResponse;
 import com.xiaoo.kaleido.auth.application.command.UserAuthCommandService;
 import com.xiaoo.kaleido.base.result.Result;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 授权控制器
+ * 普通用户认证API
  *
  * @author ouyucheng
  * @date 2025/12/31
@@ -53,7 +53,7 @@ public class UserAuthController {
      */
     @PostMapping("/register")
     public Result<RegisterResponse> register(
-            @Valid @RequestBody RegisterCommand command) {
+            @Valid @RequestBody RegisterUserCommand command) {
         
         log.info("接收用户注册请求，手机号: {}", command.getTelephone());
         RegisterResponse response = userAuthCommandService.register(command);
