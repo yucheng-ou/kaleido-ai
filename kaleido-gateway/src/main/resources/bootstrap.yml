@@ -36,18 +36,12 @@ spring:
               uri: lb://kaleido-notice
               predicates:
                 - Path=/kaleido-notice/**
-    nacos:
-      discovery:
-        group: ${spring.application.name}
-      config:
-        group: ${spring.application.name}
+            - id: kaleido-admin-server
+              uri: lb://kaleido-admin
+              predicates:
+                - Path=/kaleido-admin/**
 
-# 网关认证策略配置
-# 配置说明：
-# 1. 列表顺序即为匹配优先级，先配置的优先级更高
-# 2. 策略类型：PUBLIC（公共路径，无需认证）、USER（用户路径，需要用户登录）、ADMIN（管理员路径，需要管理员登录）
-# 3. 路径模式支持 Ant 风格通配符
-# 4. 默认策略：当没有路径匹配时使用的策略
+# 认证策略配置
 gateway:
   auth:
     strategies:

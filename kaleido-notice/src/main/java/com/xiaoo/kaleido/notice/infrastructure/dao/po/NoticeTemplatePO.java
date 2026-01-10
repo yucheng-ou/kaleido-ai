@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("notice_template")
+@TableName("t_notice_template")
 public class NoticeTemplatePO extends BasePO {
 
     /**

@@ -4,7 +4,7 @@ import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.DictInfraConvertor;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictDao;
+import com.xiaoo.kaleido.admin.infrastructure.dao.DictDao;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
@@ -77,11 +77,6 @@ public class DictRepositoryImpl implements IDictRepository {
     @Override
     public boolean existsByTypeCodeAndDictCode(String typeCode, String dictCode) {
         return dictDao.existsByTypeCodeAndDictCode(typeCode, dictCode);
-    }
-
-    @Override
-    public boolean existsByTypeCode(String typeCode) {
-        return dictDao.existsByTypeCode(typeCode);
     }
 
     @Override

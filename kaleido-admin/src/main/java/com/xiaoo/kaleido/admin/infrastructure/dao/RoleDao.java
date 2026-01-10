@@ -33,11 +33,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
     List<RolePO> findByStatus(@Param("status") String status);
 
     /**
-     * 查找系统角色
-     */
-    List<RolePO> findByIsSystem(@Param("isSystem") Boolean isSystem);
-
-    /**
      * 查找所有角色
      */
     List<RolePO> findAll();
@@ -68,11 +63,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
     List<RolePO> findEnabledRoles();
 
     /**
-     * 查找系统角色列表
-     */
-    List<RolePO> findSystemRoles();
-
-    /**
      * 获取角色树
      */
     List<RolePO> getRoleTree();
@@ -91,11 +81,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
      * 根据状态统计角色数量
      */
     long countByStatus(@Param("status") String status);
-
-    /**
-     * 根据是否系统角色统计数量
-     */
-    long countByIsSystem(@Param("isSystem") Boolean isSystem);
 
     /**
      * 根据ID列表查询角色编码

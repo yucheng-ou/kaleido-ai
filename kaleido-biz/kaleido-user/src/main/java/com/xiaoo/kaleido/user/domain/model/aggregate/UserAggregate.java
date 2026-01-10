@@ -42,12 +42,11 @@ public class UserAggregate {
                 .build();
     }
 
-    public static UserAggregate create(String telephone, String passwordHash, String nickName, String inviteCode, String inviterId) {
+    public static UserAggregate create(String telephone, String nickName, String inviteCode, String inviterId) {
 
         // 创建用户实体
         User user = User.create(
                 telephone,
-                passwordHash,
                 nickName,
                 inviteCode,
                 inviterId

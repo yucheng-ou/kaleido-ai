@@ -38,12 +38,6 @@ public class RolePO extends BasePO {
     private String description;
 
     /**
-     * 是否系统角色：0-否 1-是
-     */
-    @TableField("is_system")
-    private Boolean isSystem;
-
-    /**
      * 状态：ENABLE-启用 DISABLE-禁用
      */
     @TableField("status")

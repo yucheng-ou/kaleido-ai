@@ -16,13 +16,12 @@
         <result property="code" column="code"/>
         <result property="name" column="name"/>
         <result property="description" column="description"/>
-        <result property="isSystem" column="is_system"/>
         <result property="status" column="status"/>
     </resultMap>
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="RoleColumns">
-        id, code, name, description, is_system, status,
+        id, code, name, description, status,
         created_at, updated_at, deleted, lock_version
     </sql>
     
@@ -49,17 +48,6 @@
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
-        </if>
-        ORDER BY created_at DESC
-    </select>
-    
-    <!-- 查找系统角色 -->
-    <select id="findByIsSystem" resultMap="RoleMap">
-        SELECT <include refid="RoleColumns"/>
-        FROM t_role
-        WHERE deleted = 0
-        <if test="isSystem != null">
-            AND is_system = #{isSystem}
         </if>
         ORDER BY created_at DESC
     </select>
@@ -114,9 +102,6 @@
         <if test="req.name != null and req.name != ''">
             AND name LIKE CONCAT('%', #{req.name}, '%')
         </if>
-        <if test="req.isSystem != null">
-            AND is_system = #{req.isSystem}
-        </if>
         <if test="req.enabled != null">
             AND status = #{req.enabled}
         </if>
@@ -131,20 +116,12 @@
         ORDER BY created_at DESC
     </select>
     
-    <!-- 查找系统角色列表 -->
-    <select id="findSystemRoles" resultMap="RoleMap">
-        SELECT <include refid="RoleColumns"/>
-        FROM t_role
-        WHERE deleted = 0 AND is_system = 1
-        ORDER BY created_at DESC
-    </select>
-    
     <!-- 获取角色树 -->
     <select id="getRoleTree" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
         FROM t_role
         WHERE deleted = 0
-        ORDER BY is_system DESC, created_at ASC
+        ORDER BY created_at ASC
     </select>
     
     <!-- 检查角色是否存在 -->
@@ -171,16 +148,6 @@
         </if>
     </select>
     
-    <!-- 根据是否系统角色统计数量 -->
-    <select id="countByIsSystem" resultType="long">
-        SELECT COUNT(*)
-        FROM t_role
-        WHERE deleted = 0
-        <if test="isSystem != null">
-            AND is_system = #{isSystem}
-        </if>
-    </select>
-
     <!-- 根据ID列表查询角色编码 -->
     <select id="findCodesByIds" resultType="string">
         SELECT code

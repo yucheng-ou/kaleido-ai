@@ -29,14 +29,14 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     private final IPermissionRepository permissionRepository;
 
     @Override
-    public RoleAggregate createRole(String code, String name, String description, Boolean isSystem) {
+    public RoleAggregate createRole(String code, String name, String description) {
         // 验证角色编码唯一性
         if (roleRepository.existsByCode(code)) {
             throw AdminException.of(AdminErrorCode.ROLE_CODE_EXIST.getCode(), AdminErrorCode.ROLE_CODE_EXIST.getMessage());
         }
 
         // 创建角色
-        RoleAggregate role = RoleAggregate.create(code, name, description, isSystem);
+        RoleAggregate role = RoleAggregate.create(code, name, description);
 
         log.info("角色领域服务创建角色，角色ID: {}, 角色编码: {}, 角色名称: {}",
                 role.getId(), code, name);
@@ -85,11 +85,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         // 获取角色
         RoleAggregate role = findByIdOrThrow(roleId);
 
-        // 检查是否为系统角色
-        if (role.isSystem()) {
-            throw AdminException.of(AdminErrorCode.SYSTEM_ROLE_CANNOT_DELETE.getCode(), AdminErrorCode.SYSTEM_ROLE_CANNOT_DELETE.getMessage());
-        }
-
         // 删除角色
         roleRepository.deleteById(roleId);
 
@@ -115,30 +110,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     }
 
     @Override
-    public RoleAggregate removePermissions(String roleId, List<String> permissionIds) {
-        // 获取角色
-        RoleAggregate role = findByIdOrThrow(roleId);
-
-        // 移除权限
-        role.removePermissions(permissionIds);
-
-        log.info("角色领域服务移除权限，角色ID: {}, 权限数量: {}", roleId, permissionIds.size());
-        return role;
-    }
-
-    @Override
-    public RoleAggregate clearPermissions(String roleId) {
-        // 获取角色
-        RoleAggregate role = findByIdOrThrow(roleId);
-
-        // 清空权限
-        role.clearPermissions();
-
-        log.info("角色领域服务清空权限，角色ID: {}", roleId);
-        return role;
-    }
-
-    @Override
     public RoleAggregate findByIdOrThrow(String roleId) {
         return roleRepository.findById(roleId)
                 .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST.getCode(), AdminErrorCode.ROLE_NOT_EXIST.getMessage()));
@@ -153,16 +124,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     @Override
     public List<RoleAggregate> findEnabledRoles() {
         return roleRepository.findByStatus(DataStatusEnum.ENABLE);
-    }
-
-    @Override
-    public List<RoleAggregate> findSystemRoles() {
-        return roleRepository.findByIsSystem(true);
-    }
-
-    @Override
-    public List<RoleAggregate> findByPermissionId(String permissionId) {
-        return roleRepository.findByPermissionId(permissionId);
     }
 
     @Override
@@ -193,11 +154,5 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         } catch (AdminException e) {
             return false;
         }
-    }
-
-    @Override
-    public List<RoleAggregate> getRoleTree() {
-        // 使用仓储层提供的角色树方法
-        return roleRepository.getRoleTree();
     }
 }

@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 /**
- * 鏍￠獙鐭俊楠岃瘉鐮佸懡浠?
+ * 校验短信验证码command
  *
  * @author ouyucheng
  * @date 2025/12/29

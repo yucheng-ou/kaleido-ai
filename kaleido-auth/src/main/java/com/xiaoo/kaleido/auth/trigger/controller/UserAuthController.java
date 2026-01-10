@@ -70,7 +70,7 @@ public class UserAuthController {
     public Result<UserLoginResponse> login(
             @Valid @RequestBody AdminLoginCommand command) {
         
-        log.info("接收用户登录请求，手机号: {}", command.getTelephone());
+        log.info("接收用户登录请求，手机号: {}", command.getMobile());
         return Result.success(userAuthCommandService.login(command));
     }
 }

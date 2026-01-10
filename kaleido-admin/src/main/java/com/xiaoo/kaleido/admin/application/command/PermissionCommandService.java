@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PermissionCommandService {
 
     private final IPermissionRepository permissionRepository;
-    private final IPermissionDomainService IPermissionDomainService;
+    private final IPermissionDomainService permissionDomainService;
 
     /**
      * 创建权限
@@ -35,7 +35,7 @@ public class PermissionCommandService {
     @Transactional
     public String createPermission(AddPermissionCommand command) {
         // 调用领域服务创建权限
-        PermissionAggregate permissionAggregate = IPermissionDomainService.createPermission(
+        PermissionAggregate permissionAggregate = permissionDomainService.createPermission(
                 command.getCode(),
                 command.getName(),
                 command.getType(),
@@ -63,7 +63,7 @@ public class PermissionCommandService {
      */
     public void updatePermission(String permissionId, UpdatePermissionCommand command) {
         // 调用领域服务更新权限信息
-        PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermission(
+        PermissionAggregate permissionAggregate = permissionDomainService.updatePermission(
                 permissionId,
                 command.getName(),
                 command.getType(),
@@ -89,7 +89,7 @@ public class PermissionCommandService {
      */
     public void updatePermissionCode(String permissionId, String code) {
         // 调用领域服务更新权限编码
-        PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermissionCode(permissionId, code);
+        PermissionAggregate permissionAggregate = permissionDomainService.updatePermissionCode(permissionId, code);
 
         // 保存权限
         permissionRepository.update(permissionAggregate);
@@ -105,7 +105,7 @@ public class PermissionCommandService {
     @Transactional
     public void deletePermission(DeletePermissionCommand command) {
         // 调用领域服务删除权限
-        IPermissionDomainService.deletePermission(command.getPermissionId());
+        permissionDomainService.deletePermission(command.getPermissionId());
 
         log.info("权限删除成功，权限ID: {}", command.getPermissionId());
     }
@@ -117,7 +117,7 @@ public class PermissionCommandService {
      * @return 是否可用
      */
     public boolean isCodeAvailable(String code) {
-        return IPermissionDomainService.isCodeAvailable(code);
+        return permissionDomainService.isCodeAvailable(code);
     }
 
     /**
@@ -127,6 +127,6 @@ public class PermissionCommandService {
      * @return 是否存在且有效
      */
     public boolean isValidPermission(String permissionId) {
-        return IPermissionDomainService.isValidPermission(permissionId);
+        return permissionDomainService.isValidPermission(permissionId);
     }
 }

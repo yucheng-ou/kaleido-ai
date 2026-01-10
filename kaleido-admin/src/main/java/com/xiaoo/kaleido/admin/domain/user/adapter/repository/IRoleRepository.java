@@ -58,21 +58,6 @@ public interface IRoleRepository {
     List<RoleAggregate> findByStatus(DataStatusEnum status);
 
     /**
-     * 查找系统角色
-     *
-     * @param isSystem 是否系统角色
-     * @return 角色列表
-     */
-    List<RoleAggregate> findByIsSystem(Boolean isSystem);
-
-    /**
-     * 查找所有角色
-     *
-     * @return 角色列表
-     */
-    List<RoleAggregate> findAll();
-
-    /**
      * 根据ID列表查找角色
      *
      * @param ids ID列表
@@ -89,19 +74,11 @@ public interface IRoleRepository {
     List<RoleAggregate> findAllByCode(List<String> codes);
 
     /**
-     * 根据权限ID查找拥有该权限的角色
+     * 获取所有角色列表
      *
-     * @param permissionId 权限ID
      * @return 角色列表
      */
-    List<RoleAggregate> findByPermissionId(String permissionId);
-
-    /**
-     * 获取角色树
-     *
-     * @return 角色树根节点列表
-     */
-    List<RoleAggregate> getRoleTree();
+    List<RoleAggregate> findAll();
 
     /**
      * 删除角色

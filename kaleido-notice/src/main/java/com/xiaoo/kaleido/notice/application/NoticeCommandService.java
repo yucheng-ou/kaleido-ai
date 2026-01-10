@@ -52,12 +52,14 @@ public class NoticeCommandService {
     @Transactional(rollbackFor = Exception.class)
     public String sendSmsVerifyCode(SendSmsVerifyCodeCommand command) {
         String mobile = command.getMobile().trim();
-        
+
+        String dictCode = switch (command.getTargetType()) {
+            case USER -> DictConstant.NoticeTemplateDict.DICT_CODE_VERIFY_CODE_USER;
+            case ADMIN -> DictConstant.NoticeTemplateDict.DICT_CODE_VERIFY_CODE_ADMIN;
+        };
+
         // 查找验证码通知模板code
-        Result<DictResponse> dictResult = rpcAdminSysService.getDictByCode(
-                DictConstant.NoticeTypeDict.TYPE_CODE, 
-                DictConstant.NoticeTypeDict.DICT_CODE_VERIFY_CODE
-        );
+        Result<DictResponse> dictResult = rpcAdminSysService.getDictByCode(DictConstant.NoticeTemplateDict.TYPE_CODE, dictCode);
 
         // 检查远程调用结果
         if (dictResult == null || !dictResult.getSuccess() || dictResult.getData() == null) {
@@ -73,7 +75,7 @@ public class NoticeCommandService {
         }
 
         NoticeTemplateAggregate template = templateOpt.get();
-        
+
         // 生成验证码
         String verifyCode = NoticeAggregate.generateVerifyCode();
 
@@ -81,16 +83,16 @@ public class NoticeCommandService {
         String noticeContent = template.render(verifyCode);
 
         // 创建通知聚合根
-        NoticeAggregate smsVerifyCodeAggregate = noticeDomainService.createSmsVerifyCodeAggregate(mobile, noticeContent);
+        NoticeAggregate smsVerifyCodeAggregate = noticeDomainService.createSmsVerifyCodeAggregate(mobile, noticeContent, command.getTargetType());
 
         // 发送通知
         INoticeAdapterService noticeAdapterService = noticeServiceFactory.getNoticeAdapterService(NoticeTypeEnum.SMS);
         noticeAdapterService.sendNotice(smsVerifyCodeAggregate.getTargetAddress(), noticeContent);
-        
+
         // 保存通知记录
         noticeRepository.save(smsVerifyCodeAggregate);
 
-        log.info("短信验证码发送成功，手机号: {}, 验证码: {}", mobile, verifyCode);
+        log.info("短信验证码发送成功，手机号: {}, 目标类型: {}, 验证码: {}", mobile, command.getTargetType(), verifyCode);
         return verifyCode;
     }
 
@@ -102,15 +104,11 @@ public class NoticeCommandService {
     public String addNoticeTemplate(AddNoticeTemplateCommand command) {
 
         // 调用领域服务处理业务逻辑
-        NoticeTemplateAggregate template = noticeTemplateDomainService.createNoticeTemplate(
-            command.getName(),
-            command.getCode(),
-            command.getContent()
-        );
-        
+        NoticeTemplateAggregate template = noticeTemplateDomainService.createNoticeTemplate(command.getName(), command.getCode(), command.getContent());
+
         // 保存模板
         noticeTemplateRepository.save(template);
-        
+
         log.info("通知模板添加成功，模板ID: {}, 模板编码: {}", template.getId(), template.getCode());
         return template.getId();
     }

@@ -98,14 +98,6 @@ public interface IPermissionDomainService {
     List<PermissionAggregate> findRootPermissions();
 
     /**
-     * 根据类型查找权限列表
-     *
-     * @param type 权限类型
-     * @return 权限列表
-     */
-    List<PermissionAggregate> findByType(PermissionType type);
-
-    /**
      * 获取完整的权限树
      *
      * @return 权限树根节点列表

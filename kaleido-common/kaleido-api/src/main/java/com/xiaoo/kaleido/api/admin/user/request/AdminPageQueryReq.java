@@ -20,11 +20,6 @@ public class AdminPageQueryReq extends BasePageReq {
     private static final long serialVersionUID = 1L;
     
     /**
-     * 管理员账号
-     */
-    private String username;
-    
-    /**
      * 真实姓名
      */
     private String realName;

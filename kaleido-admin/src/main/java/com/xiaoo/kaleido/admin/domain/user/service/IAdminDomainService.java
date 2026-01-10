@@ -85,40 +85,6 @@ public interface IAdminDomainService {
     AdminAggregate findByMobile(String mobile);
 
     /**
-     * 查找所有正常的管理员
-     *
-     * @return 正常的管理员列表
-     */
-    List<AdminAggregate> findNormalAdminUsers();
-
-
-    /**
-     * 检查手机号是否存在
-     *
-     * @param mobile 手机号
-     * @return 是否存在
-     */
-    boolean existsByMobile(String mobile);
-
-    /**
-     * 检查管理员是否存在且可用
-     *
-     * @param adminId 管理员ID
-     * @return 是否存在且可用
-     */
-    boolean isValidAdminUser(String adminId);
-
-
-    /**
-     * 验证管理员是否拥有某个角色
-     *
-     * @param adminId 管理员ID
-     * @param roleId      角色ID
-     * @return 是否拥有
-     */
-    boolean hasRole(String adminId, String roleId);
-
-    /**
      * 获取管理员的所有权限（通过角色）
      *
      * @param adminId 管理员ID
@@ -126,14 +92,6 @@ public interface IAdminDomainService {
      */
     List<String> getPermissionsByAdminId(String adminId);
 
-    /**
-     * 验证管理员是否有某个权限
-     *
-     * @param adminId  管理员ID
-     * @param permissionId 权限ID
-     * @return 是否有权限
-     */
-    boolean hasPermission(String adminId, String permissionId);
 
     /**
      * 管理员登陆

@@ -36,7 +36,6 @@ public class UserCommandService {
         // 调用领域服务创建用户聚合根
         UserAggregate userAggregate = userDomainService.createUser(
                 command.getTelephone(),
-                command.getPassword(),
                 command.getInviterCode()
         );
 

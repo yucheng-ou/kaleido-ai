@@ -12,6 +12,11 @@ import lombok.Getter;
 public enum PermissionType {
 
     /**
+     * 目录权限
+     */
+    DIRECTORY("DIRECTORY", "目录"),
+
+    /**
      * 菜单权限
      */
     MENU("MENU", "菜单"),
@@ -19,12 +24,7 @@ public enum PermissionType {
     /**
      * 按钮权限
      */
-    BUTTON("BUTTON", "按钮"),
-
-    /**
-     * 接口权限
-     */
-    API("API", "接口");
+    BUTTON("BUTTON", "按钮");
 
     private final String code;
     private final String description;
@@ -50,6 +50,15 @@ public enum PermissionType {
     }
 
     /**
+     * 判断是否为目录权限
+     *
+     * @return 是否为目录权限
+     */
+    public boolean isDirectory() {
+        return this == DIRECTORY;
+    }
+
+    /**
      * 判断是否为菜单权限
      *
      * @return 是否为菜单权限
@@ -65,14 +74,5 @@ public enum PermissionType {
      */
     public boolean isButton() {
         return this == BUTTON;
-    }
-
-    /**
-     * 判断是否为接口权限
-     *
-     * @return 是否为接口权限
-     */
-    public boolean isApi() {
-        return this == API;
     }
 }

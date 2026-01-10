@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.notice.infrastructure.adapter.repository.convertor;
 
 import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.notice.domain.model.valobj.TargetAddress;
 import com.xiaoo.kaleido.notice.infrastructure.dao.po.NoticePO;
@@ -26,6 +27,7 @@ public interface NoticeConvertor {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "noticeType", target = "noticeType")
     @Mapping(source = "target", target = "targetAddress", qualifiedByName = "targetToAddress")
+    @Mapping(source = "target", target = "targetType", qualifiedByName = "targetToTargetType")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "businessType", target = "businessType")
     @Mapping(source = "content", target = "content")
@@ -41,7 +43,7 @@ public interface NoticeConvertor {
      */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "noticeType", target = "noticeType")
-    @Mapping(source = "targetAddress", target = "target", qualifiedByName = "addressToTarget")
+    @Mapping(source = "po", target = "target", qualifiedByName = "addressAndTypeToTarget")
     @Mapping(source = "status", target = "status")
     @Mapping(source = "businessType", target = "businessType")
     @Mapping(source = "content", target = "content")
@@ -55,6 +57,33 @@ public interface NoticeConvertor {
     @Named("targetToAddress")
     default String targetToAddress(TargetAddress target) {
         return target != null ? target.getFormattedAddress() : null;
+    }
+
+    @Named("targetToTargetType")
+    default TargetTypeEnum targetToTargetType(TargetAddress target) {
+        return target != null ? target.getTargetType() : null;
+    }
+
+    @Named("addressAndTypeToTarget")
+    default TargetAddress addressAndTypeToTarget(NoticePO po) {
+        if (po == null || po.getTargetAddress() == null) {
+            return null;
+        }
+        // 从PO中获取通知类型和目标类型
+        NoticeTypeEnum noticeType = po.getNoticeType();
+        TargetTypeEnum targetType = po.getTargetType();
+        
+        if (noticeType == null) {
+            // 如果没有通知类型，假设是手机号（SMS类型）
+            noticeType = NoticeTypeEnum.SMS;
+        }
+        
+        if (targetType == null) {
+            // 如果没有目标类型，默认为普通用户
+            targetType = TargetTypeEnum.USER;
+        }
+        
+        return TargetAddress.create(po.getTargetAddress(), noticeType, targetType);
     }
 
     @Named("addressToTarget")

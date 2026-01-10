@@ -19,10 +19,9 @@ public interface IRoleDomainService {
      * @param code        角色编码
      * @param name        角色名称
      * @param description 角色描述
-     * @param isSystem    是否系统角色
      * @return 创建的角色
      */
-    RoleAggregate createRole(String code, String name, String description, Boolean isSystem);
+    RoleAggregate createRole(String code, String name, String description);
 
     /**
      * 更新角色信息
@@ -67,23 +66,6 @@ public interface IRoleDomainService {
     RoleAggregate assignPermissions(String roleId, List<String> permissionIds);
 
     /**
-     * 从角色移除权限
-     *
-     * @param roleId        角色ID
-     * @param permissionIds 权限ID列表
-     * @return 更新后的角色
-     */
-    RoleAggregate removePermissions(String roleId, List<String> permissionIds);
-
-    /**
-     * 清空角色权限
-     *
-     * @param roleId 角色ID
-     * @return 更新后的角色
-     */
-    RoleAggregate clearPermissions(String roleId);
-
-    /**
      * 根据ID查找角色，不存在则抛出异常
      *
      * @param roleId 角色ID
@@ -105,21 +87,6 @@ public interface IRoleDomainService {
      * @return 启用的角色列表
      */
     List<RoleAggregate> findEnabledRoles();
-
-    /**
-     * 查找系统角色
-     *
-     * @return 系统角色列表
-     */
-    List<RoleAggregate> findSystemRoles();
-
-    /**
-     * 根据权限ID查找拥有该权限的角色
-     *
-     * @param permissionId 权限ID
-     * @return 角色列表
-     */
-    List<RoleAggregate> findByPermissionId(String permissionId);
 
     /**
      * 检查角色编码是否存在
@@ -153,11 +120,4 @@ public interface IRoleDomainService {
      * @return 是否拥有
      */
     boolean hasPermission(String roleId, String permissionId);
-
-    /**
-     * 获取角色树（按角色类型分组）
-     *
-     * @return 角色树
-     */
-    List<RoleAggregate> getRoleTree();
 }

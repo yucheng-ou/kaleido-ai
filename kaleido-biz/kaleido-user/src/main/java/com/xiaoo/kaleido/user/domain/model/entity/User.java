@@ -71,20 +71,17 @@ public class User extends BaseEntity {
     /**
      * 创建用户实体
      *
-     * @param telephone    手机号
-     * @param passwordHash 密码哈希
-     * @param nickName     昵称
-     * @param inviteCode   邀请码
-     * @param inviterId    邀请人ID（可选）
+     * @param telephone  手机号
+     * @param nickName   昵称
+     * @param inviteCode 邀请码
+     * @param inviterId  邀请人ID（可选）
      * @return 用户实体
      */
-    public static User create(String telephone, String passwordHash,
-                              String nickName, String inviteCode, String inviterId) {
+    public static User create(String telephone, String nickName, String inviteCode, String inviterId) {
 
         return User.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
                 .mobile(telephone)
-                .passwordHash(passwordHash)
                 .nickName(nickName)
                 .inviteCode(inviteCode)
                 .inviterId(inviterId)
@@ -113,7 +110,7 @@ public class User extends BaseEntity {
      * @throws IllegalStateException 如果用户状态不允许修改
      */
     public void updateAvatar(String avatarUrl) {
-        if(checkUserStatusIsActive()){
+        if (checkUserStatusIsActive()) {
             this.avatar = avatarUrl;
         }
     }
@@ -125,7 +122,7 @@ public class User extends BaseEntity {
      * @throws IllegalStateException 如果用户状态不允许冻结
      */
     public void freeze() {
-        if(checkUserStatusIsActive()){
+        if (checkUserStatusIsActive()) {
             this.status = UserStatus.FROZEN;
         }
     }
@@ -133,10 +130,9 @@ public class User extends BaseEntity {
 
     /**
      * 解冻用户
-     *
      */
     public void unfreeze() {
-        if(checkUserStatusIsActive()){
+        if (checkUserStatusIsActive()) {
             this.status = UserStatus.ACTIVE;
         }
     }

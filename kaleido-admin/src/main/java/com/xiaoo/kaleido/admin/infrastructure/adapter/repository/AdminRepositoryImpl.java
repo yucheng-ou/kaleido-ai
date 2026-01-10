@@ -64,16 +64,6 @@ public class AdminRepositoryImpl implements IAdminRepository {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public List<AdminAggregate> saveAll(List<AdminAggregate> admins) {
-        List<AdminAggregate> savedList = new ArrayList<>();
-        for (AdminAggregate admin : admins) {
-            savedList.add(save(admin));
-        }
-        return savedList;
-    }
-
-    @Override
     public Optional<AdminAggregate> findById(String id) {
         AdminPO po = adminDao.findById(id);
         if (po == null) {
@@ -81,17 +71,6 @@ public class AdminRepositoryImpl implements IAdminRepository {
         }
         AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         // 加载角色ID
-        loadRoleIds(aggregate);
-        return Optional.of(aggregate);
-    }
-
-    @Override
-    public Optional<AdminAggregate> findByUsername(String username) {
-        AdminPO po = adminDao.findByUsername(username);
-        if (po == null) {
-            return Optional.empty();
-        }
-        AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         loadRoleIds(aggregate);
         return Optional.of(aggregate);
     }
@@ -105,38 +84,6 @@ public class AdminRepositoryImpl implements IAdminRepository {
         AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
         loadRoleIds(aggregate);
         return Optional.of(aggregate);
-    }
-
-    @Override
-    public List<AdminAggregate> findByStatus(AdminStatus status) {
-        List<AdminPO> poList = adminDao.findByStatus(status != null ? status.getCode() : null);
-        return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    public List<AdminAggregate> findAll() {
-        List<AdminPO> poList = adminDao.findAll();
-        return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    public List<AdminAggregate> findAllById(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return new ArrayList<>();
-        }
-        List<AdminPO> poList = adminDao.findAllById(ids);
-        return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    public List<AdminAggregate> findByRoleId(String roleId) {
-        List<AdminPO> poList = adminDao.findByRoleId(roleId);
-        return convertAndLoadRoleIds(poList);
-    }
-
-    @Override
-    public boolean existsById(String id) {
-        return adminDao.existsById(id);
     }
     
     @Override

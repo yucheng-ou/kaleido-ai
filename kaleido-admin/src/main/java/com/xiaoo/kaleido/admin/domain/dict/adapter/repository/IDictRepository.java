@@ -90,14 +90,6 @@ public interface IDictRepository {
     boolean existsByTypeCodeAndDictCode(String typeCode, String dictCode);
 
     /**
-     * 检查字典类型编码是否已存在
-     *
-     * @param typeCode 字典类型编码
-     * @return 是否存在
-     */
-    boolean existsByTypeCode(String typeCode);
-
-    /**
      * 删除字典
      *
      * @param id 字典ID

@@ -2,6 +2,8 @@ package com.xiaoo.kaleido.api.admin.user.response;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,17 +14,16 @@ import java.util.List;
  * @date 2025/12/31
  */
 @Data
-public class AdminInfoResponse {
+public class AdminInfoResponse implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
     
     /**
      * 管理员ID
      */
     private String adminId;
-    
-    /**
-     * 管理员账号
-     */
-    private String username;
+
     
     /**
      * 真实姓名
