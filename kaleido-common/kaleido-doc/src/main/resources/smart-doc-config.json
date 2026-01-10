@@ -9,5 +9,16 @@
   "framework": "spring",
   "skipTransientField": true,
   "requestExample": true,
-  "responseExample": true
+  "responseExample": true,
+  "randomMock": true,
+  "requestHeaders": [
+    {
+      "name": "Authorization",
+      "type": "string",
+      "desc": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。",
+      "value": "Bearer ",
+      "required": false,
+      "since": "-"
+    }
+  ]
 }

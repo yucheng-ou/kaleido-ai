@@ -69,6 +69,7 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-web</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

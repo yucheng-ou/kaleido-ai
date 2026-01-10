@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.auth.trigger.controller;
 
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
+import com.xiaoo.kaleido.api.admin.user.command.RegisterAdminCommand;
 import com.xiaoo.kaleido.api.admin.user.response.AdminLoginResponse;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.auth.application.command.AdminAuthCommandService;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 管理员控制器
+ * 管理员认证API
  *
  * @author ouyucheng
  * @date 2026/1/4
@@ -36,7 +36,7 @@ public class AdminAuthController {
      */
     @PostMapping("/register")
     public Result<RegisterResponse> registerAdminUser(
-            @Valid @RequestBody RegisterCommand command) {
+            @Valid @RequestBody RegisterAdminCommand command) {
         RegisterResponse response = adminAuthCommandService.register(command);
         return Result.success(response);
     }

@@ -28,8 +28,7 @@ public class RpcAdminDictServiceImpl implements IRpcAdminDictService {
 
     @Override
     public Result<DictResponse> getDictByCode(String typeCode, String dictCode) {
-        // 参数验证由Spring Validation处理（通过接口的@NotBlank注解）
-        
+
         // 查询字典
         DictResponse dictResponse = dictQueryService.findByTypeCodeAndDictCode(typeCode, dictCode);
 

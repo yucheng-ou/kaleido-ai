@@ -58,13 +58,13 @@ public class PermissionCommandService {
     /**
      * 更新权限信息
      *
+     * @param permissionId 权限ID
      * @param command 更新权限信息命令
      */
-    @Transactional
-    public void updatePermission(UpdatePermissionCommand command) {
+    public void updatePermission(String permissionId, UpdatePermissionCommand command) {
         // 调用领域服务更新权限信息
         PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermission(
-                command.getPermissionId(),
+                permissionId,
                 command.getName(),
                 command.getType(),
                 command.getParentId(),
@@ -76,9 +76,9 @@ public class PermissionCommandService {
         );
 
         // 保存权限
-        permissionRepository.save(permissionAggregate);
+        permissionRepository.update(permissionAggregate);
 
-        log.info("权限信息更新成功，权限ID: {}", command.getPermissionId());
+        log.info("权限信息更新成功，权限ID: {}", permissionId);
     }
 
     /**
@@ -87,13 +87,12 @@ public class PermissionCommandService {
      * @param permissionId 权限ID
      * @param code 新的权限编码
      */
-    @Transactional
     public void updatePermissionCode(String permissionId, String code) {
         // 调用领域服务更新权限编码
         PermissionAggregate permissionAggregate = IPermissionDomainService.updatePermissionCode(permissionId, code);
 
         // 保存权限
-        permissionRepository.save(permissionAggregate);
+        permissionRepository.update(permissionAggregate);
 
         log.info("权限编码更新成功，权限ID: {}, 新编码: {}", permissionId, code);
     }

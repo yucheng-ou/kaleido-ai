@@ -35,30 +35,22 @@ public class RoleRepositoryImpl implements IRoleRepository {
     private final RolePermissionDao rolePermissionDao;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public RoleAggregate save(RoleAggregate role) {
         // 转换并保存角色
         RolePO po = RoleConvertor.INSTANCE.toPO(role);
-        if (po.getId() == null) {
-            roleDao.insert(po);
-        } else {
-            roleDao.updateById(po);
-        }
-
-        // 保存权限关联
-        saveRolePermissions(role.getId(), role.getPermissionIds());
+        roleDao.insert(po);
 
         return RoleConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public List<RoleAggregate> saveAll(List<RoleAggregate> roles) {
-        List<RoleAggregate> savedList = new ArrayList<>();
-        for (RoleAggregate role : roles) {
-            savedList.add(save(role));
-        }
-        return savedList;
+    public RoleAggregate update(RoleAggregate role) {
+        // 转换并保存角色
+        RolePO po = RoleConvertor.INSTANCE.toPO(role);
+
+        roleDao.updateById(po);
+
+        return RoleConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
@@ -129,24 +121,6 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
-    public List<RoleAggregate> findByCondition(RolePageQueryReq req) {
-        List<RolePO> poList = roleDao.findByCondition(req);
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
-    public List<RoleAggregate> findEnabledRoles() {
-        List<RolePO> poList = roleDao.findEnabledRoles();
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
-    public List<RoleAggregate> findSystemRoles() {
-        List<RolePO> poList = roleDao.findSystemRoles();
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
     public List<RoleAggregate> getRoleTree() {
         List<RolePO> poList = roleDao.getRoleTree();
         return convertAndLoadPermissionIds(poList);
@@ -162,17 +136,6 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteAllById(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return;
-        }
-        for (String id : ids) {
-            deleteById(id);
-        }
-    }
-
-    @Override
     public boolean existsById(String id) {
         return roleDao.existsById(id);
     }
@@ -182,27 +145,11 @@ public class RoleRepositoryImpl implements IRoleRepository {
         return roleDao.existsByCode(code);
     }
 
-    @Override
-    public long count() {
-        return roleDao.count();
-    }
-
-    @Override
-    public long countByStatus(DataStatusEnum status) {
-        // 注意：这里需要将 DataStatusEnum 转换为数据库存储的值
-        // 由于数据库存储的是枚举名称（字符串），我们使用 name() 方法
-        return roleDao.countByStatus(status != null ? status.name() : null);
-    }
-
-    @Override
-    public long countByIsSystem(Boolean isSystem) {
-        return roleDao.countByIsSystem(isSystem);
-    }
-
     /**
      * 保存角色权限关联
      */
-    private void saveRolePermissions(String roleId, List<String> permissionIds) {
+    @Transactional(rollbackFor = Exception.class)
+    public void saveRolePermissions(String roleId, List<String> permissionIds) {
         if (CollectionUtils.isEmpty(permissionIds)) {
             return;
         }
@@ -280,14 +227,6 @@ public class RoleRepositoryImpl implements IRoleRepository {
         }
 
         return aggregates;
-    }
-
-    @Override
-    public List<String> findCodesByIds(List<String> ids) {
-        if (CollectionUtils.isEmpty(ids)) {
-            return new ArrayList<>();
-        }
-        return roleDao.findCodesByIds(ids);
     }
 
     @Override

@@ -25,12 +25,13 @@ public interface IRoleRepository {
     RoleAggregate save(RoleAggregate role);
 
     /**
-     * 批量保存角色
+     * 更新角色
      *
-     * @param roles 角色列表
-     * @return 保存后的角色列表
+     * @param role 角色
+     * @return 更新后的角色
      */
-    List<RoleAggregate> saveAll(List<RoleAggregate> roles);
+    RoleAggregate update(RoleAggregate role);
+
 
     /**
      * 根据ID查找角色
@@ -96,28 +97,6 @@ public interface IRoleRepository {
     List<RoleAggregate> findByPermissionId(String permissionId);
 
     /**
-     * 根据条件查询角色列表
-     *
-     * @param req 查询条件
-     * @return 角色列表
-     */
-    List<RoleAggregate> findByCondition(RolePageQueryReq req);
-
-    /**
-     * 查找启用的角色列表
-     *
-     * @return 启用的角色列表
-     */
-    List<RoleAggregate> findEnabledRoles();
-
-    /**
-     * 查找系统角色列表
-     *
-     * @return 系统角色列表
-     */
-    List<RoleAggregate> findSystemRoles();
-
-    /**
      * 获取角色树
      *
      * @return 角色树根节点列表
@@ -130,13 +109,6 @@ public interface IRoleRepository {
      * @param id 角色ID
      */
     void deleteById(String id);
-
-    /**
-     * 批量删除角色
-     *
-     * @param ids 角色ID列表
-     */
-    void deleteAllById(List<String> ids);
 
     /**
      * 检查角色是否存在
@@ -154,36 +126,6 @@ public interface IRoleRepository {
      */
     boolean existsByCode(String code);
 
-    /**
-     * 统计角色数量
-     *
-     * @return 角色数量
-     */
-    long count();
-
-    /**
-     * 根据状态统计角色数量
-     *
-     * @param status 角色状态
-     * @return 角色数量
-     */
-    long countByStatus(DataStatusEnum status);
-
-    /**
-     * 根据是否系统角色统计数量
-     *
-     * @param isSystem 是否系统角色
-     * @return 角色数量
-     */
-    long countByIsSystem(Boolean isSystem);
-
-    /**
-     * 根据ID列表查询角色编码
-     *
-     * @param ids 角色ID列表
-     * @return 角色编码列表
-     */
-    List<String> findCodesByIds(List<String> ids);
 
     /**
      * 根据管理员ID查询角色编码
@@ -192,4 +134,12 @@ public interface IRoleRepository {
      * @return 角色编码列表
      */
     List<String> findCodesByAdminId(String adminId);
+
+    /**
+     * 为角色分配权限
+     *
+     * @param roleId        角色id
+     * @param permissionIds 权限列表
+     */
+    void saveRolePermissions(String roleId, List<String> permissionIds);
 }

@@ -1,8 +1,11 @@
 package com.xiaoo.kaleido.admin.domain.user.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.admin.domain.user.constant.AdminStatus;
+import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
+import com.xiaoo.kaleido.admin.domain.user.service.AbstractAdminDomainService;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
-import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminUserAggregate;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IAdminDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
@@ -25,115 +28,82 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AdminDomainServiceImpl implements IAdminDomainService {
+public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggregate, String>
+        implements IAdminDomainService {
 
     private final IAdminRepository adminUserRepository;
     private final IRoleRepository roleRepository;
 
     @Override
-    public AdminUserAggregate createAdminUser(String username, String passwordHash,
-                                              String realName, String mobile) {
-        // 验证管理员账号唯一性
-        if (adminUserRepository.existsByUsername(username)) {
-            throw AdminException.of(AdminErrorCode.ADMIN_USERNAME_EXIST.getCode(), AdminErrorCode.ADMIN_USERNAME_EXIST.getMessage());
-        }
-
+    public AdminAggregate createAdmin(String mobile) {
         // 验证手机号唯一性
         if (adminUserRepository.existsByMobile(mobile)) {
             throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST.getCode(), AdminErrorCode.ADMIN_MOBILE_EXIST.getMessage());
         }
 
         // 创建管理员
-        AdminUserAggregate adminUser = AdminUserAggregate.create(username, passwordHash, realName, mobile);
+        AdminAggregate adminUser = AdminAggregate.create(mobile);
 
-        log.info("管理员领域服务创建管理员，管理员ID: {}, 管理员账号: {}, 真实姓名: {}",
-                adminUser.getId(), username, realName);
+        log.info("管理员领域服务创建管理员，管理员ID: {}, 手机号: {}",
+                adminUser.getId(), adminUser.getMobile());
 
         return adminUser;
     }
 
     @Override
-    public AdminUserAggregate updateAdminUser(String adminUserId, String realName,
-                                              String mobile) {
+    public AdminAggregate updateAdmin(String adminId, String realName,
+                                      String mobile) {
         // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
+        AdminAggregate adminUser = findByIdOrThrow(adminId);
 
         // 验证手机号唯一性（如果手机号有变化）
-        if (mobile != null && !mobile.equals(adminUser.getMobile()) && adminUserRepository.existsByMobile(mobile)) {
-            throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST.getCode(), AdminErrorCode.ADMIN_MOBILE_EXIST.getMessage());
+        if (StrUtil.isNotBlank(mobile) && !mobile.equals(adminUser.getMobile()) && adminUserRepository.existsByMobile(mobile)) {
+            throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST);
         }
 
         // 更新管理员信息
         adminUser.updateInfo(realName, mobile);
 
-        log.info("管理员领域服务更新管理员，管理员ID: {}, 真实姓名: {}", adminUserId, realName);
+        log.info("管理员领域服务更新管理员，管理员ID: {}, 真实姓名: {}", adminId, realName);
         return adminUser;
     }
 
     @Override
-    public AdminUserAggregate updatePassword(String adminUserId, String passwordHash) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 更新密码
-        adminUser.updatePassword(passwordHash);
-
-        log.info("管理员领域服务更新密码，管理员ID: {}", adminUserId);
-        return adminUser;
+    public AdminAggregate enableAdmin(String adminId) {
+        return executeOperationWithResult(adminId,
+                adminUser -> {
+                    adminUser.enable();
+                    return adminUser;
+                },
+                "启用管理员"
+        );
     }
 
     @Override
-    public AdminUserAggregate enableAdminUser(String adminUserId) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
+    public AdminAggregate freezeAdmin(String adminId) {
+        return executeOperationWithResult(adminId,
+                adminUser -> {
+                    adminUser.freeze();
+                    return adminUser;
+                },
+                "冻结管理员"
+        );
+    }
 
-        // 启用管理员
-        adminUser.enable();
 
-        log.info("管理员领域服务启用管理员，管理员ID: {}", adminUserId);
-        return adminUser;
+    @Override
+    public AdminAggregate updateLastLoginTime(String adminId) {
+        return executeOperationWithResult(adminId,
+                adminUser -> {
+                    adminUser.updateLastLoginTime();
+                    return adminUser;
+                },
+                "更新最后登录时间"
+        );
     }
 
     @Override
-    public AdminUserAggregate freezeAdminUser(String adminUserId) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 冻结管理员
-        adminUser.freeze();
-
-        log.info("管理员领域服务冻结管理员，管理员ID: {}", adminUserId);
-        return adminUser;
-    }
-
-    @Override
-    public void deleteAdminUser(String adminUserId) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 删除管理员
-        adminUserRepository.deleteById(adminUserId);
-
-        log.info("管理员领域服务删除管理员，管理员ID: {}", adminUserId);
-    }
-
-    @Override
-    public AdminUserAggregate updateLastLoginTime(String adminUserId) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 更新最后登录时间
-        adminUser.updateLastLoginTime();
-
-        log.info("管理员领域服务更新最后登录时间，管理员ID: {}", adminUserId);
-        return adminUser;
-    }
-
-    @Override
-    public AdminUserAggregate assignRoles(String adminUserId, List<String> roleIds) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
+    public AdminAggregate assignRoles(String adminId, List<String> roleIds) {
         // 验证角色是否存在且启用
         for (String roleId : roleIds) {
             RoleAggregate role = roleRepository.findById(roleId)
@@ -143,69 +113,37 @@ public class AdminDomainServiceImpl implements IAdminDomainService {
             }
         }
 
-        // 分配角色
-        adminUser.addRoles(roleIds);
-
-        log.info("管理员领域服务分配角色，管理员ID: {}, 角色数量: {}", adminUserId, roleIds.size());
-        return adminUser;
+        return executeOperationWithResult(adminId,
+                adminUser -> {
+                    adminUser.addRoles(roleIds);
+                    return adminUser;
+                },
+                "分配角色"
+        );
     }
 
     @Override
-    public AdminUserAggregate removeRoles(String adminUserId, List<String> roleIds) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 移除角色
-        adminUser.removeRoles(roleIds);
-
-        log.info("管理员领域服务移除角色，管理员ID: {}, 角色数量: {}", adminUserId, roleIds.size());
-        return adminUser;
-    }
-
-    @Override
-    public AdminUserAggregate clearRoles(String adminUserId) {
-        // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-
-        // 清空角色
-        adminUser.clearRoles();
-
-        log.info("管理员领域服务清空角色，管理员ID: {}", adminUserId);
-        return adminUser;
-    }
-
-    @Override
-    public AdminUserAggregate findByIdOrThrow(String adminUserId) {
-        return adminUserRepository.findById(adminUserId)
+    public AdminAggregate findByIdOrThrow(String adminId) {
+        return adminUserRepository.findById(adminId)
                 .orElseThrow(() -> AdminException.of(AdminErrorCode.ADMIN_USER_NOT_EXIST.getCode(), AdminErrorCode.ADMIN_USER_NOT_EXIST.getMessage()));
     }
 
     @Override
-    public AdminUserAggregate findByUsernameOrThrow(String username) {
-        return adminUserRepository.findByUsername(username)
-                .orElseThrow(() -> AdminException.of(AdminErrorCode.ADMIN_USER_NOT_EXIST.getCode(), AdminErrorCode.ADMIN_USER_NOT_EXIST.getMessage()));
+    protected AdminAggregate findEntityById(String adminId) {
+        return findByIdOrThrow(adminId);
     }
 
     @Override
-    public AdminUserAggregate findByMobile(String mobile) {
+    public AdminAggregate findByMobile(String mobile) {
         return adminUserRepository.findByMobile(mobile)
                 .orElse(null);
     }
 
     @Override
-    public List<AdminUserAggregate> findNormalAdminUsers() {
-        return adminUserRepository.findByStatus(com.xiaoo.kaleido.admin.domain.user.constant.AdminUserStatus.NORMAL);
+    public List<AdminAggregate> findNormalAdminUsers() {
+        return adminUserRepository.findByStatus(AdminStatus.NORMAL);
     }
 
-    @Override
-    public List<AdminUserAggregate> findByRoleId(String roleId) {
-        return adminUserRepository.findByRoleId(roleId);
-    }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return adminUserRepository.existsByUsername(username);
-    }
 
     @Override
     public boolean existsByMobile(String mobile) {
@@ -213,30 +151,20 @@ public class AdminDomainServiceImpl implements IAdminDomainService {
     }
 
     @Override
-    public boolean isValidAdminUser(String adminUserId) {
+    public boolean isValidAdminUser(String adminId) {
         try {
-            AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
+            AdminAggregate adminUser = findByIdOrThrow(adminId);
             return adminUser.isAvailable();
         } catch (AdminException e) {
             return false;
         }
     }
 
-    @Override
-    public boolean isUsernameAvailable(String username) {
-        return !adminUserRepository.existsByUsername(username);
-    }
 
     @Override
-    public void verifyPassword(String adminUserId, String passwordHash) {
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
-         adminUser.verifyPassword(passwordHash);
-    }
-
-    @Override
-    public boolean hasRole(String adminUserId, String roleId) {
+    public boolean hasRole(String adminId, String roleId) {
         try {
-            AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
+            AdminAggregate adminUser = findByIdOrThrow(adminId);
             return adminUser.hasRole(roleId);
         } catch (AdminException e) {
             return false;
@@ -244,9 +172,9 @@ public class AdminDomainServiceImpl implements IAdminDomainService {
     }
 
     @Override
-    public List<String> getPermissionsByAdminUserId(String adminUserId) {
+    public List<String> getPermissionsByAdminId(String adminId) {
         // 获取管理员
-        AdminUserAggregate adminUser = findByIdOrThrow(adminUserId);
+        AdminAggregate adminUser = findByIdOrThrow(adminId);
 
         // 获取管理员的所有角色
         List<String> roleIds = adminUser.getRoleIds();
@@ -269,8 +197,24 @@ public class AdminDomainServiceImpl implements IAdminDomainService {
     }
 
     @Override
-    public boolean hasPermission(String adminUserId, String permissionId) {
-        List<String> permissions = getPermissionsByAdminUserId(adminUserId);
+    public boolean hasPermission(String adminId, String permissionId) {
+        List<String> permissions = getPermissionsByAdminId(adminId);
         return permissions.contains(permissionId);
+    }
+
+    @Override
+    public AdminAggregate login(String adminId) {
+        // 1. 根据手机号查找管理员
+        AdminAggregate adminUser = findByIdOrThrow(adminId);
+
+        // 2. 验证管理员状态（必须为NORMAL状态）
+        if (!adminUser.isAvailable()) {
+            log.error("管理员登录失败，账号状态不可用，管理员ID: {}, 状态: {}",
+                    adminUser.getId(), adminUser.getStatus());
+            throw AdminException.of(AdminErrorCode.ADMIN_USER_STATUS_ERROR);
+        }
+
+        // 3. 更新最后登录时间
+        return updateLastLoginTime(adminUser.getId());
     }
 }

@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.user.application.command;
 
-import com.xiaoo.kaleido.api.user.command.AddUserCommand;
+import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.command.ChangeNickNameCommand;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
@@ -31,7 +31,7 @@ public class UserCommandService {
      * @param command 创建用户命令
      * @return 用户ID
      */
-    public String createUser(AddUserCommand command) {
+    public String createUser(RegisterUserCommand command) {
 
         // 调用领域服务创建用户聚合根
         UserAggregate userAggregate = userDomainService.createUser(

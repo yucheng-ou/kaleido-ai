@@ -27,6 +27,6 @@ public class WorkerIdHolder implements CommandLineRunner {
     //保证相同服务上不同机器之间不重复
     @Override
     public void run(String... args) {
-        WORKER_ID = redissonService.incr(applicationName) % 64;
+        WORKER_ID = redissonService.incr(applicationName) % 32;
     }
 }

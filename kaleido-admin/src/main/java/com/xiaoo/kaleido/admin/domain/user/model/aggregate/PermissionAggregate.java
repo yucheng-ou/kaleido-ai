@@ -148,33 +148,6 @@ public class PermissionAggregate extends BaseEntity {
     }
 
     /**
-     * 判断是否为根权限（没有父权限）
-     *
-     * @return 是否为根权限
-     */
-    public boolean isRoot() {
-        return parentId == null || parentId.trim().isEmpty();
-    }
-
-    /**
-     * 判断是否为菜单权限
-     *
-     * @return 是否为菜单权限
-     */
-    public boolean isMenu() {
-        return type != null && type.isMenu();
-    }
-
-    /**
-     * 判断是否为按钮权限
-     *
-     * @return 是否为按钮权限
-     */
-    public boolean isButton() {
-        return type != null && type.isButton();
-    }
-
-    /**
      * 判断是否为接口权限
      *
      * @return 是否为接口权限
@@ -183,22 +156,5 @@ public class PermissionAggregate extends BaseEntity {
         return type != null && type.isApi();
     }
 
-    /**
-     * 判断是否隐藏
-     *
-     * @return 是否隐藏
-     */
-    public boolean isHidden() {
-        return isHidden != null && isHidden;
-    }
 
-    /**
-     * 验证权限编码是否匹配
-     *
-     * @param code 权限编码
-     * @return 是否匹配
-     */
-    public boolean matches(String code) {
-        return this.code != null && this.code.equals(code);
-    }
 }

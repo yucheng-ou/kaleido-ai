@@ -1,10 +1,10 @@
 package com.xiaoo.kaleido.admin.trigger.rpc;
 
 import com.xiaoo.kaleido.admin.application.command.AdminCommandService;
-import com.xiaoo.kaleido.admin.application.query.IAdminUserQueryService;
+import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
 import com.xiaoo.kaleido.api.admin.user.IRpcAdminAuthService;
-import com.xiaoo.kaleido.api.admin.user.command.AddAdminCommand;
-import com.xiaoo.kaleido.api.admin.user.response.AdminUserInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.command.RegisterAdminCommand;
+import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import lombok.RequiredArgsConstructor;
@@ -27,13 +27,13 @@ import org.springframework.validation.annotation.Validated;
 public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
 
     private final AdminCommandService adminCommandService;
-    private final IAdminUserQueryService adminUserQueryService;
+    private final IAdminQueryService adminUserQueryService;
 
     @Override
     public Result<String> register(
-            AddAdminCommand command) {
+            RegisterAdminCommand command) {
 
-        return Result.success(adminCommandService.createAdminUser(command));
+        return Result.success(adminCommandService.createAdmin(command));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
     }
 
     @Override
-    public Result<AdminUserInfoResponse> findByMobile(
+    public Result<AdminInfoResponse> findByMobile(
             String telephone) {
 
         return Result.success(adminUserQueryService.findByMobile(telephone));

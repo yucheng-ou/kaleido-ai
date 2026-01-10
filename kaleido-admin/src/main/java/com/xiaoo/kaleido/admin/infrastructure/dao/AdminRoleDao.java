@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.admin.infrastructure.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserRolePO;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminRolePO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,32 +14,32 @@ import java.util.List;
  * @date 2025/12/31
  */
 @Mapper
-public interface AdminUserRoleDao extends BaseMapper<AdminUserRolePO> {
+public interface AdminRoleDao extends BaseMapper<AdminRolePO> {
 
     /**
      * 根据管理员ID查找关联记录
      */
-    List<AdminUserRolePO> findByAdminUserId(@Param("adminUserId") String adminUserId);
+    List<AdminRolePO> findByAdminId(@Param("adminId") String adminId);
 
     /**
      * 根据角色ID查找关联记录
      */
-    List<AdminUserRolePO> findByRoleId(@Param("roleId") String roleId);
+    List<AdminRolePO> findByRoleId(@Param("roleId") String roleId);
 
     /**
      * 根据管理员ID列表查找关联记录
      */
-    List<AdminUserRolePO> findByAdminUserIds(@Param("adminUserIds") List<String> adminUserIds);
+    List<AdminRolePO> findByAdminIds(@Param("adminIds") List<String> adminIds);
 
     /**
      * 根据角色ID列表查找关联记录
      */
-    List<AdminUserRolePO> findByRoleIds(@Param("roleIds") List<String> roleIds);
+    List<AdminRolePO> findByRoleIds(@Param("roleIds") List<String> roleIds);
 
     /**
      * 删除管理员的所有角色关联
      */
-    int deleteByAdminUserId(@Param("adminUserId") String adminUserId);
+    int deleteByAdminId(@Param("adminId") String adminId);
 
     /**
      * 删除角色的所有管理员关联
@@ -49,5 +49,5 @@ public interface AdminUserRoleDao extends BaseMapper<AdminUserRolePO> {
     /**
      * 批量插入关联记录
      */
-    int batchInsert(@Param("list") List<AdminUserRolePO> list);
+    int batchInsert(@Param("list") List<AdminRolePO> list);
 }

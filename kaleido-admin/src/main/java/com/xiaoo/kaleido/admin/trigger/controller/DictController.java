@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
-import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.command.DictCommandService;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
@@ -15,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * 字典控制器
  *
@@ -26,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/admin/dict")
+@RequestMapping("/dict")
 @RequiredArgsConstructor
 public class DictController {
 
@@ -57,9 +54,7 @@ public class DictController {
             @PathVariable String dictId,
             @Valid @RequestBody UpdateDictCommand command) {
 
-        // 设置字典ID到命令对象
-        command.setId(dictId);
-        dictCommandService.updateDict(command);
+        dictCommandService.updateDict(dictId,command);
         return Result.success();
 
     }
@@ -107,62 +102,6 @@ public class DictController {
     }
 
     /**
-     * 根据字典类型编码和字典编码查询字典
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 字典信息
-     */
-    @GetMapping("/{typeCode}/{dictCode}")
-    public Result<DictResponse> getDictByCode(
-            @PathVariable String typeCode,
-            @PathVariable String dictCode) {
-
-        DictResponse dict = dictQueryService.findByTypeCodeAndDictCode(typeCode, dictCode);
-        return Result.success(dict);
-    }
-
-    /**
-     * 根据字典类型编码查询字典列表
-     *
-     * @param typeCode 字典类型编码
-     * @return 字典列表
-     */
-    @GetMapping("/type/{typeCode}")
-    public Result<List<DictResponse>> getDictsByType(
-            @PathVariable String typeCode) {
-
-        return Result.success(dictQueryService.findByTypeCode(typeCode));
-    }
-
-    /**
-     * 根据字典类型编码查询启用的字典列表
-     *
-     * @param typeCode 字典类型编码
-     * @return 启用的字典列表
-     */
-    @GetMapping("/type/{typeCode}/enabled")
-    public Result<List<DictResponse>> getEnabledDictsByType(
-            @PathVariable String typeCode) {
-
-        return Result.success(dictQueryService.findEnabledByTypeCode(typeCode));
-    }
-
-    /**
-     * 查询字典列表
-     *
-     * @param queryReq 查询条件
-     * @return 字典列表
-     */
-    @GetMapping("/list")
-    public Result<List<DictResponse>> listDicts(
-            DictQueryReq queryReq) {
-
-        return Result.success(dictQueryService.queryDicts(queryReq));
-
-    }
-
-    /**
      * 分页查询字典列表
      *
      * @param pageQueryReq 分页查询条件
@@ -173,21 +112,5 @@ public class DictController {
             DictPageQueryReq pageQueryReq) {
 
         return Result.success(dictQueryService.pageQueryDicts(pageQueryReq));
-    }
-
-
-    /**
-     * 获取字典值
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 字典值
-     */
-    @GetMapping("/value/{typeCode}/{dictCode}")
-    public Result<String> getDictValue(
-            @PathVariable String typeCode,
-            @PathVariable String dictCode) {
-
-        return Result.success(dictCommandService.getDictValue(typeCode, dictCode));
     }
 }

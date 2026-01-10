@@ -29,28 +29,7 @@ public interface RoleQueryService {
      * @return 角色信息
      */
     RoleInfoResponse findByCode(String code);
-    
-    /**
-     * 查询所有启用的角色
-     *
-     * @return 启用的角色列表
-     */
-    List<RoleInfoResponse> findEnabledRoles();
-    
-    /**
-     * 查询系统角色
-     *
-     * @return 系统角色列表
-     */
-    List<RoleInfoResponse> findSystemRoles();
-    
-    /**
-     * 根据权限ID查询拥有该权限的角色
-     *
-     * @param permissionId 权限ID
-     * @return 角色列表
-     */
-    List<RoleInfoResponse> findByPermissionId(String permissionId);
+
     
     /**
      * 获取角色树
@@ -66,23 +45,6 @@ public interface RoleQueryService {
      * @return 是否存在
      */
     boolean existsByCode(String code);
-    
-    /**
-     * 检查角色是否存在且启用
-     *
-     * @param roleId 角色ID
-     * @return 是否存在且启用
-     */
-    boolean isValidRole(String roleId);
-    
-    /**
-     * 验证角色是否拥有某个权限
-     *
-     * @param roleId 角色ID
-     * @param permissionId 权限ID
-     * @return 是否拥有
-     */
-    boolean hasPermission(String roleId, String permissionId);
 
     /**
      * 根据管理员id查询所有拥有的角色编码

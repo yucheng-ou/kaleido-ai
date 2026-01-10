@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DictCommandService {
 
     private final IDictRepository dictRepository;
-    private final IDictDomainService IDictDomainService;
+    private final IDictDomainService dictDomainService;
 
     /**
      * 创建字典
@@ -34,7 +34,7 @@ public class DictCommandService {
     public String createDict(AddDictCommand command) {
 
         // 调用领域服务创建字典
-        DictAggregate dictAggregate = IDictDomainService.createDict(
+        DictAggregate dictAggregate = dictDomainService.createDict(
                 command.getTypeCode(),
                 command.getTypeName(),
                 command.getDictCode(),
@@ -56,22 +56,22 @@ public class DictCommandService {
      *
      * @param command 更新字典命令
      */
-    public void updateDict(UpdateDictCommand command) {
+    public void updateDict(String dictId, UpdateDictCommand command) {
 
         DictAggregate dictAggregate;
-        if (command.getTypeName() != null && !command.getTypeName().trim().isEmpty()) {
-            // 更新字典类型信息
-            dictAggregate = IDictDomainService.updateDictTypeInfo(command.getId(), command.getTypeName());
-        } else {
-            // 更新字典信息
-            dictAggregate = IDictDomainService.updateDict(command.getId(),
-                    command.getDictName(), command.getDictValue(), command.getSort());
-        }
+        // 更新字典类型信息
+        dictAggregate = dictDomainService.updateDict(
+                dictId,
+                command.getTypeName(),
+                command.getDictName(),
+                command.getDictValue(),
+                command.getSort()
+        );
 
         // 保存字典
-        dictRepository.save(dictAggregate);
+        dictRepository.update(dictAggregate);
 
-        log.info("字典更新成功，字典ID: {}", command.getId());
+        log.info("字典更新成功，字典ID: {}", dictId);
     }
 
     /**
@@ -81,10 +81,10 @@ public class DictCommandService {
      */
     public void enableDict(String dictId) {
         // 调用领域服务启用字典
-        DictAggregate dictAggregate = IDictDomainService.enableDict(dictId);
+        DictAggregate dictAggregate = dictDomainService.enableDict(dictId);
 
         // 保存字典
-        dictRepository.save(dictAggregate);
+        dictRepository.update(dictAggregate);
 
         log.info("字典启用成功，字典ID: {}", dictId);
     }
@@ -96,10 +96,10 @@ public class DictCommandService {
      */
     public void disableDict(String dictId) {
         // 调用领域服务禁用字典
-        DictAggregate dictAggregate = IDictDomainService.disableDict(dictId);
+        DictAggregate dictAggregate = dictDomainService.disableDict(dictId);
 
         // 保存字典
-        dictRepository.save(dictAggregate);
+        dictRepository.update(dictAggregate);
 
         log.info("字典禁用成功，字典ID: {}", dictId);
     }
@@ -112,24 +112,11 @@ public class DictCommandService {
     @Transactional
     public void deleteDict(String dictId) {
         // 调用领域服务获取要删除的字典对象
-        DictAggregate dictAggregate = IDictDomainService.deleteDict(dictId);
+        DictAggregate dictAggregate = dictDomainService.deleteDict(dictId);
 
         // 执行软删除：标记为删除状态并更新
         dictRepository.deleteById(dictAggregate.getId());
 
         log.info("字典软删除成功，字典ID: {}", dictId);
     }
-
-    /**
-     * 根据字典类型编码和字典编码获取字典值
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 字典值
-     */
-    public String getDictValue(String typeCode, String dictCode) {
-        DictAggregate dictAggregate = IDictDomainService.getDictByCode(typeCode, dictCode);
-        return dictAggregate.getDictValue();
-    }
-
 }

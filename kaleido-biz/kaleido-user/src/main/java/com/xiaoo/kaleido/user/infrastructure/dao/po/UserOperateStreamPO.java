@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("user_operate_stream")
+@TableName("t_user_operate_stream")
 public class UserOperateStreamPO extends BasePO {
 
     /**

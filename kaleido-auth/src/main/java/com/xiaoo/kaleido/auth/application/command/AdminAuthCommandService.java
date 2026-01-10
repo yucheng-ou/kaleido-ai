@@ -3,11 +3,10 @@ package com.xiaoo.kaleido.auth.application.command;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoo.kaleido.api.admin.user.IRpcAdminAuthService;
-import com.xiaoo.kaleido.api.admin.user.command.AddAdminCommand;
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.user.command.RegisterCommand;
+import com.xiaoo.kaleido.api.admin.user.command.RegisterAdminCommand;
+import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
 import com.xiaoo.kaleido.api.admin.user.response.AdminLoginResponse;
-import com.xiaoo.kaleido.api.admin.user.response.AdminUserInfoResponse;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
@@ -47,22 +46,14 @@ public class AdminAuthCommandService {
      * @param command 注册命令
      * @return 注册响应
      */
-    public RegisterResponse register(RegisterCommand command) {
+    public RegisterResponse register(RegisterAdminCommand command) {
         log.info("管理员注册，手机号: {}", command.getTelephone());
 
         // 1. 验证短信验证码
         verifySmsCode(command.getTelephone(), command.getVerificationCode());
 
-        // 2. 将RegisterCommand转换为AddAdminUserCommand
-        AddAdminCommand addAdminCommand = AddAdminCommand.builder()
-                .username("")
-                .password(command.getPassword())
-                .realName(command.getNickName() != null ? command.getNickName() : "管理员")
-                .mobile(command.getTelephone())
-                .build();
-
-        // 3. 调用管理员服务注册
-        Result<String> register = rpcAdminAuthService.register(addAdminCommand);
+        // 2. 调用管理员服务注册
+        Result<String> register = rpcAdminAuthService.register(command);
 
         if (!Boolean.TRUE.equals(register.getSuccess())) {
             log.error("管理员注册失败，手机号: {}, 错误: {}", command.getTelephone(), register.getMsg());
@@ -87,21 +78,24 @@ public class AdminAuthCommandService {
     public AdminLoginResponse login(AdminLoginCommand command) {
         log.info("用户登录，手机号: {}", command.getTelephone());
 
-        //根据手机号查询用户信息
-        AdminUserInfoResponse user = rpcAdminAuthService.findByMobile(command.getTelephone()).getData();
+        // 1. 验证短信验证码
+        verifySmsCode(command.getTelephone(), command.getVerificationCode());
 
-        // 调用用户服务记录登录
+        // 2. 根据手机号查询用户信息
+        AdminInfoResponse user = rpcAdminAuthService.findByMobile(command.getTelephone()).getData();
+
+        // 3. 调用用户服务记录登录
         Result<Void> loginResult = rpcAdminAuthService.login(user.getAdminUserId());
         if (!Boolean.TRUE.equals(loginResult.getSuccess())) {
             log.error("管理员登录记录失败，管理员ID: {}, 错误: {}", user.getAdminUserId(), loginResult.getMsg());
             throw new AuthException(AuthErrorCode.AUTH_LOGIN_FAILED);
         }
 
-        // 使用Sa-Token登录
+        // 4. 使用Sa-Token登录
         StpUserUtil.login(user.getAdminUserId());
         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
 
-        // 构建响应
+        // 5. 构建响应
         AdminLoginResponse response = new AdminLoginResponse();
         response.setUserId(user.getAdminUserId());
         response.setToken(tokenInfo.getTokenValue());

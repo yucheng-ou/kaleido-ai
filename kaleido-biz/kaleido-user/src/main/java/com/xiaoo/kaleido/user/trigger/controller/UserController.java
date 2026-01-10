@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
-import com.xiaoo.kaleido.api.user.command.AddUserCommand;
+import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.command.ChangeNickNameCommand;
 import com.xiaoo.kaleido.user.application.command.UserCommandService;
 import com.xiaoo.kaleido.user.application.query.UserQueryService;
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result<String> register(@Valid @RequestBody AddUserCommand request) {
+    public Result<String> register(@Valid @RequestBody RegisterUserCommand request) {
         String userId = userCommandService.createUser(request);
         return Result.success(userId);
     }

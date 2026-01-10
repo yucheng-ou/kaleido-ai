@@ -29,21 +29,14 @@ public interface IDictDomainService {
      * 更新字典信息
      *
      * @param dictId    字典ID
+     * @param typeName  字段类型名称
      * @param dictName  字典名称
      * @param dictValue 字典值
      * @param sort      排序
      * @return 更新后的字典
      */
-    DictAggregate updateDict(String dictId, String dictName, String dictValue, Integer sort);
+    DictAggregate updateDict(String dictId, String typeName, String dictName, String dictValue, Integer sort);
 
-    /**
-     * 更新字典类型信息
-     *
-     * @param dictId   字典ID
-     * @param typeName 字典类型名称
-     * @return 更新后的字典
-     */
-    DictAggregate updateDictTypeInfo(String dictId, String typeName);
 
     /**
      * 启用字典
@@ -77,5 +70,5 @@ public interface IDictDomainService {
      * @return 字典
      */
     DictAggregate getDictByCode(String typeCode, String dictCode);
-    
+
 }

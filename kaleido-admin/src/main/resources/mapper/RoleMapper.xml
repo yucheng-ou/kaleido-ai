@@ -161,13 +161,6 @@
         WHERE code = #{code} AND deleted = 0
     </select>
     
-    <!-- 统计角色数量 -->
-    <select id="count" resultType="long">
-        SELECT COUNT(*)
-        FROM t_role
-        WHERE deleted = 0
-    </select>
-    
     <!-- 根据状态统计角色数量 -->
     <select id="countByStatus" resultType="long">
         SELECT COUNT(*)

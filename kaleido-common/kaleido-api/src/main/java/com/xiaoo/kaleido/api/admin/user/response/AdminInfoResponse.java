@@ -12,12 +12,12 @@ import java.util.List;
  * @date 2025/12/31
  */
 @Data
-public class AdminUserInfoResponse {
+public class AdminInfoResponse {
     
     /**
      * 管理员ID
      */
-    private String adminUserId;
+    private String adminId;
     
     /**
      * 管理员账号

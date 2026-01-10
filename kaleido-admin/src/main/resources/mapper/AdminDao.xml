@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.AdminUserDao">
+<mapper namespace="com.xiaoo.kaleido.admin.infrastructure.dao.AdminDao">
     
     <!-- 1. ResultMap定义 -->
-    <resultMap id="AdminUserMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminUserPO">
+    <resultMap id="AdminMap" type="com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminPO">
         <!-- 继承BasePO的字段映射 -->
         <result property="id" column="id"/>
         <result property="createdAt" column="created_at"/>
@@ -12,9 +12,7 @@
         <result property="deleted" column="deleted"/>
         <result property="lockVersion" column="lock_version"/>
         
-        <!-- AdminUserPO特有字段 -->
-        <result property="username" column="username"/>
-        <result property="passwordHash" column="password_hash"/>
+        <!-- AdminPO特有字段 -->
         <result property="realName" column="real_name"/>
         <result property="mobile" column="mobile"/>
         <result property="status" column="status"/>
@@ -22,7 +20,7 @@
     </resultMap>
     
     <!-- 2. 可重用SQL片段 -->
-    <sql id="AdminUserColumns">
+    <sql id="AdminColumns">
         id, username, password_hash, real_name, mobile, status, last_login_time,
         created_at, updated_at, deleted, lock_version
     </sql>
@@ -30,30 +28,30 @@
     <!-- 3. 查询语句 -->
     
     <!-- 根据ID查找管理员 -->
-    <select id="findById" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findById" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 根据账号查找管理员 -->
-    <select id="findByUsername" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findByUsername" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE username = #{username} AND deleted = 0
     </select>
     
     <!-- 根据手机号查找管理员 -->
-    <select id="findByMobile" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findByMobile" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE mobile = #{mobile} AND deleted = 0
     </select>
     
     <!-- 根据状态查找管理员列表 -->
-    <select id="findByStatus" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findByStatus" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE deleted = 0
         <if test="status != null">
             AND status = #{status}
@@ -62,17 +60,17 @@
     </select>
     
     <!-- 查找所有管理员 -->
-    <select id="findAll" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findAll" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
     
     <!-- 根据ID列表查找管理员 -->
-    <select id="findAllById" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findAllById" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE deleted = 0 AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
@@ -81,9 +79,9 @@
     </select>
     
     <!-- 根据账号列表查找管理员 -->
-    <select id="findAllByUsername" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="findAllByUsername" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE deleted = 0 AND username IN
         <foreach collection="usernames" item="username" open="(" separator="," close=")">
             #{username}
@@ -92,10 +90,10 @@
     </select>
     
     <!-- 根据角色ID查找拥有该角色的管理员 -->
-    <select id="findByRoleId" resultMap="AdminUserMap">
+    <select id="findByRoleId" resultMap="AdminMap">
         SELECT au.*
-        FROM t_admin_user au
-        INNER JOIN t_admin_user_role aur ON au.id = aur.admin_user_id
+        FROM t_admin au
+        INNER JOIN t_admin_role aur ON au.id = aur.admin_id
         WHERE au.deleted = 0 AND aur.role_id = #{roleId}
         ORDER BY au.created_at DESC
     </select>
@@ -103,45 +101,35 @@
     <!-- 检查管理员是否存在 -->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM t_admin_user
+        FROM t_admin
         WHERE id = #{id} AND deleted = 0
     </select>
     
     <!-- 检查管理员账号是否存在 -->
     <select id="existsByUsername" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM t_admin_user
+        FROM t_admin
         WHERE username = #{username} AND deleted = 0
     </select>
     
     <!-- 检查手机号是否存在 -->
     <select id="existsByMobile" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM t_admin_user
+        FROM t_admin
         WHERE mobile = #{mobile} AND deleted = 0
     </select>
     
     <!-- 统计管理员数量 -->
     <select id="count" resultType="long">
         SELECT COUNT(*)
-        FROM t_admin_user
+        FROM t_admin
         WHERE deleted = 0
-    </select>
-    
-    <!-- 根据状态统计管理员数量 -->
-    <select id="countByStatus" resultType="long">
-        SELECT COUNT(*)
-        FROM t_admin_user
-        WHERE deleted = 0
-        <if test="status != null">
-            AND status = #{status}
-        </if>
     </select>
     
     <!-- 分页查询管理员 -->
-    <select id="pageQuery" resultMap="AdminUserMap">
-        SELECT <include refid="AdminUserColumns"/>
-        FROM t_admin_user
+    <select id="pageQuery" resultMap="AdminMap">
+        SELECT <include refid="AdminColumns"/>
+        FROM t_admin
         WHERE deleted = 0
         <if test="queryReq.username != null and queryReq.username != ''">
             AND username LIKE CONCAT('%', #{queryReq.username}, '%')
@@ -157,8 +145,8 @@
         </if>
         <if test="queryReq.roleId != null and queryReq.roleId != ''">
             AND id IN (
-                SELECT admin_user_id 
-                FROM t_admin_user_role 
+                SELECT admin_id 
+                FROM t_admin_role 
                 WHERE role_id = #{queryReq.roleId}
             )
         </if>
