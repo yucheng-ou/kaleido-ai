@@ -32,11 +32,11 @@ public interface RoleQueryService {
 
     
     /**
-     * 获取角色树
+     * 获取角色列表
      *
-     * @return 角色树根节点列表
+     * @return 角色列表
      */
-    List<RoleTreeResponse> getRoleTree();
+    List<RoleInfoResponse> getRoleList();
     
     /**
      * 检查角色编码是否存在

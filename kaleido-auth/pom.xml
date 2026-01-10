@@ -70,6 +70,11 @@
             <artifactId>kaleido-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-cache</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

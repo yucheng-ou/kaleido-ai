@@ -39,11 +39,6 @@ public class RoleAggregate extends BaseEntity {
     private String description;
 
     /**
-     * 是否系统角色
-     */
-    private Boolean isSystem;
-
-    /**
      * 角色状态
      */
     private DataStatusEnum status;
@@ -60,16 +55,14 @@ public class RoleAggregate extends BaseEntity {
      * @param code        角色编码
      * @param name        角色名称
      * @param description 角色描述
-     * @param isSystem    是否系统角色
      * @return 角色对象
      */
-    public static RoleAggregate create(String code, String name, String description, Boolean isSystem) {
+    public static RoleAggregate create(String code, String name, String description) {
         return RoleAggregate.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
                 .code(code)
                 .name(name)
                 .description(description)
-                .isSystem(isSystem != null ? isSystem : false)
                 .status(DataStatusEnum.ENABLE)
                 .permissionIds(new ArrayList<>())
                 .build();
@@ -167,17 +160,6 @@ public class RoleAggregate extends BaseEntity {
     public boolean isEnabled() {
         return status != null && status == DataStatusEnum.ENABLE;
     }
-
-
-    /**
-     * 判断是否为系统角色
-     *
-     * @return 是否为系统角色
-     */
-    public boolean isSystem() {
-        return isSystem != null && isSystem;
-    }
-
 
     /**
      * 判断是否拥有某个权限

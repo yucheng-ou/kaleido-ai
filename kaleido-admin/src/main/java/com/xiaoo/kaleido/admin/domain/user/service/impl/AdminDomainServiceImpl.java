@@ -38,7 +38,7 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
     public AdminAggregate createAdmin(String mobile) {
         // 验证手机号唯一性
         if (adminUserRepository.existsByMobile(mobile)) {
-            throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST.getCode(), AdminErrorCode.ADMIN_MOBILE_EXIST.getMessage());
+            throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST);
         }
 
         // 创建管理员
@@ -140,38 +140,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
     }
 
     @Override
-    public List<AdminAggregate> findNormalAdminUsers() {
-        return adminUserRepository.findByStatus(AdminStatus.NORMAL);
-    }
-
-
-    @Override
-    public boolean existsByMobile(String mobile) {
-        return adminUserRepository.existsByMobile(mobile);
-    }
-
-    @Override
-    public boolean isValidAdminUser(String adminId) {
-        try {
-            AdminAggregate adminUser = findByIdOrThrow(adminId);
-            return adminUser.isAvailable();
-        } catch (AdminException e) {
-            return false;
-        }
-    }
-
-
-    @Override
-    public boolean hasRole(String adminId, String roleId) {
-        try {
-            AdminAggregate adminUser = findByIdOrThrow(adminId);
-            return adminUser.hasRole(roleId);
-        } catch (AdminException e) {
-            return false;
-        }
-    }
-
-    @Override
     public List<String> getPermissionsByAdminId(String adminId) {
         // 获取管理员
         AdminAggregate adminUser = findByIdOrThrow(adminId);
@@ -194,12 +162,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         }
 
         return new ArrayList<>(permissionIds);
-    }
-
-    @Override
-    public boolean hasPermission(String adminId, String permissionId) {
-        List<String> permissions = getPermissionsByAdminId(adminId);
-        return permissions.contains(permissionId);
     }
 
     @Override

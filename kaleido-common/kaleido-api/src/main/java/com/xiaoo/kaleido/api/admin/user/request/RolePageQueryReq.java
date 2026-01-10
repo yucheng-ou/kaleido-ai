@@ -25,11 +25,6 @@ public class RolePageQueryReq extends BasePageReq {
     private String name;
     
     /**
-     * 是否系统角色
-     */
-    private Boolean isSystem;
-    
-    /**
      * 是否启用
      */
     private Boolean enabled;

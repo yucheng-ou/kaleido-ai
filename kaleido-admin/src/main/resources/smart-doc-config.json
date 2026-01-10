@@ -1,6 +1,6 @@
 {
   "serverUrl": "http://localhost:9010/kaleido-admin/",
-  "serverEnv": "管理后台服务",
+  "serverEnv": "{{base_url}}",
   "allInOne": true,
   "outPath": "../doc/api/admin",
   "coverOld": true,

@@ -45,8 +45,7 @@ public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
     }
 
     @Override
-    public Result<AdminInfoResponse> findByMobile(
-            String telephone) {
+    public Result<AdminInfoResponse> findByMobile(String telephone) {
 
         return Result.success(adminUserQueryService.findByMobile(telephone));
     }

@@ -14,13 +14,8 @@ spring:
       - classpath:nacos.yml
       - classpath:ds.yml
       - classpath:rpc.yml
+      - classpath:cache.yml
 
-  cloud:
-    nacos:
-      discovery:
-        group: kaleido-gateway  # 修改为与网关相同的分组
-      config:
-        group: ${spring.application.name}
 dubbo:
   application:
     qos-port: 22221  # 添加此行，指定新的 QOS 端口

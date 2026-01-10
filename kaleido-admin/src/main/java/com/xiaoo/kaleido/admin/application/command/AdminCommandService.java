@@ -31,12 +31,12 @@ public class AdminCommandService {
      */
     public String createAdmin(RegisterAdminCommand command) {
         // 1.调用领域服务创建管理员
-        AdminAggregate adminAggregate = adminDomainService.createAdmin(command.getTelephone());
+        AdminAggregate adminAggregate = adminDomainService.createAdmin(command.getMobile());
 
         // 2.保存管理员
         adminRepository.save(adminAggregate);
 
-        log.info("管理员创建成功，管理员ID: {}, 手机号: {}", adminAggregate.getId(), command.getTelephone());
+        log.info("管理员创建成功，管理员ID: {}, 手机号: {}", adminAggregate.getId(), command.getMobile());
         return adminAggregate.getId();
     }
 

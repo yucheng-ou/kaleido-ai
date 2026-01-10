@@ -1,6 +1,7 @@
-package com.xiaoo.kaleido.admin.infrastructure.dao.po;
+package com.xiaoo.kaleido.admin.infrastructure.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xiaoo.kaleido.admin.infrastructure.dao.po.DictPO;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import org.apache.ibatis.annotations.Mapper;
@@ -51,14 +52,6 @@ public interface DictDao extends BaseMapper<DictPO> {
      * @return 是否存在
      */
     boolean existsByTypeCodeAndDictCode(@Param("typeCode") String typeCode, @Param("dictCode") String dictCode);
-
-    /**
-     * 检查字典类型编码是否已存在
-     *
-     * @param typeCode 字典类型编码
-     * @return 是否存在
-     */
-    boolean existsByTypeCode(@Param("typeCode") String typeCode);
 
     /**
      * 根据条件查询字典列表

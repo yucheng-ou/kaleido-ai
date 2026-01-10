@@ -27,7 +27,7 @@ public class UserDomainServiceImpl implements IUserDomainService {
     private final UserRepository userRepository;
 
     @Override
-    public UserAggregate createUser(String telephone, String passwordHash, String inviteCode) {
+    public UserAggregate createUser(String telephone, String inviteCode) {
 
         // 验证手机号是否已存在
         if (userRepository.existsByTelephone(telephone)) {
@@ -51,7 +51,6 @@ public class UserDomainServiceImpl implements IUserDomainService {
 
         // 创建用户聚合根并返回
         return UserAggregate.create(telephone,
-                passwordHash,
                 defaultNickName,
                 invitationCode.getValue(),
                 inviterId);

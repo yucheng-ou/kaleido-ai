@@ -130,11 +130,6 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
     }
 
     @Override
-    public List<PermissionAggregate> findByType(PermissionType type) {
-        return permissionRepository.findByType(type);
-    }
-
-    @Override
     public List<PermissionAggregate> getPermissionTree() {
         // 使用仓储层提供的权限树方法
         return permissionRepository.getPermissionTree();

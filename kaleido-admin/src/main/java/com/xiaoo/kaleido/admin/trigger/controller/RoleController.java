@@ -2,7 +2,6 @@ package com.xiaoo.kaleido.admin.trigger.controller;
 
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 import com.xiaoo.kaleido.admin.application.command.RoleCommandService;
 import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
 import com.xiaoo.kaleido.base.result.Result;
@@ -141,13 +140,13 @@ public class RoleController {
 
 
     /**
-     * 获取角色树
+     * 获取角色列表
      *
-     * @return 角色树根节点列表
+     * @return 角色列表
      */
-    @GetMapping("/tree")
-    public Result<List<RoleTreeResponse>> getRoleTree() {
-        List<RoleTreeResponse> roleTree = roleQueryService.getRoleTree();
-        return Result.success(roleTree);
+    @GetMapping("/list")
+    public Result<List<RoleInfoResponse>> getRoleList() {
+        List<RoleInfoResponse> roleList = roleQueryService.getRoleList();
+        return Result.success(roleList);
     }
 }

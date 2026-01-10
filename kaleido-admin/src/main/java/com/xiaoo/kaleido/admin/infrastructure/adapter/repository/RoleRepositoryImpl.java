@@ -85,18 +85,6 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
-    public List<RoleAggregate> findByIsSystem(Boolean isSystem) {
-        List<RolePO> poList = roleDao.findByIsSystem(isSystem);
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
-    public List<RoleAggregate> findAll() {
-        List<RolePO> poList = roleDao.findAll();
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
     public List<RoleAggregate> findAllById(List<String> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
@@ -115,14 +103,8 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
-    public List<RoleAggregate> findByPermissionId(String permissionId) {
-        List<RolePO> poList = roleDao.findByPermissionId(permissionId);
-        return convertAndLoadPermissionIds(poList);
-    }
-
-    @Override
-    public List<RoleAggregate> getRoleTree() {
-        List<RolePO> poList = roleDao.getRoleTree();
+    public List<RoleAggregate> findAll() {
+        List<RolePO> poList = roleDao.findAll();
         return convertAndLoadPermissionIds(poList);
     }
 

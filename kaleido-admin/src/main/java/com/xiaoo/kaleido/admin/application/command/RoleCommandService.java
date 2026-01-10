@@ -37,8 +37,7 @@ public class RoleCommandService {
         RoleAggregate roleAggregate = roleDomainService.createRole(
                 command.getCode(),
                 command.getName(),
-                command.getDescription(),
-                command.getIsSystem()
+                command.getDescription()
         );
 
         // 保存角色

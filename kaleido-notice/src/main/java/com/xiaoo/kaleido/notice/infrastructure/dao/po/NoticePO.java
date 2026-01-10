@@ -6,6 +6,7 @@ import com.xiaoo.kaleido.ds.po.BasePO;
 import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
 import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +20,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("notice")
+@TableName("t_notice")
 public class NoticePO extends BasePO {
 
     /**
@@ -33,6 +34,12 @@ public class NoticePO extends BasePO {
      */
     @TableField("target_address")
     private String targetAddress;
+
+    /**
+     * 目标类型
+     */
+    @TableField("target_type")
+    private TargetTypeEnum targetType;
 
     /**
      * 通知状态

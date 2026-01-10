@@ -112,13 +112,13 @@ public class UserAuthCommandService {
      * @return 登录响应
      */
     public UserLoginResponse login(AdminLoginCommand command) {
-        log.info("用户登录，手机号: {}", command.getTelephone());
+        log.info("用户登录，手机号: {}", command.getMobile());
 
         // 1. 验证短信验证码
-        verifySmsCode(command.getTelephone(), command.getVerificationCode());
+        verifySmsCode(command.getMobile(), command.getVerifyCode());
 
         // 2. 根据手机号查询用户信息
-        UserInfoResponse user = rpcUserService.getByTelephone(command.getTelephone()).getData();
+        UserInfoResponse user = rpcUserService.getByTelephone(command.getMobile()).getData();
 
         // 3. 调用用户服务记录登录
         Result<Void> loginResult = rpcUserService.login(user.getUserId());
@@ -137,7 +137,7 @@ public class UserAuthCommandService {
         response.setToken(tokenInfo.getTokenValue());
         response.setUserInfo(user);
 
-        log.info("用户登录成功，用户ID: {}, 手机号: {}", user.getUserId(), command.getTelephone());
+        log.info("用户登录成功，用户ID: {}, 手机号: {}", user.getUserId(), command.getMobile());
         return response;
     }
     

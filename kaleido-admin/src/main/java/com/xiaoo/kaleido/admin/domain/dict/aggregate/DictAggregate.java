@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
-
 /**
  * 字典聚合根（同时作为实体）
  * 封装字典相关的业务规则和一致性边界
@@ -112,32 +110,12 @@ public class DictAggregate extends BaseEntity {
     }
 
     /**
-     * 更新字典类型信息
-     *
-     * @param typeName 字典类型名称
-     */
-    public void updateTypeInfo(String typeName) {
-        if (typeName != null && !typeName.trim().isEmpty()) {
-            this.typeName = typeName;
-        }
-    }
-
-    /**
      * 判断字典是否启用
      *
      * @return 是否启用
      */
     public boolean isEnabled() {
         return DataStatusEnum.ENABLE.equals(this.status);
-    }
-
-    /**
-     * 判断字典是否禁用
-     *
-     * @return 是否禁用
-     */
-    public boolean isDisabled() {
-        return DataStatusEnum.DISABLE.equals(this.status);
     }
 
 }

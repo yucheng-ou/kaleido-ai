@@ -149,11 +149,12 @@ public class PermissionAggregate extends BaseEntity {
 
     /**
      * 判断是否为接口权限
+     * 注意：权限类型已修改，API类型已不存在，此方法保留但始终返回false
      *
      * @return 是否为接口权限
      */
     public boolean isApi() {
-        return type != null && type.isApi();
+        return false;
     }
 
 

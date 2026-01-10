@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.admin.application.query;
 import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
 import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 
 import java.util.List;
 
@@ -46,5 +47,13 @@ public interface IAdminQueryService {
      * @return 权限ID列表
      */
     List<String> getPermissionsByAdminId(String adminId);
+
+    /**
+     * 获取管理员的目录和菜单树（过滤按钮）
+     *
+     * @param adminId 管理员ID
+     * @return 目录和菜单树
+     */
+    List<PermissionInfoResponse> getDirectoryAndMenuTreeByAdminId(String adminId);
 
 }

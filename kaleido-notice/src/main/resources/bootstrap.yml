@@ -16,12 +16,6 @@ spring:
       - classpath:rpc.yml
       - classpath:cache.yml
 
-  cloud:
-    nacos:
-      discovery:
-        group: ${spring.application.name}
-      config:
-        group: ${spring.application.name}
 dubbo:
   application:
     qos-port: 22224  # 添加此行，指定新的 QOS 端口

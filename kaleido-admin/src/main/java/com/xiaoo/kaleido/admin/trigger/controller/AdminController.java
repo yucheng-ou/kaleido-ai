@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
 import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
+import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import com.xiaoo.kaleido.admin.application.command.AdminCommandService;
 import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
 import com.xiaoo.kaleido.base.result.Result;
@@ -125,5 +126,18 @@ public class AdminController {
             @PathVariable String adminId) {
         List<String> permissions = adminQueryService.getPermissionsByAdminId(adminId);
         return Result.success(permissions);
+    }
+
+    /**
+     * 获取管理员的目录和菜单树（过滤按钮）
+     *
+     * @param adminId 管理员ID
+     * @return 目录和菜单树
+     */
+    @GetMapping("/{adminId}/directory-menus")
+    public Result<List<PermissionInfoResponse>> getAdminDirectoryAndMenus(
+            @PathVariable String adminId) {
+        List<PermissionInfoResponse> directoryMenus = adminQueryService.getDirectoryAndMenuTreeByAdminId(adminId);
+        return Result.success(directoryMenus);
     }
 }

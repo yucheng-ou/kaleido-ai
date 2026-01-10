@@ -62,13 +62,4 @@ public interface IDictDomainService {
      */
     DictAggregate deleteDict(String dictId);
 
-    /**
-     * 根据字典类型编码和字典编码获取字典
-     *
-     * @param typeCode 字典类型编码
-     * @param dictCode 字典编码
-     * @return 字典
-     */
-    DictAggregate getDictByCode(String typeCode, String dictCode);
-
 }

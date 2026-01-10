@@ -48,11 +48,6 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
     List<PermissionPO> findAllById(@Param("ids") List<String> ids);
 
     /**
-     * 根据编码列表查找权限
-     */
-    List<PermissionPO> findAllByCode(@Param("codes") List<String> codes);
-
-    /**
      * 根据条件查询权限列表
      */
     List<PermissionPO> findByCondition(@Param("req") PermissionPageQueryReq req);
@@ -62,10 +57,6 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
      */
     List<PermissionPO> getPermissionTree();
 
-    /**
-     * 检查权限是否存在
-     */
-    boolean existsById(@Param("id") String id);
 
     /**
      * 检查权限编码是否存在
@@ -73,29 +64,15 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
     boolean existsByCode(@Param("code") String code);
 
     /**
-     * 统计权限数量
-     */
-    long count();
-
-    /**
      * 根据类型查找权限列表
      */
     List<PermissionPO> findByType(@Param("type") String type);
-
-    /**
-     * 根据类型统计权限数量
-     */
-    long countByType(@Param("type") String type);
 
     /**
      * 根据父权限ID统计子权限数量
      */
     long countByParentId(@Param("parentId") String parentId);
 
-    /**
-     * 根据ID列表查询权限编码
-     */
-    List<String> findCodesByIds(@Param("ids") List<String> ids);
 
     /**
      * 根据角色ID列表查询权限编码

@@ -34,11 +34,6 @@ public class RoleInfoResponse {
     private String description;
     
     /**
-     * 是否系统角色
-     */
-    private Boolean isSystem;
-    
-    /**
      * 是否启用
      */
     private Boolean enabled;

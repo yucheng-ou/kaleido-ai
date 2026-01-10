@@ -85,9 +85,4 @@ public class DictDomainServiceImpl implements IDictDomainService {
         return dictAggregate;
     }
 
-    @Override
-    public DictAggregate getDictByCode(String typeCode, String dictCode) {
-        return dictRepository.findByTypeCodeAndDictCodeOrThrow(typeCode, dictCode);
-    }
-
 }

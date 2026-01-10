@@ -5,7 +5,6 @@ import com.xiaoo.kaleido.admin.application.convertor.RoleConvertor;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,12 +48,12 @@ public class RoleQueryServiceImpl implements RoleQueryService {
 
 
     @Override
-    public List<RoleTreeResponse> getRoleTree() {
-        log.debug("获取角色树");
+    public List<RoleInfoResponse> getRoleList() {
+        log.debug("获取角色列表");
 
-        List<RoleAggregate> aggregateList = roleRepository.getRoleTree();
+        List<RoleAggregate> aggregateList = roleRepository.findAll();
         return aggregateList.stream()
-                .map(roleConvertor::toTreeResponse)
+                .map(roleConvertor::toResponse)
                 .collect(Collectors.toList());
     }
 

@@ -34,14 +34,6 @@ public interface IAdminRepository {
     AdminAggregate update(AdminAggregate admin);
 
     /**
-     * 批量保存管理员
-     *
-     * @param admins 管理员列表
-     * @return 保存后的管理员列表
-     */
-    List<AdminAggregate> saveAll(List<AdminAggregate> admins);
-
-    /**
      * 根据ID查找管理员
      *
      * @param id 管理员ID
@@ -49,13 +41,6 @@ public interface IAdminRepository {
      */
     Optional<AdminAggregate> findById(String id);
 
-    /**
-     * 根据账号查找管理员
-     *
-     * @param username 管理员账号
-     * @return 管理员
-     */
-    Optional<AdminAggregate> findByUsername(String username);
 
     /**
      * 根据手机号查找管理员
@@ -64,47 +49,6 @@ public interface IAdminRepository {
      * @return 管理员
      */
     Optional<AdminAggregate> findByMobile(String mobile);
-
-    /**
-     * 根据状态查找管理员列表
-     *
-     * @param status 管理员状态
-     * @return 管理员列表
-     */
-    List<AdminAggregate> findByStatus(AdminStatus status);
-
-    /**
-     * 查找所有管理员
-     *
-     * @return 管理员列表
-     */
-    List<AdminAggregate> findAll();
-
-    /**
-     * 根据ID列表查找管理员
-     *
-     * @param ids ID列表
-     * @return 管理员列表
-     */
-    List<AdminAggregate> findAllById(List<String> ids);
-
-    /**
-     * 根据角色ID查找拥有该角色的管理员
-     *
-     * @param roleId 角色ID
-     * @return 管理员列表
-     */
-    List<AdminAggregate> findByRoleId(String roleId);
-
-
-    /**
-     * 检查管理员是否存在
-     *
-     * @param id 管理员ID
-     * @return 是否存在
-     */
-    boolean existsById(String id);
-
 
     /**
      * 检查手机号是否存在

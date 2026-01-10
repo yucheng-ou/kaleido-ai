@@ -38,9 +38,4 @@ public class AddRoleCommand extends BaseCommand {
      */
     @Size(max = 200, message = "角色描述长度不能超过200位")
     private String description;
-    
-    /**
-     * 是否系统角色
-     */
-    private Boolean isSystem;
 }

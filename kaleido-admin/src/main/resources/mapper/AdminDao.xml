@@ -21,7 +21,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="AdminColumns">
-        id, username, password_hash, real_name, mobile, status, last_login_time,
+        id, real_name, mobile, status, last_login_time,
         created_at, updated_at, deleted, lock_version
     </sql>
     
@@ -34,82 +34,11 @@
         WHERE id = #{id} AND deleted = 0
     </select>
     
-    <!-- 根据账号查找管理员 -->
-    <select id="findByUsername" resultMap="AdminMap">
-        SELECT <include refid="AdminColumns"/>
-        FROM t_admin
-        WHERE username = #{username} AND deleted = 0
-    </select>
-    
     <!-- 根据手机号查找管理员 -->
     <select id="findByMobile" resultMap="AdminMap">
         SELECT <include refid="AdminColumns"/>
         FROM t_admin
         WHERE mobile = #{mobile} AND deleted = 0
-    </select>
-    
-    <!-- 根据状态查找管理员列表 -->
-    <select id="findByStatus" resultMap="AdminMap">
-        SELECT <include refid="AdminColumns"/>
-        FROM t_admin
-        WHERE deleted = 0
-        <if test="status != null">
-            AND status = #{status}
-        </if>
-        ORDER BY created_at DESC
-    </select>
-    
-    <!-- 查找所有管理员 -->
-    <select id="findAll" resultMap="AdminMap">
-        SELECT <include refid="AdminColumns"/>
-        FROM t_admin
-        WHERE deleted = 0
-        ORDER BY created_at DESC
-    </select>
-    
-    <!-- 根据ID列表查找管理员 -->
-    <select id="findAllById" resultMap="AdminMap">
-        SELECT <include refid="AdminColumns"/>
-        FROM t_admin
-        WHERE deleted = 0 AND id IN
-        <foreach collection="ids" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        ORDER BY created_at DESC
-    </select>
-    
-    <!-- 根据账号列表查找管理员 -->
-    <select id="findAllByUsername" resultMap="AdminMap">
-        SELECT <include refid="AdminColumns"/>
-        FROM t_admin
-        WHERE deleted = 0 AND username IN
-        <foreach collection="usernames" item="username" open="(" separator="," close=")">
-            #{username}
-        </foreach>
-        ORDER BY created_at DESC
-    </select>
-    
-    <!-- 根据角色ID查找拥有该角色的管理员 -->
-    <select id="findByRoleId" resultMap="AdminMap">
-        SELECT au.*
-        FROM t_admin au
-        INNER JOIN t_admin_role aur ON au.id = aur.admin_id
-        WHERE au.deleted = 0 AND aur.role_id = #{roleId}
-        ORDER BY au.created_at DESC
-    </select>
-    
-    <!-- 检查管理员是否存在 -->
-    <select id="existsById" resultType="boolean">
-        SELECT COUNT(*) > 0
-        FROM t_admin
-        WHERE id = #{id} AND deleted = 0
-    </select>
-    
-    <!-- 检查管理员账号是否存在 -->
-    <select id="existsByUsername" resultType="boolean">
-        SELECT COUNT(*) > 0
-        FROM t_admin
-        WHERE username = #{username} AND deleted = 0
     </select>
     
     <!-- 检查手机号是否存在 -->
@@ -119,21 +48,11 @@
         WHERE mobile = #{mobile} AND deleted = 0
     </select>
     
-    <!-- 统计管理员数量 -->
-    <select id="count" resultType="long">
-        SELECT COUNT(*)
-        FROM t_admin
-        WHERE deleted = 0
-    </select>
-    
     <!-- 分页查询管理员 -->
     <select id="pageQuery" resultMap="AdminMap">
         SELECT <include refid="AdminColumns"/>
         FROM t_admin
         WHERE deleted = 0
-        <if test="queryReq.username != null and queryReq.username != ''">
-            AND username LIKE CONCAT('%', #{queryReq.username}, '%')
-        </if>
         <if test="queryReq.realName != null and queryReq.realName != ''">
             AND real_name LIKE CONCAT('%', #{queryReq.realName}, '%')
         </if>

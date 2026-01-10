@@ -16,11 +16,10 @@ public interface IUserDomainService {
      * 创建用户
      *
      * @param telephone    手机号
-     * @param passwordHash 密码哈希
      * @param inviteCode    邀请人邀请码
      * @return 用户聚合根
      */
-    UserAggregate createUser(String telephone, String passwordHash, String inviteCode);
+    UserAggregate createUser(String telephone, String inviteCode);
 
     /**
      * 根据ID查找用户，如果不存在则抛出异常
