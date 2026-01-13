@@ -39,10 +39,10 @@ public class AdminRepositoryImpl implements IAdminRepository {
 
     @Override
     public AdminAggregate save(AdminAggregate admin) {
-        // 转换并保存管理员
+        // 1. 转换并保存管理员
         AdminPO po = AdminConvertor.INSTANCE.toPO(admin);
 
-        //插入角色
+        // 2. 插入角色
         try {
             adminDao.insert(po);
         } catch (DuplicateKeyException e) {
@@ -54,10 +54,10 @@ public class AdminRepositoryImpl implements IAdminRepository {
 
     @Override
     public AdminAggregate update(AdminAggregate admin) {
-        // 转换并保存管理员
+        // 1. 转换并保存管理员
         AdminPO po = AdminConvertor.INSTANCE.toPO(admin);
 
-        //更新管理员信息
+        // 2. 更新管理员信息
         adminDao.updateById(po);
 
         return AdminConvertor.INSTANCE.toEntity(po);
@@ -65,24 +65,35 @@ public class AdminRepositoryImpl implements IAdminRepository {
 
     @Override
     public Optional<AdminAggregate> findById(String id) {
+        // 1. 查询管理员PO
         AdminPO po = adminDao.findById(id);
         if (po == null) {
             return Optional.empty();
         }
+        
+        // 2. 转换为聚合根
         AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
-        // 加载角色ID
+        
+        // 3. 加载角色ID
         loadRoleIds(aggregate);
+        
         return Optional.of(aggregate);
     }
 
     @Override
     public Optional<AdminAggregate> findByMobile(String mobile) {
+        // 1. 查询管理员PO
         AdminPO po = adminDao.findByMobile(mobile);
         if (po == null) {
             return Optional.empty();
         }
+        
+        // 2. 转换为聚合根
         AdminAggregate aggregate = AdminConvertor.INSTANCE.toEntity(po);
+        
+        // 3. 加载角色ID
         loadRoleIds(aggregate);
+        
         return Optional.of(aggregate);
     }
     
@@ -95,30 +106,27 @@ public class AdminRepositoryImpl implements IAdminRepository {
     public List<AdminAggregate> pageQuery(AdminPageQueryReq pageQueryReq) {
         log.debug("分页查询管理员，pageQueryReq={}", pageQueryReq);
 
-        // 执行分页查询（PageHelper已在Service层启动）
+        // 1. 执行分页查询（PageHelper已在Service层启动）
         List<AdminPO> poList = adminDao.pageQuery(pageQueryReq);
 
         if (CollectionUtils.isEmpty(poList)) {
             return new ArrayList<>();
         }
 
-        // 转换PO为聚合根并加载角色ID
+        // 2. 转换PO为聚合根并加载角色ID
         return convertAndLoadRoleIds(poList);
     }
 
-    /**
-     * 保存用户角色关联
-     */
     @Transactional(rollbackFor = Exception.class)
     public void assignRoles(AdminAggregate admin) {
         if (CollectionUtils.isEmpty(admin.getRoleIds())) {
             return;
         }
 
-        // 删除旧的关联
+        // 1. 删除旧的关联
         adminRoleDao.deleteByAdminId(admin.getId());
 
-        // 创建新的关联
+        // 2. 创建新的关联
         List<AdminRolePO> rolePOs = admin.getRoleIds().stream()
                 .map(roleId -> {
                     AdminRolePO po = new AdminRolePO();
@@ -128,52 +136,54 @@ public class AdminRepositoryImpl implements IAdminRepository {
                 })
                 .collect(Collectors.toList());
 
-        // 批量插入
+        // 3. 批量插入
         if (!CollectionUtils.isEmpty(rolePOs)) {
             adminRoleDao.batchInsert(rolePOs);
         }
     }
 
-    /**
-     * 加载用户的角色ID列表
-     */
     private void loadRoleIds(AdminAggregate aggregate) {
         if (aggregate == null || aggregate.getId() == null) {
             return;
         }
+        
+        // 1. 查询用户角色关联
         List<AdminRolePO> rolePOs = adminRoleDao.findByAdminId(aggregate.getId());
+        
+        // 2. 提取角色ID列表
         List<String> roleIds = rolePOs.stream()
                 .map(AdminRolePO::getRoleId)
                 .collect(Collectors.toList());
+        
+        // 3. 设置到聚合根
         aggregate.setRoleIds(roleIds);
     }
 
-    /**
-     * 转换PO列表并加载角色ID
-     */
     private List<AdminAggregate> convertAndLoadRoleIds(List<AdminPO> poList) {
         if (CollectionUtils.isEmpty(poList)) {
             return new ArrayList<>();
         }
 
-        // 转换PO为聚合根
+        // 1. 转换PO为聚合根
         List<AdminAggregate> aggregates = poList.stream()
                 .map(AdminConvertor.INSTANCE::toEntity)
                 .collect(Collectors.toList());
 
-        // 批量加载角色ID
+        // 2. 批量加载角色ID
         if (!CollectionUtils.isEmpty(aggregates)) {
+            // 2.1 收集所有管理员ID
             List<String> adminIds = aggregates.stream()
                     .map(AdminAggregate::getId)
                     .collect(Collectors.toList());
 
+            // 2.2 批量查询角色关联
             List<AdminRolePO> allRolePOs = adminRoleDao.findByAdminIds(adminIds);
 
-            // 按用户ID分组
+            // 2.3 按用户ID分组
             var roleMap = allRolePOs.stream()
                     .collect(Collectors.groupingBy(AdminRolePO::getAdminId));
 
-            // 设置角色ID列表
+            // 2.4 设置角色ID列表
             for (AdminAggregate aggregate : aggregates) {
                 List<AdminRolePO> userRolePOs = roleMap.get(aggregate.getId());
                 if (userRolePOs != null) {

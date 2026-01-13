@@ -36,84 +36,120 @@ public class RoleRepositoryImpl implements IRoleRepository {
 
     @Override
     public RoleAggregate save(RoleAggregate role) {
-        // 转换并保存角色
+        // 1. 转换聚合根为PO
         RolePO po = RoleConvertor.INSTANCE.toPO(role);
+        
+        // 2. 保存到数据库
         roleDao.insert(po);
 
+        // 3. 转换PO为聚合根并返回
         return RoleConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
     public RoleAggregate update(RoleAggregate role) {
-        // 转换并保存角色
+        // 1. 转换聚合根为PO
         RolePO po = RoleConvertor.INSTANCE.toPO(role);
 
+        // 2. 更新到数据库
         roleDao.updateById(po);
 
+        // 3. 转换PO为聚合根并返回
         return RoleConvertor.INSTANCE.toEntity(po);
     }
 
     @Override
     public Optional<RoleAggregate> findById(String id) {
+        // 1. 根据ID查询PO
         RolePO po = roleDao.findById(id);
         if (po == null) {
             return Optional.empty();
         }
+        
+        // 2. 转换PO为聚合根
         RoleAggregate aggregate = RoleConvertor.INSTANCE.toEntity(po);
-        // 加载权限ID
+        
+        // 3. 加载权限ID
         loadPermissionIds(aggregate);
+        
+        // 4. 返回结果
         return Optional.of(aggregate);
     }
 
     @Override
     public Optional<RoleAggregate> findByCode(String code) {
+        // 1. 根据编码查询PO
         RolePO po = roleDao.findByCode(code);
         if (po == null) {
             return Optional.empty();
         }
+        
+        // 2. 转换PO为聚合根
         RoleAggregate aggregate = RoleConvertor.INSTANCE.toEntity(po);
+        
+        // 3. 加载权限ID
         loadPermissionIds(aggregate);
+        
+        // 4. 返回结果
         return Optional.of(aggregate);
     }
 
     @Override
     public List<RoleAggregate> findByStatus(DataStatusEnum status) {
-        // 注意：这里需要将 DataStatusEnum 转换为数据库存储的值
-        // 由于数据库存储的是枚举名称（字符串），我们使用 name() 方法
-        List<RolePO> poList = roleDao.findByStatus(status != null ? status.name() : null);
+        // 1. 将枚举转换为数据库存储的值（枚举名称）
+        String statusValue = status != null ? status.name() : null;
+        
+        // 2. 根据状态查询PO列表
+        List<RolePO> poList = roleDao.findByStatus(statusValue);
+        
+        // 3. 转换PO列表并加载权限ID
         return convertAndLoadPermissionIds(poList);
     }
 
     @Override
     public List<RoleAggregate> findAllById(List<String> ids) {
+        // 1. 检查ID列表是否为空
         if (CollectionUtils.isEmpty(ids)) {
             return new ArrayList<>();
         }
+        
+        // 2. 根据ID列表查询PO列表
         List<RolePO> poList = roleDao.findAllById(ids);
+        
+        // 3. 转换PO列表并加载权限ID
         return convertAndLoadPermissionIds(poList);
     }
 
     @Override
     public List<RoleAggregate> findAllByCode(List<String> codes) {
+        // 1. 检查编码列表是否为空
         if (CollectionUtils.isEmpty(codes)) {
             return new ArrayList<>();
         }
+        
+        // 2. 根据编码列表查询PO列表
         List<RolePO> poList = roleDao.findAllByCode(codes);
+        
+        // 3. 转换PO列表并加载权限ID
         return convertAndLoadPermissionIds(poList);
     }
 
     @Override
     public List<RoleAggregate> findAll() {
+        // 1. 查询所有PO列表
         List<RolePO> poList = roleDao.findAll();
+        
+        // 2. 转换PO列表并加载权限ID
         return convertAndLoadPermissionIds(poList);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(String id) {
-        // 删除权限关联
+        // 1. 删除角色权限关联
         rolePermissionDao.deleteByRoleId(id);
-        // 删除角色
+        
+        // 2. 删除角色
         roleDao.deleteById(id);
     }
 
@@ -127,19 +163,17 @@ public class RoleRepositoryImpl implements IRoleRepository {
         return roleDao.existsByCode(code);
     }
 
-    /**
-     * 保存角色权限关联
-     */
     @Transactional(rollbackFor = Exception.class)
     public void saveRolePermissions(String roleId, List<String> permissionIds) {
+        // 1. 检查权限ID列表是否为空
         if (CollectionUtils.isEmpty(permissionIds)) {
             return;
         }
 
-        // 删除旧的关联
+        // 2. 删除旧的权限关联
         rolePermissionDao.deleteByRoleId(roleId);
 
-        // 创建新的关联
+        // 3. 创建新的权限关联PO列表
         List<RolePermissionPO> permissionPOs = permissionIds.stream()
                 .map(permissionId -> {
                     RolePermissionPO po = new RolePermissionPO();
@@ -149,52 +183,56 @@ public class RoleRepositoryImpl implements IRoleRepository {
                 })
                 .collect(Collectors.toList());
 
-        // 批量插入
+        // 4. 批量插入新的权限关联
         if (!CollectionUtils.isEmpty(permissionPOs)) {
             rolePermissionDao.batchInsert(permissionPOs);
         }
     }
 
-    /**
-     * 加载角色的权限ID列表
-     */
     private void loadPermissionIds(RoleAggregate aggregate) {
+        // 1. 检查聚合根是否有效
         if (aggregate == null || aggregate.getId() == null) {
             return;
         }
+        
+        // 2. 根据角色ID查询权限关联PO列表
         List<RolePermissionPO> permissionPOs = rolePermissionDao.findByRoleId(aggregate.getId());
+        
+        // 3. 提取权限ID列表
         List<String> permissionIds = permissionPOs.stream()
                 .map(RolePermissionPO::getPermissionId)
                 .collect(Collectors.toList());
+        
+        // 4. 设置权限ID列表到聚合根
         aggregate.setPermissionIds(permissionIds);
     }
 
-    /**
-     * 转换PO列表并加载权限ID
-     */
     private List<RoleAggregate> convertAndLoadPermissionIds(List<RolePO> poList) {
+        // 1. 检查PO列表是否为空
         if (CollectionUtils.isEmpty(poList)) {
             return new ArrayList<>();
         }
 
-        // 转换PO为聚合根
+        // 2. 转换PO列表为聚合根列表
         List<RoleAggregate> aggregates = poList.stream()
                 .map(RoleConvertor.INSTANCE::toEntity)
                 .collect(Collectors.toList());
 
-        // 批量加载权限ID
+        // 3. 批量加载权限ID
         if (!CollectionUtils.isEmpty(aggregates)) {
+            // 3.1 提取角色ID列表
             List<String> roleIds = aggregates.stream()
                     .map(RoleAggregate::getId)
                     .collect(Collectors.toList());
 
+            // 3.2 批量查询权限关联PO列表
             List<RolePermissionPO> allPermissionPOs = rolePermissionDao.findByRoleIds(roleIds);
 
-            // 按角色ID分组
+            // 3.3 按角色ID分组
             var permissionMap = allPermissionPOs.stream()
                     .collect(Collectors.groupingBy(RolePermissionPO::getRoleId));
 
-            // 设置权限ID列表
+            // 3.4 为每个聚合根设置权限ID列表
             for (RoleAggregate aggregate : aggregates) {
                 List<RolePermissionPO> rolePermissionPOs = permissionMap.get(aggregate.getId());
                 if (rolePermissionPOs != null) {
@@ -208,14 +246,18 @@ public class RoleRepositoryImpl implements IRoleRepository {
             }
         }
 
+        // 4. 返回聚合根列表
         return aggregates;
     }
 
     @Override
     public List<String> findCodesByAdminId(String adminId) {
+        // 1. 检查管理员ID是否有效
         if (adminId == null || adminId.trim().isEmpty()) {
             return new ArrayList<>();
         }
+        
+        // 2. 查询管理员关联的角色编码
         return roleDao.findCodesByAdminId(adminId);
     }
 }

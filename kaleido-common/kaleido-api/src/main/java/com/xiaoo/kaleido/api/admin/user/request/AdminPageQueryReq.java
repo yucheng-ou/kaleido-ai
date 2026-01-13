@@ -1,8 +1,7 @@
 package com.xiaoo.kaleido.api.admin.user.request;
 
 import com.xiaoo.kaleido.base.request.BasePageReq;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 
@@ -14,10 +13,10 @@ import java.io.Serial;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdminPageQueryReq extends BasePageReq {
-    
-    @Serial
-    private static final long serialVersionUID = 1L;
     
     /**
      * 真实姓名

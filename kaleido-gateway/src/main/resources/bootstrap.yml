@@ -1,16 +1,21 @@
+# 服务器配置
 server:
-  port: 9010
+  port: 9010  # 网关服务端口
 
+# Spring 应用配置
 spring:
   application:
-    name: kaleido-gateway
+    name: kaleido-gateway  # 应用名称，用于服务注册和配置中心
+  
   profiles:
-    active: dev
+    active: dev  # 激活的配置文件环境
+  
   config:
     import:
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
       - classpath:nacos.yml
       - classpath:cache.yml
+  
   cloud:
     gateway:
       server:
@@ -20,43 +25,56 @@ spring:
           globalcors:
             cors-configurations:
               '[/**]':
-                allowedHeaders: '*'
-                allowedMethods: '*'
-                allowedOrigins: '*'
+                allowedHeaders: '*'      # 允许所有请求头
+                allowedMethods: '*'      # 允许所有 HTTP 方法
+                allowedOrigins: '*'      # 允许所有来源（生产环境应限制）
           routes:
+            # 认证服务路由
             - id: kaleido-auth-server
-              uri: lb://kaleido-auth
+              uri: lb://kaleido-auth  # 负载均衡到认证服务
               predicates:
-                - Path=/kaleido-auth/**
-            - id: kaleido-user-server
-              uri: lb://kaleido-user
-              predicates:
-                - Path=/kaleido-user/**
-            - id: kaleido-notice-server
-              uri: lb://kaleido-notice
-              predicates:
-                - Path=/kaleido-notice/**
-            - id: kaleido-admin-server
-              uri: lb://kaleido-admin
-              predicates:
-                - Path=/kaleido-admin/**
+                - Path=/kaleido-auth/**  # 路径匹配规则
 
-# 认证策略配置
+            # 用户服务路由
+            - id: kaleido-user-server
+              uri: lb://kaleido-user  # 负载均衡到用户服务
+              predicates:
+                - Path=/kaleido-user/**  # 路径匹配规则
+
+            # 通知服务路由
+            - id: kaleido-notice-server
+              uri: lb://kaleido-notice  # 负载均衡到通知服务
+              predicates:
+                - Path=/kaleido-notice/**  # 路径匹配规则
+
+            # 管理后台服务路由
+            - id: kaleido-admin-server
+              uri: lb://kaleido-admin  # 负载均衡到管理后台服务
+              predicates:
+                - Path=/kaleido-admin/**  # 路径匹配规则
+
 gateway:
   auth:
+    # 认证策略列表
     strategies:
       # 公共路径（无需认证）
       - pattern: "/kaleido-auth/public/**"
         strategy: "PUBLIC"
+        # 说明：认证服务的公共接口，如登录、注册等
 
       # 管理员认证路径
       - pattern: "/kaleido-admin/**"
         strategy: "ADMIN"
+        # 说明：管理后台所有接口需要管理员权限
+
       - pattern: "/kaleido-notice/**"
         strategy: "ADMIN"
+        # 说明：通知服务接口需要管理员权限
       
       # 用户认证路径
       - pattern: "/kaleido-user/**"
         strategy: "USER"
+        # 说明：用户服务接口需要用户登录
     
+    # 默认策略（当没有路径匹配时使用）
     default-strategy: "PUBLIC"

@@ -69,6 +69,11 @@
             <artifactId>kaleido-cache</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-job</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

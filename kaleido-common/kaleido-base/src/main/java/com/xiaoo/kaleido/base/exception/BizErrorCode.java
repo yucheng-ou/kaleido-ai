@@ -3,11 +3,12 @@ package com.xiaoo.kaleido.base.exception;
 import lombok.Getter;
 
 /**
+ * 业务错误码枚举
+ * 定义系统通用的业务错误码
+ *
  * @author ouyucheng
  * @date 2025/11/7
- * @description
  */
-
 @Getter
 public enum BizErrorCode implements ErrorCode {
 

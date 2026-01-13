@@ -26,16 +26,16 @@ public class NoticeDomainServiceImpl implements INoticeDomainService {
 
     @Override
     public NoticeAggregate createSmsVerifyCodeAggregate(String mobile, String content) {
-        // 默认目标类型为普通用户
+        // 1.默认目标类型为普通用户
         return createSmsVerifyCodeAggregate(mobile, content, TargetTypeEnum.USER);
     }
 
     @Override
     public NoticeAggregate createSmsVerifyCodeAggregate(String mobile, String content, TargetTypeEnum targetType) {
-        //推送目标值对象
+        // 1.创建推送目标值对象
         TargetAddress targetAddress = TargetAddress.create(mobile, NoticeTypeEnum.SMS, targetType);
 
-        //创建最终通知聚合根
+        // 2.创建最终通知聚合根
         return NoticeAggregate.create(NoticeTypeEnum.SMS, targetAddress, BusinessTypeEnum.VERIFY_CODE, content);
     }
 }

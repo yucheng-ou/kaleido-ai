@@ -1,6 +1,6 @@
 {
   "serverUrl": "http://localhost:8082",
-  "serverEnv": "用户服务",
+  "serverEnv": "{{base_url}}",
   "allInOne": true,
   "outPath": "../../doc/api/user",
   "coverOld": true,

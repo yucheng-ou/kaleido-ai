@@ -64,6 +64,10 @@
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-cache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-api</artifactId>
+        </dependency>
 
     </dependencies>
 

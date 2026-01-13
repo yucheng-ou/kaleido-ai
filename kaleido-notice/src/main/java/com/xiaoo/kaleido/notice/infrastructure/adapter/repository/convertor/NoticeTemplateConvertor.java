@@ -19,6 +19,9 @@ public interface NoticeTemplateConvertor {
 
     /**
      * 将 NoticeTemplateAggregate 转换为 NoticeTemplatePO
+     * 
+     * @param aggregate 通知模板聚合根
+     * @return 通知模板持久化对象
      */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "code", target = "templateCode")
@@ -29,6 +32,9 @@ public interface NoticeTemplateConvertor {
 
     /**
      * 将 NoticeTemplatePO 转换为 NoticeTemplateAggregate
+     * 
+     * @param po 通知模板持久化对象
+     * @return 通知模板聚合根
      */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "templateCode", target = "code")

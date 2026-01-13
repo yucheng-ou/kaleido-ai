@@ -3,7 +3,7 @@ package com.xiaoo.kaleido.user.domain.model.entity;
 import com.xiaoo.kaleido.base.constant.enums.UserGenderEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
-import com.xiaoo.kaleido.user.domain.constant.UserStatus;
+import com.xiaoo.kaleido.api.user.enums.UserStatus;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
 import lombok.Data;
@@ -14,6 +14,8 @@ import java.util.Date;
 
 /**
  * 用户实体
+ * <p>
+ * 用户领域模型的核心实体，包含用户的基本信息、状态和业务行为
  *
  * @author ouyucheng
  * @date 2025/12/16
@@ -25,62 +27,71 @@ public class User extends BaseEntity {
 
     /**
      * 手机号（唯一）
+     * 用户注册和登录的主要标识，必须符合手机号格式规范
      */
     private String mobile;
 
     /**
-     * 密码哈希值
-     */
-    private String passwordHash;
-
-    /**
      * 昵称
+     * 用户显示名称，长度限制为2-20个字符
      */
     private String nickName;
 
     /**
      * 用户邀请码（唯一）
+     * 用户用于邀请新用户的唯一代码，长度为6位字母数字组合
      */
     private String inviteCode;
 
     /**
      * 邀请人ID（可为空）
+     * 邀请该用户注册的用户ID，用于建立邀请关系
      */
     private String inviterId;
 
     /**
      * 最后登录时间
+     * 记录用户最后一次登录的时间
      */
     private Date lastLoginTime;
 
     /**
      * 头像URL
+     * 用户头像的URL地址
      */
     private String avatar;
 
     /**
      * 性别
+     * 用户性别，使用枚举类型表示
      */
     private UserGenderEnum gender;
 
     /**
      * 用户状态
+     * 用户当前状态，包括活跃、冻结、删除等
      */
     private UserStatus status;
 
     /**
      * 创建用户实体
+     * <p>
+     * 用于新用户注册时创建用户实体，会自动生成用户ID并设置初始状态
      *
-     * @param telephone  手机号
-     * @param nickName   昵称
-     * @param inviteCode 邀请码
-     * @param inviterId  邀请人ID（可选）
+     * @param telephone  手机号，必须符合手机号格式规范
+     * @param nickName   昵称，长度限制为2-20个字符
+     * @param inviteCode 邀请码，不能为空
+     * @param inviterId  邀请人ID，可为空表示无邀请人
      * @return 用户实体
+     * @throws IllegalArgumentException 当参数不符合要求时抛出
      */
     public static User create(String telephone, String nickName, String inviteCode, String inviterId) {
+        // 1.生成用户ID
+        String userId = SnowflakeUtil.newSnowflakeId();
 
+        // 2.构建用户实体
         return User.builder()
-                .id(SnowflakeUtil.newSnowflakeId())
+                .id(userId)
                 .mobile(telephone)
                 .nickName(nickName)
                 .inviteCode(inviteCode)
@@ -147,16 +158,6 @@ public class User extends BaseEntity {
             throw UserException.of(UserErrorCode.USER_IS_DELETED);
         }
         this.status = UserStatus.DELETED;
-    }
-
-    /**
-     * 验证密码
-     *
-     * @param passwordHash 待验证的密码哈希
-     * @return 是否匹配
-     */
-    public boolean verifyPassword(String passwordHash) {
-        return this.passwordHash.equals(passwordHash);
     }
 
     /**

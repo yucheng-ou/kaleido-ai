@@ -1,10 +1,12 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
 import com.xiaoo.kaleido.admin.application.command.RoleCommandService;
 import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ public class RoleController {
      * @param command 创建角色命令
      * @return 角色ID
      */
+    @SaCheckPermission(value = "admin:role:create", type = StpAdminUtil.TYPE)
     @PostMapping
     public Result<String> createRole(
             @Valid @RequestBody AddRoleCommand command) {
@@ -49,6 +52,7 @@ public class RoleController {
      * @param command 更新角色信息命令（不包含角色ID）
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:role:update", type = StpAdminUtil.TYPE)
     @PutMapping("/{roleId}")
     public Result<Void> updateRole(
             @PathVariable String roleId,
@@ -63,10 +67,11 @@ public class RoleController {
      * @param roleId 角色ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:role:enable", type = StpAdminUtil.TYPE)
     @PutMapping("/{roleId}/enable")
     public Result<Void> enableRole(
             @PathVariable String roleId) {
-        roleCommandService.enableRole(new EnableRoleCommand(roleId));
+        roleCommandService.enableRole(roleId);
         return Result.success();
     }
 
@@ -76,10 +81,11 @@ public class RoleController {
      * @param roleId 角色ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:role:disable", type = StpAdminUtil.TYPE)
     @PutMapping("/{roleId}/disable")
     public Result<Void> disableRole(
             @PathVariable String roleId) {
-        roleCommandService.disableRole(new DisableRoleCommand(roleId));
+        roleCommandService.disableRole(roleId);
         return Result.success();
     }
 
@@ -89,6 +95,7 @@ public class RoleController {
      * @param roleId 角色ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:role:delete", type = StpAdminUtil.TYPE)
     @DeleteMapping("/{roleId}")
     public Result<Void> deleteRole(
             @PathVariable String roleId) {
@@ -103,6 +110,7 @@ public class RoleController {
      * @param command 分配权限给角色命令（不包含角色ID）
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:role:assign-permissions", type = StpAdminUtil.TYPE)
     @PostMapping("/{roleId}/permissions")
     public Result<Void> assignPermissions(
             @PathVariable String roleId,
@@ -118,6 +126,7 @@ public class RoleController {
      * @param roleId 角色ID
      * @return 角色信息
      */
+    @SaCheckPermission(value = "admin:role:read", type = StpAdminUtil.TYPE)
     @GetMapping("/{roleId}")
     public Result<RoleInfoResponse> getRoleById(
             @PathVariable String roleId) {
@@ -131,6 +140,7 @@ public class RoleController {
      * @param code 角色编码
      * @return 角色信息
      */
+    @SaCheckPermission(value = "admin:role:read", type = StpAdminUtil.TYPE)
     @GetMapping("/code/{code}")
     public Result<RoleInfoResponse> getRoleByCode(
             @PathVariable String code) {
@@ -144,6 +154,7 @@ public class RoleController {
      *
      * @return 角色列表
      */
+    @SaCheckPermission(value = "admin:role:read", type = StpAdminUtil.TYPE)
     @GetMapping("/list")
     public Result<List<RoleInfoResponse>> getRoleList() {
         List<RoleInfoResponse> roleList = roleQueryService.getRoleList();

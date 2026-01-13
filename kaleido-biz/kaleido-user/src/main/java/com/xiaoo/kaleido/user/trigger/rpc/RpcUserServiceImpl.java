@@ -30,22 +30,19 @@ public class RpcUserServiceImpl implements IRpcUserService {
     private final UserQueryService userQueryService;
 
     @Override
-    public Result<UserInfoResponse> getById(
-            String userId) {
+    public Result<UserInfoResponse> getById(String userId) {
         UserInfoResponse data = userQueryService.findById(userId);
         return Result.success(data);
     }
 
     @Override
-    public Result<UserInfoResponse> getByTelephone(
-            String telephone) {
+    public Result<UserInfoResponse> getByTelephone(String telephone) {
         UserInfoResponse data = userQueryService.findByTelephone(telephone);
         return Result.success(data);
     }
 
     @Override
-    public Result<String> register(
-            RegisterUserCommand command) {
+    public Result<String> register(RegisterUserCommand command) {
         String data = userCommandService.createUser(command);
         return Result.success(data);
     }

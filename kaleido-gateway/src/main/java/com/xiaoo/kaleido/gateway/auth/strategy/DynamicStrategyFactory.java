@@ -1,10 +1,11 @@
-package com.xiaoo.kaleido.gateway.auth;
+package com.xiaoo.kaleido.gateway.auth.strategy;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.gateway.auth.config.AuthStrategyConfig;
+import com.xiaoo.kaleido.gateway.auth.strategy.factory.AdminPathStrategy;
 import com.xiaoo.kaleido.gateway.enums.AuthStrategyEnum;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 动态策略工厂类
- * <p>
+ * 
  * 根据配置文件动态加载认证策略，使用策略模式实现灵活的认证检查
  * 使用 AntPathMatcher 进行路径匹配，支持通配符匹配
  * 配置从 application.yml 加载，支持动态配置管理
- * </p>
+ * 
  */
 @Slf4j
 @Component
@@ -89,6 +90,9 @@ public class DynamicStrategyFactory {
 
     /**
      * 根据策略类型创建策略实例
+     * 
+     * @param strategyType 策略类型枚举
+     * @return 对应的认证策略实例
      */
     private LoginCheckStrategy createStrategy(AuthStrategyEnum strategyType) {
         return switch (strategyType) {
@@ -100,11 +104,11 @@ public class DynamicStrategyFactory {
 
     /**
      * 根据请求路径获取对应的认证策略
-     * <p>
+     * 
      * 使用 Caffeine 缓存提高性能，避免重复路径匹配计算
      * 按照配置列表的顺序进行匹配，第一个匹配的路径模式对应的策略将被返回
      * 如果没有匹配的路径模式，则返回默认策略
-     * </p>
+     * 
      *
      * @param requestPath 请求路径
      * @return 对应的认证策略实例
@@ -116,10 +120,10 @@ public class DynamicStrategyFactory {
 
     /**
      * 查找请求路径对应的认证策略（缓存未命中时调用）
-     * <p>
+     * 
      * 按照配置列表的顺序进行匹配，第一个匹配的路径模式对应的策略将被返回
      * 如果没有匹配的路径模式，则返回默认策略
-     * </p>
+     * 
      *
      * @param requestPath 请求路径
      * @return 对应的认证策略实例
@@ -138,7 +142,10 @@ public class DynamicStrategyFactory {
     }
 
     /**
-     * 获取缓存统计信息（用于监控和调试）
+     * 获取缓存统计信息
+     * 
+     * 用于监控和调试缓存性能，包括命中率、加载次数、缓存大小等信息
+     * 
      *
      * @return 缓存统计信息字符串
      */
@@ -147,7 +154,11 @@ public class DynamicStrategyFactory {
     }
 
     /**
-     * 清空缓存（用于配置更新等场景）
+     * 清空缓存
+     * 
+     * 用于配置更新、系统维护等需要清空缓存的场景
+     * 调用此方法将清空所有缓存的路径-策略映射
+     * 
      */
     public void clearCache() {
         pathCache.invalidateAll();

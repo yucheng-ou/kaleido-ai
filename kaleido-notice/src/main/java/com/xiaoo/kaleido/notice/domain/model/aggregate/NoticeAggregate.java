@@ -29,6 +29,8 @@ public class NoticeAggregate extends BaseEntity {
 
     private static final Integer VERIFY_CODE_LENGTH = 6;
 
+    public static final Integer MAX_RETRY_NUM = 3;
+
     /**
      * 通知类型
      */
@@ -91,6 +93,7 @@ public class NoticeAggregate extends BaseEntity {
                 .status(NoticeStatusEnum.PENDING)
                 .businessType(businessType)
                 .content(content)
+                .retryStatus(RetryStatus.init())
                 .build();
     }
 
@@ -121,14 +124,21 @@ public class NoticeAggregate extends BaseEntity {
         this.sentAt = new Date();
     }
 
+
     /**
      * 标记为发送失败
      *
      * @param resultMessage 失败原因
      */
     public void markAsFailed(String resultMessage) {
-        this.status = NoticeStatusEnum.FAILED;
-        this.resultMessage = resultMessage;
+        if (isNeedRetry()) {
+            //需要进行重试 标记为待发送 更新重试次数
+            this.status = NoticeStatusEnum.PENDING;
+            retryStatus.retry();
+        } else {
+            //不需要重试了 直接记录为发送失败
+            this.status = NoticeStatusEnum.FAILED;
+        }
     }
 
     /**
@@ -172,6 +182,10 @@ public class NoticeAggregate extends BaseEntity {
      */
     public String getTargetAddress() {
         return target != null ? target.getFormattedAddress() : null;
+    }
+
+    public boolean isNeedRetry() {
+        return retryStatus.getRetryNum() <= MAX_RETRY_NUM;
     }
 
 }

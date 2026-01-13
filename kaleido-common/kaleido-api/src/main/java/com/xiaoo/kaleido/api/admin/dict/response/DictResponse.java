@@ -1,7 +1,8 @@
 package com.xiaoo.kaleido.api.admin.dict.response;
 
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
-import lombok.Data;
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
 
 import java.util.Date;
 
@@ -12,7 +13,11 @@ import java.util.Date;
  * @date 2025/12/25
  */
 @Data
-public class DictResponse {
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DictResponse extends BaseResp {
 
     /**
      * 字典ID

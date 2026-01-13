@@ -29,22 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserAuthController {
     
     private final UserAuthCommandService userAuthCommandService;
-    
-    /**
-     * 发送短信验证码
-     *
-     * @param command 发送短信验证码命令
-     * @return 短信验证码响应
-     */
-    @PostMapping("/sms-code")
-    public Result<SmsCodeResponse> sendSmsCode(
-            @Valid @RequestBody SendSmsCodeCommand command) {
-        
-        log.info("接收发送短信验证码请求，手机号: {}", command.getMobile());
-        SmsCodeResponse response = userAuthCommandService.sendSmsCode(command);
-        return Result.success(response);
-    }
-    
+
     /**
      * 用户注册
      *

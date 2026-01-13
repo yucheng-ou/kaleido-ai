@@ -32,6 +32,8 @@ public class RoleQueryServiceImpl implements RoleQueryService {
     public RoleInfoResponse findById(String roleId) {
         log.debug("根据ID查询角色，roleId={}", roleId);
 
+        // 1. 调用仓储层查询角色聚合根
+        // 2. 如果存在则转换为响应对象，否则返回null
         return roleRepository.findById(roleId)
                 .map(roleConvertor::toResponse)
                 .orElse(null);
@@ -41,17 +43,21 @@ public class RoleQueryServiceImpl implements RoleQueryService {
     public RoleInfoResponse findByCode(String code) {
         log.debug("根据编码查询角色，code={}", code);
 
+        // 1. 调用仓储层根据编码查询角色聚合根
+        // 2. 如果存在则转换为响应对象，否则返回null
         return roleRepository.findByCode(code)
                 .map(roleConvertor::toResponse)
                 .orElse(null);
     }
 
-
     @Override
     public List<RoleInfoResponse> getRoleList() {
         log.debug("获取角色列表");
 
+        // 1. 调用仓储层查询所有角色聚合根列表
         List<RoleAggregate> aggregateList = roleRepository.findAll();
+        
+        // 2. 转换为响应对象列表
         return aggregateList.stream()
                 .map(roleConvertor::toResponse)
                 .collect(Collectors.toList());
@@ -61,6 +67,7 @@ public class RoleQueryServiceImpl implements RoleQueryService {
     public boolean existsByCode(String code) {
         log.debug("检查角色编码是否存在，code={}", code);
 
+        // 调用仓储层检查角色编码是否存在
         return roleRepository.existsByCode(code);
     }
 
@@ -68,8 +75,10 @@ public class RoleQueryServiceImpl implements RoleQueryService {
     public Set<String> getRoleCodesId(String adminId) {
         log.debug("根据管理员ID查询角色编码，adminId={}", adminId);
 
-        // 直接调用仓储层的新接口查询角色编码
+        // 1. 调用仓储层查询管理员关联的角色编码
         List<String> roleCodes = roleRepository.findCodesByAdminId(adminId);
+        
+        // 2. 转换为集合返回
         return new HashSet<>(roleCodes);
     }
 }

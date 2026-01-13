@@ -4,9 +4,11 @@ import com.xiaoo.kaleido.base.exception.ErrorCode;
 import lombok.Getter;
 
 /**
+ * 认证授权错误码枚举
+ * 定义认证授权相关的错误码
+ *
  * @author ouyucheng
  * @date 2025/11/19
- * @description
  */
 @Getter
 public enum AuthErrorCode implements ErrorCode {

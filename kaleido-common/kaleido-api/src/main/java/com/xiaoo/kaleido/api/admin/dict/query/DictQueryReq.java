@@ -1,7 +1,8 @@
 package com.xiaoo.kaleido.api.admin.dict.query;
 
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
-import lombok.Data;
+import com.xiaoo.kaleido.base.request.BaseReq;
+import lombok.*;
 
 /**
  * 字典查询请求
@@ -10,7 +11,11 @@ import lombok.Data;
  * @date 2025/12/30
  */
 @Data
-public class DictQueryReq {
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DictQueryReq extends BaseReq {
 
     /**
      * 字典类型编码

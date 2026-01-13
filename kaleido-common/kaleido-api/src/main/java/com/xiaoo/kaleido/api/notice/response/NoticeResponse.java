@@ -2,22 +2,22 @@ package com.xiaoo.kaleido.api.notice.response;
 import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
 import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
 import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
+
 import java.util.Date;
 /**
- * 閫氱煡鍝嶅簲瀵硅薄
+ * 通知响应对象
  *
  * @author ouyucheng
  * @date 2025/12/30
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class NoticeResponse {
+@NoArgsConstructor
+public class NoticeResponse extends BaseResp {
     /**
      * 通知ID
      */

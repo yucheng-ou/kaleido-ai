@@ -2,8 +2,7 @@ package com.xiaoo.kaleido.api.user.query;
 
 import com.xiaoo.kaleido.base.constant.enums.UserGenderEnum;
 import com.xiaoo.kaleido.base.request.BasePageReq;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serial;
 
@@ -15,16 +14,16 @@ import java.io.Serial;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserPageQueryReq extends BasePageReq {
-    
-    @Serial
-    private static final long serialVersionUID = 1L;
-    
+
     private String nickName;
-    
+
     private String telephone;
-    
+
     private Integer status;
-    
+
     private UserGenderEnum gender;
 }

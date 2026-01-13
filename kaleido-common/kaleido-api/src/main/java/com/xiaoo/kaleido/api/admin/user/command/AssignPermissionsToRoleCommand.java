@@ -2,10 +2,8 @@ package com.xiaoo.kaleido.api.admin.user.command;
 import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.List;
 /**
  * 为角色分配权限命令
@@ -14,9 +12,10 @@ import java.util.List;
  * @date 2025/12/31
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class AssignPermissionsToRoleCommand extends BaseCommand {
     
     /**

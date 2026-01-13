@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.notice.infrastructure.adapter;
 
 import com.xiaoo.kaleido.notice.types.annotation.NoticeAdapter;
 import com.xiaoo.kaleido.api.notice.enums.NoticeTypeEnum;
+import com.xiaoo.kaleido.base.result.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,8 @@ import org.springframework.stereotype.Service;
 public class NoticeEmailService extends AbstractNoticeAdapterService {
 
     @Override
-    public boolean sendNoticeByType(String target, String content) {
+    public Result<Void> sendNoticeByType(String target, String content) {
         //TODO 实现邮件通知
-        return true;
+        return Result.success();
     }
 }

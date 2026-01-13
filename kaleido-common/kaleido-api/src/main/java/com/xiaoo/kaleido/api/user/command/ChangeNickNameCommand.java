@@ -3,10 +3,8 @@ import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 /**
  * 淇敼鏄电О鍛戒护
  *
@@ -14,9 +12,10 @@ import lombok.NoArgsConstructor;
  * @date 2025/12/16
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class ChangeNickNameCommand extends BaseCommand {
     /**
      * 用户ID

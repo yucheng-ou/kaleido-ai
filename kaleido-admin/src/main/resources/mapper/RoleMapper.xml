@@ -163,8 +163,8 @@
     <select id="findCodesByAdminId" resultType="string">
         SELECT r.code
         FROM t_role r
-        INNER JOIN t_admin_user_role aur ON r.id = aur.role_id
-        WHERE r.deleted = 0 AND aur.deleted = 0 AND aur.admin_user_id = #{adminId}
+        INNER JOIN t_admin_role aur ON r.id = aur.role_id
+        WHERE r.deleted = 0 AND aur.deleted = 0 AND aur.admin_id = #{adminId}
         ORDER BY r.created_at DESC
     </select>
 </mapper>

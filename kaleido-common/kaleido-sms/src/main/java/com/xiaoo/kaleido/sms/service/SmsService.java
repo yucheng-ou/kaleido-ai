@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.sms.service;
 
+import com.xiaoo.kaleido.base.result.Result;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -18,10 +19,10 @@ public class SmsService {
      * @param msg    短信内容
      * @return 是否发送成功
      */
-    public Boolean sendSmsMsg(String mobile, String msg) {
+    public Result<Void> sendSmsMsg(String mobile, String msg) {
         //TODO 后续集成阿里云短信服务
 
-        return true;
+        return Result.success();
     }
 
 }

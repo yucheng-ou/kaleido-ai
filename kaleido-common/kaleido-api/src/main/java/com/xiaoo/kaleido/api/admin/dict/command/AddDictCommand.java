@@ -4,10 +4,7 @@ import com.xiaoo.kaleido.base.command.BaseCommand;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 添加字典命令
@@ -16,9 +13,10 @@ import lombok.NoArgsConstructor;
  * @date 2025/12/30
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class AddDictCommand extends BaseCommand {
 
     /**

@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.notice.application;
 
+import cn.hutool.json.JSONUtil;
 import com.xiaoo.kaleido.api.admin.dict.IRpcAdminDictService;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.api.notice.command.AddNoticeTemplateCommand;
@@ -51,24 +52,26 @@ public class NoticeCommandService {
 
     @Transactional(rollbackFor = Exception.class)
     public String sendSmsVerifyCode(SendSmsVerifyCodeCommand command) {
+        // 1.参数处理
         String mobile = command.getMobile().trim();
 
+        // 2.根据目标类型确定字典编码
         String dictCode = switch (command.getTargetType()) {
             case USER -> DictConstant.NoticeTemplateDict.DICT_CODE_VERIFY_CODE_USER;
             case ADMIN -> DictConstant.NoticeTemplateDict.DICT_CODE_VERIFY_CODE_ADMIN;
         };
 
-        // 查找验证码通知模板code
+        // 3.远程调用获取验证码通知模板编码
         Result<DictResponse> dictResult = rpcAdminSysService.getDictByCode(DictConstant.NoticeTemplateDict.TYPE_CODE, dictCode);
 
-        // 检查远程调用结果
+        // 4.检查远程调用结果
         if (dictResult == null || !dictResult.getSuccess() || dictResult.getData() == null) {
             throw NoticeException.of(NoticeErrorCode.VERIFICATION_CODE_TEMPLATE_EMPTY);
         }
 
         String templateCode = dictResult.getData().getDictValue();
 
-        // 根据code查找模板
+        // 5.根据编码查找模板
         Optional<NoticeTemplateAggregate> templateOpt = noticeTemplateRepository.findByCode(templateCode);
         if (templateOpt.isEmpty()) {
             throw NoticeException.of(NoticeErrorCode.VERIFICATION_CODE_TEMPLATE_EMPTY);
@@ -76,37 +79,44 @@ public class NoticeCommandService {
 
         NoticeTemplateAggregate template = templateOpt.get();
 
-        // 生成验证码
+        // 6.生成验证码
         String verifyCode = NoticeAggregate.generateVerifyCode();
 
-        // 渲染模板内容
+        // 7.渲染模板内容
         String noticeContent = template.render(verifyCode);
 
-        // 创建通知聚合根
+        // 8.创建通知聚合根
         NoticeAggregate smsVerifyCodeAggregate = noticeDomainService.createSmsVerifyCodeAggregate(mobile, noticeContent, command.getTargetType());
 
-        // 发送通知
+        // 9.发送通知
         INoticeAdapterService noticeAdapterService = noticeServiceFactory.getNoticeAdapterService(NoticeTypeEnum.SMS);
-        noticeAdapterService.sendNotice(smsVerifyCodeAggregate.getTargetAddress(), noticeContent);
+        Result<Void> sendResult = noticeAdapterService.sendNotice(smsVerifyCodeAggregate.getTargetAddress(), noticeContent);
 
-        // 保存通知记录
+        // 10.保存通知记录
+        if (sendResult.getSuccess()) {
+            smsVerifyCodeAggregate.markAsSuccess(JSONUtil.toJsonStr(sendResult));
+        } else {
+            smsVerifyCodeAggregate.markAsFailed(JSONUtil.toJsonStr(sendResult));
+        }
         noticeRepository.save(smsVerifyCodeAggregate);
+
+        // 11.保存验证码到缓存
+        noticeRepository.cacheVerifyCode(command.getTargetType(), command.getMobile(), verifyCode);
 
         log.info("短信验证码发送成功，手机号: {}, 目标类型: {}, 验证码: {}", mobile, command.getTargetType(), verifyCode);
         return verifyCode;
     }
 
     public Boolean checkSmsVerifyCode(CheckSmsVerifyCodeCommand command) {
-        //TODO 验证码校验
-        return true;
+        //直接从缓存取出验证码进行校验
+        return noticeRepository.checkVerifyCode(command.getTargetType(), command.getMobile(), command.getVerifyCode());
     }
 
     public String addNoticeTemplate(AddNoticeTemplateCommand command) {
-
-        // 调用领域服务处理业务逻辑
+        // 1.调用领域服务处理业务逻辑
         NoticeTemplateAggregate template = noticeTemplateDomainService.createNoticeTemplate(command.getName(), command.getCode(), command.getContent());
 
-        // 保存模板
+        // 2.保存模板
         noticeTemplateRepository.save(template);
 
         log.info("通知模板添加成功，模板ID: {}, 模板编码: {}", template.getId(), template.getCode());

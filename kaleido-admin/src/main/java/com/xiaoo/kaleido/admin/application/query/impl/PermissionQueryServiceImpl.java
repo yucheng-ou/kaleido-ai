@@ -36,6 +36,8 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public PermissionInfoResponse findById(String permissionId) {
         log.debug("根据ID查询权限，permissionId={}", permissionId);
         
+        // 1. 调用仓储层查询权限聚合根
+        // 2. 如果存在则转换为响应对象，否则返回null
         return permissionRepository.findById(permissionId)
                 .map(permissionConvertor::toResponse)
                 .orElse(null);
@@ -45,6 +47,8 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public PermissionInfoResponse findByCode(String code) {
         log.debug("根据编码查询权限，code={}", code);
         
+        // 1. 调用仓储层根据编码查询权限聚合根
+        // 2. 如果存在则转换为响应对象，否则返回null
         return permissionRepository.findByCode(code)
                 .map(permissionConvertor::toResponse)
                 .orElse(null);
@@ -54,7 +58,10 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public List<PermissionInfoResponse> findByParentId(String parentId) {
         log.debug("根据父权限ID查询子权限，parentId={}", parentId);
         
+        // 1. 调用仓储层根据父权限ID查询子权限聚合根列表
         List<PermissionAggregate> aggregateList = permissionRepository.findByParentId(parentId);
+        
+        // 2. 转换为响应对象列表
         return aggregateList.stream()
                 .map(permissionConvertor::toResponse)
                 .collect(Collectors.toList());
@@ -64,7 +71,10 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public List<PermissionInfoResponse> findRootPermissions() {
         log.debug("查询根权限列表");
         
+        // 1. 调用仓储层查询根权限聚合根列表
         List<PermissionAggregate> aggregateList = permissionRepository.findRootPermissions();
+        
+        // 2. 转换为响应对象列表
         return aggregateList.stream()
                 .map(permissionConvertor::toResponse)
                 .collect(Collectors.toList());
@@ -74,7 +84,10 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public List<PermissionInfoResponse> getPermissionTree() {
         log.debug("获取权限树");
         
+        // 1. 调用仓储层获取权限树聚合根列表
         List<PermissionAggregate> aggregateList = permissionRepository.getPermissionTree();
+        
+        // 2. 转换为响应对象列表
         return aggregateList.stream()
                 .map(permissionConvertor::toResponse)
                 .collect(Collectors.toList());
@@ -84,6 +97,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
     public boolean existsByCode(String code) {
         log.debug("检查权限编码是否存在，code={}", code);
         
+        // 调用仓储层检查权限编码是否存在
         return permissionRepository.existsByCode(code);
     }
 

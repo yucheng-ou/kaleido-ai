@@ -4,7 +4,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.reactor.filter.SaReactorFilter;
 import cn.dev33.satoken.util.SaResult;
-import com.xiaoo.kaleido.gateway.auth.DynamicStrategyFactory;
+import com.xiaoo.kaleido.gateway.auth.strategy.DynamicStrategyFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import java.util.Objects;
  * <p>
  * 配置网关的全局认证过滤器，使用策略模式根据请求路径选择不同的认证策略
  * 支持从配置文件动态加载策略配置
- * </p>
  */
 @Configuration
 @Slf4j
@@ -39,7 +38,6 @@ public class SaTokenConfig {
      * 2. 包含所有其他路径进行认证检查
      * 3. 使用动态策略工厂根据路径选择认证策略
      * 4. 全局异常处理
-     * </p>
      *
      * @return 配置好的 SaReactorFilter 实例
      */
@@ -61,6 +59,12 @@ public class SaTokenConfig {
 
     }
 
+    /**
+     * 处理认证异常，返回统一的错误响应
+     *
+     * @param throwable 捕获的异常
+     * @return 统一的错误响应结果
+     */
     private SaResult getSaResult(Throwable throwable) {
         if (Objects.requireNonNull(throwable) instanceof NotLoginException) {
             log.error("请先登录");

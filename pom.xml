@@ -47,7 +47,6 @@
 
         <kaleido.version>0.0.1-SNAPSHOT</kaleido.version>
 
-
         <lombok.version>1.18.36</lombok.version>
         <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>
         <guava.version>32.1.3-jre</guava.version>
@@ -65,6 +64,7 @@
         <sa-token.version>1.44.0</sa-token.version>
         <jsqlparser.version>4.9</jsqlparser.version>
         <smart-doc.version>2.7.7</smart-doc.version>
+        <xxl-job.version>2.4.0</xxl-job.version>
 
     </properties>
 
@@ -236,6 +236,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-job</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
@@ -290,12 +296,18 @@
                 <version>${smart-doc.version}</version>
                 <scope>provided</scope>
             </dependency>
-            
+
             <!-- smart-doc Maven 插件 -->
             <dependency>
                 <groupId>com.github.shalousun</groupId>
                 <artifactId>smart-doc-maven-plugin</artifactId>
                 <version>${smart-doc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xuxueli</groupId>
+                <artifactId>xxl-job-core</artifactId>
+                <version>${xxl-job.version}</version>
             </dependency>
 
         </dependencies>

@@ -31,8 +31,9 @@
 
     <!-- 根据目标地址查找通知列表 -->
     <select id="findByTargetAddress" resultMap="NoticeMap">
-        SELECT <include refid="NoticeColumns"/>
-        FROM notice
+        SELECT
+        <include refid="NoticeColumns"/>
+        FROM t_notice
         WHERE target_address = #{targetAddress} AND deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -40,7 +41,7 @@
     <!-- 根据状态查找通知列表 -->
     <select id="findByStatus" resultMap="NoticeMap">
         SELECT <include refid="NoticeColumns"/>
-        FROM notice
+        FROM t_notice
         WHERE status = #{status} AND deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -48,7 +49,7 @@
     <!-- 根据业务类型查找通知列表 -->
     <select id="findByBusinessType" resultMap="NoticeMap">
         SELECT <include refid="NoticeColumns"/>
-        FROM notice
+        FROM t_notice
         WHERE business_type = #{businessType} AND deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -66,7 +67,7 @@
     <!-- 根据条件分页查询通知 -->
     <select id="selectByCondition" resultMap="NoticeMap">
         SELECT <include refid="NoticeColumns"/>
-        FROM notice
+        FROM t_notice
         WHERE deleted = 0
         <include refid="NoticeQueryConditions"/>
         ORDER BY created_at DESC
@@ -75,7 +76,7 @@
     <!-- 查找需要重试的通知列表 -->
     <select id="findRetryNotices" resultMap="NoticeMap">
         SELECT <include refid="NoticeColumns"/>
-        FROM notice
+        FROM t_notice
         WHERE deleted = 0
         AND status = 'FAILED'
         AND retry_num <![CDATA[ < ]]> max_retry_num

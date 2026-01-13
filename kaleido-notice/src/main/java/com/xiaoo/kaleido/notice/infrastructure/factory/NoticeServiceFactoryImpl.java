@@ -18,7 +18,6 @@ import java.util.Map;
  * <p>
  * 基础设施层实现，负责根据通知类型获取对应的适配器服务
  * 使用策略模式，通过 {@link NoticeAdapter} 注解自动发现和注册适配器
- * </p>
  *
  * @author ouyucheng
  * @date 2025/12/19
@@ -36,7 +35,7 @@ public class NoticeServiceFactoryImpl implements INoticeServiceFactory {
      */
     public NoticeServiceFactoryImpl(List<INoticeAdapterService> adapterServices) {
         this.adapterServiceMap = new HashMap<>();
-        
+
         for (INoticeAdapterService adapterService : adapterServices) {
             NoticeAdapter annotation = adapterService.getClass().getAnnotation(NoticeAdapter.class);
             if (annotation != null) {
@@ -50,8 +49,8 @@ public class NoticeServiceFactoryImpl implements INoticeServiceFactory {
                 }
             }
         }
-        
-        log.info("通知服务工厂初始化完成，共注册 {} 个适配器: {}", 
+
+        log.info("通知服务工厂初始化完成，共注册 {} 个适配器: {}",
                 adapterServiceMap.size(), adapterServiceMap.keySet());
     }
 
@@ -60,13 +59,13 @@ public class NoticeServiceFactoryImpl implements INoticeServiceFactory {
         if (noticeType == null) {
             throw NoticeException.of(NoticeErrorCode.NOTICE_TYPE_EMPTY);
         }
-        
+
         INoticeAdapterService adapterService = adapterServiceMap.get(noticeType);
         if (adapterService == null) {
             log.error("不支持的通知类型: {}", noticeType);
             throw NoticeException.of(NoticeErrorCode.UNSUPPORTED_NOTICE_TYPE);
         }
-        
+
         return adapterService;
     }
 }

@@ -1,12 +1,12 @@
 package com.xiaoo.kaleido.api.notice.command;
+import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 /**
  * 校验短信验证码command
  *
@@ -15,9 +15,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class CheckSmsVerifyCodeCommand extends BaseCommand {
+    /**
+     * 目标类型
+     */
+    @NotNull(message = "推送目标类型不能为空")
+    private TargetTypeEnum targetType;
+
     /**
      * 手机号
      */

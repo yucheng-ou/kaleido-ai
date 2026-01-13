@@ -5,10 +5,7 @@ import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 用户注册命令
@@ -17,9 +14,10 @@ import lombok.NoArgsConstructor;
  * @date 2025/12/31
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class RegisterAdminCommand extends BaseCommand {
     
     /**

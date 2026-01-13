@@ -2,20 +2,19 @@ package com.xiaoo.kaleido.api.admin.user.command;
 import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 /**
- * 鏇存柊绠＄悊鍛樹俊鎭懡浠?
+ * 更新管理员命令
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class UpdateAdminCommand extends BaseCommand {
     
     /**

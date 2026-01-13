@@ -5,10 +5,7 @@ import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 更新权限命令
@@ -17,9 +14,10 @@ import lombok.NoArgsConstructor;
  * @date 2025/12/31
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class UpdatePermissionCommand extends BaseCommand {
     /**
      * 权限名称

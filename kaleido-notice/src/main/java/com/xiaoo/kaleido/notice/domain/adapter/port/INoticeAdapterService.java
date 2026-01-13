@@ -1,6 +1,8 @@
 package com.xiaoo.kaleido.notice.domain.adapter.port;
 
 
+import com.xiaoo.kaleido.base.result.Result;
+
 /**
  * 短信服务接口（领域层定义）
  * 负责短信发送功能
@@ -17,5 +19,5 @@ public interface INoticeAdapterService {
      * @param content 通知内容
      * @return 是否发送成功
      */
-    boolean sendNotice(String target, String content);
+    Result<Void> sendNotice(String target, String content);
 }

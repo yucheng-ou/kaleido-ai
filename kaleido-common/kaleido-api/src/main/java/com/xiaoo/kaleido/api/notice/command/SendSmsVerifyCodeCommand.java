@@ -4,10 +4,8 @@ import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 /**
  * 发送短信验证码command
  *
@@ -15,9 +13,10 @@ import lombok.NoArgsConstructor;
  * @date 2025/12/29
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class SendSmsVerifyCodeCommand extends BaseCommand {
 
     /**

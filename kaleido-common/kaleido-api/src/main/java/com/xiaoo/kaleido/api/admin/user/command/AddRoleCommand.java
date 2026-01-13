@@ -3,23 +3,22 @@ import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 /**
- * 娣诲姞瑙掕壊鍛戒护
+ * 添加角色命令
  *
  * @author ouyucheng
  * @date 2025/12/31
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
 @NoArgsConstructor
-@AllArgsConstructor
 public class AddRoleCommand extends BaseCommand {
     /**
-     * 瑙掕壊缂栫爜
+     * 角色编码
      */
     @NotBlank(message = "角色编码不能为空")
     @Size(min = 2, max = 50, message = "角色编码长度必须在2-50位之间")

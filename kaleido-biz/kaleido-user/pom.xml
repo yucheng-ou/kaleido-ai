@@ -1,6 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================
+     Kaleido 用户服务 - Maven 配置文件
+     ============================================
+     说明：用户微服务的Maven构建配置，定义项目依赖和构建参数
+     作者：ouyucheng
+     日期：2025/12/16
+     ============================================ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
+    <!-- 父项目：kaleido-biz业务模块父工程 -->
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-biz</artifactId>
@@ -8,10 +18,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <!-- 项目基本信息 -->
     <artifactId>kaleido-user</artifactId>
     <packaging>jar</packaging>
     <name>kaleido-user</name>
-    <description>用户模块</description>
+    <description>Kaleido用户微服务 - 提供用户管理、认证、权限等核心功能</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

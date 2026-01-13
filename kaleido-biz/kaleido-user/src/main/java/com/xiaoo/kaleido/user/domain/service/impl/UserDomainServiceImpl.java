@@ -15,6 +15,8 @@ import java.util.UUID;
 
 /**
  * 用户领域服务实现
+ * <p>
+ * 用户领域服务的具体实现，处理跨实体的用户业务逻辑
  *
  * @author ouyucheng
  * @date 2025/12/16
@@ -28,13 +30,12 @@ public class UserDomainServiceImpl implements IUserDomainService {
 
     @Override
     public UserAggregate createUser(String telephone, String inviteCode) {
-
-        // 验证手机号是否已存在
+        // 1.验证手机号是否已存在
         if (userRepository.existsByTelephone(telephone)) {
             throw UserException.of(UserErrorCode.DUPLICATE_TELEPHONE);
         }
 
-        // 验证邀请码
+        // 2.验证邀请码（如果提供）
         String inviterId = null;
         if (StrUtil.isNotBlank(inviteCode)) {
             UserAggregate inviter = userRepository.findByInviteCode(inviteCode)
@@ -42,14 +43,13 @@ public class UserDomainServiceImpl implements IUserDomainService {
             inviterId = inviter.getId();
         }
 
-        // 生成邀请码
+        // 3.生成用户邀请码
         InvitationCode invitationCode = generateInvitationCode();
 
-        // 生成默认昵称（用户+手机号后4位）
+        // 4.生成默认昵称（用户+手机号后4位）
         String defaultNickName = "用户" + telephone.substring(telephone.length() - 4);
 
-
-        // 创建用户聚合根并返回
+        // 5.创建用户聚合根并返回
         return UserAggregate.create(telephone,
                 defaultNickName,
                 invitationCode.getValue(),
@@ -97,12 +97,6 @@ public class UserDomainServiceImpl implements IUserDomainService {
     }
 
     @Override
-    public boolean verifyPassword(String userId, String passwordHash) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
-        return aggregate.verifyPassword(passwordHash);
-    }
-
-    @Override
     public UserAggregate login(String userId) {
         UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
         aggregate.login();
@@ -118,18 +112,28 @@ public class UserDomainServiceImpl implements IUserDomainService {
 
     @Override
     public InvitationCode generateInvitationCode() {
-        // 生成唯一邀请码
+        // 1.尝试生成唯一邀请码（最多重试10次）
         InvitationCode invitationCode;
         int maxRetry = 10;
 
         for (int i = 0; i < maxRetry; i++) {
             invitationCode = InvitationCode.generate();
+            
+            // 使用布隆过滤器快速判断邀请码是否可能已存在
+            if (!userRepository.mightExistByInviteCode(invitationCode.getValue())) {
+                // 布隆过滤器判断不存在，极大概率确实不存在
+                return invitationCode;
+            }
+            
+            // 布隆过滤器判断可能存在，查询数据库确认
             if (!userRepository.existsByInviteCode(invitationCode.getValue())) {
+                // 数据库确认不存在，添加到布隆过滤器
+                userRepository.addToInviteCodeFilter(invitationCode.getValue());
                 return invitationCode;
             }
         }
 
-        // 如果多次尝试后仍然冲突，使用基于UUID的确定性生成
+        // 2.如果多次尝试后仍然冲突，使用基于UUID的确定性生成
         String uuid = UUID.randomUUID().toString().replace("-", "");
         return InvitationCode.fromUserId(uuid);
     }

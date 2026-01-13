@@ -10,7 +10,7 @@
         <result property="updatedAt" column="updated_at"/>
         <result property="deleted" column="deleted"/>
         <result property="lockVersion" column="lock_version"/>
-        
+
         <!-- NoticeTemplatePO特有字段 -->
         <result property="templateCode" column="template_code"/>
         <result property="templateName" column="template_name"/>
@@ -26,21 +26,21 @@
     <!-- 根据模板编码查找模板 -->
     <select id="findByTemplateCode" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
-        FROM notice_template
+        FROM t_notice_template
         WHERE template_code = #{templateCode} AND deleted = 0
     </select>
 
     <!-- 检查模板编码是否存在 -->
     <select id="existsByTemplateCode" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM notice_template
+        FROM t_notice_template
         WHERE template_code = #{templateCode} AND deleted = 0
     </select>
 
     <!-- 根据通知类型查找模板列表 -->
     <select id="findByNoticeType" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
-        FROM notice_template
+        FROM t_notice_template
         WHERE deleted = 0 AND status = 'ENABLE'
         ORDER BY created_at DESC
     </select>
@@ -48,7 +48,7 @@
     <!-- 根据业务类型查找模板列表 -->
     <select id="findByBusinessType" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
-        FROM notice_template
+        FROM t_notice_template
         WHERE deleted = 0 AND status = 'ENABLE'
         ORDER BY created_at DESC
     </select>
@@ -63,7 +63,7 @@
     <!-- 根据条件分页查询模板 -->
     <select id="selectByCondition" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
-        FROM notice_template
+        FROM t_notice_template
         WHERE deleted = 0
         <include refid="NoticeTemplateQueryConditions"/>
         ORDER BY created_at DESC
@@ -72,7 +72,7 @@
     <!-- 查找启用的模板列表 -->
     <select id="findEnabledTemplates" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
-        FROM notice_template
+        FROM t_notice_template
         WHERE deleted = 0 AND status = 'ENABLE'
         ORDER BY created_at DESC
     </select>

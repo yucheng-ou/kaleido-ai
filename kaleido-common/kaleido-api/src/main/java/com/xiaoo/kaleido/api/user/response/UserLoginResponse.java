@@ -1,5 +1,8 @@
 package com.xiaoo.kaleido.api.user.response;
-import lombok.Data;
+
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
+
 /**
  * 登录响应
  *
@@ -7,17 +10,21 @@ import lombok.Data;
  * @date 2025/12/31
  */
 @Data
-public class UserLoginResponse {
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor 
+@NoArgsConstructor
+public class UserLoginResponse extends BaseResp {
     /**
      * 用户ID
      */
-    private String userId;
+    String userId;
     /**
      * 认证令牌
      */
-    private String token;
+    String token;
     /**
      * 用户信息
      */
-    private UserInfoResponse userInfo;
+    UserInfoResponse userInfo;
 }

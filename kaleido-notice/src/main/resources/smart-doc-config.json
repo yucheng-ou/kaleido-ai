@@ -1,6 +1,6 @@
 {
   "serverUrl": "http://localhost:8083",
-  "serverEnv": "通知服务",
+  "serverEnv": "{{base_url}}",
   "allInOne": true,
   "outPath": "../doc/api/notice",
   "coverOld": true,
