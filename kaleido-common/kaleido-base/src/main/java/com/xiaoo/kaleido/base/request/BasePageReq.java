@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import java.io.Serial;
 
 /**
- * @Author ouyucheng
- * @Date 2025/11/3 16:50
- * @Description 基础分页请求类
+ * @author ouyucheng
+ * @date 2025/11/3 16:50
+ * @description 基础分页请求类
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

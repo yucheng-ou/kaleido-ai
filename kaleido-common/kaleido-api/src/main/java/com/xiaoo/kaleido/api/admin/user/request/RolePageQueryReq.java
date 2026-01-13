@@ -1,8 +1,7 @@
 package com.xiaoo.kaleido.api.admin.user.request;
 
 import com.xiaoo.kaleido.base.request.BasePageReq;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * 角色分页查询请求
@@ -12,6 +11,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RolePageQueryReq extends BasePageReq {
     
     /**

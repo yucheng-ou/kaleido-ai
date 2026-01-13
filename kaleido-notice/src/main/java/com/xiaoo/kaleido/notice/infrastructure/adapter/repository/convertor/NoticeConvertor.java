@@ -23,6 +23,9 @@ public interface NoticeConvertor {
 
     /**
      * 将 NoticeAggregate 转换为 NoticePO
+     * 
+     * @param aggregate 通知聚合根
+     * @return 通知持久化对象
      */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "noticeType", target = "noticeType")
@@ -40,6 +43,9 @@ public interface NoticeConvertor {
 
     /**
      * 将 NoticePO 转换为 NoticeAggregate
+     * 
+     * @param po 通知持久化对象
+     * @return 通知聚合根
      */
     @Mapping(source = "id", target = "id")
     @Mapping(source = "noticeType", target = "noticeType")

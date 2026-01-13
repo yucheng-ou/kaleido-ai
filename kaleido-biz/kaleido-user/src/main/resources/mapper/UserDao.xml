@@ -13,7 +13,6 @@
         
         <!-- UserPO特有字段 -->
         <result property="mobile" column="mobile"/>
-        <result property="passwordHash" column="password_hash"/>
         <result property="nickName" column="nick_name"/>
         <result property="status" column="status"/>
         <result property="inviteCode" column="invite_code"/>
@@ -23,61 +22,88 @@
         <result property="gender" column="gender"/>
     </resultMap>
 
-    <!-- 用户表字段列表 -->
+    <!-- 
+        用户表字段列表
+        包含所有用户表的字段，用于SQL语句中的字段引用
+    -->
     <sql id="UserColumns">
-        id, mobile, password_hash, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
+        id, mobile, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
     </sql>
 
-    <!-- 根据ID查找用户 -->
+    <!-- 
+        根据ID查找用户
+        查询指定ID的用户信息，只返回未删除的用户
+    -->
     <select id="findById" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE id = #{id} AND deleted = 0
     </select>
 
-    <!-- 根据手机号查找用户 -->
+    <!-- 
+        根据手机号查找用户
+        查询指定手机号的用户信息，只返回未删除的用户
+    -->
     <select id="findByTelephone" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE mobile = #{telephone} AND deleted = 0
     </select>
 
-    <!-- 根据邀请码查找用户 -->
+    <!-- 
+        根据邀请码查找用户
+        查询指定邀请码的用户信息，只返回未删除的用户
+    -->
     <select id="findByInviteCode" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE invite_code = #{inviteCode} AND deleted = 0
     </select>
 
-    <!-- 检查用户ID是否存在 -->
+    <!-- 
+        检查用户ID是否存在
+        检查指定ID的用户是否存在且未删除
+    -->
     <select id="existsById" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM user
+        FROM t_user
         WHERE id = #{id} AND deleted = 0
     </select>
 
-    <!-- 检查手机号是否存在 -->
+    <!-- 
+        检查手机号是否存在
+        检查指定手机号的用户是否存在且未删除
+    -->
     <select id="existsByTelephone" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM user
+        FROM t_user
         WHERE mobile = #{telephone} AND deleted = 0
     </select>
 
-    <!-- 检查邀请码是否存在 -->
+    <!-- 
+        检查邀请码是否存在
+        检查指定邀请码的用户是否存在且未删除
+    -->
     <select id="existsByInviteCode" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM user
+        FROM t_user
         WHERE invite_code = #{inviteCode} AND deleted = 0
     </select>
 
-    <!-- 检查昵称是否存在 -->
+    <!-- 
+        检查昵称是否存在
+        检查指定昵称的用户是否存在且未删除
+    -->
     <select id="existsByNickName" resultType="boolean">
         SELECT COUNT(*) > 0
-        FROM user
+        FROM t_user
         WHERE nick_name = #{nickName} AND deleted = 0
     </select>
 
-    <!-- 用户查询条件片段 -->
+    <!-- 
+        用户查询条件片段
+        用户查询的通用条件片段，支持昵称、手机号、状态、性别等条件
+    -->
     <sql id="UserQueryConditions">
         <if test="req.nickName != null and req.nickName != ''">AND nick_name LIKE CONCAT('%', #{req.nickName}, '%')</if>
         <if test="req.telephone != null and req.telephone != ''">AND mobile LIKE CONCAT('%', #{req.telephone}, '%')</if>
@@ -85,28 +111,37 @@
         <if test="req.gender != null">AND gender = #{req.gender}</if>
     </sql>
 
-    <!-- 通用查询 -->
+    <!-- 
+        通用查询
+        根据条件查询用户列表，支持多种查询条件组合
+    -->
     <select id="query" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE deleted = 0
         <include refid="UserQueryConditions"/>
         ORDER BY created_at DESC
     </select>
 
-    <!-- 根据条件查询用户 -->
+    <!-- 
+        根据条件查询用户
+        根据查询条件分页查询用户列表，支持多种查询条件组合
+    -->
     <select id="selectByCondition" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE deleted = 0
         <include refid="UserQueryConditions"/>
         ORDER BY created_at DESC
     </select>
 
-    <!-- 根据ID列表查询 -->
+    <!-- 
+        根据ID列表查询
+        根据用户ID列表批量查询用户信息，只返回未删除的用户
+    -->
     <select id="getByIds" resultMap="UserMap">
         SELECT <include refid="UserColumns"/>
-        FROM user
+        FROM t_user
         WHERE deleted = 0
         AND id IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
@@ -114,4 +149,17 @@
         </foreach>
         ORDER BY id DESC
     </select>
+
+    <!--
+    分页查询邀请码（用于布隆过滤器初始化）
+    分批查询数据库中的邀请码，用于服务启动时加载到布隆过滤器
+-->
+    <select id="selectInviteCodesWithLimit" resultType="java.lang.String">
+        SELECT invite_code
+        FROM t_user
+        WHERE deleted = 0 AND invite_code IS NOT NULL
+        ORDER BY created_at
+            LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 </mapper>

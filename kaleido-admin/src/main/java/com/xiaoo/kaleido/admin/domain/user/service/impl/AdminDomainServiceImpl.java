@@ -36,12 +36,12 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public AdminAggregate createAdmin(String mobile) {
-        // 验证手机号唯一性
+        // 1. 验证手机号唯一性
         if (adminUserRepository.existsByMobile(mobile)) {
             throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST);
         }
 
-        // 创建管理员
+        // 2. 创建管理员
         AdminAggregate adminUser = AdminAggregate.create(mobile);
 
         log.info("管理员领域服务创建管理员，管理员ID: {}, 手机号: {}",
@@ -53,15 +53,15 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
     @Override
     public AdminAggregate updateAdmin(String adminId, String realName,
                                       String mobile) {
-        // 获取管理员
+        // 1. 获取管理员
         AdminAggregate adminUser = findByIdOrThrow(adminId);
 
-        // 验证手机号唯一性（如果手机号有变化）
+        // 2. 验证手机号唯一性（如果手机号有变化）
         if (StrUtil.isNotBlank(mobile) && !mobile.equals(adminUser.getMobile()) && adminUserRepository.existsByMobile(mobile)) {
             throw AdminException.of(AdminErrorCode.ADMIN_MOBILE_EXIST);
         }
 
-        // 更新管理员信息
+        // 3. 更新管理员信息
         adminUser.updateInfo(realName, mobile);
 
         log.info("管理员领域服务更新管理员，管理员ID: {}, 真实姓名: {}", adminId, realName);
@@ -90,7 +90,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         );
     }
 
-
     @Override
     public AdminAggregate updateLastLoginTime(String adminId) {
         return executeOperationWithResult(adminId,
@@ -104,7 +103,8 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public AdminAggregate assignRoles(String adminId, List<String> roleIds) {
-        // 验证角色是否存在且启用
+        // 1. 验证角色
+        // 1.1 验证角色是否存在且启用
         for (String roleId : roleIds) {
             RoleAggregate role = roleRepository.findById(roleId)
                     .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST, "角色不存在: " + roleId));
@@ -113,6 +113,7 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
             }
         }
 
+        // 2. 分配角色
         return executeOperationWithResult(adminId,
                 adminUser -> {
                     adminUser.addRoles(roleIds);
@@ -141,19 +142,19 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public List<String> getPermissionsByAdminId(String adminId) {
-        // 获取管理员
+        // 1. 获取管理员
         AdminAggregate adminUser = findByIdOrThrow(adminId);
 
-        // 获取管理员的所有角色
+        // 2. 获取管理员的所有角色
         List<String> roleIds = adminUser.getRoleIds();
         if (roleIds.isEmpty()) {
             return new ArrayList<>();
         }
 
-        // 获取所有角色
+        // 3. 获取所有角色
         List<RoleAggregate> roles = roleRepository.findAllById(roleIds);
 
-        // 收集所有权限ID
+        // 4. 收集所有权限ID
         Set<String> permissionIds = new HashSet<>();
         for (RoleAggregate role : roles) {
             if (role.isEnabled()) {
@@ -166,10 +167,10 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public AdminAggregate login(String adminId) {
-        // 1. 根据手机号查找管理员
+        // 1. 根据ID查找管理员
         AdminAggregate adminUser = findByIdOrThrow(adminId);
 
-        // 2. 验证管理员状态（必须为NORMAL状态）
+        // 2. 验证管理员状态（必须为可用状态）
         if (!adminUser.isAvailable()) {
             log.error("管理员登录失败，账号状态不可用，管理员ID: {}, 状态: {}",
                     adminUser.getId(), adminUser.getStatus());

@@ -6,9 +6,9 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @Author ouyucheng
- * @Date 2025/11/4 16:17
- * @Description 基础请求类
+ * @author ouyucheng
+ * @date 2025/11/4 16:17
+ * @description 基础请求类
  */
 @Data
 public class BaseReq implements Serializable {

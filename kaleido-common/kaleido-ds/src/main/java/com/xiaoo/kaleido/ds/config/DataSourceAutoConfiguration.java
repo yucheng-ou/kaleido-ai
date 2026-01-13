@@ -14,17 +14,17 @@ import org.springframework.context.annotation.Import;
 /**
  * 数据源自动配置类
  *
- * <p>该类是Spring Boot自动配置类，用于配置MyBatis Plus的相关组件。
- * 通过{@link AutoConfiguration}注解，Spring Boot会自动加载该配置。</p>
+ * 该类是Spring Boot自动配置类，用于配置MyBatis Plus的相关组件。
+ * 通过{@link AutoConfiguration}注解，Spring Boot会自动加载该配置。
  *
- * <p>主要功能包括：
+ * 主要功能包括：
  * <ul>
  *   <li>配置乐观锁拦截器，支持乐观锁功能</li>
  *   <li>配置防止全表更新拦截器，增强数据安全</li>
  *   <li>配置分页拦截器，支持MySQL数据库的分页查询</li>
  *   <li>通过{@link Import}注解导入{@link MyMetaObjectHandler}，实现自动填充功能</li>
  * </ul>
- * </p>
+ * 
  *
  * @author ouyucheng
  * @version 1.0
@@ -38,7 +38,7 @@ public class DataSourceAutoConfiguration {
     /**
      * 配置MyBatis Plus拦截器
      *
-     * <p>该方法创建并配置MyBatis Plus的拦截器链，包含以下拦截器：</p>
+     * 该方法创建并配置MyBatis Plus的拦截器链，包含以下拦截器：
      * <ul>
      *   <li>{@link OptimisticLockerInnerInterceptor} - 乐观锁拦截器，用于实现乐观锁功能</li>
      *   <li>{@link BlockAttackInnerInterceptor} - 防止全表更新拦截器，避免误操作导致全表数据被修改</li>

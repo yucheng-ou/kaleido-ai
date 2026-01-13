@@ -17,14 +17,19 @@ import java.util.Date;
 public class RetryStatus {
 
     /**
+     * 重试间隔时间 毫秒
+     */
+    private static final Integer retryIntervalTime = 10 * 1000;
+
+    /**
      * 下次重试时间
      */
-    private final Date nextRetryAt;
+    private Date nextRetryAt;
 
     /**
      * 重试次数
      */
-    private final Integer retryNum;
+    private Integer retryNum;
 
     public static RetryStatus init() {
         return create(null, 0);
@@ -34,5 +39,8 @@ public class RetryStatus {
         return RetryStatus.builder().nextRetryAt(nextRetryAt).retryNum(retryNum).build();
     }
 
-    ;
+    public void retry() {
+        retryNum++;
+        nextRetryAt = new Date(System.currentTimeMillis() + retryIntervalTime);
+    }
 }

@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.notice.domain.adapter.repository;
 
+import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
+import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.api.notice.query.NoticePageQueryReq;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
 import com.xiaoo.kaleido.api.notice.enums.NoticeStatusEnum;
@@ -15,6 +17,25 @@ import java.util.Optional;
  * @date 2025/12/18
  */
 public interface INoticeRepository {
+
+    /**
+     * 缓存短信验证码
+     *
+     * @param targetType 推送目标类型
+     * @param mobile     手机号
+     * @param verifyCode 验证码
+     */
+    void cacheVerifyCode(TargetTypeEnum targetType, String mobile, String verifyCode);
+
+    /**
+     * 校验短信验证码
+     *
+     * @param targetType 推送目标类型
+     * @param mobile     手机号
+     * @param verifyCode 验证码
+     * @return 是否检验成功
+     */
+    Boolean checkVerifyCode(TargetTypeEnum targetType, String mobile, String verifyCode);
 
     /**
      * 根据ID查找通知聚合根
@@ -39,6 +60,14 @@ public interface INoticeRepository {
      * @return 保存后的通知聚合根
      */
     NoticeAggregate save(NoticeAggregate notice);
+
+    /**
+     * 更新通知聚合根
+     *
+     * @param notice 通知聚合根
+     * @return 保存后的通知聚合根
+     */
+    NoticeAggregate update(NoticeAggregate notice);
 
     /**
      * 根据ID删除通知聚合根

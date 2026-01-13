@@ -4,9 +4,9 @@ import java.lang.annotation.*;
 
 /**
  * 空返回值检查注解
- * <p>
+ * 
  * 标注在方法上，当方法返回值为null或空集合/空数组时抛出业务异常
- * </p>
+ * 
  *
  * @author ouyucheng
  * @date 2025/12/16

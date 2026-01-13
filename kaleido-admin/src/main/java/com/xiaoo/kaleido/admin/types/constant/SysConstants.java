@@ -1,5 +1,11 @@
 package com.xiaoo.kaleido.admin.types.constant;
 
+/**
+ * 系统常量类
+ * 定义管理员模块的系统级常量
+ *
+ * @author ouyucheng
+ */
 public class SysConstants {
 
     /**

@@ -20,11 +20,17 @@ public interface NoticeAppConvertor {
     
     /**
      * NoticeAggregate 转换为 NoticeResponse
+     * 
+     * @param aggregate 通知聚合根
+     * @return 通知响应对象
      */
     NoticeResponse toResponse(NoticeAggregate aggregate);
     
     /**
      * NoticeTemplateAggregate 转换为 NoticeTemplateResponse
+     * 
+     * @param aggregate 通知模板聚合根
+     * @return 通知模板响应对象
      */
     NoticeTemplateResponse toTemplateResponse(NoticeTemplateAggregate aggregate);
 }

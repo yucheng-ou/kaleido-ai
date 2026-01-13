@@ -8,7 +8,6 @@ import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IAdminDomainService;
-import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
 import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
 import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
@@ -40,7 +39,10 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
     public AdminInfoResponse findById(String adminId) {
         log.debug("根据ID查询管理员信息，adminId={}", adminId);
         
+        // 1. 调用领域服务查询管理员聚合根
         AdminAggregate adminAggregate = adminDomainService.findByIdOrThrow(adminId);
+        
+        // 2. 转换为响应对象
         return adminConvertor.toResponse(adminAggregate);
     }
 
@@ -48,10 +50,15 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
     public AdminInfoResponse findByMobile(String mobile) {
         log.debug("根据手机号查询管理员信息，mobile={}", mobile);
         
+        // 1. 调用领域服务根据手机号查询管理员聚合根
         AdminAggregate adminAggregate = adminDomainService.findByMobile(mobile);
+        
+        // 2. 如果不存在则返回null
         if (adminAggregate == null) {
             return null;
         }
+        
+        // 3. 转换为响应对象
         return adminConvertor.toResponse(adminAggregate);
     }
 
@@ -59,26 +66,26 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
     public PageInfo<AdminInfoResponse> pageQuery(AdminPageQueryReq pageQueryReq) {
         log.debug("分页查询管理员，pageQueryReq={}", pageQueryReq);
         
-        // 启动PageHelper分页
+        // 1. 启动PageHelper分页
         PageHelper.startPage(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
         
-        // 调用仓储分页查询
+        // 2. 调用仓储分页查询
         List<AdminAggregate> aggregates = adminRepository.pageQuery(pageQueryReq);
         
-        // 转换为响应对象
+        // 3. 转换为响应对象
         List<AdminInfoResponse> responseList = aggregates.stream()
                 .map(adminConvertor::toResponse)
                 .collect(Collectors.toList());
         
-        // 构建PageInfo分页响应
+        // 4. 构建PageInfo分页响应
         return new PageInfo<>(responseList);
     }
-
 
     @Override
     public List<String> getPermissionsByAdminId(String adminId) {
         log.debug("获取管理员的所有权限，adminId={}", adminId);
         
+        // 调用领域服务获取管理员的所有权限ID
         return adminDomainService.getPermissionsByAdminId(adminId);
     }
 
@@ -105,24 +112,18 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
         return buildPermissionTree(allPermissions);
     }
 
-    /**
-     * 构建权限树形结构
-     *
-     * @param permissions 权限列表
-     * @return 树形结构的权限列表
-     */
     private List<PermissionInfoResponse> buildPermissionTree(List<PermissionInfoResponse> permissions) {
         if (CollectionUtils.isEmpty(permissions)) {
             return Collections.emptyList();
         }
         
-        // 创建ID到权限的映射
+        // 1. 创建ID到权限的映射
         Map<String, PermissionInfoResponse> permissionMap = new HashMap<>();
         for (PermissionInfoResponse permission : permissions) {
             permissionMap.put(permission.getPermissionId(), permission);
         }
         
-        // 构建树形结构
+        // 2. 构建树形结构
         List<PermissionInfoResponse> tree = new ArrayList<>();
         for (PermissionInfoResponse permission : permissions) {
             String parentId = permission.getParentId();
@@ -139,14 +140,14 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
             }
         }
         
-        // 对每个节点的children按sort排序
+        // 3. 对每个节点的children按sort排序
         for (PermissionInfoResponse permission : permissions) {
             if (permission.getChildren() != null && !permission.getChildren().isEmpty()) {
                 permission.getChildren().sort(Comparator.comparingInt(p -> p.getSort() != null ? p.getSort() : 0));
             }
         }
         
-        // 对根节点按sort排序
+        // 4. 对根节点按sort排序
         tree.sort(Comparator.comparingInt(p -> p.getSort() != null ? p.getSort() : 0));
         
         return tree;

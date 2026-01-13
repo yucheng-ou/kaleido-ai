@@ -29,18 +29,18 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
     public PermissionAggregate createPermission(String code, String name, PermissionType type,
                                                 String parentId, Integer sort, String icon,
                                                 String path, String component, Boolean isHidden) {
-        // 验证权限编码唯一性
+        // 1. 验证权限编码唯一性
         if (permissionRepository.existsByCode(code)) {
             throw AdminException.of(AdminErrorCode.PERMISSION_CODE_EXIST);
         }
 
-        // 验证父权限是否存在
+        // 2. 验证父权限是否存在
         if (parentId != null && !parentId.trim().isEmpty()) {
             permissionRepository.findById(parentId)
                     .orElseThrow(() -> AdminException.of(AdminErrorCode.PARENT_PERMISSION_NOT_EXIST));
         }
 
-        // 创建权限
+        // 3. 创建权限
         PermissionAggregate permission = PermissionAggregate.create(
                 code, name, type, parentId, sort, icon, path, component, isHidden
         );
@@ -55,10 +55,10 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
     public PermissionAggregate updatePermission(String permissionId, String name, PermissionType type,
                                                 String parentId, Integer sort, String icon,
                                                 String path, String component, Boolean isHidden) {
-        // 获取权限
+        // 1. 获取权限
         PermissionAggregate permission = findByIdOrThrow(permissionId);
 
-        // 验证父权限是否存在（如果父权限ID有变化）
+        // 2. 验证父权限是否存在（如果父权限ID有变化）
         if (parentId != null && !parentId.equals(permission.getParentId())) {
             if (!parentId.trim().isEmpty()) {
                 permissionRepository.findById(parentId)
@@ -66,7 +66,7 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
             }
         }
 
-        // 更新权限信息
+        // 3. 更新权限信息
         permission.updateInfo(name, type, parentId, sort, icon, path, component, isHidden);
 
         log.info("权限领域服务更新权限，权限ID: {}, 权限名称: {}", permissionId, name);
@@ -75,15 +75,15 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
 
     @Override
     public PermissionAggregate updatePermissionCode(String permissionId, String code) {
-        // 获取权限
+        // 1. 获取权限
         PermissionAggregate permission = findByIdOrThrow(permissionId);
 
-        // 验证新编码是否可用
+        // 2. 验证新编码是否可用
         if (!permission.getCode().equals(code) && permissionRepository.existsByCode(code)) {
             throw AdminException.of(AdminErrorCode.PERMISSION_CODE_EXIST);
         }
 
-        // 更新权限编码
+        // 3. 更新权限编码
         permission.updateCode(code);
 
         log.info("权限领域服务更新权限编码，权限ID: {}, 新编码: {}", permissionId, code);
@@ -92,16 +92,16 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
 
     @Override
     public void deletePermission(String permissionId) {
-        // 获取权限
+        // 1. 获取权限
         PermissionAggregate permission = findByIdOrThrow(permissionId);
 
-        // 检查是否有子权限
+        // 2. 检查是否有子权限
         long childCount = permissionRepository.countByParentId(permissionId);
         if (childCount > 0) {
             throw AdminException.of(AdminErrorCode.PERMISSION_HAS_CHILDREN);
         }
 
-        // 删除权限
+        // 3. 删除权限
         permissionRepository.deleteById(permissionId);
 
         log.info("权限领域服务删除权限，权限ID: {}", permissionId);

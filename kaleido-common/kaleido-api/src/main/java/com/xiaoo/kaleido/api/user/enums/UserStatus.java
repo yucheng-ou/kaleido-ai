@@ -1,10 +1,12 @@
-package com.xiaoo.kaleido.user.domain.constant;
+package com.xiaoo.kaleido.api.user.enums;
 
 
 import lombok.Getter;
 
 /**
  * 用户状态枚举
+ * <p>
+ * 定义用户的所有可能状态，包括正常、冻结、删除等
  *
  * @author ouyucheng
  * @date 2025/12/16
@@ -14,16 +16,19 @@ public enum UserStatus {
 
     /**
      * 正常状态
+     * 用户可以正常登录和操作
      */
     ACTIVE(1, "正常"),
 
     /**
      * 冻结状态
+     * 用户被管理员冻结，无法登录和操作
      */
     FROZEN(2, "冻结"),
 
     /**
      * 已删除状态（软删除）
+     * 用户已被删除，数据保留但不可见
      */
     DELETED(3, "已删除");
 

@@ -9,8 +9,16 @@ import java.util.Random;
 
 /**
  * 邀请码值对象
- * 封装邀请码的生成、验证和业务规则
- *
+ * 
+ * 封装邀请码的生成、验证和业务规则，确保邀请码的唯一性和有效性
+ * 特性：
+ * <ul>
+ *   <li>长度固定为6位</li>
+ *   <li>使用排除易混淆字符的字符集</li>
+ *   <li>支持随机生成和确定性生成</li>
+ *   <li>内置格式验证</li>
+ * </ul>
+ * 
  * @author ouyucheng
  * @date 2025/12/16
  */
@@ -49,10 +57,12 @@ public class InvitationCode {
 
     /**
      * 创建邀请码（从字符串）
-     *
-     * @param code 邀请码字符串
+     * 
+     * 从字符串创建邀请码值对象，会进行格式验证
+     * 
+     * @param code 邀请码字符串，不能为空且必须符合格式要求
      * @return 邀请码值对象
-     * @throws UserException 如果邀请码无效
+     * @throws UserException 如果邀请码无效（空值、长度错误、格式错误）
      */
     public static InvitationCode fromString(String code) {
         validate(code);
@@ -61,7 +71,9 @@ public class InvitationCode {
 
     /**
      * 生成随机邀请码
-     *
+     * 
+     * 生成一个随机的6位邀请码，使用排除易混淆字符的字符集
+     * 
      * @return 新的邀请码值对象
      */
     public static InvitationCode generate() {
@@ -78,9 +90,11 @@ public class InvitationCode {
 
     /**
      * 验证邀请码格式
-     *
-     * @param code 待验证的邀请码
-     * @throws UserException 如果邀请码无效
+     * 
+     * 验证邀请码是否符合格式要求，包括长度、字符集等
+     * 
+     * @param code 待验证的邀请码，不能为空
+     * @throws UserException 如果邀请码无效（空值、长度错误、格式错误）
      */
     private static void validate(String code) {
         if (code == null || code.trim().isEmpty()) {
@@ -109,9 +123,11 @@ public class InvitationCode {
 
     /**
      * 判断邀请码是否有效格式（静态方法，用于验证）
-     *
-     * @param code 邀请码字符串
-     * @return 是否有效格式
+     * 
+     * 验证邀请码格式但不抛出异常，返回布尔值结果
+     * 
+     * @param code 邀请码字符串，不能为空
+     * @return 是否有效格式，true表示格式正确，false表示格式错误
      */
     public static boolean isValidFormat(String code) {
         try {
@@ -124,9 +140,12 @@ public class InvitationCode {
 
     /**
      * 生成基于用户ID的确定性邀请码（可选，用于测试或特定场景）
-     *
-     * @param userId 用户ID
-     * @return 确定性邀请码
+     * 
+     * 根据用户ID生成确定性的邀请码，相同用户ID总是生成相同的邀请码
+     * 注意：主要用于测试或特定场景，生产环境通常使用随机生成
+     * 
+     * @param userId 用户ID，不能为空
+     * @return 确定性邀请码，如果用户ID太短则回退到随机生成
      */
     public static InvitationCode fromUserId(String userId) {
         if (userId == null || userId.length() < CODE_LENGTH) {

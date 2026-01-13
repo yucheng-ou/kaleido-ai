@@ -1,17 +1,37 @@
+# ============================================
+# Kaleido 用户服务 - 启动配置文件
+# ============================================
+# 说明：用户微服务启动配置，包含服务端口、应用名称、配置文件导入等基础配置
+# 作者：ouyucheng
+# 日期：2025/12/16
+# ============================================
+
+# 服务器配置
 server:
+  # 服务端口：用户服务运行在9012端口
   port: 9012
   servlet:
+    # 上下文路径：所有API的前缀路径
     context-path: /kaleido-user
 
+# Spring应用配置
 spring:
   application:
+    # 应用名称：用于服务注册和配置中心识别
     name: kaleido-user
   profiles:
+    # 激活的配置文件：dev表示开发环境
     active: dev
   config:
+    # 配置文件导入顺序：按顺序加载配置
     import:
+      # 1. 从Nacos配置中心加载环境特定配置
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      # 2. 本地Nacos客户端配置
       - classpath:nacos.yml
+      # 3. 数据源配置
       - classpath:ds.yml
+      # 4. RPC（Dubbo）配置
       - classpath:rpc.yml
+      # 5. 缓存配置
       - classpath:cache.yml

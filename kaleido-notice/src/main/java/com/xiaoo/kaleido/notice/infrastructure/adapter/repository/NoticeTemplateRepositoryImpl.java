@@ -33,47 +33,66 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
 
     @Override
     public Optional<NoticeTemplateAggregate> findById(String id) {
+        // 1.调用DAO层查询持久化对象
         NoticeTemplatePO templatePO = noticeTemplateDao.selectById(id);
+        
+        // 2.判断查询结果
         if (templatePO == null) {
             return Optional.empty();
         }
+        
+        // 3.转换为聚合根并返回
         return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
     }
 
     @Override
     public Optional<NoticeTemplateAggregate> findByCode(String code) {
+        // 1.调用DAO层根据编码查询持久化对象
         NoticeTemplatePO templatePO = noticeTemplateDao.findByTemplateCode(code);
+        
+        // 2.判断查询结果
         if (templatePO == null) {
             return Optional.empty();
         }
+        
+        // 3.转换为聚合根并返回
         return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
     }
 
     @Override
     public void save(NoticeTemplateAggregate template) {
+        // 1.将聚合根转换为持久化对象
         NoticeTemplatePO templatePO = NoticeTemplateConvertor.INSTANCE.toPO(template);
+        
+        // 2.调用DAO层插入数据
         noticeTemplateDao.insert(templatePO);
     }
 
     @Override
     public void deleteById(String id) {
+        // 1.调用DAO层删除记录
         noticeTemplateDao.deleteById(id);
     }
 
     @Override
     public NoticeTemplateAggregate findByIdOrThrow(String id) {
+        // 1.调用findById方法查询
+        // 2.如果不存在则抛出异常
         return findById(id)
                 .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
     }
 
     @Override
     public NoticeTemplateAggregate findByCodeOrThrow(String code) {
+        // 1.调用findByCode方法查询
+        // 2.如果不存在则抛出异常
         return findByCode(code)
                 .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
     }
 
     @Override
     public boolean existsByCode(String code) {
+        // 1.调用DAO层检查编码是否存在
         return noticeTemplateDao.existsByTemplateCode(code);
     }
 
@@ -84,7 +103,10 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
      * @return 模板列表
      */
     public List<NoticeTemplateAggregate> findByNoticeType(String noticeType) {
+        // 1.调用DAO层根据通知类型查询持久化对象列表
         List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findByNoticeType(noticeType);
+        
+        // 2.转换为聚合根列表并返回
         return templatePOs.stream()
                 .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
@@ -97,7 +119,10 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
      * @return 模板列表
      */
     public List<NoticeTemplateAggregate> findByBusinessType(String businessType) {
+        // 1.调用DAO层根据业务类型查询持久化对象列表
         List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findByBusinessType(businessType);
+        
+        // 2.转换为聚合根列表并返回
         return templatePOs.stream()
                 .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
@@ -105,10 +130,10 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
 
     @Override
     public List<NoticeTemplateAggregate> pageQuery(NoticeTemplatePageQueryReq req) {
-        // 执行分页查询（PageHelper已在Service层启动）
+        // 1.执行分页查询（PageHelper已在Service层启动）
         List<NoticeTemplatePO> poList = noticeTemplateDao.selectByCondition(req);
 
-        // 转换为聚合根列表
+        // 2.转换为聚合根列表
         return poList.stream()
                 .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
@@ -120,7 +145,10 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
      * @return 启用的模板列表
      */
     public List<NoticeTemplateAggregate> findEnabledTemplates() {
+        // 1.调用DAO层查询启用的模板持久化对象
         List<NoticeTemplatePO> templatePOs = noticeTemplateDao.findEnabledTemplates();
+        
+        // 2.转换为聚合根列表并返回
         return templatePOs.stream()
                 .map(NoticeTemplateConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());

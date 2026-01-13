@@ -24,12 +24,12 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate createNoticeTemplate(String name, String code, String content) {
-        // 验证模板编码唯一性
+        // 1.验证模板编码唯一性
         if (noticeTemplateRepository.existsByCode(code)) {
             throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_CODE_EXISTS);
         }
 
-        // 创建模板聚合根
+        // 2.创建模板聚合根
         NoticeTemplateAggregate template = NoticeTemplateAggregate.create(name, code, content);
 
         log.info("通知模板领域服务创建模板，模板ID: {}, 模板编码: {}", template.getId(), code);
@@ -38,10 +38,10 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate updateTemplateName(String templateId, String newName) {
-        // 获取模板
+        // 1.获取模板
         NoticeTemplateAggregate template = noticeTemplateRepository.findByIdOrThrow(templateId);
 
-        // 更新模板名称
+        // 2.更新模板名称
         template.updateName(newName);
 
         log.info("通知模板领域服务更新模板名称，模板ID: {}, 新名称: {}", templateId, newName);
@@ -50,10 +50,10 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate updateTemplateContent(String templateId, String newContent) {
-        // 获取模板
+        // 1.获取模板
         NoticeTemplateAggregate template = noticeTemplateRepository.findByIdOrThrow(templateId);
 
-        // 更新模板内容
+        // 2.更新模板内容
         template.updateContent(newContent);
 
         log.info("通知模板领域服务更新模板内容，模板ID: {}, 内容长度: {}", templateId, newContent.length());
@@ -62,10 +62,10 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate enableTemplate(String templateId) {
-        // 获取模板
+        // 1.获取模板
         NoticeTemplateAggregate template = noticeTemplateRepository.findByIdOrThrow(templateId);
 
-        // 启用模板
+        // 2.启用模板
         template.enable();
 
         log.info("通知模板领域服务启用模板，模板ID: {}", templateId);
@@ -74,10 +74,10 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate disableTemplate(String templateId) {
-        // 获取模板
+        // 1.获取模板
         NoticeTemplateAggregate template = noticeTemplateRepository.findByIdOrThrow(templateId);
 
-        // 禁用模板
+        // 2.禁用模板
         template.disable();
 
         log.info("通知模板领域服务禁用模板，模板ID: {}", templateId);
@@ -86,15 +86,19 @@ public class NoticeTemplateDomainServiceImpl implements INoticeTemplateDomainSer
 
     @Override
     public NoticeTemplateAggregate getTemplateByCode(String code) {
+        // 1.根据编码获取模板
         return noticeTemplateRepository.findByCodeOrThrow(code);
     }
 
     @Override
     public boolean isValidTemplate(String code) {
         try {
+            // 1.根据编码获取模板
             NoticeTemplateAggregate template = noticeTemplateRepository.findByCodeOrThrow(code);
+            // 2.检查模板是否启用
             return template.isEnabled();
         } catch (NoticeException e) {
+            // 3.模板不存在时返回false
             return false;
         }
     }

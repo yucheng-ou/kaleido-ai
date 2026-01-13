@@ -26,6 +26,7 @@
         <module>kaleido-aop</module>
         <module>kaleido-sms</module>
         <module>kaleido-sa-token</module>
+        <module>kaleido-job</module>
     </modules>
 
     <dependencies>

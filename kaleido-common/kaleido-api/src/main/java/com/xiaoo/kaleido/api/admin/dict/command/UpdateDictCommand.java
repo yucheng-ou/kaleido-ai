@@ -12,28 +12,30 @@ import lombok.*;
  * @author ouyucheng
  * @date 2025/12/30
  */
-@Value
+@Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@AllArgsConstructor 
+@NoArgsConstructor
 public class UpdateDictCommand extends BaseCommand {
 
     /**
      * 字典类型名称
      */
-    String typeName;
+    private String typeName;
 
     /**
      * 字典名称
      */
-    String dictName;
+    private String dictName;
 
     /**
      * 字典值
      */
-    String dictValue;
+    private String dictValue;
 
     /**
      * 排序
      */
-    Integer sort;
+    private Integer sort;
 }

@@ -37,8 +37,7 @@ public class RpcAdminAuthServiceImpl implements IRpcAdminAuthService {
     }
 
     @Override
-    public Result<Void> login(
-            String adminUserId) {
+    public Result<Void> login(String adminUserId) {
 
         adminCommandService.login(adminUserId);
         return Result.success();

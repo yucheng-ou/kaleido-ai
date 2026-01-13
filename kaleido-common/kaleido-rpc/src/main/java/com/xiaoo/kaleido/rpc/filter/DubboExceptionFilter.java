@@ -53,28 +53,28 @@ public class DubboExceptionFilter implements Filter {
     }
 
     private org.apache.dubbo.rpc.Result convertExceptionToResult(Throwable e, Invoker<?> invoker, Invocation invocation) {
-        // 解包UndeclaredThrowableException（AOP代理可能包装的异常）
+        // 1. 解包UndeclaredThrowableException（AOP代理可能包装的异常）
         Throwable cause = unwrapException(e);
 
-        // 记录异常详情
+        // 2. 记录异常详情
         logExceptionDetails(cause, invoker, invocation);
 
-        // 转换为Result对象
+        // 3. 转换为Result对象
         Result<String> result = createResultFromException(cause);
 
-        // 返回干净的AsyncRpcResult，避免序列化异常类
+        // 4. 返回干净的AsyncRpcResult，避免序列化异常类
         return AsyncRpcResult.newDefaultAsyncResult(result, invocation);
     }
 
     private Throwable unwrapException(Throwable e) {
         Throwable cause = e;
 
-        // 解包UndeclaredThrowableException
+        // 1. 解包UndeclaredThrowableException
         while (cause instanceof UndeclaredThrowableException) {
             cause = ((UndeclaredThrowableException) cause).getUndeclaredThrowable();
         }
 
-        // 获取根本原因
+        // 2. 获取根本原因
         while (cause != null && cause.getCause() != null && cause.getCause() != cause) {
             cause = cause.getCause();
         }
@@ -104,10 +104,10 @@ public class DubboExceptionFilter implements Filter {
 
     /**
      * 根据异常封装统一Result
-     * 为什么同意返回Result而不是直接抛出异常 因为调用方不一定是Java服务
+     * 返回Result而不是直接抛出异常，因为调用方不一定是Java服务
      *
      * @param e 异常信息
-     * @return Result.error
+     * @return 统一的错误Result
      */
     private Result<String> createResultFromException(Throwable e) {
         if (e instanceof BizException bizException) {
@@ -154,23 +154,23 @@ public class DubboExceptionFilter implements Filter {
         // 例如："register.command.username: 管理员账号不能为空, register.command.username: 管理员账号长度必须在4-20位之间"
         // 应该只返回："管理员账号不能为空"
         
-        // 首先，查找第一个冒号后的内容
+        // 1. 首先，查找第一个冒号后的内容
         int firstColonIndex = fullMessage.indexOf(':');
         if (firstColonIndex == -1) {
             // 没有冒号，直接返回原消息
             return fullMessage;
         }
         
-        // 获取第一个冒号后的部分
+        // 2. 获取第一个冒号后的部分
         String afterFirstColon = fullMessage.substring(firstColonIndex + 1).trim();
         
-        // 如果还有逗号，只取逗号前的部分
+        // 3. 如果还有逗号，只取逗号前的部分
         int firstCommaIndex = afterFirstColon.indexOf(',');
         if (firstCommaIndex != -1) {
-            // 找到第一个错误信息（逗号前的内容）
+            // 3.1 找到第一个错误信息（逗号前的内容）
             String firstError = afterFirstColon.substring(0, firstCommaIndex).trim();
             
-            // 清理可能的多余前缀（如字段名重复）
+            // 3.2 清理可能的多余前缀（如字段名重复）
             // 例如："管理员账号不能为空, register.command.username: 管理员账号长度必须在4-20位之间"
             // 我们需要确保只返回纯错误信息
             
@@ -183,7 +183,7 @@ public class DubboExceptionFilter implements Filter {
             return firstError;
         }
         
-        // 没有逗号，直接返回第一个冒号后的内容
+        // 4. 没有逗号，直接返回第一个冒号后的内容
         // 但需要检查是否还包含其他字段前缀
         int anotherColonIndex = afterFirstColon.indexOf(':');
         if (anotherColonIndex != -1) {

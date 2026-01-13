@@ -1,6 +1,10 @@
 package com.xiaoo.kaleido.api.user.response;
-import lombok.Data;
+
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
+
 import java.util.Date;
+
 /**
  * 用户信息响应
  *
@@ -8,7 +12,12 @@ import java.util.Date;
  * @date 2025/12/16
  */
 @Data
-public class UserInfoResponse {
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor 
+@NoArgsConstructor
+public class UserInfoResponse extends BaseResp {
+
     /**
      * 用户ID
      */

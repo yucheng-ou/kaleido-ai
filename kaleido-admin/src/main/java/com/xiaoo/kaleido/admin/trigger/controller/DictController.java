@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
@@ -8,6 +9,7 @@ import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.command.DictCommandService;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ public class DictController {
      * @return 字典ID
      */
     @PostMapping
+    @SaCheckPermission(value = "admin:dict:create", type = StpAdminUtil.TYPE)
     public Result<String> createDict(
             @Valid @RequestBody AddDictCommand command) {
         return Result.success(dictCommandService.createDict(command));
@@ -50,11 +53,12 @@ public class DictController {
      * @return 操作结果
      */
     @PutMapping("/{dictId}")
+    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
     public Result<Void> updateDict(
             @PathVariable String dictId,
             @Valid @RequestBody UpdateDictCommand command) {
 
-        dictCommandService.updateDict(dictId,command);
+        dictCommandService.updateDict(dictId, command);
         return Result.success();
 
     }
@@ -66,6 +70,7 @@ public class DictController {
      * @return 操作结果
      */
     @PutMapping("/{dictId}/enable")
+    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
     public Result<Void> enableDict(
             @PathVariable String dictId) {
         dictCommandService.enableDict(dictId);
@@ -79,6 +84,7 @@ public class DictController {
      * @return 操作结果
      */
     @PutMapping("/{dictId}/disable")
+    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
     public Result<Void> disableDict(
             @PathVariable String dictId) {
 
@@ -94,6 +100,7 @@ public class DictController {
      * @return 操作结果
      */
     @DeleteMapping("/{dictId}")
+    @SaCheckPermission(value = "admin:dict:delete", type = StpAdminUtil.TYPE)
     public Result<Void> deleteDict(
             @PathVariable String dictId) {
 
@@ -108,6 +115,7 @@ public class DictController {
      * @return 分页结果
      */
     @GetMapping("/page")
+    @SaCheckPermission(value = "admin:dict:read", type = StpAdminUtil.TYPE)
     public Result<PageInfo<DictResponse>> pageDicts(
             DictPageQueryReq pageQueryReq) {
 

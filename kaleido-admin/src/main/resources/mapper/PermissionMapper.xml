@@ -166,6 +166,5 @@
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}
         </foreach>
-        ORDER BY p.sort ASC, p.created_at ASC
     </select>
 </mapper>

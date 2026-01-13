@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.user.domain.event;
 
-import com.xiaoo.kaleido.user.domain.constant.UserStatus;
+import com.xiaoo.kaleido.api.user.enums.UserStatus;
 import lombok.Getter;
 
 /**

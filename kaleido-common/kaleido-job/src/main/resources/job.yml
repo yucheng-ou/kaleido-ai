@@ -1,0 +1,11 @@
+xxl:
+  job:
+    accessToken: ${xxl.job.accessToken}
+    admin:
+      adminAddresses: http://${xxl.job.admin.address}/xxl-job-admin/
+    executor:
+      appName: ${xxl.job.executor.appName}
+      ip: ${xxl.job.executor.ip}
+      port: ${xxl.job.executor.port}
+
+

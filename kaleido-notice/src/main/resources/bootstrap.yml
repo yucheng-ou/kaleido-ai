@@ -15,6 +15,7 @@ spring:
       - classpath:ds.yml
       - classpath:rpc.yml
       - classpath:cache.yml
+      - classpath:job.yml
 
 dubbo:
   application:

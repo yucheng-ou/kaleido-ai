@@ -25,12 +25,12 @@ public class DictDomainServiceImpl implements IDictDomainService {
     @Override
     public DictAggregate createDict(String typeCode, String typeName, String dictCode,
                                     String dictName, String dictValue, Integer sort) {
-        // 验证字典编码唯一性
+        // 1. 验证字典编码唯一性
         if (dictRepository.existsByTypeCodeAndDictCode(typeCode, dictCode)) {
             throw AdminException.of(AdminErrorCode.DICT_CODE_EXIST);
         }
 
-        // 创建字典
+        // 2. 创建字典
         DictAggregate dictAggregate = DictAggregate.create(typeCode, typeName, dictCode, dictName, dictValue, sort);
 
         log.info("字典领域服务创建字典，字典ID: {}, 类型编码: {}, 字典编码: {}",
@@ -41,23 +41,22 @@ public class DictDomainServiceImpl implements IDictDomainService {
 
     @Override
     public DictAggregate updateDict(String dictId, String typeName, String dictName, String dictValue, Integer sort) {
-        // 获取字典
+        // 1. 获取字典
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
 
-        // 更新字典信息
+        // 2. 更新字典信息
         dictAggregate.updateInfo(typeName, dictName, dictValue, sort);
 
         log.info("字典领域服务更新字典，字典ID: {}, 字典名称: {}", dictId, dictName);
         return dictAggregate;
     }
 
-
     @Override
     public DictAggregate enableDict(String dictId) {
-        // 获取字典
+        // 1. 获取字典
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
 
-        // 启用字典
+        // 2. 启用字典
         dictAggregate.enable();
 
         log.info("字典领域服务启用字典，字典ID: {}", dictId);
@@ -66,10 +65,10 @@ public class DictDomainServiceImpl implements IDictDomainService {
 
     @Override
     public DictAggregate disableDict(String dictId) {
-        // 获取字典
+        // 1. 获取字典
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
 
-        // 禁用字典
+        // 2. 禁用字典
         dictAggregate.disable();
 
         log.info("字典领域服务禁用字典，字典ID: {}", dictId);
@@ -78,7 +77,7 @@ public class DictDomainServiceImpl implements IDictDomainService {
 
     @Override
     public DictAggregate deleteDict(String dictId) {
-        // 获取字典（验证字典是否存在）
+        // 1. 获取字典（验证字典是否存在）
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
 
         log.info("字典领域服务准备删除字典，字典ID: {}", dictId);

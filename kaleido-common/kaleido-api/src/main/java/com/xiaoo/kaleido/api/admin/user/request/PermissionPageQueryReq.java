@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.api.admin.user.request;
 import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import com.xiaoo.kaleido.base.request.BasePageReq;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
 /**
  * 鏉冮檺鍒嗛〉鏌ヨ璇锋眰
  *
@@ -11,6 +11,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PermissionPageQueryReq extends BasePageReq {
     /**
      * 权限编码

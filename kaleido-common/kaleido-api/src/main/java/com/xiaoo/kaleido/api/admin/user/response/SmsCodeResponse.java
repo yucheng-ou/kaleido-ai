@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.api.admin.user.response;
 
-import lombok.Data;
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
 
 import java.util.Date;
 
@@ -11,7 +12,11 @@ import java.util.Date;
  * @date 2025/12/31
  */
 @Data
-public class SmsCodeResponse {
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@AllArgsConstructor 
+@NoArgsConstructor
+public class SmsCodeResponse extends BaseResp {
     
     /**
      * 手机号

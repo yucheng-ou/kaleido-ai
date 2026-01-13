@@ -6,7 +6,7 @@ import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 
 
 public class StpUtilConfig {
-    public void init(){
+    public void init() {
         SaTokenConfig adminConfig = new SaTokenConfig();
         adminConfig.setTokenName("kaleido-admin-token");
         adminConfig.setTimeout(2592000);
@@ -15,7 +15,7 @@ public class StpUtilConfig {
         adminConfig.setIsShare(true);
         adminConfig.setIsLog(true);
         adminConfig.setTokenStyle("random-64");
-        StpAdminUtil.stpLogic.setConfig(adminConfig);
+        StpAdminUtil.getStpLogic().setConfig(adminConfig);
 
         SaTokenConfig userConfig = new SaTokenConfig();
         userConfig.setTokenName("kaleido-user-token");
@@ -25,6 +25,6 @@ public class StpUtilConfig {
         userConfig.setIsShare(true);
         userConfig.setIsLog(true);
         userConfig.setTokenStyle("random-64");
-        StpUserUtil.stpLogic.setConfig(userConfig);
+        StpUserUtil.getStpLogic().setConfig(userConfig);
     }
 }

@@ -237,7 +237,7 @@ public interface IRedisService {
 
     /**
      * 获取 Redis 过期信号量
-     * <p>
+     * 
      * 基于Redis的Redisson的分布式信号量（Semaphore）Java对象RSemaphore采用了与java.util.concurrent.Semaphore相似的接口和用法。
      * 同时还提供了异步（Async）、反射式（Reactive）和RxJava2标准的接口。
      *

@@ -1,14 +1,13 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
-import com.github.pagehelper.PageInfo;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.xiaoo.kaleido.api.admin.user.command.AddPermissionCommand;
-import com.xiaoo.kaleido.api.admin.user.command.DeletePermissionCommand;
 import com.xiaoo.kaleido.api.admin.user.command.UpdatePermissionCommand;
-import com.xiaoo.kaleido.api.admin.user.request.PermissionPageQueryReq;
 import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import com.xiaoo.kaleido.admin.application.command.PermissionCommandService;
 import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,7 @@ public class PermissionController {
      * @param command 创建权限命令
      * @return 权限ID
      */
+    @SaCheckPermission(value = "admin:permission:create", type = StpAdminUtil.TYPE)
     @PostMapping
     public Result<String> createPermission(
             @Valid @RequestBody AddPermissionCommand command) {
@@ -53,6 +53,7 @@ public class PermissionController {
      * @param command 更新权限信息命令（不包含权限ID）
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:permission:update", type = StpAdminUtil.TYPE)
     @PutMapping("/{permissionId}")
     public Result<Void> updatePermission(
             @PathVariable String permissionId,
@@ -68,6 +69,7 @@ public class PermissionController {
      * @param code 新的权限编码
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:permission:update", type = StpAdminUtil.TYPE)
     @PutMapping("/{permissionId}/code")
     public Result<Void> updatePermissionCode(
             @PathVariable String permissionId,
@@ -82,10 +84,11 @@ public class PermissionController {
      * @param permissionId 权限ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:permission:delete", type = StpAdminUtil.TYPE)
     @DeleteMapping("/{permissionId}")
     public Result<Void> deletePermission(
             @PathVariable String permissionId) {
-        permissionCommandService.deletePermission(new DeletePermissionCommand(permissionId));
+        permissionCommandService.deletePermission(permissionId);
         return Result.success();
     }
 
@@ -95,6 +98,7 @@ public class PermissionController {
      * @param permissionId 权限ID
      * @return 权限信息
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/{permissionId}")
     public Result<PermissionInfoResponse> getPermissionById(
             @PathVariable String permissionId) {
@@ -108,6 +112,7 @@ public class PermissionController {
      * @param code 权限编码
      * @return 权限信息
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/code/{code}")
     public Result<PermissionInfoResponse> getPermissionByCode(
             @PathVariable String code) {
@@ -121,6 +126,7 @@ public class PermissionController {
      * @param parentId 父权限ID
      * @return 子权限列表
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/parent/{parentId}")
     public Result<List<PermissionInfoResponse>> getPermissionsByParentId(
             @PathVariable String parentId) {
@@ -133,6 +139,7 @@ public class PermissionController {
      *
      * @return 根权限列表
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/root")
     public Result<List<PermissionInfoResponse>> getRootPermissions() {
         List<PermissionInfoResponse> permissions = permissionQueryService.findRootPermissions();
@@ -144,6 +151,7 @@ public class PermissionController {
      *
      * @return 权限树根节点列表
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/tree")
     public Result<List<PermissionInfoResponse>> getPermissionTree() {
         List<PermissionInfoResponse> permissionTree = permissionQueryService.getPermissionTree();
@@ -156,6 +164,7 @@ public class PermissionController {
      * @param code 权限编码
      * @return 是否可用
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/check-code")
     public Result<Boolean> checkCodeAvailable(
             @RequestParam String code) {
@@ -169,6 +178,7 @@ public class PermissionController {
      * @param permissionId 权限ID
      * @return 是否存在且有效
      */
+    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/check-valid")
     public Result<Boolean> checkPermissionValid(
             @RequestParam String permissionId) {

@@ -1,21 +1,23 @@
 package com.xiaoo.kaleido.api.notice.response;
+
 import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.xiaoo.kaleido.base.response.BaseResp;
+import lombok.*;
+
 import java.util.Date;
+
 /**
- * 閫氱煡妯℃澘鍝嶅簲瀵硅薄
+ * 通知模板响应对象
  *
  * @author ouyucheng
  * @date 2025/12/30
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class NoticeTemplateResponse {
+@NoArgsConstructor
+public class NoticeTemplateResponse extends BaseResp {
     /**
      * 模板ID
      */
@@ -24,7 +26,7 @@ public class NoticeTemplateResponse {
      * 模板编码
      */
     private String code;
-    
+
     /**
      * 模板名称
      */

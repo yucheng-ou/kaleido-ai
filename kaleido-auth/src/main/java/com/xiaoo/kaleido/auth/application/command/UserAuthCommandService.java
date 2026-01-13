@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.auth.application.command;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
-import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
@@ -9,6 +8,7 @@ import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
 import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
 import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
+import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.api.user.IRpcUserService;
 import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
@@ -27,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 /**
- * 授权命令服务
+ * 用户授权命令服务
+ * <p>
+ * 负责普通用户的短信验证码发送、注册、登录等授权相关命令操作
  *
  * @author ouyucheng
  * @date 2025/12/31
@@ -44,18 +46,13 @@ public class UserAuthCommandService {
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcUserService rpcUserService;
 
-    /**
-     * 发送短信验证码
-     *
-     * @param command 发送短信验证码命令
-     * @return 短信验证码响应
-     */
     public SmsCodeResponse sendSmsCode(SendSmsCodeCommand command) {
         log.info("发送短信验证码，手机号: {}", command.getMobile());
 
         // 调用RPC服务发送短信验证码
         SendSmsVerifyCodeCommand smsCommand = SendSmsVerifyCodeCommand.builder()
                 .mobile(command.getMobile())
+                .targetType(TargetTypeEnum.USER)
                 .build();
 
         Result<String> result = rpcNoticeService.generateAndSendSmsVerifyCode(smsCommand);
@@ -66,21 +63,17 @@ public class UserAuthCommandService {
         }
 
         // 构建响应
-        SmsCodeResponse response = new SmsCodeResponse();
-        response.setMobile(command.getMobile());
-        response.setCode(result.getData());
-        response.setSendTime(new Date());
+        SmsCodeResponse response = SmsCodeResponse
+                .builder()
+                .mobile(command.getMobile())
+                .code(result.getData())
+                .sendTime(new Date())
+                .build();
 
         log.info("短信验证码发送成功，手机号: {}", command.getMobile());
         return response;
     }
-    
-    /**
-     * 用户注册
-     *
-     * @param command 注册命令
-     * @return 注册响应
-     */
+
     public RegisterResponse register(RegisterUserCommand command) {
         log.info("用户注册，手机号: {}", command.getTelephone());
 
@@ -92,25 +85,18 @@ public class UserAuthCommandService {
 
         if (!Boolean.TRUE.equals(registerResult.getSuccess())) {
             log.error("用户注册失败，手机号: {}, 错误: {}", command.getTelephone(), registerResult.getMsg());
-            throw new AuthException(AuthErrorCode.AUTH_LOGIN_FAILED);
+            throw AuthException.of(registerResult.getCode(), registerResult.getMsg());
         }
 
         String userId = registerResult.getData();
 
         // 3. 构建响应
-        RegisterResponse response = new RegisterResponse();
-        response.setUserId(userId);
+        RegisterResponse response = RegisterResponse.builder().userId(userId).build();
 
         log.info("用户注册成功，用户ID: {}, 手机号: {}", userId, command.getTelephone());
         return response;
     }
-    
-    /**
-     * 用户登录
-     *
-     * @param command 登录命令
-     * @return 登录响应
-     */
+
     public UserLoginResponse login(AdminLoginCommand command) {
         log.info("用户登录，手机号: {}", command.getMobile());
 
@@ -124,37 +110,30 @@ public class UserAuthCommandService {
         Result<Void> loginResult = rpcUserService.login(user.getUserId());
         if (!Boolean.TRUE.equals(loginResult.getSuccess())) {
             log.error("用户登录记录失败，用户ID: {}, 错误: {}", user.getUserId(), loginResult.getMsg());
-            throw new AuthException(AuthErrorCode.AUTH_LOGIN_FAILED);
+            throw AuthException.of(loginResult.getCode(), loginResult.getMsg());
         }
 
         // 4. 使用Sa-Token登录
-         StpUserUtil.login(user.getUserId());
-         SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+        StpUserUtil.login(user.getUserId());
+        StpUserUtil.getStpLogic().getSession().set(user.getUserId(), user);
+        SaTokenInfo tokenInfo = StpUserUtil.getTokenInfo();
 
         // 5. 构建响应
-        UserLoginResponse response = new UserLoginResponse();
-        response.setUserId(user.getUserId());
-        response.setToken(tokenInfo.getTokenValue());
-        response.setUserInfo(user);
+        UserLoginResponse response = new UserLoginResponse(user.getUserId(), tokenInfo.getTokenValue(), user);
 
         log.info("用户登录成功，用户ID: {}, 手机号: {}", user.getUserId(), command.getMobile());
         return response;
     }
-    
-    /**
-     * 验证短信验证码
-     *
-     * @param mobile 手机号
-     * @param code 验证码
-     */
+
     private void verifySmsCode(String mobile, String code) {
         CheckSmsVerifyCodeCommand checkCommand = CheckSmsVerifyCodeCommand.builder()
+                .targetType(TargetTypeEnum.USER)
                 .mobile(mobile)
                 .verifyCode(code)
                 .build();
-        
+
         Result<Boolean> result = rpcNoticeService.checkSmsVerifyCode(checkCommand);
-        
+
         if (!Boolean.TRUE.equals(result.getSuccess()) || !Boolean.TRUE.equals(result.getData())) {
             log.error("短信验证码验证失败，手机号: {}, 验证码: {}", mobile, code);
             throw new AuthException(AuthErrorCode.AUTH_CAPTCHA_ERROR);

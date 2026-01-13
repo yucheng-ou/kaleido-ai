@@ -8,15 +8,15 @@ import java.util.Date;
 /**
  * MyBatis Plus元对象处理器
  * 
- * <p>该类实现了{@link MetaObjectHandler}接口，用于自动填充实体类的公共字段。</p>
+ * 该类实现了{@link MetaObjectHandler}接口，用于自动填充实体类的公共字段。
  * 
- * <p>主要功能包括：
+ * 主要功能包括：
  * <ul>
  *   <li>在插入操作时自动填充创建时间、更新时间、删除状态和乐观锁版本号</li>
  *   <li>在更新操作时自动填充更新时间</li>
  *   <li>提供智能填充机制，仅在字段值为null时进行填充，避免覆盖已有值</li>
  * </ul>
- * </p>
+ * 
  * 
  * @author ouyucheng
  * @date 2025/11/5 11:40
@@ -27,7 +27,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
      * 插入操作时的自动填充处理
      * 
-     * <p>在实体类插入数据库时自动填充以下字段：</p>
+     * 在实体类插入数据库时自动填充以下字段：
      * <ul>
      *   <li>createdAt - 创建时间，如果字段值为null则设置为当前时间</li>
      *   <li>updatedAt - 更新时间，如果字段值为null则设置为当前时间</li>
@@ -52,8 +52,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
      * 条件设置字段值（仅在字段值为null时设置）
      * 
-     * <p>该方法提供智能填充机制，只有在字段值为null时才进行填充，
-     * 避免在单元测试或其他场景中覆盖已经设置的值。</p>
+     * 该方法提供智能填充机制，只有在字段值为null时才进行填充，
+     * 避免在单元测试或其他场景中覆盖已经设置的值。
      *
      * @param fieldName 字段名称
      * @param fieldVal 字段值
@@ -68,7 +68,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     /**
      * 更新操作时的自动填充处理
      * 
-     * <p>在实体类更新数据库时自动填充更新时间字段：</p>
+     * 在实体类更新数据库时自动填充更新时间字段：
      * <ul>
      *   <li>updatedAt - 更新时间，强制设置为当前时间</li>
      * </ul>

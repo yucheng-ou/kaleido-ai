@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
@@ -8,6 +9,7 @@ import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
 import com.xiaoo.kaleido.admin.application.command.AdminCommandService;
 import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,7 @@ public class AdminController {
      * @param command     更新管理员信息命令（不包含管理员ID）
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:user:update", type = StpAdminUtil.TYPE)
     @PutMapping("/{adminId}")
     public Result<Void> updateAdmin(
             @PathVariable String adminId,
@@ -53,6 +56,7 @@ public class AdminController {
      * @param adminId 管理员ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:user:enable", type = StpAdminUtil.TYPE)
     @PutMapping("/{adminId}/enable")
     public Result<Void> enableAdmin(
             @PathVariable String adminId) {
@@ -66,6 +70,7 @@ public class AdminController {
      * @param adminId 管理员ID
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:user:freeze", type = StpAdminUtil.TYPE)
     @PutMapping("/{adminId}/freeze")
     public Result<Void> freezeAdmin(
             @PathVariable String adminId) {
@@ -80,6 +85,7 @@ public class AdminController {
      * @param command     分配角色命令（不包含管理员ID）
      * @return 操作结果
      */
+    @SaCheckPermission(value = "admin:user:assign-roles", type = StpAdminUtil.TYPE)
     @PostMapping("/{adminId}/roles")
     public Result<Void> assignRoles(
             @PathVariable String adminId,
@@ -94,6 +100,7 @@ public class AdminController {
      * @param adminId 管理员ID
      * @return 管理员信息
      */
+    @SaCheckPermission(value = "admin:user:read", type = StpAdminUtil.TYPE)
     @GetMapping("/{adminId}")
     public Result<AdminInfoResponse> getAdminById(
             @PathVariable String adminId) {
@@ -108,6 +115,7 @@ public class AdminController {
      * @param pageQueryReq 分页查询条件
      * @return 分页结果
      */
+    @SaCheckPermission(value = "admin:user:read", type = StpAdminUtil.TYPE)
     @GetMapping("/page")
     public Result<PageInfo<AdminInfoResponse>> pageAdminList(
             AdminPageQueryReq pageQueryReq) {
@@ -121,6 +129,7 @@ public class AdminController {
      * @param adminId 管理员ID
      * @return 权限ID列表
      */
+    @SaCheckPermission(value = "admin:user:read", type = StpAdminUtil.TYPE)
     @GetMapping("/{adminId}/permissions")
     public Result<List<String>> getAdminPermissions(
             @PathVariable String adminId) {
@@ -134,6 +143,7 @@ public class AdminController {
      * @param adminId 管理员ID
      * @return 目录和菜单树
      */
+    @SaCheckPermission(value = "admin:user:read", type = StpAdminUtil.TYPE)
     @GetMapping("/{adminId}/directory-menus")
     public Result<List<PermissionInfoResponse>> getAdminDirectoryAndMenus(
             @PathVariable String adminId) {
