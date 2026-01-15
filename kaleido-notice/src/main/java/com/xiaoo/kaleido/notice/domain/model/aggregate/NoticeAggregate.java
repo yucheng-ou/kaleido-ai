@@ -83,18 +83,9 @@ public class NoticeAggregate extends BaseEntity {
      * @param content      通知内容
      * @return 通知聚合根
      */
-    public static NoticeAggregate create(String noticeId, NoticeTypeEnum noticeType, TargetAddress target,
-                                         BusinessTypeEnum businessType, String content) {
+    public static NoticeAggregate create(String noticeId, NoticeTypeEnum noticeType, TargetAddress target, BusinessTypeEnum businessType, String content) {
 
-        return NoticeAggregate.builder()
-                .id(noticeId)
-                .noticeType(noticeType)
-                .target(target)
-                .status(NoticeStatusEnum.PENDING)
-                .businessType(businessType)
-                .content(content)
-                .retryStatus(RetryStatus.init())
-                .build();
+        return NoticeAggregate.builder().id(noticeId).noticeType(noticeType).target(target).status(NoticeStatusEnum.PENDING).businessType(businessType).content(content).retryStatus(RetryStatus.init()).build();
     }
 
     /**
@@ -106,8 +97,7 @@ public class NoticeAggregate extends BaseEntity {
      * @param content      通知内容
      * @return 通知聚合根
      */
-    public static NoticeAggregate create(NoticeTypeEnum noticeType, TargetAddress target,
-                                         BusinessTypeEnum businessType, String content) {
+    public static NoticeAggregate create(NoticeTypeEnum noticeType, TargetAddress target, BusinessTypeEnum businessType, String content) {
         // 使用雪花算法生成ID
         String noticeId = SnowflakeUtil.newSnowflakeId();
         return create(noticeId, noticeType, target, businessType, content);
@@ -131,12 +121,16 @@ public class NoticeAggregate extends BaseEntity {
      * @param resultMessage 失败原因
      */
     public void markAsFailed(String resultMessage) {
+        this.resultMessage = resultMessage;
+        this.sentAt = new Date();
+
+        retryStatus.update(MAX_RETRY_NUM);
+
         if (isNeedRetry()) {
-            //需要进行重试 标记为待发送 更新重试次数
+            //需要进行重试 标记为待发送
             this.status = NoticeStatusEnum.PENDING;
-            retryStatus.retry();
         } else {
-            //不需要重试了 直接记录为发送失败
+            //直接记录为发送失败
             this.status = NoticeStatusEnum.FAILED;
         }
     }
@@ -185,7 +179,7 @@ public class NoticeAggregate extends BaseEntity {
     }
 
     public boolean isNeedRetry() {
-        return retryStatus.getRetryNum() <= MAX_RETRY_NUM;
+        return retryStatus.getRetryNum() < MAX_RETRY_NUM;
     }
 
 }

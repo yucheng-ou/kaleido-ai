@@ -26,7 +26,7 @@ public class MyXxlJobExecutor {
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor() {
         XxlJobSpringExecutor xxlJobSpringExecutor = new XxlJobSpringExecutor();
-        xxlJobSpringExecutor.setAdminAddresses(adminAddresses);
+        xxlJobSpringExecutor.setAdminAddresses("http://" + adminAddresses + "/xxl-job-admin/");
         xxlJobSpringExecutor.setAccessToken(accessToken);
         xxlJobSpringExecutor.setIp(ip);
         xxlJobSpringExecutor.setPort(port);

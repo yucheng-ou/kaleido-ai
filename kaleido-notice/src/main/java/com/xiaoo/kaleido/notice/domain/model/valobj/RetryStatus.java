@@ -39,8 +39,12 @@ public class RetryStatus {
         return RetryStatus.builder().nextRetryAt(nextRetryAt).retryNum(retryNum).build();
     }
 
-    public void retry() {
+    public void update(Integer maxRetryNum) {
+        if (retryNum >= maxRetryNum - 1) {
+            nextRetryAt = null;
+        } else {
+            nextRetryAt = new Date(System.currentTimeMillis() + retryIntervalTime);
+        }
         retryNum++;
-        nextRetryAt = new Date(System.currentTimeMillis() + retryIntervalTime);
     }
 }

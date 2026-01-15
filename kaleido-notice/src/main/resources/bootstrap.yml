@@ -1,8 +1,3 @@
-server:
-  port: 9014
-  servlet:
-    context-path: /kaleido-notice
-
 spring:
   application:
     name: kaleido-notice
@@ -10,13 +5,10 @@ spring:
     active: dev
   config:
     import:
-      - nacos:${spring.application.name}-${spring.profiles.active}.yml
       - classpath:nacos.yml
-      - classpath:ds.yml
-      - classpath:rpc.yml
-      - classpath:cache.yml
-      - classpath:job.yml
-
-dubbo:
-  application:
-    qos-port: 22224  # 添加此行，指定新的 QOS 端口
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - nacos:kaleido-job.yml
+      - nacos:kaleido-ds.yml
+      - nacos:kaleido-rpc.yml
+      - nacos:kaleido-cache.yml
+      - nacos:kaleido-dynamic-tp.yml

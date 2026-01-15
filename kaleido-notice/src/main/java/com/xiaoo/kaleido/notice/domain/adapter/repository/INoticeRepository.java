@@ -107,4 +107,12 @@ public interface INoticeRepository {
      * @return 通知列表
      */
     List<NoticeAggregate> pageQuery(NoticePageQueryReq req);
+
+    /**
+     * 查找需要重试的通知列表
+     *
+     * @param limit 查询限制条数
+     * @return 需要重试的通知列表
+     */
+    List<NoticeAggregate> findRetryNotices(Integer limit);
 }

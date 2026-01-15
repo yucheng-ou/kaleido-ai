@@ -64,7 +64,9 @@
         <sa-token.version>1.44.0</sa-token.version>
         <jsqlparser.version>4.9</jsqlparser.version>
         <smart-doc.version>2.7.7</smart-doc.version>
-        <xxl-job.version>2.4.0</xxl-job.version>
+        <xxl-job.version>3.3.2</xxl-job.version>
+        <dynamic-tp.version>1.2.2-x</dynamic-tp.version>
+        <jackson.version>2.17.3</jackson.version>
 
     </properties>
 
@@ -242,6 +244,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-dynamic-tp</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-mq</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
@@ -308,6 +322,24 @@
                 <groupId>com.xuxueli</groupId>
                 <artifactId>xxl-job-core</artifactId>
                 <version>${xxl-job.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.dromara.dynamictp</groupId>
+                <artifactId>dynamic-tp-spring-boot-starter-nacos</artifactId>
+                <version>${dynamic-tp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
         </dependencies>

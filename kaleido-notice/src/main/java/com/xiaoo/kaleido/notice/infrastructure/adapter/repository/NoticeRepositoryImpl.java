@@ -87,7 +87,7 @@ public class NoticeRepositoryImpl implements INoticeRepository {
         NoticePO noticePO = NoticeConvertor.INSTANCE.toPO(notice);
 
         // 2.更新操作
-        noticeDao.insert(noticePO);
+        noticeDao.updateById(noticePO);
 
         // 3.重新加载并返回聚合根
         return NoticeConvertor.INSTANCE.toAggregate(noticePO);
@@ -161,15 +161,10 @@ public class NoticeRepositoryImpl implements INoticeRepository {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 查找需要重试的通知列表
-     *
-     * @param maxRetryNum 最大重试次数
-     * @return 需要重试的通知列表
-     */
-    public List<NoticeAggregate> findRetryNotices(Integer maxRetryNum) {
+    @Override
+    public List<NoticeAggregate> findRetryNotices(Integer limit) {
         // 1.调用DAO层查询需要重试的通知持久化对象
-        List<NoticePO> noticePOs = noticeDao.findRetryNotices(maxRetryNum);
+        List<NoticePO> noticePOs = noticeDao.findRetryNotices(limit);
 
         // 2.转换为聚合根列表并返回
         return noticePOs.stream()

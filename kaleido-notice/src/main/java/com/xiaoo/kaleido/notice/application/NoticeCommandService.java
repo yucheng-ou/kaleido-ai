@@ -95,15 +95,14 @@ public class NoticeCommandService {
         // 10.保存通知记录
         if (sendResult.getSuccess()) {
             smsVerifyCodeAggregate.markAsSuccess(JSONUtil.toJsonStr(sendResult));
+            noticeRepository.cacheVerifyCode(command.getTargetType(), command.getMobile(), verifyCode);
+            log.info("短信验证码发送成功，手机号: {}, 目标类型: {}", mobile, command.getTargetType());
         } else {
+            log.error("短信验证码发送失败，手机号: {}, 目标类型: {}，错误码：{},失败原因: {}", mobile, command.getTargetType(), sendResult.getCode(), sendResult.getMsg());
             smsVerifyCodeAggregate.markAsFailed(JSONUtil.toJsonStr(sendResult));
         }
         noticeRepository.save(smsVerifyCodeAggregate);
 
-        // 11.保存验证码到缓存
-        noticeRepository.cacheVerifyCode(command.getTargetType(), command.getMobile(), verifyCode);
-
-        log.info("短信验证码发送成功，手机号: {}, 目标类型: {}, 验证码: {}", mobile, command.getTargetType(), verifyCode);
         return verifyCode;
     }
 
