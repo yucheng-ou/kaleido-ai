@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.tag.infrastructure.dao.TagDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.tag.infrastructure.dao.po.TagPO">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="name" property="name" />
+        <result column="type_code" property="typeCode" />
+        <result column="color" property="color" />
+        <result column="description" property="description" />
+        <result column="usage_count" property="usageCount" />
+        <result column="status" property="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM t_tag WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="findByUserIdAndTypeCode" resultMap="BaseResultMap">
+        SELECT * FROM t_tag 
+        WHERE user_id = #{userId} 
+          AND type_code = #{typeCode} 
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="existsByUserIdAndNameAndTypeCode" resultType="boolean">
+        SELECT COUNT(1) > 0 FROM t_tag 
+        WHERE user_id = #{userId} 
+          AND name = #{name} 
+          AND type_code = #{typeCode} 
+          AND deleted = 0
+    </select>
+
+    <select id="findByIds" resultMap="BaseResultMap">
+        SELECT * FROM t_tag 
+        WHERE id IN 
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <select id="findByIdAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag 
+        WHERE id = #{tagId} 
+          AND user_id = #{userId} 
+          AND deleted = 0
+    </select>
+
+    <select id="findByIdsAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag 
+        WHERE id IN 
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        AND user_id = #{userId} 
+        AND deleted = 0
+    </select>
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT * FROM t_tag 
+        WHERE deleted = 0
+        <if test="queryReq.userId != null and queryReq.userId != ''">
+            AND user_id = #{queryReq.userId}
+        </if>
+        <if test="queryReq.typeCode != null and queryReq.typeCode != ''">
+            AND type_code = #{queryReq.typeCode}
+        </if>
+        <if test="queryReq.name != null and queryReq.name != ''">
+            AND name LIKE CONCAT('%', #{queryReq.name}, '%')
+        </if>
+        <if test="queryReq.status != null">
+            AND status = #{queryReq.status}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+</mapper>

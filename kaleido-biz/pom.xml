@@ -16,6 +16,8 @@
 
     <modules>
         <module>kaleido-user</module>
+        <module>kaleido-wardrobe</module>
+        <module>kaleido-tag</module>
     </modules>
 
     <properties>
