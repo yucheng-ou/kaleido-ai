@@ -21,7 +21,7 @@ public class BasePO implements Serializable {
     /**
      * 主键id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     private String id;
 
     /**

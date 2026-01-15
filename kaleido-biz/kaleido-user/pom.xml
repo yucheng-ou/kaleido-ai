@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ============================================
-     Kaleido 用户服务 - Maven 配置文件
-     ============================================
-     说明：用户微服务的Maven构建配置，定义项目依赖和构建参数
-     作者：ouyucheng
-     日期：2025/12/16
-     ============================================ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>

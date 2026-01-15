@@ -22,7 +22,7 @@ public class SmsService {
     public Result<Void> sendSmsMsg(String mobile, String msg) {
         //TODO 后续集成阿里云短信服务
 
-        return Result.success();
+        return Result.error("push failed", "短信推送失败");
     }
 
 }

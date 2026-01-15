@@ -78,10 +78,10 @@
         SELECT <include refid="NoticeColumns"/>
         FROM t_notice
         WHERE deleted = 0
-        AND status = 'FAILED'
+        AND status = 'PENDING'
         AND retry_num <![CDATA[ < ]]> max_retry_num
         AND (next_retry_at IS NULL OR next_retry_at <![CDATA[ <= ]]> NOW())
         ORDER BY created_at ASC
-        LIMIT #{maxRetryNum}
+        LIMIT #{limit}
     </select>
 </mapper>

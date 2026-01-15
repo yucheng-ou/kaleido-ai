@@ -27,6 +27,8 @@
         <module>kaleido-sms</module>
         <module>kaleido-sa-token</module>
         <module>kaleido-job</module>
+        <module>kaleido-dynamic-tp</module>
+        <module>kaleido-mq</module>
     </modules>
 
     <dependencies>

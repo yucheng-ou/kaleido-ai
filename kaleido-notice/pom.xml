@@ -74,6 +74,16 @@
             <artifactId>kaleido-job</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-dynamic-tp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-mq</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

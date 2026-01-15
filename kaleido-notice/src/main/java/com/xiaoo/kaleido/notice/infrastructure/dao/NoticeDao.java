@@ -53,8 +53,8 @@ public interface NoticeDao extends BaseMapper<NoticePO> {
     /**
      * 查找需要重试的通知列表
      *
-     * @param maxRetryNum 最大重试次数
+     * @param limit 查询限制条数
      * @return 需要重试的通知列表
      */
-    List<NoticePO> findRetryNotices(@Param("maxRetryNum") Integer maxRetryNum);
+    List<NoticePO> findRetryNotices(@Param("limit") Integer limit);
 }
