@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.tag.infrastructure.dao.TagRelationDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.tag.infrastructure.dao.po.TagRelationPO">
+        <id column="id" property="id" />
+        <result column="tag_id" property="tagId" />
+        <result column="entity_id" property="entityId" />
+        <result column="user_id" property="userId" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findByTagIdAndEntityId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE tag_id = #{tagId} 
+          AND entity_id = #{entityId} 
+          AND deleted = 0
+    </select>
+
+    <select id="findByTagId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE tag_id = #{tagId} 
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByEntityId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE entity_id = #{entityId} 
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByTagIdsAndEntityId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE tag_id IN 
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        AND entity_id = #{entityId} 
+        AND deleted = 0
+    </select>
+
+    <select id="findByTagIdAndEntityIds" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE tag_id = #{tagId} 
+          AND entity_id IN 
+        <foreach collection="entityIds" item="entityId" open="(" separator="," close=")">
+            #{entityId}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <select id="findByTagIdAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE tag_id = #{tagId} 
+          AND user_id = #{userId} 
+          AND deleted = 0
+    </select>
+
+    <select id="findByEntityIdAndUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_tag_relation 
+        WHERE entity_id = #{entityId} 
+          AND user_id = #{userId} 
+          AND deleted = 0
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+        INSERT INTO t_tag_relation (id, tag_id, entity_id, user_id, created_at, updated_at, lock_version, deleted)
+        VALUES 
+        <foreach collection="relations" item="relation" separator=",">
+            (#{relation.id}, #{relation.tagId}, #{relation.entityId}, #{relation.userId}, 
+             #{relation.createdAt}, #{relation.updatedAt}, #{relation.lockVersion}, 0)
+        </foreach>
+    </insert>
+
+    <update id="batchDelete" parameterType="list">
+        UPDATE t_tag_relation SET deleted = 1, updated_at = NOW() 
+        WHERE id IN 
+        <foreach collection="relations" item="relation" open="(" separator="," close=")">
+            #{relation.id}
+        </foreach>
+    </update>
+
+    <update id="deleteByTagId">
+        UPDATE t_tag_relation SET deleted = 1, updated_at = NOW() 
+        WHERE tag_id = #{tagId} AND deleted = 0
+    </update>
+
+    <update id="deleteByEntityId">
+        UPDATE t_tag_relation SET deleted = 1, updated_at = NOW() 
+        WHERE entity_id = #{entityId} AND deleted = 0
+    </update>
+
+    <update id="deleteByTagIdAndEntityIds">
+        UPDATE t_tag_relation SET deleted = 1, updated_at = NOW() 
+        WHERE tag_id = #{tagId} 
+          AND entity_id IN 
+        <foreach collection="entityIds" item="entityId" open="(" separator="," close=")">
+            #{entityId}
+        </foreach>
+        AND deleted = 0
+    </update>
+
+    <update id="deleteByTagIdsAndEntityId">
+        UPDATE t_tag_relation SET deleted = 1, updated_at = NOW() 
+        WHERE tag_id IN 
+        <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+        AND entity_id = #{entityId} 
+        AND deleted = 0
+    </update>
+
+</mapper>
