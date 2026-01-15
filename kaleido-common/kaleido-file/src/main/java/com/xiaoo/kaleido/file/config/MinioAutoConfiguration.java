@@ -1,0 +1,32 @@
+package com.xiaoo.kaleido.file.config;
+
+import com.xiaoo.kaleido.file.service.MinIOService;
+import com.xiaoo.kaleido.file.service.impl.MinIOServiceImpl;
+import io.minio.MinioClient;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+
+/**
+ * MinIO自动配置类
+ */
+@AutoConfiguration
+@ConditionalOnClass(io.minio.MinioClient.class)
+@ConditionalOnProperty(prefix = "minio", name = {"endpoint", "accessKey", "secretKey"})
+@EnableConfigurationProperties(MinIOProperties.class)
+@Import({MinIOConfig.class,})
+public class MinioAutoConfiguration {
+
+    /**
+     * 创建MinIOService Bean
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public MinIOService minIOService(MinioClient minioClient, MinIOProperties properties) {
+        return new MinIOServiceImpl(minioClient, properties);
+    }
+}

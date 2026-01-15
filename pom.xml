@@ -67,6 +67,7 @@
         <xxl-job.version>3.3.2</xxl-job.version>
         <dynamic-tp.version>1.2.2-x</dynamic-tp.version>
         <jackson.version>2.17.3</jackson.version>
+        <minio.version>8.6.0</minio.version>
 
     </properties>
 
@@ -256,6 +257,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.xiaoo</groupId>
+                <artifactId>kaleido-file</artifactId>
+                <version>${kaleido.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
@@ -340,6 +347,12 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
 
         </dependencies>
