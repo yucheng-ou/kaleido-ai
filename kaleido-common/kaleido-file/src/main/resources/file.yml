@@ -1,0 +1,6 @@
+minio:
+  endpoint: http://127.0.0.1:9000     # MinIO服务地址
+  fileHost: http://127.0.0.1:9000     # 文件地址host
+  bucketName: bucket                  # 存储桶bucket名称
+  accessKey: root                     # 用户名
+  secretKey: 12345678                 # 密码

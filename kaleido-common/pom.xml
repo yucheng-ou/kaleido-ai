@@ -29,6 +29,7 @@
         <module>kaleido-job</module>
         <module>kaleido-dynamic-tp</module>
         <module>kaleido-mq</module>
+        <module>kaleido-file</module>
     </modules>
 
     <dependencies>
