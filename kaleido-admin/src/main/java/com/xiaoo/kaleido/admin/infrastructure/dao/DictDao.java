@@ -39,10 +39,9 @@ public interface DictDao extends BaseMapper<DictPO> {
      * 根据字典类型编码查询启用的字典列表
      *
      * @param typeCode 字典类型编码
-     * @param status 状态
      * @return 启用的字典持久化对象列表
      */
-    List<DictPO> findEnabledByTypeCode(@Param("typeCode") String typeCode, @Param("status") String status);
+    List<DictPO> findEnabledByTypeCode(@Param("typeCode") String typeCode);
 
     /**
      * 检查字典类型编码和字典编码是否已存在

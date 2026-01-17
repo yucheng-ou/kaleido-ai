@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.notice.domain.service;
 
 import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
+import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
 
 /**
  * 通知领域服务接口
@@ -33,5 +34,29 @@ public interface INoticeDomainService {
      * @return 通知聚合根
      */
     NoticeAggregate createSmsVerifyCodeAggregate(String mobile, String content, TargetTypeEnum targetType);
+
+    /**
+     * 生成验证码
+     *
+     * @return 6位数字验证码
+     */
+    String generateVerifyCode();
+
+    /**
+     * 渲染模板内容
+     *
+     * @param template 模板聚合根
+     * @param verifyCode 验证码
+     * @return 渲染后的内容
+     */
+    String renderTemplate(NoticeTemplateAggregate template, String verifyCode);
+
+    /**
+     * 处理手机号参数
+     *
+     * @param mobile 原始手机号
+     * @return 处理后的手机号（去除空格）
+     */
+    String processMobile(String mobile);
 
 }

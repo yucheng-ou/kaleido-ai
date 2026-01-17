@@ -91,7 +91,7 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
     }
 
     @Override
-    public void deletePermission(String permissionId) {
+    public PermissionAggregate deletePermission(String permissionId) {
         // 1. 获取权限
         PermissionAggregate permission = findByIdOrThrow(permissionId);
 
@@ -101,10 +101,8 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
             throw AdminException.of(AdminErrorCode.PERMISSION_HAS_CHILDREN);
         }
 
-        // 3. 删除权限
-        permissionRepository.deleteById(permissionId);
-
-        log.info("权限领域服务删除权限，权限ID: {}", permissionId);
+        log.info("权限领域服务准备删除权限，权限ID: {}", permissionId);
+        return permission;
     }
 
     @Override

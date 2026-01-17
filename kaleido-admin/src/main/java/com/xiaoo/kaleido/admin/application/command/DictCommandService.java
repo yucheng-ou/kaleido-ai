@@ -60,26 +60,6 @@ public class DictCommandService {
         log.info("字典更新成功，字典ID: {}", dictId);
     }
 
-    public void enableDict(String dictId) {
-        // 1. 调用领域服务启用字典
-        DictAggregate dictAggregate = dictDomainService.enableDict(dictId);
-
-        // 2. 保存字典
-        dictRepository.update(dictAggregate);
-
-        log.info("字典启用成功，字典ID: {}", dictId);
-    }
-
-    public void disableDict(String dictId) {
-        // 1. 调用领域服务禁用字典
-        DictAggregate dictAggregate = dictDomainService.disableDict(dictId);
-
-        // 2. 保存字典
-        dictRepository.update(dictAggregate);
-
-        log.info("字典禁用成功，字典ID: {}", dictId);
-    }
-
     @Transactional
     public void deleteDict(String dictId) {
         // 1. 调用领域服务获取要删除的字典对象

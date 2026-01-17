@@ -7,7 +7,6 @@ import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IRoleDomainService;
 import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -57,38 +56,12 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     }
 
     @Override
-    public RoleAggregate enableRole(String roleId) {
-        // 1. 获取角色
+    public RoleAggregate deleteRole(String roleId) {
+        // 1. 获取角色（验证角色是否存在）
         RoleAggregate role = findByIdOrThrow(roleId);
 
-        // 2. 启用角色
-        role.enable();
-
-        log.info("角色领域服务启用角色，角色ID: {}", roleId);
+        log.info("角色领域服务准备删除角色，角色ID: {}", roleId);
         return role;
-    }
-
-    @Override
-    public RoleAggregate disableRole(String roleId) {
-        // 1. 获取角色
-        RoleAggregate role = findByIdOrThrow(roleId);
-
-        // 2. 禁用角色
-        role.disable();
-
-        log.info("角色领域服务禁用角色，角色ID: {}", roleId);
-        return role;
-    }
-
-    @Override
-    public void deleteRole(String roleId) {
-        // 1. 获取角色
-        RoleAggregate role = findByIdOrThrow(roleId);
-
-        // 2. 删除角色
-        roleRepository.deleteById(roleId);
-
-        log.info("角色领域服务删除角色，角色ID: {}", roleId);
     }
 
     @Override
@@ -122,8 +95,8 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     }
 
     @Override
-    public List<RoleAggregate> findEnabledRoles() {
-        return roleRepository.findByStatus(DataStatusEnum.ENABLE);
+    public List<RoleAggregate> findAllRoles() {
+        return roleRepository.findAll();
     }
 
     @Override
@@ -135,10 +108,9 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     public boolean isValidRole(String roleId) {
         try {
             // 1. 获取角色
-            RoleAggregate role = findByIdOrThrow(roleId);
-            
-            // 2. 检查角色是否启用
-            return role.isEnabled();
+            findByIdOrThrow(roleId);
+            // 2. 角色存在时返回true
+            return true;
         } catch (AdminException e) {
             return false;
         }

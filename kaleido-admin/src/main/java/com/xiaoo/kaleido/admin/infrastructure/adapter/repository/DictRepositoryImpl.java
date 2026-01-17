@@ -9,7 +9,6 @@ import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -83,7 +82,7 @@ public class DictRepositoryImpl implements IDictRepository {
     @Override
     public List<DictAggregate> findEnabledByTypeCode(String typeCode) {
         // 1. 调用DAO层查询启用的持久化对象列表
-        List<DictPO> poList = dictDao.findEnabledByTypeCode(typeCode, DataStatusEnum.ENABLE.name());
+        List<DictPO> poList = dictDao.findEnabledByTypeCode(typeCode);
         
         // 2. 转换为聚合根列表
         return poList.stream()

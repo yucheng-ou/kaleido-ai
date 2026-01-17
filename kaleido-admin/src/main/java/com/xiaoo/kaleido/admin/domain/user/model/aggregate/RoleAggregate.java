@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.admin.domain.user.model.aggregate;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.Builder;
@@ -39,11 +38,6 @@ public class RoleAggregate extends BaseEntity {
     private String description;
 
     /**
-     * 角色状态
-     */
-    private DataStatusEnum status;
-
-    /**
      * 权限ID列表
      */
     @Builder.Default
@@ -63,7 +57,6 @@ public class RoleAggregate extends BaseEntity {
                 .code(code)
                 .name(name)
                 .description(description)
-                .status(DataStatusEnum.ENABLE)
                 .permissionIds(new ArrayList<>())
                 .build();
     }
@@ -81,20 +74,6 @@ public class RoleAggregate extends BaseEntity {
         if (description != null) {
             this.description = description;
         }
-    }
-
-    /**
-     * 启用角色
-     */
-    public void enable() {
-        this.status = DataStatusEnum.ENABLE;
-    }
-
-    /**
-     * 禁用角色
-     */
-    public void disable() {
-        this.status = DataStatusEnum.DISABLE;
     }
 
     /**
@@ -150,15 +129,6 @@ public class RoleAggregate extends BaseEntity {
      */
     public void clearPermissions() {
         permissionIds.clear();
-    }
-
-    /**
-     * 判断角色是否启用
-     *
-     * @return 是否启用
-     */
-    public boolean isEnabled() {
-        return status != null && status == DataStatusEnum.ENABLE;
     }
 
     /**

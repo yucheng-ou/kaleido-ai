@@ -1,8 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.user.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
-import com.xiaoo.kaleido.api.admin.user.request.RolePageQueryReq;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,14 +46,6 @@ public interface IRoleRepository {
      * @return 角色
      */
     Optional<RoleAggregate> findByCode(String code);
-
-    /**
-     * 根据状态查找角色列表
-     *
-     * @param status 角色状态
-     * @return 角色列表
-     */
-    List<RoleAggregate> findByStatus(DataStatusEnum status);
 
     /**
      * 根据ID列表查找角色

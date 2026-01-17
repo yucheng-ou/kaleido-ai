@@ -15,12 +15,11 @@
         <result property="templateCode" column="template_code"/>
         <result property="templateName" column="template_name"/>
         <result property="templateContent" column="template_content"/>
-        <result property="status" column="status"/>
     </resultMap>
 
     <!-- 通知模板表字段列表 -->
     <sql id="NoticeTemplateColumns">
-        id, template_code, template_name, template_content, status, created_at, updated_at, deleted, lock_version
+        id, template_code, template_name, template_content, created_at, updated_at, deleted, lock_version
     </sql>
 
     <!-- 根据模板编码查找模板 -->
@@ -41,7 +40,7 @@
     <select id="findByNoticeType" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
         FROM t_notice_template
-        WHERE deleted = 0 AND status = 'ENABLE'
+        WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
 
@@ -49,7 +48,7 @@
     <select id="findByBusinessType" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
         FROM t_notice_template
-        WHERE deleted = 0 AND status = 'ENABLE'
+        WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
 
@@ -57,7 +56,6 @@
     <sql id="NoticeTemplateQueryConditions">
         <if test="req.templateCode != null and req.templateCode != ''">AND template_code LIKE CONCAT('%', #{req.templateCode}, '%')</if>
         <if test="req.templateName != null and req.templateName != ''">AND template_name LIKE CONCAT('%', #{req.templateName}, '%')</if>
-        <if test="req.status != null">AND status = #{req.status}</if>
     </sql>
 
     <!-- 根据条件分页查询模板 -->
@@ -73,7 +71,7 @@
     <select id="findEnabledTemplates" resultMap="NoticeTemplateMap">
         SELECT <include refid="NoticeTemplateColumns"/>
         FROM t_notice_template
-        WHERE deleted = 0 AND status = 'ENABLE'
+        WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
 </mapper>

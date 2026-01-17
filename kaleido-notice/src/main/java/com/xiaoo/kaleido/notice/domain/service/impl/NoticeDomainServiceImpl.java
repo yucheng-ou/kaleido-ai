@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.notice.domain.service.impl;
 import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
 import com.xiaoo.kaleido.notice.domain.adapter.repository.INoticeRepository;
 import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeAggregate;
+import com.xiaoo.kaleido.notice.domain.model.aggregate.NoticeTemplateAggregate;
 import com.xiaoo.kaleido.notice.domain.model.valobj.TargetAddress;
 import com.xiaoo.kaleido.notice.domain.service.INoticeDomainService;
 import com.xiaoo.kaleido.api.notice.enums.BusinessTypeEnum;
@@ -37,5 +38,20 @@ public class NoticeDomainServiceImpl implements INoticeDomainService {
 
         // 2.创建最终通知聚合根
         return NoticeAggregate.create(NoticeTypeEnum.SMS, targetAddress, BusinessTypeEnum.VERIFY_CODE, content);
+    }
+
+    @Override
+    public String generateVerifyCode() {
+        return NoticeAggregate.generateVerifyCode();
+    }
+
+    @Override
+    public String renderTemplate(NoticeTemplateAggregate template, String verifyCode) {
+        return template.render(verifyCode);
+    }
+
+    @Override
+    public String processMobile(String mobile) {
+        return mobile != null ? mobile.trim() : null;
     }
 }

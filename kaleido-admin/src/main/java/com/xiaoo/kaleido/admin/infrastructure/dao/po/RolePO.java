@@ -2,7 +2,6 @@ package com.xiaoo.kaleido.admin.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,10 +35,4 @@ public class RolePO extends BasePO {
      */
     @TableField("description")
     private String description;
-
-    /**
-     * 状态：ENABLE-启用 DISABLE-禁用
-     */
-    @TableField("status")
-    private DataStatusEnum status;
 }

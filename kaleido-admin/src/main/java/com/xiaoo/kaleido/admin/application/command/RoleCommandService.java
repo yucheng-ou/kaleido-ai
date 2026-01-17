@@ -7,9 +7,6 @@ import com.xiaoo.kaleido.admin.domain.user.service.IRoleDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 角色命令服务（应用层）
@@ -56,29 +53,12 @@ public class RoleCommandService {
         log.info("角色信息更新成功，角色ID: {}", roleId);
     }
 
-    public void enableRole(String roleId) {
-        // 1. 调用领域服务启用角色
-        RoleAggregate roleAggregate = roleDomainService.enableRole(roleId);
-
-        // 2. 保存角色
-        roleRepository.save(roleAggregate);
-
-        log.info("角色启用成功，角色ID: {}", roleId);
-    }
-
-    public void disableRole(String roleId) {
-        // 1. 调用领域服务禁用角色
-        RoleAggregate roleAggregate = roleDomainService.disableRole(roleId);
-
-        // 2. 保存角色
-        roleRepository.save(roleAggregate);
-
-        log.info("角色禁用成功，角色ID: {}", roleId);
-    }
-
     public void deleteRole(String roleId) {
-        // 1. 调用领域服务删除角色
-        roleDomainService.deleteRole(roleId);
+        // 1. 调用领域服务获取要删除的角色（验证角色是否存在）
+        RoleAggregate roleAggregate = roleDomainService.deleteRole(roleId);
+
+        // 2. 调用仓储层删除角色
+        roleRepository.deleteById(roleAggregate.getId());
 
         log.info("角色删除成功，角色ID: {}", roleId);
     }

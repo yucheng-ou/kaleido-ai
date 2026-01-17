@@ -40,22 +40,6 @@ public interface INoticeTemplateDomainService {
     NoticeTemplateAggregate updateTemplateContent(String templateId, String newContent);
 
     /**
-     * 启用模板
-     *
-     * @param templateId 模板ID
-     * @return 启用后的模板聚合根
-     */
-    NoticeTemplateAggregate enableTemplate(String templateId);
-
-    /**
-     * 禁用模板
-     *
-     * @param templateId 模板ID
-     * @return 禁用后的模板聚合根
-     */
-    NoticeTemplateAggregate disableTemplate(String templateId);
-
-    /**
      * 根据编码获取模板
      *
      * @param code 模板编码
@@ -64,10 +48,10 @@ public interface INoticeTemplateDomainService {
     NoticeTemplateAggregate getTemplateByCode(String code);
 
     /**
-     * 验证模板是否存在且启用
+     * 验证模板是否存在
      *
      * @param code 模板编码
-     * @return 是否有效
+     * @return 是否存在
      */
     boolean isValidTemplate(String code);
 }
