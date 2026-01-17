@@ -46,7 +46,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
                     brandAggregate.getId(), brandAggregate.getName());
         } catch (Exception e) {
             log.error("品牌保存失败，品牌ID: {}, 原因: {}", brandAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_SAVE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "品牌保存失败");
         }
     }
 
@@ -64,7 +64,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
                     brandAggregate.getId(), brandAggregate.getName());
         } catch (Exception e) {
             log.error("品牌更新失败，品牌ID: {}, 原因: {}", brandAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_UPDATE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "品牌更新失败");
         }
     }
 
@@ -78,7 +78,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
             log.info("品牌删除成功，品牌ID: {}", brandId);
         } catch (Exception e) {
             log.error("品牌删除失败，品牌ID: {}, 原因: {}", brandId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_DELETE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "品牌删除失败");
         }
     }
 
@@ -97,7 +97,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
             return Optional.of(brandAggregate);
         } catch (Exception e) {
             log.error("查询品牌失败，品牌ID: {}, 原因: {}", brandId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "品牌查询失败");
         }
     }
 
@@ -113,7 +113,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
             return brandDao.existsByName(name);
         } catch (Exception e) {
             log.error("检查品牌名称唯一性失败，品牌名称: {}, 原因: {}", name, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "品牌名称唯一性检查失败");
         }
     }
 
@@ -129,7 +129,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error("查询所有品牌失败，原因: {}", e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "查询所有品牌失败");
         }
     }
 }

@@ -55,7 +55,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
                     clothingAggregate.getName(), clothingAggregate.getImages().size());
         } catch (Exception e) {
             log.error("服装保存失败，服装ID: {}, 原因: {}", clothingAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_SAVE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "服装保存失败");
         }
     }
 
@@ -80,7 +80,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
                     clothingAggregate.getName(), clothingAggregate.getImages().size());
         } catch (Exception e) {
             log.error("服装更新失败，服装ID: {}, 原因: {}", clothingAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_UPDATE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "服装更新失败");
         }
     }
 
@@ -97,7 +97,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
             log.info("服装删除成功，服装ID: {}", clothingId);
         } catch (Exception e) {
             log.error("服装删除失败，服装ID: {}, 原因: {}", clothingId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_DELETE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "服装删除失败");
         }
     }
 
@@ -121,7 +121,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
             return Optional.of(clothingAggregate);
         } catch (Exception e) {
             log.error("查询服装失败，服装ID: {}, 原因: {}", clothingId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "服装查询失败");
         }
     }
 
@@ -138,7 +138,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
         } catch (Exception e) {
             log.error("检查服装名称唯一性失败，用户ID: {}, 服装名称: {}, 原因: {}",
                     userId, name, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "服装名称唯一性检查失败");
         }
     }
 
@@ -154,7 +154,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error("查询用户服装列表失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户服装列表查询失败");
         }
     }
 
@@ -171,7 +171,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
         } catch (Exception e) {
             log.error("查询用户类型服装列表失败，用户ID: {}, 类型编码: {}, 原因: {}",
                     userId, typeCode, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户类型服装列表查询失败");
         }
     }
 
@@ -188,7 +188,7 @@ public class ClothingRepositoryImpl implements IClothingRepository {
         } catch (Exception e) {
             log.error("查询用户类型颜色服装列表失败，用户ID: {}, 类型编码: {}, 颜色编码: {}, 原因: {}",
                     userId, typeCode, colorCode, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户类型颜色服装列表查询失败");
         }
     }
 

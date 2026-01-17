@@ -65,7 +65,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     public StorageLocationAggregate findByIdOrThrow(String locationId) {
         // 1. 参数校验
         if (StrUtil.isBlank(locationId)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置ID不能为空");
         }
 
         // 2. 查找位置
@@ -85,7 +85,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
 
         // 2. 参数校验
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置名称不能为空");
         }
 
         // 3. 检查位置名称是否唯一（如果名称有变更）
@@ -117,10 +117,10 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     public boolean isLocationNameUnique(String userId, String name) {
         // 1. 参数校验
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置名称不能为空");
         }
 
         // 2. 检查位置名称是否已存在
@@ -131,7 +131,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     public boolean canDeleteLocation(String locationId) {
         // 1. 参数校验
         if (StrUtil.isBlank(locationId)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置ID不能为空");
         }
 
         // 2. 检查位置是否被服装引用
@@ -145,7 +145,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
 
         // 2. 参数校验
         if (StrUtil.isBlank(imageId)) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGE_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片ID不能为空");
         }
 
         // 3. 设置主图
@@ -164,7 +164,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     public List<StorageLocationAggregate> findByUserId(String userId) {
         // 1. 参数校验
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
 
         // 2. 查询用户的所有位置
@@ -179,10 +179,10 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
      */
     private void validateCreateLocationParams(String userId, String name) {
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置名称不能为空");
         }
     }
 

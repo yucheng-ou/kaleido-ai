@@ -3,8 +3,6 @@ package com.xiaoo.kaleido.wardrobe.application.command;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.RecordOutfitWearCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateOutfitCommand;
-import com.xiaoo.kaleido.file.model.ImageInfo;
-import com.xiaoo.kaleido.file.service.IMinIOService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitRepository;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
@@ -32,7 +30,7 @@ public class OutfitCommandService {
 
     private final IOutfitDomainService outfitDomainService;
     private final IOutfitRepository outfitRepository;
-    private final IMinIOService minIOService;
+    private final ImageProcessingService imageProcessingService;
 
     /**
      * 创建穿搭（包含服装和图片）
@@ -44,35 +42,30 @@ public class OutfitCommandService {
         // 1.准备图片信息
         List<CreateOutfitWithClothingsCommand.ImageInfo> imageInfos = command.getImages();
 
-        // 2.为每个图片获取MinIO中的完整信息并转换为领域服务需要的格式
-        List<OutfitImageInfoDTO> domainImageInfos = imageInfos.stream()
-                .map(info -> {
-                    try {
-                        // 从MinIO获取图片详细信息
-                        ImageInfo minioImageInfo = minIOService.getImageInfo(info.getPath());
-
-                        // 创建完整的图片信息
+        // 2.使用图片处理服务转换图片信息
+        List<OutfitImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
+                imageInfos.stream()
+                        .map(ImageInfoAdapter::fromOutfitImageInfo)
+                        .collect(java.util.stream.Collectors.toList()),
+                (adapter, minioInfo) -> {
+                    if (minioInfo != null) {
                         return OutfitImageInfoDTO.builder()
-                                .imageOrder(info.getImageOrder())
-                                .path(info.getPath())
-                                .isPrimary(info.getIsPrimary())
-                                .imageSize(minioImageInfo.getFileSize())
-                                .width(minioImageInfo.getWidth())
-                                .height(minioImageInfo.getHeight())
+                                .imageOrder(adapter.getImageOrder())
+                                .path(adapter.getPath())
+                                .isPrimary(adapter.getIsPrimary())
+                                .imageSize(minioInfo.getFileSize())
+                                .width(minioInfo.getWidth())
+                                .height(minioInfo.getHeight())
                                 .build();
-
-                    } catch (Exception e) {
-                        // 处理异常：记录日志并返回基本图片信息
-                        log.warn("获取图片信息失败，路径: {}, 错误: ", info.getPath(), e);
-
+                    } else {
                         return OutfitImageInfoDTO.builder()
-                                .imageOrder(info.getImageOrder())
-                                .path(info.getPath())
-                                .isPrimary(info.getIsPrimary())
+                                .imageOrder(adapter.getImageOrder())
+                                .path(adapter.getPath())
+                                .isPrimary(adapter.getIsPrimary())
                                 .build();
                     }
-                })
-                .collect(Collectors.toList());
+                }
+        );
 
         // TODO: 验证服装ID列表中的所有服装属于同一用户
         // 暂时跳过验证，后续通过依赖注入服装查询服务实现
@@ -106,34 +99,30 @@ public class OutfitCommandService {
         // 1.准备图片信息
         List<UpdateOutfitCommand.ImageInfo> imageInfos = command.getImages();
 
-        // 2.为每个图片获取MinIO中的完整信息并转换为领域服务需要的格式
-        List<OutfitImageInfoDTO> domainImageInfos = imageInfos.stream()
-                .map(info -> {
-                    try {
-                        // 从MinIO获取图片详细信息
-                        ImageInfo minioImageInfo = minIOService.getImageInfo(info.getPath());
-
-                        // 创建完整的图片信息
+        // 2.使用图片处理服务转换图片信息
+        List<OutfitImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
+                imageInfos.stream()
+                        .map(ImageInfoAdapter::fromOutfitUpdateImageInfo)
+                        .collect(java.util.stream.Collectors.toList()),
+                (adapter, minioInfo) -> {
+                    if (minioInfo != null) {
                         return OutfitImageInfoDTO.builder()
-                                .imageOrder(info.getImageOrder())
-                                .path(info.getPath())
-                                .isPrimary(info.getIsPrimary())
-                                .imageSize(minioImageInfo.getFileSize())
-                                .width(minioImageInfo.getWidth())
-                                .height(minioImageInfo.getHeight())
+                                .imageOrder(adapter.getImageOrder())
+                                .path(adapter.getPath())
+                                .isPrimary(adapter.getIsPrimary())
+                                .imageSize(minioInfo.getFileSize())
+                                .width(minioInfo.getWidth())
+                                .height(minioInfo.getHeight())
                                 .build();
-                    } catch (Exception e) {
-                        // 处理异常：记录日志并返回基本图片信息
-                        log.warn("获取图片信息失败，路径: {}, 错误: {}", info.getPath(), e.getMessage());
-
+                    } else {
                         return OutfitImageInfoDTO.builder()
-                                .imageOrder(info.getImageOrder())
-                                .path(info.getPath())
-                                .isPrimary(info.getIsPrimary())
+                                .imageOrder(adapter.getImageOrder())
+                                .path(adapter.getPath())
+                                .isPrimary(adapter.getIsPrimary())
                                 .build();
                     }
-                })
-                .collect(Collectors.toList());
+                }
+        );
 
         // TODO: 验证服装ID列表中的所有服装属于同一用户
         // 暂时跳过验证，后续通过依赖注入服装查询服务实现

@@ -2,8 +2,6 @@ package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
-import com.xiaoo.kaleido.file.model.ImageInfo;
-import com.xiaoo.kaleido.file.service.IMinIOService;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationDomainService;
@@ -35,7 +33,7 @@ public class LocationCommandService {
 
     private final ILocationDomainService locationDomainService;
     private final ILocationRepository locationRepository;
-    private final IMinIOService minIOService;
+    private final ImageProcessingService imageProcessingService;
 
     /**
      * 创建位置（包含图片）
@@ -44,18 +42,8 @@ public class LocationCommandService {
      * @return 创建的位置ID
      */
     public String createLocation(CreateLocationWithImagesCommand command) {
-        // 1. 转换图片信息
-        List<LocationImageInfo> imageInfos = command.getImages() != null ? 
-                command.getImages().stream()
-                        .map(image -> {
-                            LocationImageInfo info = new LocationImageInfo();
-                            info.setPath(image.getPath());
-                            info.setImageOrder(image.getImageOrder());
-                            info.setIsPrimary(image.getIsPrimary());
-                            return info;
-                        })
-                        .collect(Collectors.toList()) : 
-                List.of();
+        // 1. 使用模板方法转换图片信息
+        List<LocationImageInfo> imageInfos = LocationImageInfoConverter.convertCreateCommandImages(command.getImages());
 
         // 2. 调用原有方法
         return createLocationWithImages(
@@ -111,18 +99,8 @@ public class LocationCommandService {
      * @param command 更新位置命令
      */
     public void updateLocation(UpdateLocationCommand command) {
-        // 1. 转换图片信息
-        List<LocationImageInfo> imageInfos = command.getImages() != null ? 
-                command.getImages().stream()
-                        .map(image -> {
-                            LocationImageInfo info = new LocationImageInfo();
-                            info.setPath(image.getPath());
-                            info.setImageOrder(image.getImageOrder());
-                            info.setIsPrimary(image.getIsPrimary());
-                            return info;
-                        })
-                        .collect(Collectors.toList()) : 
-                List.of();
+        // 1. 使用模板方法转换图片信息
+        List<LocationImageInfo> imageInfos = LocationImageInfoConverter.convertUpdateCommandImages(command.getImages());
 
         // 2. 调用原有方法
         updateLocationWithImages(
@@ -216,35 +194,30 @@ public class LocationCommandService {
             return List.of();
         }
 
-        return images.stream()
-                .map(info -> {
-                    try {
-                        // 从MinIO获取图片详细信息
-                        ImageInfo minioImageInfo = minIOService.getImageInfo(info.getPath());
-
-                        // 创建完整的图片信息
+        return imageProcessingService.processImages(
+                images.stream()
+                        .map(ImageInfoAdapter::fromLocationCommandImageInfo)
+                        .collect(java.util.stream.Collectors.toList()),
+                (adapter, minioInfo) -> {
+                    if (minioInfo != null) {
                         return LocationImageInfoDTO.builder()
-                                .path(info.getPath())
-                                .imageOrder(info.getImageOrder())
-                                .isPrimary(info.getIsPrimary())
-                                .imageSize(minioImageInfo.getFileSize())
-                                .width(minioImageInfo.getWidth())
-                                .height(minioImageInfo.getHeight())
-                                .imageType(ImageType.fromMimeType(minioImageInfo.getMimeType()))
+                                .path(adapter.getPath())
+                                .imageOrder(adapter.getImageOrder())
+                                .isPrimary(adapter.getIsPrimary())
+                                .imageSize(minioInfo.getFileSize())
+                                .width(minioInfo.getWidth())
+                                .height(minioInfo.getHeight())
+                                .imageType(ImageType.fromMimeType(minioInfo.getMimeType()))
                                 .build();
-
-                    } catch (Exception e) {
-                        // 处理异常：记录日志并返回基本图片信息
-                        log.warn("获取图片信息失败，路径: {}, 错误: ", info.getPath(), e);
-
+                    } else {
                         return LocationImageInfoDTO.builder()
-                                .path(info.getPath())
-                                .imageOrder(info.getImageOrder())
-                                .isPrimary(info.getIsPrimary())
+                                .path(adapter.getPath())
+                                .imageOrder(adapter.getImageOrder())
+                                .isPrimary(adapter.getIsPrimary())
                                 .build();
                     }
-                })
-                .collect(Collectors.toList());
+                }
+        );
     }
 
     /**
