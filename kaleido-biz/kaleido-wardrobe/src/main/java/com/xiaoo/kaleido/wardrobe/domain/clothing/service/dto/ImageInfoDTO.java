@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import lombok.*;
 
 /**
@@ -20,7 +21,7 @@ public class ImageInfoDTO  {
     private Integer imageOrder;
     private Boolean isPrimary;
     private Long imageSize;
-    private String imageType;
+    private ImageType imageType;
     private Integer width;
     private Integer height;
 }

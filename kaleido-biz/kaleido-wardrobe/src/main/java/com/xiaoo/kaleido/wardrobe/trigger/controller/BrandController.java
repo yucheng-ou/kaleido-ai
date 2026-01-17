@@ -86,17 +86,6 @@ public class BrandController {
     }
 
     /**
-     * 查询启用状态的品牌列表
-     *
-     * @return 启用状态的品牌信息响应列表
-     */
-    @GetMapping("/enabled")
-    public Result<List<BrandInfoResponse>> listEnabledBrands() {
-        List<BrandInfoResponse> brandList = brandQueryService.findEnabledBrands();
-        return Result.success(brandList);
-    }
-
-    /**
      * 根据ID查询品牌详情
      *
      * @param brandId 品牌ID，不能为空

@@ -15,9 +15,6 @@ import org.springframework.context.annotation.Import;
  * MinIO自动配置类
  */
 @AutoConfiguration
-@ConditionalOnClass(io.minio.MinioClient.class)
-@ConditionalOnProperty(prefix = "minio", name = {"endpoint", "accessKey", "secretKey"})
-@EnableConfigurationProperties(MinIOProperties.class)
 @Import({MinIOConfig.class,})
 public class MinioAutoConfiguration {
 

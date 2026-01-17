@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.response;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import com.xiaoo.kaleido.base.response.BaseResp;
 import lombok.*;
 
@@ -160,9 +161,9 @@ public class ClothingInfoResponse extends BaseResp {
         private Long fileSize;
 
         /**
-         * 文件类型
+         * 图片类型
          */
-        private String mimeType;
+        private ImageType imageType;
 
         /**
          * 缩略图路径

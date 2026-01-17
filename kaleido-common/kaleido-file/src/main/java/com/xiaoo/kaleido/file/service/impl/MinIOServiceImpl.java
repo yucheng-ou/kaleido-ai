@@ -25,7 +25,6 @@ import java.util.Optional;
  * MinIO服务实现类
  */
 @Slf4j
-@Service
 public class MinIOServiceImpl implements IMinIOService {
 
     private final MinioClient minioClient;

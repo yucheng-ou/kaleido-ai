@@ -361,7 +361,23 @@ public enum WardrobeErrorCode implements ErrorCode {
     BRAND_DELETE_FAIL("WARDROBE_BRAND_DELETE_FAIL", "品牌删除失败"),
     
     /** 品牌查询失败：品牌查询操作失败 */
-    BRAND_QUERY_FAIL("WARDROBE_BRAND_QUERY_FAIL", "品牌查询失败");
+    BRAND_QUERY_FAIL("WARDROBE_BRAND_QUERY_FAIL", "品牌查询失败"),
+
+    // ========== 位置基础设施层错误码 ==========
+    /** 位置保存失败：位置保存操作失败 */
+    LOCATION_SAVE_FAIL("WARDROBE_LOCATION_SAVE_FAIL", "位置保存失败"),
+    
+    /** 位置更新失败：位置更新操作失败 */
+    LOCATION_UPDATE_FAIL("WARDROBE_LOCATION_UPDATE_FAIL", "位置更新失败"),
+    
+    /** 位置删除失败：位置删除操作失败 */
+    LOCATION_DELETE_FAIL("WARDROBE_LOCATION_DELETE_FAIL", "位置删除失败"),
+    
+    /** 位置查询失败：位置查询操作失败 */
+    LOCATION_QUERY_FAIL("WARDROBE_LOCATION_QUERY_FAIL", "位置查询失败"),
+    
+    /** 位置被引用：位置被服装引用，不能删除 */
+    LOCATION_HAS_REFERENCES("WARDROBE_LOCATION_HAS_REFERENCES", "位置被服装引用，不能删除");
 
     /**
      * 错误码

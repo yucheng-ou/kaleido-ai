@@ -60,7 +60,7 @@ public interface WardrobeConvertor {
     @Mapping(source = "width", target = "width")
     @Mapping(source = "height", target = "height")
     @Mapping(source = "imageSize", target = "fileSize")
-    @Mapping(source = "imageType", target = "mimeType")
+    @Mapping(source = "imageType", target = "imageType")
     ClothingInfoResponse.ImageInfo toImageResponse(ClothingImage clothingImage);
 
     /**

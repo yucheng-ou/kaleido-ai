@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.LocationDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO">
+        <id column="id" property="id"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+        <result column="lock_version" property="lockVersion"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="address" property="address"/>
+        <result column="primary_image_id" property="primaryImageId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, created_at, updated_at, deleted, lock_version,
+        user_id, name, description, address, primary_image_id
+    </sql>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_storage_location
+        WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_storage_location
+        WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_storage_location
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="existsByNameAndUserId" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_storage_location
+        WHERE name = #{name} AND user_id = #{userId} AND deleted = 0
+    </select>
+
+    <select id="hasClothingReferences" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_clothing
+        WHERE current_location_id = #{locationId} AND deleted = 0
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_storage_location
+        WHERE deleted = 0
+    </select>
+
+    <select id="findByIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_storage_location
+        WHERE id IN
+        <foreach collection="locationIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <insert id="insert" parameterType="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO">
+        INSERT INTO t_wardrobe_storage_location (
+            id, created_at, updated_at, deleted, lock_version,
+            user_id, name, description, address, primary_image_id
+        ) VALUES (
+            #{id}, #{createdAt}, #{updatedAt}, #{deleted}, #{lockVersion},
+            #{userId}, #{name}, #{description}, #{address}, #{primaryImageId}
+        )
+    </insert>
+
+    <update id="updateById" parameterType="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO">
+        UPDATE t_wardrobe_storage_location
+        SET
+            updated_at = #{updatedAt},
+            lock_version = #{lockVersion},
+            user_id = #{userId},
+            name = #{name},
+            description = #{description},
+            address = #{address},
+            primary_image_id = #{primaryImageId}
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+    <update id="deleteById">
+        UPDATE t_wardrobe_storage_location
+        SET deleted = 1, updated_at = NOW()
+        WHERE id = #{id} AND deleted = 0
+    </update>
+
+</mapper>
