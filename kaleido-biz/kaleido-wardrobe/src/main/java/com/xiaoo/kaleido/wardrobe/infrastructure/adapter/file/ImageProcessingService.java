@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.wardrobe.application.command;
+package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file;
 
 import com.xiaoo.kaleido.file.model.ImageInfo;
 import com.xiaoo.kaleido.file.service.IMinIOService;

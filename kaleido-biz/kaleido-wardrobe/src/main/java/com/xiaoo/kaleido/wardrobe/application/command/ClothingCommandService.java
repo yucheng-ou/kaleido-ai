@@ -1,7 +1,9 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.wardrobe.command.CreateClothingWithImagesCommand;
+import com.xiaoo.kaleido.api.wardrobe.command.ClothingImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateClothingCommand;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.file.IClothingFileService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
@@ -28,7 +30,7 @@ public class ClothingCommandService {
 
     private final IClothingDomainService clothingDomainService;
     private final IClothingRepository clothingRepository;
-    private final ImageProcessingService imageProcessingService;
+    private final IClothingFileService clothingFileService;
 
     /**
      * 创建服装（包含图片）
@@ -38,32 +40,10 @@ public class ClothingCommandService {
      */
     public String createClothingWithImages(CreateClothingWithImagesCommand command) {
         // 1.准备图片信息
-        List<CreateClothingWithImagesCommand.ImageInfo> imageInfos = command.getImages();
+        List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<ImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
-                imageInfos.stream()
-                        .map(ImageInfoAdapter::fromClothingImageInfo)
-                        .collect(java.util.stream.Collectors.toList()),
-                (adapter, minioInfo) -> {
-                    if (minioInfo != null) {
-                        return ImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .imageSize(minioInfo.getFileSize())
-                                .width(minioInfo.getWidth())
-                                .height(minioInfo.getHeight())
-                                .build();
-                    } else {
-                        return ImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .build();
-                    }
-                }
-        );
+        List<ImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
 
         // 3.调用领域服务创建服装
         ClothingAggregate clothing = clothingDomainService.createClothingWithImages(
@@ -98,32 +78,10 @@ public class ClothingCommandService {
      */
     public void updateClothing(UpdateClothingCommand command) {
         // 1.准备图片信息
-        List<UpdateClothingCommand.ImageInfo> imageInfos = command.getImages();
+        List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<ImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
-                imageInfos.stream()
-                        .map(ImageInfoAdapter::fromClothingUpdateImageInfo)
-                        .collect(java.util.stream.Collectors.toList()),
-                (adapter, minioInfo) -> {
-                    if (minioInfo != null) {
-                        return ImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .imageSize(minioInfo.getFileSize())
-                                .width(minioInfo.getWidth())
-                                .height(minioInfo.getHeight())
-                                .build();
-                    } else {
-                        return ImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .build();
-                    }
-                }
-        );
+        List<ImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
 
         // 3.调用领域服务更新服装
         ClothingAggregate clothing = clothingDomainService.updateClothing(

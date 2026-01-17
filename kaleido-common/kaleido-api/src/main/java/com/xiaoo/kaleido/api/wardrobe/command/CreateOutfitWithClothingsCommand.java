@@ -52,32 +52,6 @@ public class CreateOutfitWithClothingsCommand {
      */
     @NotNull(message = "图片列表不能为空")
     @Size(min = 1, max = 10, message = "图片列表至少包含1张图片，最多10张")
-    private List<ImageInfo> images;
-    
-    /**
-     * 图片信息
-     */
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ImageInfo {
-        /**
-         * 图片路径（在MinIO中的文件路径）
-         */
-        @NotBlank(message = "图片路径不能为空")
-        private String path;
-        
-        /**
-         * 排序序号
-         */
-        @NotNull(message = "排序序号不能为空")
-        private Integer imageOrder;
-        
-        /**
-         * 是否为主图
-         */
-        @NotNull(message = "是否为主图不能为空")
-        private Boolean isPrimary;
-    }
+    private List<OutfitImageInfoCommand> images;
+
 }

@@ -2,20 +2,19 @@ package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
+import com.xiaoo.kaleido.wardrobe.domain.location.adapter.file.ILocationFileService;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.dto.LocationImageInfoDTO;
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file.ImageProcessingService;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 位置命令服务
@@ -34,6 +33,7 @@ public class LocationCommandService {
     private final ILocationDomainService locationDomainService;
     private final ILocationRepository locationRepository;
     private final ImageProcessingService imageProcessingService;
+    private final ILocationFileService locationFileService;
 
     /**
      * 创建位置（包含图片）
@@ -43,7 +43,7 @@ public class LocationCommandService {
      */
     public String createLocation(CreateLocationWithImagesCommand command) {
         // 1. 使用模板方法转换图片信息
-        List<LocationImageInfo> imageInfos = LocationImageInfoConverter.convertCreateCommandImages(command.getImages());
+        List<LocationImageInfoDTO> imageInfoDTOS = locationFileService.convertorImageInfo(command.getImages());
 
         // 2. 调用原有方法
         return createLocationWithImages(
@@ -51,7 +51,7 @@ public class LocationCommandService {
                 command.getName(),
                 command.getDescription(),
                 command.getAddress(),
-                imageInfos
+                imageInfoDTOS
         );
     }
 
@@ -70,9 +70,7 @@ public class LocationCommandService {
             String name,
             String description,
             String address,
-            List<LocationImageInfo> images) {
-        // 1. 准备图片信息
-        List<LocationImageInfoDTO> domainImageInfos = prepareImageInfos(images);
+            List<LocationImageInfoDTO> images) {
 
         // 2. 调用领域服务创建位置（包含图片）
         StorageLocationAggregate location = locationDomainService.createLocationWithImages(
@@ -80,7 +78,7 @@ public class LocationCommandService {
                 name,
                 description,
                 address,
-                domainImageInfos
+                images
         );
 
         // 3. 保存位置
@@ -100,7 +98,7 @@ public class LocationCommandService {
      */
     public void updateLocation(UpdateLocationCommand command) {
         // 1. 使用模板方法转换图片信息
-        List<LocationImageInfo> imageInfos = LocationImageInfoConverter.convertUpdateCommandImages(command.getImages());
+        List<LocationImageInfoDTO> imageInfoDTOS = locationFileService.convertorImageInfo(command.getImages());
 
         // 2. 调用原有方法
         updateLocationWithImages(
@@ -108,7 +106,7 @@ public class LocationCommandService {
                 command.getName(),
                 command.getDescription(),
                 command.getAddress(),
-                imageInfos
+                imageInfoDTOS
         );
     }
 
@@ -126,9 +124,8 @@ public class LocationCommandService {
             String name,
             String description,
             String address,
-            List<LocationImageInfo> images) {
+            List<LocationImageInfoDTO> images) {
         // 1. 准备图片信息
-        List<LocationImageInfoDTO> domainImageInfos = prepareImageInfos(images);
 
         // 2. 调用领域服务更新位置（包含图片）
         StorageLocationAggregate location = locationDomainService.updateLocationWithImages(
@@ -136,7 +133,7 @@ public class LocationCommandService {
                 name,
                 description,
                 address,
-                domainImageInfos
+                images
         );
 
         // 3. 更新位置
@@ -179,65 +176,5 @@ public class LocationCommandService {
 
         // 3. 记录日志
         log.info("位置主图设置成功，位置ID: {}, 主图ID: {}", locationId, imageId);
-    }
-
-    /**
-     * 准备图片信息
-     * <p>
-     * 将用户传入的图片信息转换为领域服务需要的格式，同时从MinIO获取图片详细信息
-     *
-     * @param images 用户传入的图片信息列表
-     * @return 领域服务需要的图片信息DTO列表
-     */
-    private List<LocationImageInfoDTO> prepareImageInfos(List<LocationImageInfo> images) {
-        if (images == null || images.isEmpty()) {
-            return List.of();
-        }
-
-        return imageProcessingService.processImages(
-                images.stream()
-                        .map(ImageInfoAdapter::fromLocationCommandImageInfo)
-                        .collect(java.util.stream.Collectors.toList()),
-                (adapter, minioInfo) -> {
-                    if (minioInfo != null) {
-                        return LocationImageInfoDTO.builder()
-                                .path(adapter.getPath())
-                                .imageOrder(adapter.getImageOrder())
-                                .isPrimary(adapter.getIsPrimary())
-                                .imageSize(minioInfo.getFileSize())
-                                .width(minioInfo.getWidth())
-                                .height(minioInfo.getHeight())
-                                .imageType(ImageType.fromMimeType(minioInfo.getMimeType()))
-                                .build();
-                    } else {
-                        return LocationImageInfoDTO.builder()
-                                .path(adapter.getPath())
-                                .imageOrder(adapter.getImageOrder())
-                                .isPrimary(adapter.getIsPrimary())
-                                .build();
-                    }
-                }
-        );
-    }
-
-    /**
-     * 位置图片信息（内部类）
-     */
-    @Data
-    public static class LocationImageInfo {
-        /**
-         * 图片路径（在minio中的文件路径）
-         */
-        private String path;
-
-        /**
-         * 排序序号
-         */
-        private Integer imageOrder;
-
-        /**
-         * 是否为主图
-         */
-        private Boolean isPrimary;
     }
 }

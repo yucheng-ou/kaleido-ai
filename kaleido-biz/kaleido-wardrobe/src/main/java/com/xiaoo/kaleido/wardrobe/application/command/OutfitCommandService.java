@@ -1,8 +1,10 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand;
+import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.RecordOutfitWearCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateOutfitCommand;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.file.IOutfitFileService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitRepository;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
@@ -30,7 +32,7 @@ public class OutfitCommandService {
 
     private final IOutfitDomainService outfitDomainService;
     private final IOutfitRepository outfitRepository;
-    private final ImageProcessingService imageProcessingService;
+    private final IOutfitFileService outfitFileService;
 
     /**
      * 创建穿搭（包含服装和图片）
@@ -40,32 +42,11 @@ public class OutfitCommandService {
      */
     public String createOutfitWithClothingsAndImages(CreateOutfitWithClothingsCommand command) {
         // 1.准备图片信息
-        List<CreateOutfitWithClothingsCommand.ImageInfo> imageInfos = command.getImages();
+        List<OutfitImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<OutfitImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
-                imageInfos.stream()
-                        .map(ImageInfoAdapter::fromOutfitImageInfo)
-                        .collect(java.util.stream.Collectors.toList()),
-                (adapter, minioInfo) -> {
-                    if (minioInfo != null) {
-                        return OutfitImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .imageSize(minioInfo.getFileSize())
-                                .width(minioInfo.getWidth())
-                                .height(minioInfo.getHeight())
-                                .build();
-                    } else {
-                        return OutfitImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .build();
-                    }
-                }
-        );
+        List<OutfitImageInfoDTO> domainImageInfos = outfitFileService.convertorImageInfo(imageInfos);
+
 
         // TODO: 验证服装ID列表中的所有服装属于同一用户
         // 暂时跳过验证，后续通过依赖注入服装查询服务实现
@@ -97,32 +78,10 @@ public class OutfitCommandService {
      */
     public void updateOutfit(UpdateOutfitCommand command) {
         // 1.准备图片信息
-        List<UpdateOutfitCommand.ImageInfo> imageInfos = command.getImages();
+        List<OutfitImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<OutfitImageInfoDTO> domainImageInfos = imageProcessingService.processImages(
-                imageInfos.stream()
-                        .map(ImageInfoAdapter::fromOutfitUpdateImageInfo)
-                        .collect(java.util.stream.Collectors.toList()),
-                (adapter, minioInfo) -> {
-                    if (minioInfo != null) {
-                        return OutfitImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .imageSize(minioInfo.getFileSize())
-                                .width(minioInfo.getWidth())
-                                .height(minioInfo.getHeight())
-                                .build();
-                    } else {
-                        return OutfitImageInfoDTO.builder()
-                                .imageOrder(adapter.getImageOrder())
-                                .path(adapter.getPath())
-                                .isPrimary(adapter.getIsPrimary())
-                                .build();
-                    }
-                }
-        );
+        List<OutfitImageInfoDTO> domainImageInfos = outfitFileService.convertorImageInfo(imageInfos);
 
         // TODO: 验证服装ID列表中的所有服装属于同一用户
         // 暂时跳过验证，后续通过依赖注入服装查询服务实现

@@ -1,5 +1,8 @@
-package com.xiaoo.kaleido.wardrobe.application.command;
+package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file;
 
+import com.xiaoo.kaleido.api.wardrobe.command.ClothingImageInfoCommand;
+import com.xiaoo.kaleido.api.wardrobe.command.LocationImageInfoCommand;
+import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
 import lombok.Data;
 
 /**
@@ -22,7 +25,7 @@ public class ImageInfoAdapter implements BasicImageInfo {
      * 从服装创建命令的ImageInfo创建适配器
      */
     public static ImageInfoAdapter fromClothingImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.CreateClothingWithImagesCommand.ImageInfo imageInfo) {
+            ClothingImageInfoCommand imageInfo) {
         return new ImageInfoAdapter(
                 imageInfo.getPath(),
                 imageInfo.getImageOrder(),
@@ -34,73 +37,37 @@ public class ImageInfoAdapter implements BasicImageInfo {
      * 从服装更新命令的ImageInfo创建适配器
      */
     public static ImageInfoAdapter fromClothingUpdateImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.UpdateClothingCommand.ImageInfo imageInfo) {
+            ClothingImageInfoCommand imageInfo) {
         return new ImageInfoAdapter(
                 imageInfo.getPath(),
                 imageInfo.getImageOrder(),
-                imageInfo.getIsMain()
+                imageInfo.getIsPrimary()
         );
     }
     
     /**
      * 从位置创建命令的ImageInfo创建适配器
      */
-    public static ImageInfoAdapter fromLocationImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand.ImageInfo imageInfo) {
+    public static ImageInfoAdapter fromLocationImageInfo(LocationImageInfoCommand imageInfo) {
         return new ImageInfoAdapter(
                 imageInfo.getPath(),
                 imageInfo.getImageOrder(),
                 imageInfo.getIsPrimary()
         );
     }
-    
-    /**
-     * 从位置更新命令的ImageInfo创建适配器
-     */
-    public static ImageInfoAdapter fromLocationUpdateImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand.ImageInfo imageInfo) {
-        return new ImageInfoAdapter(
-                imageInfo.getPath(),
-                imageInfo.getImageOrder(),
-                imageInfo.getIsPrimary()
-        );
-    }
+
     
     /**
      * 从穿搭创建命令的ImageInfo创建适配器
      */
-    public static ImageInfoAdapter fromOutfitImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand.ImageInfo imageInfo) {
+    public static ImageInfoAdapter fromOutfitImageInfo(OutfitImageInfoCommand imageInfo) {
         return new ImageInfoAdapter(
                 imageInfo.getPath(),
                 imageInfo.getImageOrder(),
                 imageInfo.getIsPrimary()
         );
     }
-    
-    /**
-     * 从穿搭更新命令的ImageInfo创建适配器
-     */
-    public static ImageInfoAdapter fromOutfitUpdateImageInfo(
-            com.xiaoo.kaleido.api.wardrobe.command.UpdateOutfitCommand.ImageInfo imageInfo) {
-        return new ImageInfoAdapter(
-                imageInfo.getPath(),
-                imageInfo.getImageOrder(),
-                imageInfo.getIsPrimary()
-        );
-    }
-    
-    /**
-     * 从LocationCommandService的内部类创建适配器
-     */
-    public static ImageInfoAdapter fromLocationCommandImageInfo(
-            LocationCommandService.LocationImageInfo imageInfo) {
-        return new ImageInfoAdapter(
-                imageInfo.getPath(),
-                imageInfo.getImageOrder(),
-                imageInfo.getIsPrimary()
-        );
-    }
+
     
     private ImageInfoAdapter(String path, Integer imageOrder, Boolean isPrimary) {
         this.path = path;
