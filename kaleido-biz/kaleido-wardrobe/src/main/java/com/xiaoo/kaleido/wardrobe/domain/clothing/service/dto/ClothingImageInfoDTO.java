@@ -16,7 +16,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageInfoDTO  {
+public class ClothingImageInfoDTO {
     private String path;
     private Integer imageOrder;
     private Boolean isPrimary;

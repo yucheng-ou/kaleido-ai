@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.file;
 
 import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
 
 import java.util.List;
