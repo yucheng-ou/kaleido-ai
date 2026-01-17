@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.admin.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,10 +46,5 @@ public class DictPO extends BasePO {
      * 排序
      */
     private Integer sort;
-
-    /**
-     * 状态：ENABLE/DISABLE
-     */
-    private DataStatusEnum status;
 
 }

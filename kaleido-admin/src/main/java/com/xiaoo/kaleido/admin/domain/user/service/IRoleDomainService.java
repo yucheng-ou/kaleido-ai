@@ -34,27 +34,12 @@ public interface IRoleDomainService {
     RoleAggregate updateRole(String roleId, String name, String description);
 
     /**
-     * 启用角色
-     *
-     * @param roleId 角色ID
-     * @return 启用后的角色
-     */
-    RoleAggregate enableRole(String roleId);
-
-    /**
-     * 禁用角色
-     *
-     * @param roleId 角色ID
-     * @return 禁用后的角色
-     */
-    RoleAggregate disableRole(String roleId);
-
-    /**
      * 删除角色
      *
      * @param roleId 角色ID
+     * @return 要删除的角色
      */
-    void deleteRole(String roleId);
+    RoleAggregate deleteRole(String roleId);
 
     /**
      * 分配权限给角色
@@ -82,11 +67,11 @@ public interface IRoleDomainService {
     RoleAggregate findByCodeOrThrow(String code);
 
     /**
-     * 查找所有启用的角色
+     * 查找所有角色
      *
-     * @return 启用的角色列表
+     * @return 角色列表
      */
-    List<RoleAggregate> findEnabledRoles();
+    List<RoleAggregate> findAllRoles();
 
     /**
      * 检查角色编码是否存在
@@ -97,10 +82,10 @@ public interface IRoleDomainService {
     boolean existsByCode(String code);
 
     /**
-     * 检查角色是否存在且启用
+     * 检查角色是否存在
      *
      * @param roleId 角色ID
-     * @return 是否存在且启用
+     * @return 是否存在
      */
     boolean isValidRole(String roleId);
 

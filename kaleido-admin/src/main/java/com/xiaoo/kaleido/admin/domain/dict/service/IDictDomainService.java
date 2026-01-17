@@ -39,22 +39,6 @@ public interface IDictDomainService {
 
 
     /**
-     * 启用字典
-     *
-     * @param dictId 字典ID
-     * @return 启用后的字典
-     */
-    DictAggregate enableDict(String dictId);
-
-    /**
-     * 禁用字典
-     *
-     * @param dictId 字典ID
-     * @return 禁用后的字典
-     */
-    DictAggregate disableDict(String dictId);
-
-    /**
      * 删除字典
      *
      * @param dictId 字典ID

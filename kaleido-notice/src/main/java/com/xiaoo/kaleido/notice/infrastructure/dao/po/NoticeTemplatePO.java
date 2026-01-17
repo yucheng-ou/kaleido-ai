@@ -2,7 +2,6 @@ package com.xiaoo.kaleido.notice.infrastructure.dao.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,10 +34,4 @@ public class NoticeTemplatePO extends BasePO {
      */
     @TableField("template_content")
     private String templateContent;
-
-    /**
-     * 状态
-     */
-    @TableField("status")
-    private DataStatusEnum status;
 }

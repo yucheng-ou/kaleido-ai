@@ -1,14 +1,12 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.RoleConvertor;
 import com.xiaoo.kaleido.admin.infrastructure.dao.RoleDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.RolePermissionDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePO;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePermissionPO;
-import com.xiaoo.kaleido.api.admin.user.request.RolePageQueryReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -92,18 +90,6 @@ public class RoleRepositoryImpl implements IRoleRepository {
         
         // 4. 返回结果
         return Optional.of(aggregate);
-    }
-
-    @Override
-    public List<RoleAggregate> findByStatus(DataStatusEnum status) {
-        // 1. 将枚举转换为数据库存储的值（枚举名称）
-        String statusValue = status != null ? status.name() : null;
-        
-        // 2. 根据状态查询PO列表
-        List<RolePO> poList = roleDao.findByStatus(statusValue);
-        
-        // 3. 转换PO列表并加载权限ID
-        return convertAndLoadPermissionIds(poList);
     }
 
     @Override

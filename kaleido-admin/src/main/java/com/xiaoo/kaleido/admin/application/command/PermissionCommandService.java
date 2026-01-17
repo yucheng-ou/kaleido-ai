@@ -80,8 +80,11 @@ public class PermissionCommandService {
 
     @Transactional
     public void deletePermission(String permissionId) {
-        // 1. 调用领域服务删除权限
-        permissionDomainService.deletePermission(permissionId);
+        // 1. 调用领域服务获取要删除的权限（验证权限是否存在且无子权限）
+        PermissionAggregate permissionAggregate = permissionDomainService.deletePermission(permissionId);
+
+        // 2. 调用仓储层删除权限
+        permissionRepository.deleteById(permissionAggregate.getId());
 
         log.info("权限删除成功，权限ID: {}", permissionId);
     }

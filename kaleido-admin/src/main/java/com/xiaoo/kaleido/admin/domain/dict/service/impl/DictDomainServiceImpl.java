@@ -52,30 +52,6 @@ public class DictDomainServiceImpl implements IDictDomainService {
     }
 
     @Override
-    public DictAggregate enableDict(String dictId) {
-        // 1. 获取字典
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
-
-        // 2. 启用字典
-        dictAggregate.enable();
-
-        log.info("字典领域服务启用字典，字典ID: {}", dictId);
-        return dictAggregate;
-    }
-
-    @Override
-    public DictAggregate disableDict(String dictId) {
-        // 1. 获取字典
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
-
-        // 2. 禁用字典
-        dictAggregate.disable();
-
-        log.info("字典领域服务禁用字典，字典ID: {}", dictId);
-        return dictAggregate;
-    }
-
-    @Override
     public DictAggregate deleteDict(String dictId) {
         // 1. 获取字典（验证字典是否存在）
         DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);

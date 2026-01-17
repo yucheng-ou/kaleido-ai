@@ -62,34 +62,6 @@ public class RoleController {
     }
 
     /**
-     * 启用角色
-     *
-     * @param roleId 角色ID
-     * @return 操作结果
-     */
-    @SaCheckPermission(value = "admin:role:enable", type = StpAdminUtil.TYPE)
-    @PutMapping("/{roleId}/enable")
-    public Result<Void> enableRole(
-            @PathVariable String roleId) {
-        roleCommandService.enableRole(roleId);
-        return Result.success();
-    }
-
-    /**
-     * 禁用角色
-     *
-     * @param roleId 角色ID
-     * @return 操作结果
-     */
-    @SaCheckPermission(value = "admin:role:disable", type = StpAdminUtil.TYPE)
-    @PutMapping("/{roleId}/disable")
-    public Result<Void> disableRole(
-            @PathVariable String roleId) {
-        roleCommandService.disableRole(roleId);
-        return Result.success();
-    }
-
-    /**
      * 删除角色
      *
      * @param roleId 角色ID

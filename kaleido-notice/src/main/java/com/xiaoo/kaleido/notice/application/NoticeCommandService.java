@@ -52,8 +52,8 @@ public class NoticeCommandService {
 
     @Transactional(rollbackFor = Exception.class)
     public String sendSmsVerifyCode(SendSmsVerifyCodeCommand command) {
-        // 1.参数处理
-        String mobile = command.getMobile().trim();
+        // 1.参数处理（调用领域服务）
+        String mobile = noticeDomainService.processMobile(command.getMobile());
 
         // 2.根据目标类型确定字典编码
         String dictCode = switch (command.getTargetType()) {
@@ -79,11 +79,11 @@ public class NoticeCommandService {
 
         NoticeTemplateAggregate template = templateOpt.get();
 
-        // 6.生成验证码
-        String verifyCode = NoticeAggregate.generateVerifyCode();
+        // 6.生成验证码（调用领域服务）
+        String verifyCode = noticeDomainService.generateVerifyCode();
 
-        // 7.渲染模板内容
-        String noticeContent = template.render(verifyCode);
+        // 7.渲染模板内容（调用领域服务）
+        String noticeContent = noticeDomainService.renderTemplate(template, verifyCode);
 
         // 8.创建通知聚合根
         NoticeAggregate smsVerifyCodeAggregate = noticeDomainService.createSmsVerifyCodeAggregate(mobile, noticeContent, command.getTargetType());

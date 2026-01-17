@@ -28,11 +28,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
     RolePO findByCode(@Param("code") String code);
 
     /**
-     * 根据状态查找角色列表
-     */
-    List<RolePO> findByStatus(@Param("status") String status);
-
-    /**
      * 查找所有角色
      */
     List<RolePO> findAll();
@@ -77,10 +72,6 @@ public interface RoleDao extends BaseMapper<RolePO> {
      */
     boolean existsByCode(@Param("code") String code);
 
-    /**
-     * 根据状态统计角色数量
-     */
-    long countByStatus(@Param("status") String status);
 
     /**
      * 根据ID列表查询角色编码

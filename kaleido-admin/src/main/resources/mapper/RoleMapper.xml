@@ -16,12 +16,11 @@
         <result property="code" column="code"/>
         <result property="name" column="name"/>
         <result property="description" column="description"/>
-        <result property="status" column="status"/>
     </resultMap>
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="RoleColumns">
-        id, code, name, description, status,
+        id, code, name, description,
         created_at, updated_at, deleted, lock_version
     </sql>
     
@@ -39,17 +38,6 @@
         SELECT <include refid="RoleColumns"/>
         FROM t_role
         WHERE code = #{code} AND deleted = 0
-    </select>
-    
-    <!-- 根据状态查找角色列表 -->
-    <select id="findByStatus" resultMap="RoleMap">
-        SELECT <include refid="RoleColumns"/>
-        FROM t_role
-        WHERE deleted = 0
-        <if test="status != null">
-            AND status = #{status}
-        </if>
-        ORDER BY created_at DESC
     </select>
     
     <!-- 查找所有角色 -->
@@ -102,9 +90,6 @@
         <if test="req.name != null and req.name != ''">
             AND name LIKE CONCAT('%', #{req.name}, '%')
         </if>
-        <if test="req.enabled != null">
-            AND status = #{req.enabled}
-        </if>
         ORDER BY created_at DESC
     </select>
     
@@ -112,7 +97,7 @@
     <select id="findEnabledRoles" resultMap="RoleMap">
         SELECT <include refid="RoleColumns"/>
         FROM t_role
-        WHERE deleted = 0 AND status = 1
+        WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
     
@@ -136,16 +121,6 @@
         SELECT COUNT(*) > 0
         FROM t_role
         WHERE code = #{code} AND deleted = 0
-    </select>
-    
-    <!-- 根据状态统计角色数量 -->
-    <select id="countByStatus" resultType="long">
-        SELECT COUNT(*)
-        FROM t_role
-        WHERE deleted = 0
-        <if test="status != null">
-            AND status = #{status}
-        </if>
     </select>
     
     <!-- 根据ID列表查询角色编码 -->

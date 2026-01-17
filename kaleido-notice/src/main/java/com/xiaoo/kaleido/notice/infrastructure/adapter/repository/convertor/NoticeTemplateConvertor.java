@@ -27,7 +27,6 @@ public interface NoticeTemplateConvertor {
     @Mapping(source = "code", target = "templateCode")
     @Mapping(source = "name", target = "templateName")
     @Mapping(source = "content", target = "templateContent")
-    @Mapping(source = "status", target = "status")
     NoticeTemplatePO toPO(NoticeTemplateAggregate aggregate);
 
     /**
@@ -40,6 +39,5 @@ public interface NoticeTemplateConvertor {
     @Mapping(source = "templateCode", target = "code")
     @Mapping(source = "templateName", target = "name")
     @Mapping(source = "templateContent", target = "content")
-    @Mapping(source = "status", target = "status")
     NoticeTemplateAggregate toAggregate(NoticeTemplatePO po);
 }

@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.dict.aggregate;
 
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,11 +49,6 @@ public class DictAggregate extends BaseEntity {
     private Integer sort;
 
     /**
-     * 状态
-     */
-    private DataStatusEnum status;
-
-    /**
      * 创建字典
      *
      * @param typeCode  字典类型编码
@@ -75,22 +69,7 @@ public class DictAggregate extends BaseEntity {
                 .dictName(dictName)
                 .dictValue(dictValue)
                 .sort(sort != null ? sort : 0)
-                .status(DataStatusEnum.ENABLE)
                 .build();
-    }
-
-    /**
-     * 启用字典
-     */
-    public void enable() {
-        this.status = DataStatusEnum.ENABLE;
-    }
-
-    /**
-     * 禁用字典
-     */
-    public void disable() {
-        this.status = DataStatusEnum.DISABLE;
     }
 
     /**
@@ -107,15 +86,6 @@ public class DictAggregate extends BaseEntity {
         if (sort != null) {
             this.sort = sort;
         }
-    }
-
-    /**
-     * 判断字典是否启用
-     *
-     * @return 是否启用
-     */
-    public boolean isEnabled() {
-        return DataStatusEnum.ENABLE.equals(this.status);
     }
 
 }
