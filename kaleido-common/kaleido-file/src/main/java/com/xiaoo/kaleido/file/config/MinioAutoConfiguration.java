@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.file.config;
 
-import com.xiaoo.kaleido.file.service.MinIOService;
+import com.xiaoo.kaleido.file.service.IMinIOService;
 import com.xiaoo.kaleido.file.service.impl.MinIOServiceImpl;
 import io.minio.MinioClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -26,7 +26,7 @@ public class MinioAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public MinIOService minIOService(MinioClient minioClient, MinIOProperties properties) {
+    public IMinIOService minIOService(MinioClient minioClient, MinIOProperties properties) {
         return new MinIOServiceImpl(minioClient, properties);
     }
 }
