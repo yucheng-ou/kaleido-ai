@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.BrandDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.BrandPO">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="logo_path" property="logoPath" />
+        <result column="description" property="description" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_brand 
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="existsByName" resultType="boolean">
+        SELECT COUNT(1) > 0 FROM t_wardrobe_brand 
+        WHERE name = #{name}
+          AND deleted = 0
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
+    </select>
+
+</mapper>

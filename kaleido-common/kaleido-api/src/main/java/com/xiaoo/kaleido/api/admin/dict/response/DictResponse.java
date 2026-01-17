@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.api.admin.dict.response;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.response.BaseResp;
 import lombok.*;
 
@@ -54,10 +53,6 @@ public class DictResponse extends BaseResp {
      */
     private Integer sort;
 
-    /**
-     * 状态
-     */
-    private DataStatusEnum status;
 
     /**
      * 创建时间

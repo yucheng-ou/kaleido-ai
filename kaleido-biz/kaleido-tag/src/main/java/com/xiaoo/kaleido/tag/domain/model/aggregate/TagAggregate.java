@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.tag.domain.model.aggregate;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.tag.domain.model.entity.TagRelation;
@@ -64,11 +63,6 @@ public class TagAggregate extends BaseEntity {
     private Integer usageCount;
 
     /**
-     * 标签状态
-     */
-    private DataStatusEnum status;
-
-    /**
      * 关联关系列表（聚合根内的实体）
      * 记录标签与实体的所有关联关系
      */
@@ -103,7 +97,6 @@ public class TagAggregate extends BaseEntity {
                 .color(color)
                 .description(description)
                 .usageCount(0)
-                .status(DataStatusEnum.ENABLE)
                 .build();
     }
 
@@ -134,22 +127,6 @@ public class TagAggregate extends BaseEntity {
      * @throws IllegalArgumentException 如果参数无效或实体已关联
      */
     public void associateEntity(String entityId, String userId) {
-        if (this.status == DataStatusEnum.DISABLE) {
-            throw new IllegalStateException("标签已禁用，无法关联实体");
-        }
-
-        if (entityId == null || entityId.trim().isEmpty()) {
-            throw new IllegalArgumentException("实体ID不能为空");
-        }
-        if (userId == null || userId.trim().isEmpty()) {
-            throw new IllegalArgumentException("用户ID不能为空");
-        }
-
-        // 验证实体是否已关联
-        if (isEntityAssociated(entityId)) {
-            throw new IllegalArgumentException("实体已关联该标签");
-        }
-
         // 创建关联关系
         TagRelation relation = TagRelation.create(this.id, entityId, userId);
         this.relations.add(relation);
@@ -158,60 +135,6 @@ public class TagAggregate extends BaseEntity {
         this.usageCount++;
     }
 
-    /**
-     * 取消实体关联
-     * <p>
-     * 取消标签与指定实体的关联关系，会自动更新使用次数
-     *
-     * @param entityId 实体ID，不能为空
-     * @return 如果成功取消关联返回true，如果实体未关联返回false
-     */
-    public boolean dissociateEntity(String entityId) {
-        if (entityId == null || entityId.trim().isEmpty()) {
-            throw new IllegalArgumentException("实体ID不能为空");
-        }
-
-        boolean removed = this.relations.removeIf(
-                relation -> relation.isAssociatedWith(entityId)
-        );
-
-        if (removed) {
-            // 更新使用次数和更新时间
-            this.usageCount = Math.max(0, this.usageCount - 1);
-        }
-
-        return removed;
-    }
-
-    /**
-     * 删除标签
-     * <p>
-     * 将标签标记为禁用状态，并清理所有关联关系
-     */
-    public void delete() {
-        // 清理所有关联关系
-        this.relations.clear();
-        this.usageCount = 0;
-        this.status = DataStatusEnum.DISABLE;
-    }
-
-    /**
-     * 启用标签
-     * <p>
-     * 将标签状态设置为启用
-     */
-    public void enable() {
-        this.status = DataStatusEnum.ENABLE;
-    }
-
-    /**
-     * 禁用标签
-     * <p>
-     * 将标签状态设置为禁用
-     */
-    public void disable() {
-        this.status = DataStatusEnum.DISABLE;
-    }
 
     /**
      * 验证标签是否可以关联到指定实体类型编码

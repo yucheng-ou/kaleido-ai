@@ -136,6 +136,9 @@ public enum WardrobeErrorCode implements ErrorCode {
     
     /** 位置不存在：关联的存储位置不存在 */
     LOCATION_NOT_EXIST("WARDROBE_LOCATION_NOT_EXIST", "关联的存储位置不存在"),
+    
+    /** 服装所有者不匹配：只有服装所有者可以操作 */
+    CLOTHING_OWNER_MISMATCH("WARDROBE_CLOTHING_OWNER_MISMATCH", "只有服装所有者可以操作"),
 
     // ========== 存储位置相关错误码 ==========
     /** 存储位置不存在：根据ID查询存储位置时未找到对应记录 */
@@ -233,8 +236,26 @@ public enum WardrobeErrorCode implements ErrorCode {
     /** 图片排序序号无效：图片排序序号参数无效 */
     IMAGE_ORDER_INVALID("WARDROBE_IMAGE_ORDER_INVALID", "图片排序序号无效"),
     
+    /** 图片排序序号不能为空：图片排序序号参数为空 */
+    IMAGE_ORDER_NOT_NULL("WARDROBE_IMAGE_ORDER_NOT_NULL", "图片排序序号不能为空"),
+    
+    /** 图片路径不能为空：图片路径参数为空 */
+    IMAGE_PATH_NOT_NULL("WARDROBE_IMAGE_PATH_NOT_NULL", "图片路径不能为空"),
+    
+    /** 是否为主图不能为空：是否为主图参数为空 */
+    IMAGE_IS_PRIMARY_NOT_NULL("WARDROBE_IMAGE_IS_PRIMARY_NOT_NULL", "是否为主图不能为空"),
+    
     /** 主图已存在：实体已存在主图，不能重复设置 */
     PRIMARY_IMAGE_EXISTS("WARDROBE_PRIMARY_IMAGE_EXISTS", "主图已存在"),
+    
+    /** 多个主图：不能设置多个主图 */
+    MULTIPLE_PRIMARY_IMAGES("WARDROBE_MULTIPLE_PRIMARY_IMAGES", "不能设置多个主图"),
+    
+    /** 服装图片数量超限：服装图片数量超过限制 */
+    CLOTHING_IMAGE_LIMIT_EXCEEDED("WARDROBE_CLOTHING_IMAGE_LIMIT_EXCEEDED", "服装图片数量超过限制"),
+    
+    /** 图片列表不能为空：图片列表参数为空 */
+    IMAGES_NOT_NULL("WARDROBE_IMAGES_NOT_NULL", "图片列表不能为空"),
 
     // ========== 搭配相关错误码 ==========
     /** 搭配不存在：根据ID查询搭配时未找到对应记录 */
@@ -315,7 +336,32 @@ public enum WardrobeErrorCode implements ErrorCode {
     FILE_STORAGE_FAILED("WARDROBE_FILE_STORAGE_FAILED", "文件存储失败"),
     
     /** 外部服务调用失败：调用外部服务异常 */
-    EXTERNAL_SERVICE_CALL_FAILED("WARDROBE_EXTERNAL_SERVICE_CALL_FAILED", "外部服务调用失败");
+    EXTERNAL_SERVICE_CALL_FAILED("WARDROBE_EXTERNAL_SERVICE_CALL_FAILED", "外部服务调用失败"),
+
+    // ========== 基础设施层错误码 ==========
+    /** 服装保存失败：服装保存操作失败 */
+    CLOTHING_SAVE_FAIL("WARDROBE_CLOTHING_SAVE_FAIL", "服装保存失败"),
+    
+    /** 服装更新失败：服装更新操作失败 */
+    CLOTHING_UPDATE_FAIL("WARDROBE_CLOTHING_UPDATE_FAIL", "服装更新失败"),
+    
+    /** 服装删除失败：服装删除操作失败 */
+    CLOTHING_DELETE_FAIL("WARDROBE_CLOTHING_DELETE_FAIL", "服装删除失败"),
+    
+    /** 服装查询失败：服装查询操作失败 */
+    CLOTHING_QUERY_FAIL("WARDROBE_CLOTHING_QUERY_FAIL", "服装查询失败"),
+    
+    /** 品牌保存失败：品牌保存操作失败 */
+    BRAND_SAVE_FAIL("WARDROBE_BRAND_SAVE_FAIL", "品牌保存失败"),
+    
+    /** 品牌更新失败：品牌更新操作失败 */
+    BRAND_UPDATE_FAIL("WARDROBE_BRAND_UPDATE_FAIL", "品牌更新失败"),
+    
+    /** 品牌删除失败：品牌删除操作失败 */
+    BRAND_DELETE_FAIL("WARDROBE_BRAND_DELETE_FAIL", "品牌删除失败"),
+    
+    /** 品牌查询失败：品牌查询操作失败 */
+    BRAND_QUERY_FAIL("WARDROBE_BRAND_QUERY_FAIL", "品牌查询失败");
 
     /**
      * 错误码

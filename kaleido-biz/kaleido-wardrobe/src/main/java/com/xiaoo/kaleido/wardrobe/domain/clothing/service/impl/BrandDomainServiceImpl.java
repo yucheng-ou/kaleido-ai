@@ -26,23 +26,17 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
     private final IBrandRepository brandRepository;
 
     @Override
-    public BrandAggregate createBrand(String name, String logoPath, String description, String country) {
-        // 1.参数校验
-        validateCreateBrandParams(name);
-
-        // 2.检查品牌名称是否唯一
+    public BrandAggregate createBrand(String name, String logoPath, String description) {
+        // 1.检查品牌名称是否唯一
         if (!isBrandNameUnique(name)) {
             throw WardrobeException.of(WardrobeErrorCode.BRAND_NAME_EXISTS);
         }
 
-        // 3.创建品牌聚合根
-        BrandAggregate brand = BrandAggregate.create(name, logoPath, description, country);
+        // 2.创建品牌聚合根
+        BrandAggregate brand = BrandAggregate.create(name, logoPath, description);
 
-        // 4.保存品牌
-        brandRepository.save(brand);
-
-        // 5.记录日志
-        log.info("品牌创建成功，品牌ID: {}, 品牌名称: {}", brand.getId(), brand.getName());
+        // 3.记录日志
+        log.info("品牌创建完成，品牌ID: {}, 品牌名称: {}", brand.getId(), brand.getName());
 
         return brand;
     }
@@ -60,67 +54,15 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
     }
 
     @Override
-    public BrandAggregate updateBrand(String brandId, String logoPath, String description, String country) {
-        // 1.查找品牌
+    public BrandAggregate updateBrand(String brandId, String logoPath, String description) {
+        // 1.查找品牌（如果品牌不存在或已删除，findByIdOrThrow会抛出BRAND_NOT_FOUND异常）
         BrandAggregate brand = findByIdOrThrow(brandId);
 
-        // 2.验证品牌状态
-        if (!brand.isEnabled()) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_DISABLED);
-        }
+        // 2.更新品牌信息
+        brand.updateInfo(logoPath, description);
 
-        // 3.更新品牌信息
-        brand.updateInfo(logoPath, description, country);
-
-        // 4.保存更新
-        brandRepository.update(brand);
-
-        // 5.记录日志
-        log.info("品牌信息更新成功，品牌ID: {}", brandId);
-
-        return brand;
-    }
-
-    @Override
-    public BrandAggregate enableBrand(String brandId) {
-        // 1.查找品牌
-        BrandAggregate brand = findByIdOrThrow(brandId);
-
-        // 2.验证品牌状态
-        if (brand.isEnabled()) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_ALREADY_ENABLED);
-        }
-
-        // 3.启用品牌
-        brand.enable();
-
-        // 4.保存更新
-        brandRepository.update(brand);
-
-        // 5.记录日志
-        log.info("品牌启用成功，品牌ID: {}", brandId);
-
-        return brand;
-    }
-
-    @Override
-    public BrandAggregate disableBrand(String brandId) {
-        // 1.查找品牌
-        BrandAggregate brand = findByIdOrThrow(brandId);
-
-        // 2.验证品牌状态
-        if (!brand.isEnabled()) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_ALREADY_DISABLED);
-        }
-
-        // 3.禁用品牌
-        brand.disable();
-
-        // 4.保存更新
-        brandRepository.update(brand);
-
-        // 5.记录日志
-        log.info("品牌禁用成功，品牌ID: {}", brandId);
+        // 3.记录日志
+        log.info("品牌信息更新完成，品牌ID: {}", brandId);
 
         return brand;
     }
@@ -134,20 +76,5 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
 
         // 2.检查品牌名称是否已存在
         return !brandRepository.existsByName(name.trim());
-    }
-
-    /**
-     * 验证创建品牌的参数
-     *
-     * @param name 品牌名称
-     */
-    private void validateCreateBrandParams(String name) {
-        if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_NAME_EMPTY);
-        }
-
-        if (name.trim().length() > 100) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_NAME_LENGTH_ERROR);
-        }
     }
 }

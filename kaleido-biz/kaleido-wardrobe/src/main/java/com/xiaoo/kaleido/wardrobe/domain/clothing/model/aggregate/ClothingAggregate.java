@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.entity.ClothingImage;
@@ -8,12 +7,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 服装聚合根
@@ -27,6 +24,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @SuperBuilder
 public class ClothingAggregate extends BaseEntity {
+
+    /**
+     * 每个服装最多允许的图片数量
+     */
+    public static final int MAX_IMAGES_PER_CLOTHING = 10;
 
     /**
      * 用户ID
@@ -90,11 +92,6 @@ public class ClothingAggregate extends BaseEntity {
     private String currentLocationId;
 
     /**
-     * 服装状态
-     */
-    private DataStatusEnum status;
-
-    /**
      * 主图ID
      * 关联服装图片表t_wardrobe_clothing_image
      */
@@ -151,7 +148,6 @@ public class ClothingAggregate extends BaseEntity {
                 .price(price)
                 .description(description)
                 .currentLocationId(currentLocationId)
-                .status(DataStatusEnum.ENABLE)
                 .build();
     }
 
@@ -202,108 +198,63 @@ public class ClothingAggregate extends BaseEntity {
         this.currentLocationId = locationId;
     }
 
+
+
     /**
-     * 添加图片
+     * 批量添加图片
+     * <p>
+     * 用于一次性添加多张图片的场景
      * 注意：参数和状态校验在Service层完成，这里只负责添加图片
      *
-     * @param image 服装图片实体，不能为空（已在Service层校验）
+     * @param images 图片实体列表，不能为空（已在Service层校验）
      */
-    public void addImage(ClothingImage image) {
-        this.images.add(image);
+    public void addImages(List<ClothingImage> images) {
+        if (images != null && !images.isEmpty()) {
+            this.images.addAll(images);
+        }
     }
 
     /**
-     * 移除图片
-     * 注意：参数校验在Service层完成，这里只负责移除图片
+     * 根据图片ID查找图片
      *
-     * @param imageId 图片ID，不能为空（已在Service层校验）
-     * @return 如果成功移除返回true，如果图片不存在返回false
+     * @param imageId 图片ID
+     * @return 图片实体（如果存在），否则返回Optional.empty()
      */
-    public boolean removeImage(String imageId) {
-        return this.images.removeIf(image -> image.getId().equals(imageId));
-    }
-
-    /**
-     * 设置主图
-     * 注意：参数、状态和图片存在性校验在Service层完成，这里只负责设置主图
-     *
-     * @param imageId 主图ID，不能为空（已在Service层校验）
-     */
-    public void setPrimaryImage(String imageId) {
-        this.primaryImageId = imageId;
-    }
-
-    /**
-     * 启用服装
-     * <p>
-     * 将服装状态设置为启用
-     */
-    public void enable() {
-        this.status = DataStatusEnum.ENABLE;
-    }
-
-    /**
-     * 禁用服装
-     * <p>
-     * 将服装状态设置为禁用
-     */
-    public void disable() {
-        this.status = DataStatusEnum.DISABLE;
-    }
-
-    /**
-     * 验证服装是否可以操作
-     * <p>
-     * 检查服装是否处于启用状态
-     *
-     * @return 如果服装处于启用状态返回true，否则返回false
-     */
-    public boolean isEnabled() {
-        return this.status == DataStatusEnum.ENABLE;
-    }
-
-    /**
-     * 获取主图
-     *
-     * @return 主图（如果存在），否则返回Optional.empty()
-     */
-    public Optional<ClothingImage> getPrimaryImage() {
-        if (this.primaryImageId == null) {
+    public Optional<ClothingImage> findImageById(String imageId) {
+        if (imageId == null || imageId.trim().isEmpty()) {
             return Optional.empty();
         }
         return this.images.stream()
-                .filter(image -> image.getId().equals(this.primaryImageId))
+                .filter(image -> imageId.equals(image.getId()))
                 .findFirst();
     }
 
     /**
-     * 获取图片数量
+     * 设置主图（包含业务规则）
+     * <p>
+     * 设置指定图片为主图，同时更新图片实体的isPrimary状态
+     * 注意：调用前需要确保图片存在且属于当前服装
      *
-     * @return 图片数量
+     * @param imageId 主图ID，不能为空
+     * @return 如果设置成功返回true，如果图片不存在返回false
      */
-    public int getImageCount() {
-        return this.images.size();
+    public boolean setAsPrimaryImage(String imageId) {
+        Optional<ClothingImage> imageOpt = findImageById(imageId);
+        if (imageOpt.isEmpty()) {
+            return false;
+        }
+
+        // 清除原有主图状态
+        this.images.stream()
+                .filter(ClothingImage::isPrimaryImage)
+                .forEach(ClothingImage::unsetAsPrimary);
+
+        // 设置新主图
+        ClothingImage newPrimaryImage = imageOpt.get();
+        newPrimaryImage.setAsPrimary();
+        this.primaryImageId = imageId;
+
+        return true;
     }
 
-    /**
-     * 获取所有图片ID
-     *
-     * @return 所有图片ID列表
-     */
-    public List<String> getAllImageIds() {
-        return this.images.stream()
-                .map(ClothingImage::getId)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 获取并清空图片列表（用于持久化后清理）
-     *
-     * @return 图片列表
-     */
-    public List<ClothingImage> getAndClearImages() {
-        List<ClothingImage> imagesCopy = new ArrayList<>(this.images);
-        this.images.clear();
-        return imagesCopy;
-    }
 }

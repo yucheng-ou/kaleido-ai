@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.api.tag.response;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.response.BaseResp;
 import lombok.*;
 
@@ -54,10 +53,6 @@ public class TagInfoResponse extends BaseResp {
      */
     private Integer usageCount;
 
-    /**
-     * 标签状态
-     */
-    private DataStatusEnum status;
 
     /**
      * 创建时间

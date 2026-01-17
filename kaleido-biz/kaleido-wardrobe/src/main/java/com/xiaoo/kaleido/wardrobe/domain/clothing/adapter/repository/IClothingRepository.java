@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository;
 
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.model.entity.ClothingImage;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +10,7 @@ import java.util.Optional;
  * <p>
  * 定义服装聚合根的持久化操作，包括保存、查询、更新等数据库操作
  * 遵循依赖倒置原则，接口定义在领域层，实现在基础设施层
+ * 注意：只提供聚合根级别的操作，不直接操作聚合内部的实体
  *
  * @author ouyucheng
  * @date 2026/1/15
@@ -40,6 +40,13 @@ public interface IClothingRepository {
     void update(ClothingAggregate clothingAggregate);
 
     /**
+     * 删除服装以及相关的图片
+     *
+     * @param clothingId 服装id
+     */
+    void delete(String clothingId);
+
+    /**
      * 根据ID查找服装聚合根
      * <p>
      * 根据服装ID查询服装聚合根，返回Optional对象
@@ -67,6 +74,7 @@ public interface IClothingRepository {
      * 检查服装名称在用户下的唯一性
      * <p>
      * 检查同用户下服装名称是否唯一，用于服装创建和更新时的业务规则校验
+     * 对应数据库唯一索引：uk_user_clothing_name (user_id, name)
      *
      * @param userId 用户ID，不能为空
      * @param name   服装名称，不能为空
@@ -79,6 +87,7 @@ public interface IClothingRepository {
      * 根据用户ID查询服装列表
      * <p>
      * 查询指定用户的所有服装
+     * 注意：按需加载图片信息，默认只加载基本信息
      *
      * @param userId 用户ID，不能为空
      * @return 服装聚合根列表
@@ -87,22 +96,28 @@ public interface IClothingRepository {
     List<ClothingAggregate> findByUserId(String userId);
 
     /**
-     * 更新服装图片列表
+     * 根据用户ID和类型编码查询服装列表
      * <p>
-     * 先删除旧的图片列表，再保存新的图片列表
+     * 查询指定用户下指定类型的所有服装
      *
-     * @param clothingId 服装ID，不能为空
-     * @param images     新的图片列表，可以为空（表示清空所有图片）
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当更新失败时抛出
-     */
-    void updateClothingImages(String clothingId, List<ClothingImage> images);
-
-    /**
-     * 检查服装是否存在且处于启用状态
-     *
-     * @param clothingId 服装ID，不能为空
-     * @return 如果服装存在且处于启用状态返回true，否则返回false
+     * @param userId   用户ID，不能为空
+     * @param typeCode 服装类型编码，不能为空
+     * @return 服装聚合根列表
      * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效或查询失败时抛出
      */
-    boolean existsAndEnabled(String clothingId);
+    List<ClothingAggregate> findByUserIdAndTypeCode(String userId, String typeCode);
+
+    /**
+     * 根据用户ID、类型编码和颜色编码查询服装列表
+     * <p>
+     * 查询指定用户下指定类型和颜色的所有服装
+     *
+     * @param userId    用户ID，不能为空
+     * @param typeCode  服装类型编码，可为空
+     * @param colorCode 颜色编码，可为空
+     * @return 服装聚合根列表
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效或查询失败时抛出
+     */
+    List<ClothingAggregate> findByUserIdAndTypeCodeAndColorCode(String userId, String typeCode, String colorCode);
+
 }

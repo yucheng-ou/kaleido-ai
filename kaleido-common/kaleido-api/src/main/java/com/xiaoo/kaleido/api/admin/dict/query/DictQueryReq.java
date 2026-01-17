@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.api.admin.dict.query;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.request.BaseReq;
 import lombok.*;
 
@@ -42,8 +41,4 @@ public class DictQueryReq extends BaseReq {
      */
     private String dictValue;
 
-    /**
-     * 状态
-     */
-    private DataStatusEnum status;
 }

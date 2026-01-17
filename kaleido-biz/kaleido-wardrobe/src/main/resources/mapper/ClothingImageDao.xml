@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.ClothingImageDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.ClothingImagePO">
+        <id column="id" property="id" />
+        <result column="clothing_id" property="clothingId" />
+        <result column="path" property="path" />
+        <result column="image_order" property="imageOrder" />
+        <result column="is_primary" property="isPrimary" />
+        <result column="image_size" property="imageSize" />
+        <result column="image_type" property="imageType" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findByClothingId" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing_image 
+        WHERE clothing_id = #{clothingId} 
+          AND deleted = 0
+        ORDER BY image_order ASC, created_at ASC
+    </select>
+
+    <select id="findByClothingIds" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing_image 
+        WHERE clothing_id IN 
+        <foreach collection="clothingIds" item="clothingId" open="(" separator="," close=")">
+            #{clothingId}
+        </foreach>
+        AND deleted = 0
+        ORDER BY clothing_id, image_order ASC, created_at ASC
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_wardrobe_clothing_image (
+            id, clothing_id, path, image_order, is_primary, 
+            image_size, image_type, width, height,
+            created_at, updated_at, lock_version, deleted
+        ) VALUES
+        <foreach collection="images" item="image" separator=",">
+            (
+                #{image.id}, #{image.clothingId}, #{image.path}, #{image.imageOrder}, #{image.isPrimary},
+                #{image.imageSize}, #{image.imageType}, #{image.width}, #{image.height},
+                #{image.createdAt}, #{image.updatedAt}, #{image.lockVersion}, 0
+            )
+        </foreach>
+    </insert>
+
+    <update id="deleteByClothingId">
+        UPDATE t_wardrobe_clothing_image 
+        SET deleted = 1, updated_at = NOW()
+        WHERE clothing_id = #{clothingId} 
+          AND deleted = 0
+    </update>
+
+    <update id="deleteByIds">
+        UPDATE t_wardrobe_clothing_image 
+        SET deleted = 1, updated_at = NOW()
+        WHERE id IN 
+        <foreach collection="imageIds" item="imageId" open="(" separator="," close=")">
+            #{imageId}
+        </foreach>
+        AND deleted = 0
+    </update>
+
+</mapper>
