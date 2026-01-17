@@ -42,16 +42,16 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
 
         // 1.参数校验
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "搭配名称不能为空");
         }
         if (clothingIds == null || clothingIds.isEmpty()) {
             throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
         }
         if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片列表不能为空");
         }
 
         // 2.业务规则校验：服装数量限制
@@ -125,7 +125,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
     public OutfitAggregate findByIdOrThrow(String outfitId) {
         // 1.参数校验
         if (StrUtil.isBlank(outfitId)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "搭配ID不能为空");
         }
 
         // 2.查找穿搭（包含服装列表、图片列表和穿着记录）
@@ -155,7 +155,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
             throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
         }
         if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片列表不能为空");
         }
 
         // 4.业务规则校验：服装数量限制
@@ -268,7 +268,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
     public List<OutfitAggregate> findOutfitsByUserId(String userId) {
         // 1.参数校验
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
 
         // 2.查询用户穿搭列表
@@ -285,10 +285,10 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
     private boolean isOutfitNameUnique(String userId, String name) {
         // 1.参数校验
         if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
         }
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "搭配名称不能为空");
         }
 
         // 2.从仓储层检查穿搭名称唯一性

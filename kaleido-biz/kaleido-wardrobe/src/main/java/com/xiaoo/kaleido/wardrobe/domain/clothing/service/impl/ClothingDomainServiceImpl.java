@@ -51,31 +51,17 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             String currentLocationId,
             List<ImageInfoDTO> images) {
 
-        // 1.参数校验
-        if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
-        }
-        if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_NAME_EMPTY);
-        }
-        if (StrUtil.isBlank(typeCode)) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_TYPE_CODE_EMPTY);
-        }
-        if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
-        }
-
-        // 2.业务规则校验：服装名称在用户下唯一性
+        // 1.业务规则校验：服装名称在用户下唯一性
         if (isClothingNameUnique(userId, name)) {
             throw WardrobeException.of(WardrobeErrorCode.CLOTHING_NAME_EXISTS);
         }
 
-        // 3.业务规则校验：图片数量限制
+        // 2.业务规则校验：图片数量限制
         if (images.size() > ClothingAggregate.MAX_IMAGES_PER_CLOTHING) {
             throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
         }
 
-        // 4.业务规则校验：主图唯一性
+        // 3.业务规则校验：主图唯一性
         long primaryCount = images.stream()
                 .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
                 .count();
@@ -96,7 +82,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
                         img.getImageOrder(), 
                         img.getIsPrimary(),
                         img.getImageSize(),
-                        img.getImageType(),
+                        img.getImageType() != null ? img.getImageType().name() : null,
                         img.getWidth(),
                         img.getHeight()
                 ))
@@ -121,7 +107,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
     public ClothingAggregate findByIdOrThrow(String clothingId) {
         // 1.参数校验
         if (StrUtil.isBlank(clothingId)) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装ID不能为空");
         }
 
         // 2.查找服装（包含图片列表）
@@ -153,22 +139,17 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             throw WardrobeException.of(WardrobeErrorCode.CLOTHING_OWNER_MISMATCH);
         }
 
-        // 4.参数校验
-        if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
-        }
-
-        // 5.业务规则校验：如果名称变更，检查新名称的唯一性
+        // 3.业务规则校验：如果名称变更，检查新名称的唯一性
         if (!clothing.getName().equals(name) && isClothingNameUnique(userId, name)) {
             throw WardrobeException.of(WardrobeErrorCode.CLOTHING_NAME_EXISTS);
         }
 
-        // 6.业务规则校验：图片数量限制
+        // 4.业务规则校验：图片数量限制
         if (images.size() > ClothingAggregate.MAX_IMAGES_PER_CLOTHING) {
             throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
         }
 
-        // 7.业务规则校验：主图唯一性
+        // 5.业务规则校验：主图唯一性
         long primaryCount = images.stream()
                 .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
                 .count();
@@ -197,15 +178,10 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
         // 1.查找服装
         ClothingAggregate clothing = findByIdOrThrow(clothingId);
 
-        // 2.参数校验
-        if (StrUtil.isBlank(locationId)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_ID_NOT_NULL);
-        }
-
-        // 4.变更位置
+        // 2.变更位置
         clothing.changeLocation(locationId);
 
-        // 5.记录日志
+        // 3.记录日志
         log.info("服装位置变更完成，服装ID: {}, 新位置ID: {}", clothingId, locationId);
 
         return clothing;
@@ -226,25 +202,12 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
 
     @Override
     public List<ClothingAggregate> findByUserId(String userId) {
-        // 1.参数校验
-        if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
-        }
-
-        // 2.查询用户服装列表
+        // 查询用户服装列表
         return clothingRepository.findByUserId(userId);
     }
 
     private boolean isClothingNameUnique(String userId, String name) {
-        // 1.参数校验
-        if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
-        }
-        if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_NAME_EMPTY);
-        }
-
-        // 2.从仓储层检查服装名称唯一性
+        // 从仓储层检查服装名称唯一性
         return clothingRepository.existsByUserIdAndName(userId, name);
     }
 }

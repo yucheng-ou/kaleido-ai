@@ -63,7 +63,7 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
 
         } catch (Exception e) {
             log.error("查询位置详情失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置详情查询失败");
         }
     }
 
@@ -96,7 +96,7 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
 
         } catch (Exception e) {
             log.error("查询用户位置列表失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户位置列表查询失败");
         }
     }
 
@@ -129,7 +129,7 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
 
         } catch (Exception e) {
             log.error("查询位置列表失败，位置ID列表: {}, 原因: {}", locationIds, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置列表查询失败");
         }
     }
 
@@ -145,7 +145,7 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
             return locationRepository.findById(locationId).isPresent();
         } catch (Exception e) {
             log.error("检查位置存在性失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置存在性检查失败");
         }
     }
 

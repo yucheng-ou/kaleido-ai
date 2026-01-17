@@ -45,7 +45,7 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
     public BrandAggregate findByIdOrThrow(String brandId) {
         // 1.参数校验
         if (StrUtil.isBlank(brandId)) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_ID_NOT_NULL);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "品牌ID不能为空");
         }
 
         // 2.查找品牌
@@ -71,7 +71,7 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
     public boolean isBrandNameUnique(String name) {
         // 1.参数校验
         if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.BRAND_NAME_EMPTY);
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "品牌名称不能为空");
         }
 
         // 2.检查品牌名称是否已存在

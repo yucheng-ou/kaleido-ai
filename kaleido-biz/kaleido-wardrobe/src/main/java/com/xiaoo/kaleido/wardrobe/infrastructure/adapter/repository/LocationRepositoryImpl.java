@@ -58,7 +58,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
                     locationAggregate.getImageCount());
         } catch (Exception e) {
             log.error("位置保存失败，位置ID: {}, 原因: {}", locationAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_SAVE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "位置保存失败");
         }
     }
 
@@ -85,7 +85,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
                     locationAggregate.getId(), locationAggregate.getName(), locationAggregate.getImageCount());
         } catch (Exception e) {
             log.error("位置更新失败，位置ID: {}, 原因: {}", locationAggregate.getId(), e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_UPDATE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "位置更新失败");
         }
     }
 
@@ -102,7 +102,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             log.info("位置删除成功，位置ID: {}", locationId);
         } catch (Exception e) {
             log.error("位置删除失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_DELETE_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "位置删除失败");
         }
     }
 
@@ -136,7 +136,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             return Optional.of(locationAggregate);
         } catch (Exception e) {
             log.error("查询位置失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置查询失败");
         }
     }
 
@@ -152,7 +152,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             return locationDao.existsByNameAndUserId(name, userId);
         } catch (Exception e) {
             log.error("检查位置名称唯一性失败，位置名称: {}, 用户ID: {}, 原因: {}", name, userId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置名称唯一性检查失败");
         }
     }
 
@@ -162,7 +162,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             return locationDao.hasClothingReferences(locationId);
         } catch (Exception e) {
             log.error("检查位置引用失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置引用检查失败");
         }
     }
 
@@ -185,7 +185,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             return aggregates;
         } catch (Exception e) {
             log.error("查询用户位置失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户位置查询失败");
         }
     }
 
@@ -208,7 +208,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
             return aggregates;
         } catch (Exception e) {
             log.error("查询位置列表失败，位置ID列表: {}, 原因: {}", locationIds, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_QUERY_FAIL);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置列表查询失败");
         }
     }
 
