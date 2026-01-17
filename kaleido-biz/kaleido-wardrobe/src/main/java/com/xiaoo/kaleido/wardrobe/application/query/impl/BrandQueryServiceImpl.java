@@ -1,7 +1,8 @@
-package com.xiaoo.kaleido.wardrobe.application.query;
+package com.xiaoo.kaleido.wardrobe.application.query.impl;
 
 import com.xiaoo.kaleido.api.wardrobe.response.BrandInfoResponse;
 import com.xiaoo.kaleido.wardrobe.application.convertor.WardrobeConvertor;
+import com.xiaoo.kaleido.wardrobe.application.query.IBrandQueryService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IBrandRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.BrandAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IBrandDomainService;

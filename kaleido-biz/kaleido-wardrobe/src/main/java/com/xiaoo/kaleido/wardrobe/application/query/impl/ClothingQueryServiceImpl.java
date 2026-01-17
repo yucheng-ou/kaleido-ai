@@ -1,7 +1,8 @@
-package com.xiaoo.kaleido.wardrobe.application.query;
+package com.xiaoo.kaleido.wardrobe.application.query.impl;
 
 import com.xiaoo.kaleido.api.wardrobe.response.ClothingInfoResponse;
 import com.xiaoo.kaleido.wardrobe.application.convertor.WardrobeConvertor;
+import com.xiaoo.kaleido.wardrobe.application.query.IClothingQueryService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
 import lombok.RequiredArgsConstructor;

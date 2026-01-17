@@ -1,0 +1,297 @@
+package com.xiaoo.kaleido.wardrobe.domain.outfit.service.impl;
+
+import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitClothing;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitImage;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitRepository;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 穿搭领域服务实现类
+ * <p>
+ * 实现穿搭领域服务的所有业务逻辑，包括参数校验、业务规则验证、异常处理等
+ * 遵循DDD原则：负责参数校验（针对controller未校验部分）+ 业务规则验证 + 聚合根操作
+ *
+ * @author ouyucheng
+ * @date 2026/1/17
+ */
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class OutfitDomainServiceImpl implements IOutfitDomainService {
+
+    private final IOutfitRepository outfitRepository;
+
+    @Override
+    public OutfitAggregate createOutfitWithClothingsAndImages(
+            String userId,
+            String name,
+            String description,
+            List<String> clothingIds,
+            List<OutfitImageInfoDTO> images) {
+
+        // 1.参数校验
+        if (StrUtil.isBlank(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+        }
+        if (StrUtil.isBlank(name)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EMPTY);
+        }
+        if (clothingIds == null || clothingIds.isEmpty()) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
+        }
+        if (images == null || images.isEmpty()) {
+            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
+        }
+
+        // 2.业务规则校验：服装数量限制
+        if (clothingIds.size() > OutfitAggregate.MAX_CLOTHINGS_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_CLOTHING_LIMIT_EXCEEDED);
+        }
+
+        // 3.业务规则校验：图片数量限制
+        if (images.size() > OutfitAggregate.MAX_IMAGES_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
+        }
+
+        // 4.业务规则校验：主图唯一性
+        long primaryCount = images.stream()
+                .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
+                .count();
+        if (primaryCount > 1) {
+            throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
+        }
+
+        // 5.业务规则校验：穿搭名称在用户下唯一性
+        if (isOutfitNameUnique(userId, name)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
+        }
+
+        // 6.创建穿搭聚合根
+        OutfitAggregate outfit = OutfitAggregate.create(userId, name, description);
+
+        // 7.创建服装关联实体列表
+        List<OutfitClothing> clothingEntities = clothingIds.stream()
+                .map(clothingId -> OutfitClothing.builder()
+                        .id(com.xiaoo.kaleido.distribute.util.SnowflakeUtil.newSnowflakeId())
+                        .outfitId(outfit.getId())
+                        .clothingId(clothingId)
+                        .build())
+                .collect(Collectors.toList());
+        
+        outfit.updateClothings(clothingEntities);
+
+        // 8.创建图片实体列表
+        List<OutfitImage> imageEntities = images.stream()
+                .map(img -> OutfitImage.create(
+                        outfit.getId(),
+                        img.getPath(),
+                        img.getImageOrder(),
+                        img.getIsPrimary(),
+                        img.getImageSize(),
+                        img.getImageType(),
+                        img.getWidth(),
+                        img.getHeight(),
+                        img.getDescription()
+                ))
+                .collect(Collectors.toList());
+        
+        outfit.addImages(imageEntities);
+
+        // 9.设置主图（如果有）
+        imageEntities.stream()
+                .filter(img -> Boolean.TRUE.equals(img.isPrimaryImage()))
+                .findFirst()
+                .ifPresent(primaryImage -> outfit.setAsPrimaryImage(primaryImage.getId()));
+
+        // 10.记录日志
+        log.info("穿搭创建成功，穿搭ID: {}, 用户ID: {}, 穿搭名称: {}, 服装数量: {}, 图片数量: {}",
+                outfit.getId(), userId, name, clothingIds.size(), images.size());
+
+        return outfit;
+    }
+
+    @Override
+    public OutfitAggregate findByIdOrThrow(String outfitId) {
+        // 1.参数校验
+        if (StrUtil.isBlank(outfitId)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_ID_NOT_NULL);
+        }
+
+        // 2.查找穿搭（包含服装列表、图片列表和穿着记录）
+        return outfitRepository.findById(outfitId)
+                .orElseThrow(() -> WardrobeException.of(WardrobeErrorCode.OUTFIT_NOT_FOUND));
+    }
+
+    @Override
+    public OutfitAggregate updateOutfit(
+            String outfitId,
+            String userId,
+            String name,
+            String description,
+            List<String> clothingIds,
+            List<OutfitImageInfoDTO> images) {
+        
+        // 1.查找穿搭
+        OutfitAggregate outfit = findByIdOrThrow(outfitId);
+
+        // 2.验证用户权限（只有穿搭所有者可以修改）
+        if (!outfit.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.DATA_NOT_BELONG_TO_USER);
+        }
+
+        // 3.参数校验
+        if (clothingIds == null || clothingIds.isEmpty()) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
+        }
+        if (images == null || images.isEmpty()) {
+            throw WardrobeException.of(WardrobeErrorCode.IMAGES_NOT_NULL);
+        }
+
+        // 4.业务规则校验：服装数量限制
+        if (clothingIds.size() > OutfitAggregate.MAX_CLOTHINGS_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_CLOTHING_LIMIT_EXCEEDED);
+        }
+
+        // 5.业务规则校验：图片数量限制
+        if (images.size() > OutfitAggregate.MAX_IMAGES_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
+        }
+
+        // 6.业务规则校验：主图唯一性
+        long primaryCount = images.stream()
+                .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
+                .count();
+        if (primaryCount > 1) {
+            throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
+        }
+
+        // 7.业务规则校验：如果名称变更，检查新名称的唯一性
+        if (!outfit.getName().equals(name) && isOutfitNameUnique(userId, name)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
+        }
+
+        // 8.更新穿搭基本信息
+        outfit.updateInfo(name, description);
+
+        // 9.更新服装关联实体列表
+        List<OutfitClothing> clothingEntities = clothingIds.stream()
+                .map(clothingId -> OutfitClothing.builder()
+                        .id(com.xiaoo.kaleido.distribute.util.SnowflakeUtil.newSnowflakeId())
+                        .outfitId(outfit.getId())
+                        .clothingId(clothingId)
+                        .build())
+                .collect(Collectors.toList());
+        
+        outfit.updateClothings(clothingEntities);
+
+        // 10.更新图片实体列表（全量替换）
+        List<OutfitImage> imageEntities = images.stream()
+                .map(img -> OutfitImage.create(
+                        outfit.getId(),
+                        img.getPath(),
+                        img.getImageOrder(),
+                        img.getIsPrimary(),
+                        img.getImageSize(),
+                        img.getImageType(),
+                        img.getWidth(),
+                        img.getHeight(),
+                        img.getDescription()
+                ))
+                .collect(Collectors.toList());
+        
+        // 清空原有图片并添加新图片
+        outfit.getImages().clear();
+        outfit.addImages(imageEntities);
+
+        // 11.设置主图（如果有）
+        imageEntities.stream()
+                .filter(img -> Boolean.TRUE.equals(img.isPrimaryImage()))
+                .findFirst()
+                .ifPresent(primaryImage -> outfit.setAsPrimaryImage(primaryImage.getId()));
+
+        // 12.记录日志
+        log.info("穿搭信息更新成功，穿搭ID: {}, 用户ID: {}, 新名称: {}, 服装数量: {}, 图片数量: {}",
+                outfitId, userId, name, clothingIds.size(), images.size());
+
+        return outfit;
+    }
+
+    @Override
+    public OutfitAggregate recordOutfitWear(String outfitId, String userId, String notes) {
+        // 1.查找穿搭
+        OutfitAggregate outfit = findByIdOrThrow(outfitId);
+
+        // 2.验证用户权限（只有穿搭所有者可以记录穿着）
+        if (!outfit.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.DATA_NOT_BELONG_TO_USER);
+        }
+
+        // 3.记录穿着行为
+        outfit.recordWear(userId, notes);
+
+        // 4.记录日志
+        log.info("穿搭穿着记录成功，穿搭ID: {}, 用户ID: {}, 穿着次数: {}, 最后穿着日期: {}",
+                outfitId, userId, outfit.getWearCount(), outfit.getLastWornDate());
+
+        return outfit;
+    }
+
+    @Override
+    public OutfitAggregate deleteOutfit(String outfitId, String userId) {
+        // 1.查找穿搭
+        OutfitAggregate outfit = findByIdOrThrow(outfitId);
+
+        // 2.验证用户权限（只有穿搭所有者可以删除）
+        if (!outfit.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.DATA_NOT_BELONG_TO_USER);
+        }
+
+        // 3.记录日志
+        log.info("穿搭删除操作，穿搭ID: {}, 用户ID: {}, 穿搭名称: {}",
+                outfitId, userId, outfit.getName());
+
+        return outfit;
+    }
+
+    @Override
+    public List<OutfitAggregate> findOutfitsByUserId(String userId) {
+        // 1.参数校验
+        if (StrUtil.isBlank(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+        }
+
+        // 2.查询用户穿搭列表
+        return outfitRepository.findByUserId(userId);
+    }
+
+    /**
+     * 检查穿搭名称在用户下是否唯一
+     *
+     * @param userId 用户ID
+     * @param name   穿搭名称
+     * @return 如果唯一返回false，如果已存在返回true
+     */
+    private boolean isOutfitNameUnique(String userId, String name) {
+        // 1.参数校验
+        if (StrUtil.isBlank(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.USER_ID_NOT_NULL);
+        }
+        if (StrUtil.isBlank(name)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EMPTY);
+        }
+
+        // 2.从仓储层检查穿搭名称唯一性
+        return outfitRepository.existsByUserIdAndName(userId, name);
+    }
+}
