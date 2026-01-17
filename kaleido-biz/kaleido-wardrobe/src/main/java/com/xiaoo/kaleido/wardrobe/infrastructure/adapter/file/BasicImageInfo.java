@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.wardrobe.application.command;
+package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file;
 
 /**
  * 基础图片信息接口
