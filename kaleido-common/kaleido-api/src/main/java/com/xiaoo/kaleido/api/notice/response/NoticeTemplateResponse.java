@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.api.notice.response;
 
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.base.response.BaseResp;
 import lombok.*;
 
@@ -35,10 +34,7 @@ public class NoticeTemplateResponse extends BaseResp {
      * 模板内容
      */
     private String content;
-    /**
-     * 模板状态
-     */
-    private DataStatusEnum status;
+
     /**
      * 创建时间
      */

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * 标签仓储接口的具体实现，负责标签聚合根的持久化和查询
  *
  * @author ouyucheng
- * @date 2026/1/15
+ * @date 2026/1/16
  */
 @Slf4j
 @Repository
@@ -38,7 +38,6 @@ public class TagRepositoryImpl implements ITagRepository {
     private final TagRelationDao tagRelationDao;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(TagAggregate tagAggregate) {
         // 1.转换TagAggregate为TagPO
         TagPO tagPO = TagInfraConvertor.INSTANCE.toPO(tagAggregate);
@@ -46,7 +45,8 @@ public class TagRepositoryImpl implements ITagRepository {
         // 2.保存标签基本信息
         tagDao.insert(tagPO);
 
-        log.info("标签保存成功，标签ID: {}, 用户ID: {}, 标签名称: {}", tagAggregate.getId(), tagAggregate.getUserId(), tagAggregate.getName());
+        log.info("标签保存成功，标签ID: {}, 用户ID: {}, 标签名称: {}",
+                tagAggregate.getId(), tagAggregate.getUserId(), tagAggregate.getName());
     }
 
     @Override
@@ -66,17 +66,13 @@ public class TagRepositoryImpl implements ITagRepository {
     public Optional<TagAggregate> findById(String tagId) {
         try {
             // 1.查询标签基本信息
-            TagPO tagPO = tagDao.
-                    findById(tagId);
+            TagPO tagPO = tagDao.findById(tagId);
             if (tagPO == null) {
                 return Optional.empty();
             }
 
             // 2.转换为TagAggregate
             TagAggregate tagAggregate = TagInfraConvertor.INSTANCE.toAggregate(tagPO);
-
-            // 3.加载标签关联关系
-            loadTagRelations(tagAggregate);
 
             return Optional.of(tagAggregate);
         } catch (Exception e) {
@@ -122,23 +118,22 @@ public class TagRepositoryImpl implements ITagRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateTagRelations(String tagId, List<TagRelation> relations) {
-        try {
-            // 1.删除旧的关联关系
-            tagRelationDao.deleteByTagId(tagId);
+    public void insertRelation(TagAggregate tag) {
+        //1.插入关联关系
+        batchSaveTagRelations(tag);
 
-            // 2.保存新的关联关系
-            if (relations != null && !relations.isEmpty()) {
-                List<TagRelationPO> relationPOs = TagRelationInfraConvertor.INSTANCE.toPOList(relations);
-                tagRelationDao.batchInsert(relationPOs);
-            }
+        //2.更新标签
+        update(tag);
+    }
 
-            log.info("标签关联关系更新成功，标签ID: {}, 关联关系数量: {}", tagId,
-                    relations != null ? relations.size() : 0);
-        } catch (Exception e) {
-            log.error("更新标签关联关系失败，标签ID: {}, 原因: {}", tagId, e.getMessage(), e);
-            throw TagException.of(TagErrorCode.TAG_OPERATE_FAILED);
-        }
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteRelation(TagAggregate tag) {
+        //1.删除关联关系
+        tagRelationDao.deleteByTagId(tag.getId());
+
+        //2.更新标签
+        update(tag);
     }
 
     /**
@@ -161,41 +156,5 @@ public class TagRepositoryImpl implements ITagRepository {
         if (!relationPOs.isEmpty()) {
             tagRelationDao.batchInsert(relationPOs);
         }
-    }
-
-    /**
-     * 更新标签关联关系
-     * <p>
-     * 先删除旧的关联关系，再保存新的关联关系
-     *
-     * @param tagAggregate 标签聚合根，包含新的关联关系列表
-     */
-    private void updateTagRelations(TagAggregate tagAggregate) {
-        String tagId = tagAggregate.getId();
-
-        // 1.删除旧的关联关系
-        tagRelationDao.deleteByTagId(tagId);
-
-        // 2.保存新的关联关系
-        batchSaveTagRelations(tagAggregate);
-    }
-
-    /**
-     * 加载标签关联关系
-     * <p>
-     * 从数据库加载标签的关联关系并设置到TagAggregate中
-     *
-     * @param tagAggregate 标签聚合根
-     */
-    private void loadTagRelations(TagAggregate tagAggregate) {
-        String tagId = tagAggregate.getId();
-
-        // 查询标签关联关系
-        List<TagRelationPO> relationPOs = tagRelationDao.findByTagId(tagId);
-
-        // 转换为TagRelation并设置到TagAggregate
-        List<TagRelation> relations = TagRelationInfraConvertor.INSTANCE.toEntityList(relationPOs);
-        tagAggregate.getRelations().clear();
-        tagAggregate.getRelations().addAll(relations);
     }
 }

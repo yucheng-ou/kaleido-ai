@@ -51,60 +51,31 @@ public interface ITagDomainService {
      */
     TagAggregate updateTag(String tagId, String name, String color, String description);
 
-    /**
-     * 删除标签
-     * <p>
-     * 将标签标记为禁用状态，并清理所有关联关系
-     *
-     * @param tagId 标签ID，不能为空
-     * @return 删除后的标签聚合根
-     */
-    TagAggregate deleteTag(String tagId);
 
     /**
-     * 启用标签
+     * 关联实体到标签
      * <p>
-     * 将标签状态设置为启用
+     * 将指定实体关联到标签，会自动验证标签类型与实体类型的匹配
      *
-     * @param tagId 标签ID，不能为空
-     * @return 启用后的标签聚合根
-     */
-    TagAggregate enableTag(String tagId);
-
-    /**
-     * 禁用标签
-     * <p>
-     * 将标签状态设置为禁用
-     *
-     * @param tagId 标签ID，不能为空
-     * @return 禁用后的标签聚合根
-     */
-    TagAggregate disableTag(String tagId);
-
-    /**
-     * 批量关联标签
-     * <p>
-     * 将多个标签关联到指定实体，会自动验证标签类型与实体类型的匹配
-     *
-     * @param tagIds         标签ID列表，不能为空
+     * @param tagId          标签ID，不能为空
      * @param entityId       实体ID，不能为空
      * @param userId         用户ID，不能为空
      * @param entityTypeCode 实体类型编码，用于验证标签类型匹配
-     * @return 成功关联的标签数量
+     * @return 关联后的标签聚合根
      */
-    int associateTags(List<String> tagIds, String entityId, String userId, String entityTypeCode);
+    TagAggregate associateEntity(String tagId, String entityId, String userId, String entityTypeCode);
 
     /**
-     * 批量取消关联标签
+     * 取消标签与实体的关联
      * <p>
-     * 取消多个标签与指定实体的关联关系
+     * 取消标签与指定实体的关联关系
      *
-     * @param tagIds   标签ID列表，不能为空
+     * @param tagId    标签ID，不能为空
      * @param entityId 实体ID，不能为空
      * @param userId   用户ID，不能为空
-     * @return 成功取消关联的标签数量
+     * @return 取消关联后的标签聚合根
      */
-    int dissociateTags(List<String> tagIds, String entityId, String userId);
+    TagAggregate dissociateEntity(String tagId, String entityId, String userId);
 
     /**
      * 验证标签名称在用户下的唯一性

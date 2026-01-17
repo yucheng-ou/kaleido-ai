@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.tag.domain.adapter.repository;
 
 import com.xiaoo.kaleido.tag.domain.model.aggregate.TagAggregate;
-import com.xiaoo.kaleido.tag.domain.model.entity.TagRelation;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +30,7 @@ public interface ITagRepository {
     /**
      * 更新标签聚合根
      * <p>
-     * 更新标签聚合根信息到数据库
-     * 注意：只更新标签的基本信息，不处理关联关系
+     * 更新标签聚合根信息到数据库，包括标签基本信息和关联关系
      *
      * @param tagAggregate 标签聚合根，不能为空
      * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当更新失败或标签不存在时抛出
@@ -89,14 +87,8 @@ public interface ITagRepository {
      */
     List<TagAggregate> findByUserIdAndTypeCode(String userId, String typeCode);
 
-    /**
-     * 更新标签关联关系
-     * <p>
-     * 先删除旧的关联关系，再保存新的关联关系
-     *
-     * @param tagId 标签ID，不能为空
-     * @param relations 新的关联关系列表，可以为空（表示清空所有关联关系）
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当更新失败时抛出
-     */
-    void updateTagRelations(String tagId, List<TagRelation> relations);
+
+    void insertRelation(TagAggregate tag);
+
+    void deleteRelation(TagAggregate tag);
 }

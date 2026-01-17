@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository;
 
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.BrandAggregate;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,6 +36,13 @@ public interface IBrandRepository {
      * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当更新失败或品牌不存在时抛出
      */
     void update(BrandAggregate brandAggregate);
+
+    /**
+     * 删除服装 同时删除对应的图片
+     *
+     * @param clothingId 服装id
+     */
+    void delete(String clothingId);
 
     /**
      * 根据ID查找品牌聚合根
@@ -70,12 +78,15 @@ public interface IBrandRepository {
      */
     boolean existsByName(String name);
 
+
     /**
-     * 检查品牌是否存在且处于启用状态
+     * 查询所有品牌
+     * <p>
+     * 查询所有品牌列表，按创建时间倒序排列
      *
-     * @param brandId 品牌ID，不能为空
-     * @return 如果品牌存在且处于启用状态返回true，否则返回false
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效或查询失败时抛出
+     * @return 品牌聚合根列表，如果不存在则返回空列表
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当查询失败时抛出
      */
-    boolean existsAndEnabled(String brandId);
+    List<BrandAggregate> findAll();
+
 }

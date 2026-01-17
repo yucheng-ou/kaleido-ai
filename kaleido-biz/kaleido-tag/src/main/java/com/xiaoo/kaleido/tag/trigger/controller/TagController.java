@@ -1,6 +1,8 @@
 package com.xiaoo.kaleido.tag.trigger.controller;
 
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.CreateTagCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.UpdateTagCommand;
 import com.xiaoo.kaleido.api.tag.response.TagInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
@@ -59,47 +61,6 @@ public class TagController {
         return Result.success();
     }
 
-    /**
-     * 删除标签
-     *
-     * @param tagId 标签ID，不能为空
-     * @return 空响应
-     */
-    @DeleteMapping("/{tagId}")
-    public Result<Void> deleteTag(
-            @NotBlank(message = "标签ID不能为空")
-            @PathVariable String tagId) {
-        tagCommandService.deleteTag(tagId);
-        return Result.success();
-    }
-
-    /**
-     * 启用标签
-     *
-     * @param tagId 标签ID，不能为空
-     * @return 空响应
-     */
-    @PutMapping("/{tagId}/enable")
-    public Result<Void> enableTag(
-            @NotBlank(message = "标签ID不能为空")
-            @PathVariable String tagId) {
-        tagCommandService.enableTag(tagId);
-        return Result.success();
-    }
-
-    /**
-     * 禁用标签
-     *
-     * @param tagId 标签ID，不能为空
-     * @return 空响应
-     */
-    @PutMapping("/{tagId}/disable")
-    public Result<Void> disableTag(
-            @NotBlank(message = "标签ID不能为空")
-            @PathVariable String tagId) {
-        tagCommandService.disableTag(tagId);
-        return Result.success();
-    }
 
     /**
      * 根据ID查询标签
@@ -130,5 +91,29 @@ public class TagController {
             @RequestParam String typeCode) {
         List<TagInfoResponse> tagList = tagQueryService.findByUserIdAndTypeCode(userId, typeCode);
         return Result.success(tagList);
+    }
+
+    /**
+     * 关联实体到标签
+     *
+     * @param command 关联实体命令
+     * @return 空响应
+     */
+    @PostMapping("/associate")
+    public Result<Void> associateEntity(@Valid @RequestBody AssociateEntityCommand command) {
+        tagCommandService.associateEntity(command);
+        return Result.success();
+    }
+
+    /**
+     * 取消标签与实体的关联
+     *
+     * @param command 取消关联实体命令
+     * @return 空响应
+     */
+    @PostMapping("/dissociate")
+    public Result<Void> dissociateEntity(@Valid @RequestBody DissociateEntityCommand command) {
+        tagCommandService.dissociateEntity(command);
+        return Result.success();
     }
 }

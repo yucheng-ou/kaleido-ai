@@ -20,17 +20,6 @@ public enum TagErrorCode implements ErrorCode {
     /** 标签名称已存在：同用户同类型下标签名称已存在 */
     TAG_NAME_EXISTS("TAG_NAME_EXISTS", "标签名称在用户下已存在（同类型）"),
     
-    /** 标签已禁用：尝试操作已被禁用的标签 */
-    TAG_DISABLED("TAG_DISABLED", "标签已禁用"),
-    
-    /** 标签已是启用状态：尝试启用已启用的标签 */
-    TAG_ALREADY_ENABLED("TAG_ALREADY_ENABLED", "标签已是启用状态"),
-    
-    /** 标签已是禁用状态：尝试禁用已禁用的标签 */
-    TAG_ALREADY_DISABLED("TAG_ALREADY_DISABLED", "标签已是禁用状态"),
-    
-    /** 标签状态异常：标签状态不符合操作要求 */
-    TAG_STATUS_ERROR("TAG_STATUS_ERROR", "标签状态异常"),
     
     /** 标签操作失败：通用标签操作失败错误 */
     TAG_OPERATE_FAILED("TAG_OPERATE_FAILED", "标签操作失败"),
@@ -80,6 +69,9 @@ public enum TagErrorCode implements ErrorCode {
     /** 实体已关联标签：实体已关联该标签，不能重复关联 */
     ENTITY_ALREADY_ASSOCIATED("ENTITY_ALREADY_ASSOCIATED", "实体已关联该标签"),
     
+    /** 实体未关联标签：实体未关联该标签，无法取消关联 */
+    ENTITY_NOT_ASSOCIATED("ENTITY_NOT_ASSOCIATED", "实体未关联该标签"),
+    
     /** 标签不属于用户：尝试操作不属于当前用户的标签 */
     TAG_NOT_BELONG_TO_USER("TAG_NOT_BELONG_TO_USER", "标签不属于当前用户"),
     
@@ -90,28 +82,7 @@ public enum TagErrorCode implements ErrorCode {
     USER_TAG_LIMIT_EXCEEDED("USER_TAG_LIMIT_EXCEEDED", "用户标签数量超过限制"),
     
     /** 实体标签数量超限：实体关联的标签数量超过限制 */
-    ENTITY_TAG_LIMIT_EXCEEDED("ENTITY_TAG_LIMIT_EXCEEDED", "实体标签数量超过限制"),
-    
-    /** 批量操作参数错误：批量操作参数无效 */
-    BATCH_OPERATION_PARAM_ERROR("BATCH_OPERATION_PARAM_ERROR", "批量操作参数错误"),
-    
-    /** 标签关联不存在：标签与实体的关联关系不存在 */
-    TAG_ASSOCIATION_NOT_FOUND("TAG_ASSOCIATION_NOT_FOUND", "标签关联不存在"),
-    
-    /** 标签使用次数统计错误：使用次数统计异常 */
-    TAG_USAGE_COUNT_ERROR("TAG_USAGE_COUNT_ERROR", "标签使用次数统计错误"),
-    
-    /** 标签数据同步失败：标签数据同步操作失败 */
-    TAG_DATA_SYNC_FAILED("TAG_DATA_SYNC_FAILED", "标签数据同步失败"),
-    
-    /** 标签缓存操作失败：标签缓存操作异常 */
-    TAG_CACHE_OPERATION_FAILED("TAG_CACHE_OPERATION_FAILED", "标签缓存操作失败"),
-    
-    /** 标签RPC调用失败：标签RPC服务调用异常 */
-    TAG_RPC_CALL_FAILED("TAG_RPC_CALL_FAILED", "标签RPC调用失败"),
-    
-    /** 标签消息处理失败：标签消息队列处理异常 */
-    TAG_MESSAGE_PROCESS_FAILED("TAG_MESSAGE_PROCESS_FAILED", "标签消息处理失败");
+    ENTITY_TAG_LIMIT_EXCEEDED("ENTITY_TAG_LIMIT_EXCEEDED", "实体标签数量超过限制");
 
     /**
      * 错误码

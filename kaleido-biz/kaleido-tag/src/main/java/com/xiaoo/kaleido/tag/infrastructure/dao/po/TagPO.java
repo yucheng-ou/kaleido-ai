@@ -1,15 +1,10 @@
 package com.xiaoo.kaleido.tag.infrastructure.dao.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xiaoo.kaleido.base.constant.enums.DataStatusEnum;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Date;
 
 /**
  * 标签持久化对象
@@ -61,12 +56,4 @@ public class TagPO extends BasePO {
      */
     @TableField("usage_count")
     private Integer usageCount;
-
-    /**
-     * 状态
-     * <p>
-     * 枚举值：ENABLE（启用）、DISABLE（禁用）
-     */
-    @TableField("status")
-    private DataStatusEnum status;
 }

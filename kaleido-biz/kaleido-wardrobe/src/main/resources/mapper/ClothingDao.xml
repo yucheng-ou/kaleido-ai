@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.ClothingDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.ClothingPO">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="name" property="name" />
+        <result column="type_code" property="typeCode" />
+        <result column="color_code" property="colorCode" />
+        <result column="season_code" property="seasonCode" />
+        <result column="brand_id" property="brandId" />
+        <result column="size" property="size" />
+        <result column="purchase_date" property="purchaseDate" />
+        <result column="price" property="price" />
+        <result column="description" property="description" />
+        <result column="current_location_id" property="currentLocationId" />
+        <result column="primary_image_id" property="primaryImageId" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing 
+        WHERE user_id = #{userId} 
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByUserIdAndTypeCode" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing 
+        WHERE user_id = #{userId} 
+          AND type_code = #{typeCode}
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByUserIdAndTypeCodeAndColorCode" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing 
+        WHERE user_id = #{userId} 
+          AND deleted = 0
+        <if test="typeCode != null and typeCode != ''">
+          AND type_code = #{typeCode}
+        </if>
+        <if test="colorCode != null and colorCode != ''">
+          AND color_code = #{colorCode}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="existsByUserIdAndName" resultType="boolean">
+        SELECT COUNT(1) > 0 FROM t_wardrobe_clothing 
+        WHERE user_id = #{userId} 
+          AND name = #{name}
+          AND deleted = 0
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM t_wardrobe_clothing WHERE id = #{id} AND deleted = 0
+    </select>
+
+</mapper>

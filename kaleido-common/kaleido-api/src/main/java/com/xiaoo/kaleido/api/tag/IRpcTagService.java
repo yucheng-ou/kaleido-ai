@@ -1,6 +1,8 @@
 package com.xiaoo.kaleido.api.tag;
 
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.AssociateTagsCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.DissociateTagsCommand;
 import com.xiaoo.kaleido.base.result.Result;
 import jakarta.validation.Valid;
@@ -23,9 +25,8 @@ public interface IRpcTagService {
      * 将指定的标签关联到实体，支持批量关联多个标签
      *
      * @param command 关联标签命令，包含标签ID列表、实体ID、用户ID和实体类型编码
-     * @return 成功关联的数量
      */
-    Result<Integer> associateTags(@Valid AssociateTagsCommand command);
+    Result<Void> associateTags(@Valid AssociateEntityCommand command);
 
     /**
      * 取消关联标签
@@ -33,9 +34,8 @@ public interface IRpcTagService {
      * 取消标签与实体的关联关系，支持批量取消关联多个标签
      *
      * @param command 取消关联标签命令，包含标签ID列表、实体ID和用户ID
-     * @return 成功取消关联的数量
      */
-    Result<Integer> dissociateTags(@Valid DissociateTagsCommand command);
+    Result<Void> dissociateTags(@Valid DissociateEntityCommand command);
 
     /**
      * 查询标签关联的实体列表
