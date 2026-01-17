@@ -7,7 +7,7 @@ import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.file.IClothingFileServ
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class ClothingCommandService {
         List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<ImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
+        List<ClothingImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
 
         // 3.调用领域服务创建服装
         ClothingAggregate clothing = clothingDomainService.createClothingWithImages(
@@ -81,7 +81,7 @@ public class ClothingCommandService {
         List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
         // 2.使用图片处理服务转换图片信息
-        List<ImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
+        List<ClothingImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
 
         // 3.调用领域服务更新服装
         ClothingAggregate clothing = clothingDomainService.updateClothing(

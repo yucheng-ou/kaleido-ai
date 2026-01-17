@@ -1,8 +1,7 @@
 package com.xiaoo.kaleido.wardrobe.domain.clothing.service;
 
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.model.entity.ClothingImage;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -53,7 +52,7 @@ public interface IClothingDomainService {
             BigDecimal price,
             String description,
             String currentLocationId,
-            List<ImageInfoDTO> images);
+            List<ClothingImageInfoDTO> images);
 
     /**
      * 根据ID查找服装，如果不存在则抛出异常
@@ -101,7 +100,7 @@ public interface IClothingDomainService {
             BigDecimal price,
             String description,
             String currentLocationId,
-            List<ImageInfoDTO> images);
+            List<ClothingImageInfoDTO> images);
 
     /**
      * 变更服装位置

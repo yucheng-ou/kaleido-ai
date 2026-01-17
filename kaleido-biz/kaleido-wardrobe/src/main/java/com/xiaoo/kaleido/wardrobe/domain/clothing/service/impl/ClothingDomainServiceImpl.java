@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.entity.ClothingImage;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
-import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRepository;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
@@ -49,7 +49,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             BigDecimal price,
             String description,
             String currentLocationId,
-            List<ImageInfoDTO> images) {
+            List<ClothingImageInfoDTO> images) {
 
         // 1.业务规则校验：服装名称在用户下唯一性
         if (isClothingNameUnique(userId, name)) {
@@ -129,7 +129,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             BigDecimal price,
             String description,
             String currentLocationId,
-            List<ImageInfoDTO> images) {
+            List<ClothingImageInfoDTO> images) {
         
         // 1.查找服装
         ClothingAggregate clothing = findByIdOrThrow(clothingId);
