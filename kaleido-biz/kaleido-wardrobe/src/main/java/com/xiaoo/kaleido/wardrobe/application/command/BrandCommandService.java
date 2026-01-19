@@ -54,10 +54,10 @@ public class BrandCommandService {
      *
      * @param command 更新品牌命令
      */
-    public void updateBrand(UpdateBrandCommand command) {
+    public void updateBrand(String brandId,UpdateBrandCommand command) {
         // 1.调用领域服务更新品牌
         BrandAggregate brand = brandDomainService.updateBrand(
-                command.getBrandId(),
+                brandId,
                 command.getLogoPath(),
                 command.getDescription()
         );
@@ -66,7 +66,7 @@ public class BrandCommandService {
         brandRepository.update(brand);
 
         // 3.记录日志
-        log.info("品牌更新成功，品牌ID: {}", command.getBrandId());
+        log.info("品牌更新成功，品牌ID: {}", brandId);
     }
 
     /**

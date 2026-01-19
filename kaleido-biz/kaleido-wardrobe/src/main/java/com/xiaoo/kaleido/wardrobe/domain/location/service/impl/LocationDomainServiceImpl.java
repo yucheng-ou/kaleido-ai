@@ -139,6 +139,27 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     }
 
     @Override
+    public StorageLocationAggregate validateAndGetForDeletion(String locationId) {
+        // 1. 参数校验
+        if (StrUtil.isBlank(locationId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置ID不能为空");
+        }
+
+        // 2. 查找位置
+        StorageLocationAggregate location = findByIdOrThrow(locationId);
+
+        // 3. 检查位置是否可删除（业务规则校验）
+        if (!canDeleteLocation(locationId)) {
+            throw WardrobeException.of(WardrobeErrorCode.LOCATION_HAS_REFERENCES);
+        }
+
+        // 4. 记录日志
+        log.info("位置删除验证通过，位置ID: {}, 位置名称: {}", locationId, location.getName());
+
+        return location;
+    }
+
+    @Override
     public StorageLocationAggregate setPrimaryImage(String locationId, String imageId) {
         // 1. 查找位置
         StorageLocationAggregate location = findByIdOrThrow(locationId);

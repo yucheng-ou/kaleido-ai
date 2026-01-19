@@ -34,8 +34,8 @@ public interface OutfitInfraConvertor {
      * @param po 持久化对象
      * @return 领域聚合根
      */
-    @Mapping(target = "outfitImages", ignore = true)
-    @Mapping(target = "outfitClothings", ignore = true)
+    @Mapping(target = "images", ignore = true)
+    @Mapping(target = "clothings", ignore = true)
     @Mapping(target = "wearRecords", ignore = true)
     OutfitAggregate toAggregate(OutfitPO po);
 

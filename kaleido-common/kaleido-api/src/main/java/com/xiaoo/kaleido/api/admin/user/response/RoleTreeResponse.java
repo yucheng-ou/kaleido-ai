@@ -39,11 +39,6 @@ public class RoleTreeResponse extends BaseResp {
     private String description;
     
     /**
-     * 是否启用
-     */
-    private Boolean enabled;
-    
-    /**
      * 子角色列表
      */
     private List<RoleTreeResponse> children;

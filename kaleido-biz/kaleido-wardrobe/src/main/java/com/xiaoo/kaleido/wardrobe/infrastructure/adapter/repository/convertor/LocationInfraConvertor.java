@@ -40,12 +40,12 @@ public interface LocationInfraConvertor {
     StorageLocationAggregate toAggregate(LocationPO po);
 
     /**
-     * StorageLocationAggregate转换为LocationImagePO列表
+     * LocationImage列表转换为LocationImagePO列表
      *
-     * @param aggregate 位置聚合根
+     * @param images 位置图片实体列表
      * @return 位置图片持久化对象列表
      */
-    List<LocationImagePO> toImagePOs(StorageLocationAggregate aggregate);
+    List<LocationImagePO> toImagePOs(List<LocationImage> images);
 
     /**
      * LocationImagePO转换为LocationImage

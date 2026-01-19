@@ -18,6 +18,7 @@
         <module>kaleido-user</module>
         <module>kaleido-wardrobe</module>
         <module>kaleido-tag</module>
+        <module>kaleido-coin</module>
     </modules>
 
     <properties>

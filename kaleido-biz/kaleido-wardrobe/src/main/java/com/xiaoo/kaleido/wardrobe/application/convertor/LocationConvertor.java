@@ -48,13 +48,6 @@ public interface LocationConvertor {
      * @return 图片信息DTO，包含图片的基本信息
      */
     @Mapping(source = "id", target = "imageId")
-    @Mapping(source = "path", target = "path")
-    @Mapping(source = "imageOrder", target = "imageOrder")
-    @Mapping(source = "primary", target = "isPrimary")
-    @Mapping(source = "width", target = "width")
-    @Mapping(source = "height", target = "height")
-    @Mapping(source = "imageSize", target = "fileSize")
-    @Mapping(source = "imageType", target = "imageType")
     LocationImageDTO toImageDTO(LocationImage locationImage);
 
     /**
@@ -65,14 +58,6 @@ public interface LocationConvertor {
      * @param imageDTO 图片信息DTO，不能为空
      * @return 图片响应，包含图片的基本信息
      */
-    @Mapping(source = "imageId", target = "imageId")
-    @Mapping(source = "path", target = "path")
-    @Mapping(source = "imageOrder", target = "imageOrder")
-    @Mapping(source = "isPrimary", target = "isPrimary")
-    @Mapping(source = "width", target = "width")
-    @Mapping(source = "height", target = "height")
-    @Mapping(source = "fileSize", target = "fileSize")
-    @Mapping(source = "imageType", target = "imageType")
     LocationImageResponse toImageResponse(LocationImageDTO imageDTO);
 
     /**
@@ -104,11 +89,6 @@ public interface LocationConvertor {
      * @return 位置信息响应，包含位置的基本信息和图片列表
      */
     @Mapping(source = "id", target = "locationId")
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "address", target = "address")
-    @Mapping(source = "primaryImageId", target = "primaryImageId")
     LocationInfoResponse toResponse(LocationQueryServiceImpl.LocationDTO locationDTO);
 
     /**

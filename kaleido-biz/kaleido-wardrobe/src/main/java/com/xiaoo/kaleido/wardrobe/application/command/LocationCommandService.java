@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import com.xiaoo.kaleido.api.wardrobe.command.AddClothingToLocationCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.file.ILocationFileService;
@@ -32,8 +33,8 @@ public class LocationCommandService {
 
     private final ILocationDomainService locationDomainService;
     private final ILocationRepository locationRepository;
-    private final ImageProcessingService imageProcessingService;
     private final ILocationFileService locationFileService;
+    private final LocationRecordCommandService locationRecordCommandService;
 
     /**
      * 创建位置（包含图片）
@@ -149,11 +150,10 @@ public class LocationCommandService {
      * @param locationId 位置ID
      */
     public void deleteLocation(String locationId) {
-        // 1. 检查是否可以删除（是否有服装引用）
-        if (!locationDomainService.canDeleteLocation(locationId)) {
-            throw WardrobeException.of(WardrobeErrorCode.LOCATION_HAS_REFERENCES);
-        }
-
+        // 1. 调用领域服务验证并获取可删除的位置聚合根
+        // Domain Service负责业务规则校验（如是否有服装引用）
+        StorageLocationAggregate location = locationDomainService.validateAndGetForDeletion(locationId);
+        
         // 2. 删除位置
         locationRepository.delete(locationId);
 
@@ -176,5 +176,15 @@ public class LocationCommandService {
 
         // 3. 记录日志
         log.info("位置主图设置成功，位置ID: {}, 主图ID: {}", locationId, imageId);
+    }
+
+    /**
+     * 将衣服添加到位置
+     *
+     * @param command 将衣服添加到位置命令
+     */
+    public void addClothingToLocation(AddClothingToLocationCommand command) {
+        // 调用位置记录命令服务
+        locationRecordCommandService.addClothingToLocation(command);
     }
 }

@@ -54,11 +54,6 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
             LocationInfoResponse response = locationConvertor.toResponse(locationDTO);
             response.setImages(locationConvertor.toImageResponseList(imageDTOs));
             
-            // 5.设置创建时间和更新时间（需要从聚合根获取）
-            // 注意：这里需要从聚合根中获取时间信息，假设聚合根有这些字段
-            // response.setCreatedAt(location.getCreatedAt());
-            // response.setUpdatedAt(location.getUpdatedAt());
-            
             return response;
 
         } catch (Exception e) {

@@ -30,15 +30,6 @@ public interface OutfitConvertor {
      * @return 穿搭信息响应
      */
     @Mapping(source = "id", target = "outfitId")
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "wearCount", target = "wearCount")
-    @Mapping(source = "lastWornDate", target = "lastWornDate")
-    @Mapping(source = "createdAt", target = "createdAt")
-    @Mapping(source = "updatedAt", target = "updatedAt")
-    @Mapping(source = "images", target = "images")
-    @Mapping(source = "wearRecords", target = "wearRecords")
     OutfitInfoResponse toOutfitResponse(OutfitAggregate outfitAggregate);
 
     /**
@@ -47,15 +38,6 @@ public interface OutfitConvertor {
      * @param outfitImage 穿搭图片实体，不能为空
      * @return 穿搭图片响应
      */
-    @Mapping(source = "id", target = "imageId")
-    @Mapping(source = "path", target = "path")
-    @Mapping(source = "imageOrder", target = "imageOrder")
-    @Mapping(source = "primary", target = "isPrimary")
-    @Mapping(source = "width", target = "width")
-    @Mapping(source = "height", target = "height")
-    @Mapping(source = "imageSize", target = "fileSize")
-    @Mapping(source = "imageType", target = "imageType")
-    @Mapping(source = "description", target = "description")
     OutfitImageResponse toOutfitImageResponse(OutfitImage outfitImage);
 
     /**
@@ -72,12 +54,6 @@ public interface OutfitConvertor {
      * @param wearRecord 穿着记录实体，不能为空
      * @return 穿着记录响应
      */
-    @Mapping(source = "id", target = "recordId")
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "outfitId", target = "outfitId")
-    @Mapping(source = "wearDate", target = "wearDate")
-    @Mapping(source = "notes", target = "notes")
-    @Mapping(source = "createdAt", target = "createdAt")
     WearRecordResponse toWearRecordResponse(WearRecord wearRecord);
 
     /**

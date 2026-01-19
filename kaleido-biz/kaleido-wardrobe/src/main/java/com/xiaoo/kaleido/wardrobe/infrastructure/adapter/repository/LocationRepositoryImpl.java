@@ -49,7 +49,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
 
             // 3.保存图片（如果有）
             if (locationAggregate.hasImages()) {
-                List<LocationImagePO> imagePOs = LocationInfraConvertor.INSTANCE.toImagePOs(locationAggregate);
+                List<LocationImagePO> imagePOs = LocationInfraConvertor.INSTANCE.toImagePOs(locationAggregate.getImages());
                 locationImageDao.batchInsert(imagePOs);
             }
 
@@ -77,7 +77,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
 
             // 4.保存新图片（如果有）
             if (locationAggregate.hasImages()) {
-                List<LocationImagePO> imagePOs = LocationInfraConvertor.INSTANCE.toImagePOs(locationAggregate);
+                List<LocationImagePO> imagePOs = LocationInfraConvertor.INSTANCE.toImagePOs(locationAggregate.getImages());
                 locationImageDao.batchInsert(imagePOs);
             }
 
