@@ -64,36 +64,6 @@ public class DictController {
     }
 
     /**
-     * 启用字典
-     *
-     * @param dictId 字典ID
-     * @return 操作结果
-     */
-    @PutMapping("/{dictId}/enable")
-    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
-    public Result<Void> enableDict(
-            @PathVariable String dictId) {
-        dictCommandService.enableDict(dictId);
-        return Result.success();
-    }
-
-    /**
-     * 禁用字典
-     *
-     * @param dictId 字典ID
-     * @return 操作结果
-     */
-    @PutMapping("/{dictId}/disable")
-    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
-    public Result<Void> disableDict(
-            @PathVariable String dictId) {
-
-        dictCommandService.disableDict(dictId);
-        log.info("字典禁用成功，字典ID: {}", dictId);
-        return Result.success();
-    }
-
-    /**
      * 删除字典
      *
      * @param dictId 字典ID

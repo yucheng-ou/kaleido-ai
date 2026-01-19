@@ -114,7 +114,6 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         // 2. 查询角色ID（需要根据编码查询ID）
         List<RoleAggregate> roles = roleRepository.findAllByCode(roleCodes);
         List<String> roleIds = roles.stream()
-                .filter(RoleAggregate::isEnabled)
                 .map(RoleAggregate::getId)
                 .collect(Collectors.toList());
         

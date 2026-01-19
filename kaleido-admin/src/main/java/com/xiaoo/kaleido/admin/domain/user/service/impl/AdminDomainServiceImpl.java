@@ -106,11 +106,8 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         // 1. 验证角色
         // 1.1 验证角色是否存在且启用
         for (String roleId : roleIds) {
-            RoleAggregate role = roleRepository.findById(roleId)
+            roleRepository.findById(roleId)
                     .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST, "角色不存在: " + roleId));
-            if (!role.isEnabled()) {
-                throw AdminException.of(AdminErrorCode.ROLE_DISABLED, "角色已禁用: " + roleId);
-            }
         }
 
         // 2. 分配角色
@@ -157,9 +154,7 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         // 4. 收集所有权限ID
         Set<String> permissionIds = new HashSet<>();
         for (RoleAggregate role : roles) {
-            if (role.isEnabled()) {
-                permissionIds.addAll(role.getPermissionIds());
-            }
+            permissionIds.addAll(role.getPermissionIds());
         }
 
         return new ArrayList<>(permissionIds);
