@@ -55,8 +55,7 @@ public class BrandController {
             @NotBlank(message = "品牌ID不能为空")
             @PathVariable String brandId,
             @Valid @RequestBody UpdateBrandCommand command) {
-        command.setBrandId(brandId);
-        brandCommandService.updateBrand(command);
+        brandCommandService.updateBrand(brandId, command);
         return Result.success();
     }
 

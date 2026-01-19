@@ -90,6 +90,18 @@ public interface ILocationDomainService {
     boolean canDeleteLocation(String locationId);
 
     /**
+     * 验证并获取可删除的位置聚合根
+     * <p>
+     * 验证位置是否可删除（如是否有服装引用），如果可删除则返回位置聚合根
+     * 如果不可删除则抛出异常
+     *
+     * @param locationId 位置ID，不能为空
+     * @return 可删除的位置聚合根
+     * @throws WardrobeException 当位置不可删除时抛出
+     */
+    StorageLocationAggregate validateAndGetForDeletion(String locationId);
+
+    /**
      * 设置主图
      * <p>
      * 设置指定图片为主图，包含图片存在性校验

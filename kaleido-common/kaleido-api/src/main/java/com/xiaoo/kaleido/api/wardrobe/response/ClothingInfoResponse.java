@@ -166,11 +166,6 @@ public class ClothingInfoResponse extends BaseResp {
         private ImageType imageType;
 
         /**
-         * 缩略图路径
-         */
-        private String thumbnailPath;
-
-        /**
          * 图片描述
          */
         private String description;

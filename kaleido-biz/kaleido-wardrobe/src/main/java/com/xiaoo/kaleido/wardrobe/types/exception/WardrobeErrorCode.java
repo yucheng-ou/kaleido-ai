@@ -98,6 +98,11 @@ public enum WardrobeErrorCode implements ErrorCode {
     CLOTHING_OWNER_MISMATCH("WARDROBE_CLOTHING_OWNER_MISMATCH", "只有服装所有者可以操作"),
 
     /**
+     * 服装不属于用户：验证服装所属用户时发现服装不属于指定用户
+     */
+    CLOTHING_NOT_BELONG_TO_USER("WARDROBE_CLOTHING_NOT_BELONG_TO_USER", "服装不属于该用户"),
+
+    /**
      * 服装类型编码无效：服装类型编码不存在或无效
      */
     CLOTHING_TYPE_CODE_INVALID("WARDROBE_CLOTHING_TYPE_CODE_INVALID", "服装类型编码无效"),
@@ -168,7 +173,23 @@ public enum WardrobeErrorCode implements ErrorCode {
     /**
      * 搭配服装数量超限：搭配关联的服装数量超过限制
      */
-    OUTFIT_CLOTHING_LIMIT_EXCEEDED("WARDROBE_OUTFIT_CLOTHING_LIMIT_EXCEEDED", "搭配服装数量超过限制");
+    OUTFIT_CLOTHING_LIMIT_EXCEEDED("WARDROBE_OUTFIT_CLOTHING_LIMIT_EXCEEDED", "搭配服装数量超过限制"),
+
+    // ========== 位置记录相关错误码 ==========
+    /**
+     * 位置记录不存在：根据ID查询位置记录时未找到对应记录
+     */
+    LOCATION_RECORD_NOT_FOUND("WARDROBE_LOCATION_RECORD_NOT_FOUND", "位置记录不存在"),
+
+    /**
+     * 服装已在目标位置：尝试将服装添加到已存在的位置
+     */
+    CLOTHING_ALREADY_IN_LOCATION("WARDROBE_CLOTHING_ALREADY_IN_LOCATION", "服装已在目标位置"),
+
+    /**
+     * 位置记录创建失败：位置记录创建操作失败
+     */
+    LOCATION_RECORD_CREATE_FAILED("WARDROBE_LOCATION_RECORD_CREATE_FAILED", "位置记录创建失败");
 
     /**
      * 错误码

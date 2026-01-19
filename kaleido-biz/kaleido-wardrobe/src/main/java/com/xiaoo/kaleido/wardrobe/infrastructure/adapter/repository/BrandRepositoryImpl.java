@@ -33,7 +33,6 @@ public class BrandRepositoryImpl implements IBrandRepository {
     private final BrandDao brandDao;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void save(BrandAggregate brandAggregate) {
         try {
             // 1.转换BrandAggregate为BrandPO
@@ -51,7 +50,6 @@ public class BrandRepositoryImpl implements IBrandRepository {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(BrandAggregate brandAggregate) {
         try {
             // 1.转换BrandAggregate为BrandPO

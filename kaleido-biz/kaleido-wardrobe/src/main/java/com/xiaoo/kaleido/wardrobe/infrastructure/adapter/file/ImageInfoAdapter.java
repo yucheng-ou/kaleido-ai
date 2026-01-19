@@ -34,18 +34,6 @@ public class ImageInfoAdapter implements BasicImageInfo {
     }
     
     /**
-     * 从服装更新命令的ImageInfo创建适配器
-     */
-    public static ImageInfoAdapter fromClothingUpdateImageInfo(
-            ClothingImageInfoCommand imageInfo) {
-        return new ImageInfoAdapter(
-                imageInfo.getPath(),
-                imageInfo.getImageOrder(),
-                imageInfo.getIsPrimary()
-        );
-    }
-    
-    /**
      * 从位置创建命令的ImageInfo创建适配器
      */
     public static ImageInfoAdapter fromLocationImageInfo(LocationImageInfoCommand imageInfo) {

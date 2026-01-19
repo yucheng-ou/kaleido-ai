@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: kaleido-tag
+  profiles:
+    active: dev
+  config:
+    import:
+      - classpath:nacos.yml
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - nacos:kaleido-ds.yml
+      - nacos:kaleido-rpc.yml
+      - nacos:kaleido-cache.yml

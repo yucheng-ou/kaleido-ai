@@ -1,14 +1,14 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 图片信息
  */
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class OutfitImageInfoCommand extends BaseImageInfoCommand {
 

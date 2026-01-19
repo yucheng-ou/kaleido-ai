@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 doc
 logs
+test
 ### IntelliJ IDEA ###
 .idea
 *.iws

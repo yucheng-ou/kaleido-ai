@@ -17,12 +17,6 @@ import lombok.*;
 public class UpdateBrandCommand {
     
     /**
-     * 品牌ID（路径参数，通过setter方法设置）
-     */
-    @NotBlank(message = "品牌ID不能为空")
-    private String brandId;
-    
-    /**
      * Logo路径（在MinIO中的文件路径）
      */
     @Size(max = 500, message = "Logo路径长度不能超过500个字符")

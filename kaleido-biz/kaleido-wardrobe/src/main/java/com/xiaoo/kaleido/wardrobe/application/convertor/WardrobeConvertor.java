@@ -46,24 +46,6 @@ public interface WardrobeConvertor {
     ClothingInfoResponse toClothingResponse(ClothingAggregate clothingAggregate);
 
     /**
-     * 将服装图片实体转换为图片信息响应
-     * <p>
-     * 将领域层的服装图片实体转换为应用层的图片信息响应DTO
-     *
-     * @param clothingImage 服装图片实体，不能为空
-     * @return 图片信息响应，包含图片的基本信息
-     */
-    @Mapping(source = "id", target = "imageId")
-    @Mapping(source = "path", target = "path")
-    @Mapping(source = "imageOrder", target = "imageOrder")
-    @Mapping(source = "primary", target = "isMain")
-    @Mapping(source = "width", target = "width")
-    @Mapping(source = "height", target = "height")
-    @Mapping(source = "imageSize", target = "fileSize")
-    @Mapping(source = "imageType", target = "imageType")
-    ClothingInfoResponse.ImageInfo toImageResponse(ClothingImage clothingImage);
-
-    /**
      * 将服装图片实体列表转换为图片信息响应列表
      * <p>
      * 将领域层的服装图片实体列表转换为应用层的图片信息响应DTO列表

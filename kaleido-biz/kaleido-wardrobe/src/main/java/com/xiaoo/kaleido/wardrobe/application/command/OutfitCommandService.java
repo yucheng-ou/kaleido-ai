@@ -47,10 +47,6 @@ public class OutfitCommandService {
         // 2.使用图片处理服务转换图片信息
         List<OutfitImageInfoDTO> domainImageInfos = outfitFileService.convertorImageInfo(imageInfos);
 
-
-        // TODO: 验证服装ID列表中的所有服装属于同一用户
-        // 暂时跳过验证，后续通过依赖注入服装查询服务实现
-
         // 3.调用领域服务创建穿搭
         OutfitAggregate outfit = outfitDomainService.createOutfitWithClothingsAndImages(
                 command.getUserId(),
@@ -82,9 +78,6 @@ public class OutfitCommandService {
 
         // 2.使用图片处理服务转换图片信息
         List<OutfitImageInfoDTO> domainImageInfos = outfitFileService.convertorImageInfo(imageInfos);
-
-        // TODO: 验证服装ID列表中的所有服装属于同一用户
-        // 暂时跳过验证，后续通过依赖注入服装查询服务实现
 
         // 3.调用领域服务更新穿搭
         OutfitAggregate outfit = outfitDomainService.updateOutfit(

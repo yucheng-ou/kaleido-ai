@@ -7,6 +7,7 @@ import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitImage;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitRepository;
+import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.clothing.IClothingServiceAdapter;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
@@ -31,56 +32,24 @@ import java.util.stream.Collectors;
 public class OutfitDomainServiceImpl implements IOutfitDomainService {
 
     private final IOutfitRepository outfitRepository;
+    private final IClothingServiceAdapter clothingServiceAdapter;
 
     @Override
-    public OutfitAggregate createOutfitWithClothingsAndImages(
+    public OutfitAggregate
+    createOutfitWithClothingsAndImages(
             String userId,
             String name,
             String description,
             List<String> clothingIds,
             List<OutfitImageInfoDTO> images) {
 
-        // 1.参数校验
-        if (StrUtil.isBlank(userId)) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
-        }
-        if (StrUtil.isBlank(name)) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "搭配名称不能为空");
-        }
-        if (clothingIds == null || clothingIds.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
-        }
-        if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片列表不能为空");
-        }
+        // 1.业务规则校验（使用公共方法）
+        validateOutfitBusinessRules(userId, name, clothingIds, images, true);
 
-        // 2.业务规则校验：服装数量限制
-        if (clothingIds.size() > OutfitAggregate.MAX_CLOTHINGS_PER_OUTFIT) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_CLOTHING_LIMIT_EXCEEDED);
-        }
-
-        // 3.业务规则校验：图片数量限制
-        if (images.size() > OutfitAggregate.MAX_IMAGES_PER_OUTFIT) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
-        }
-
-        // 4.业务规则校验：主图唯一性
-        long primaryCount = images.stream()
-                .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
-                .count();
-        if (primaryCount > 1) {
-            throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
-        }
-
-        // 5.业务规则校验：穿搭名称在用户下唯一性
-        if (isOutfitNameUnique(userId, name)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
-        }
-
-        // 6.创建穿搭聚合根
+        // 2.创建穿搭聚合根
         OutfitAggregate outfit = OutfitAggregate.create(userId, name, description);
 
-        // 7.创建服装关联实体列表
+        // 3.创建服装关联实体列表
         List<OutfitClothing> clothingEntities = clothingIds.stream()
                 .map(clothingId -> OutfitClothing.builder()
                         .id(com.xiaoo.kaleido.distribute.util.SnowflakeUtil.newSnowflakeId())
@@ -91,7 +60,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
         
         outfit.updateClothings(clothingEntities);
 
-        // 8.创建图片实体列表
+        // 4.创建图片实体列表
         List<OutfitImage> imageEntities = images.stream()
                 .map(img -> OutfitImage.create(
                         outfit.getId(),
@@ -108,13 +77,13 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
         
         outfit.addImages(imageEntities);
 
-        // 9.设置主图（如果有）
+        // 5.设置主图（如果有）
         imageEntities.stream()
                 .filter(img -> Boolean.TRUE.equals(img.isPrimaryImage()))
                 .findFirst()
                 .ifPresent(primaryImage -> outfit.setAsPrimaryImage(primaryImage.getId()));
 
-        // 10.记录日志
+        // 6.记录日志
         log.info("穿搭创建成功，穿搭ID: {}, 用户ID: {}, 穿搭名称: {}, 服装数量: {}, 图片数量: {}",
                 outfit.getId(), userId, name, clothingIds.size(), images.size());
 
@@ -150,41 +119,13 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
             throw WardrobeException.of(WardrobeErrorCode.DATA_NOT_BELONG_TO_USER);
         }
 
-        // 3.参数校验
-        if (clothingIds == null || clothingIds.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装列表不能为空");
-        }
-        if (images == null || images.isEmpty()) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片列表不能为空");
-        }
+        // 3.业务规则校验（使用公共方法，根据名称是否变更决定是否检查名称唯一性）
+        validateOutfitBusinessRules(userId, name, clothingIds, images, !outfit.getName().equals(name));
 
-        // 4.业务规则校验：服装数量限制
-        if (clothingIds.size() > OutfitAggregate.MAX_CLOTHINGS_PER_OUTFIT) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_CLOTHING_LIMIT_EXCEEDED);
-        }
-
-        // 5.业务规则校验：图片数量限制
-        if (images.size() > OutfitAggregate.MAX_IMAGES_PER_OUTFIT) {
-            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
-        }
-
-        // 6.业务规则校验：主图唯一性
-        long primaryCount = images.stream()
-                .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
-                .count();
-        if (primaryCount > 1) {
-            throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
-        }
-
-        // 7.业务规则校验：如果名称变更，检查新名称的唯一性
-        if (!outfit.getName().equals(name) && isOutfitNameUnique(userId, name)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
-        }
-
-        // 8.更新穿搭基本信息
+        // 4.更新穿搭基本信息
         outfit.updateInfo(name, description);
 
-        // 9.更新服装关联实体列表
+        // 5.更新服装关联实体列表
         List<OutfitClothing> clothingEntities = clothingIds.stream()
                 .map(clothingId -> OutfitClothing.builder()
                         .id(com.xiaoo.kaleido.distribute.util.SnowflakeUtil.newSnowflakeId())
@@ -195,7 +136,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
         
         outfit.updateClothings(clothingEntities);
 
-        // 10.更新图片实体列表（全量替换）
+        // 6.更新图片实体列表（全量替换）
         List<OutfitImage> imageEntities = images.stream()
                 .map(img -> OutfitImage.create(
                         outfit.getId(),
@@ -214,13 +155,13 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
         outfit.getImages().clear();
         outfit.addImages(imageEntities);
 
-        // 11.设置主图（如果有）
+        // 7.设置主图（如果有）
         imageEntities.stream()
                 .filter(img -> Boolean.TRUE.equals(img.isPrimaryImage()))
                 .findFirst()
                 .ifPresent(primaryImage -> outfit.setAsPrimaryImage(primaryImage.getId()));
 
-        // 12.记录日志
+        // 8.记录日志
         log.info("穿搭信息更新成功，穿搭ID: {}, 用户ID: {}, 新名称: {}, 服装数量: {}, 图片数量: {}",
                 outfitId, userId, name, clothingIds.size(), images.size());
 
@@ -293,5 +234,57 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
 
         // 2.从仓储层检查穿搭名称唯一性
         return outfitRepository.existsByUserIdAndName(userId, name);
+    }
+
+    /**
+     * 校验穿搭业务规则参数
+     * 
+     * @param userId 用户ID（Controller层已校验非空）
+     * @param name 穿搭名称（Controller层已校验非空）
+     * @param clothingIds 服装ID列表（Controller层已校验非空）
+     * @param images 图片信息列表（Controller层已校验非空）
+     * @param checkNameUniqueness 是否检查名称唯一性
+     */
+    private void validateOutfitBusinessRules(String userId, String name, 
+                                            List<String> clothingIds, 
+                                            List<OutfitImageInfoDTO> images,
+                                            boolean checkNameUniqueness) {
+        
+        // 1. 业务规则校验：服装数量限制
+        if (clothingIds.size() > OutfitAggregate.MAX_CLOTHINGS_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_CLOTHING_LIMIT_EXCEEDED);
+        }
+
+        // 2. 业务规则校验：图片数量限制
+        if (images.size() > OutfitAggregate.MAX_IMAGES_PER_OUTFIT) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_IMAGE_LIMIT_EXCEEDED);
+        }
+
+        // 3. 业务规则校验：主图唯一性
+        long primaryCount = images.stream()
+                .filter(img -> img.getIsPrimary() != null && img.getIsPrimary())
+                .count();
+        if (primaryCount > 1) {
+            throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
+        }
+
+        // 4. 业务规则校验：名称唯一性（根据参数决定是否检查）
+        if (checkNameUniqueness && isOutfitNameUnique(userId, name)) {
+            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
+        }
+
+        // 5. 业务规则校验：验证服装ID列表中的所有服装属于同一用户
+        validateClothingsBelongToUser(userId, clothingIds);
+    }
+
+    /**
+     * 验证服装ID列表中的所有服装属于同一用户
+     *
+     * @param userId      用户ID
+     * @param clothingIds 服装ID列表
+     */
+    private void validateClothingsBelongToUser(String userId, List<String> clothingIds) {
+        // 使用防腐层验证服装所属用户
+        clothingServiceAdapter.validateClothingsBelongToUser(clothingIds, userId);
     }
 }
