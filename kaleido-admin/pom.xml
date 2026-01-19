@@ -79,6 +79,11 @@
             <artifactId>kaleido-doc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-file</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
