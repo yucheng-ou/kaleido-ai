@@ -61,8 +61,8 @@ public class DictRepositoryImpl implements IDictRepository {
     }
 
     @Override
-    @Cached(name = ":dict:", key = "#typeCode + ':' + #dictCode", expire = 60, cacheType = CacheType.BOTH, cacheNullValue = true)
-    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.SECONDS)
+    @Cached(name = ":dict:", key = "#typeCode + ':' + #dictCode", expire = 60, localExpire = 1, cacheType = CacheType.BOTH, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
+    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.MINUTES)
     public DictAggregate findByTypeCodeAndDictCode(String typeCode, String dictCode) {
         // 1. 调用DAO层查询持久化对象
         DictPO po = dictDao.findByTypeCodeAndDictCode(typeCode, dictCode);
