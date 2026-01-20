@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -65,27 +64,26 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<UserAggregate> findById(String id) {
+    public UserAggregate findById(String id) {
         // 1.查询用户持久化对象
         UserPO userPO = userDao.findById(id);
         if (userPO == null) {
-            return Optional.empty();
+            return null;
         }
 
         // 2.转换为用户实体
         User user = UserConvertor.INSTANCE.toEntity(userPO);
 
         // 3.创建聚合根（不加载操作流水，按需加载）
-        UserAggregate aggregate = UserAggregate.create(user);
-        return Optional.of(aggregate);
+        return UserAggregate.create(user);
     }
 
     @Override
-    public Optional<UserAggregate> findUserAndStreamById(String id) {
+    public UserAggregate findUserAndStreamById(String id) {
         // 1.查询用户持久化对象
         UserPO userPO = userDao.findById(id);
         if (userPO == null) {
-            return Optional.empty();
+            return null;
         }
 
         // 2.转换为用户实体
@@ -100,25 +98,25 @@ public class UserRepositoryImpl implements UserRepository {
         // 4.创建聚合根并添加操作流水
         UserAggregate aggregate = UserAggregate.create(user);
         aggregate.getOperateStreams().addAll(streams);
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override
-    public Optional<UserAggregate> findByTelephone(String telephone) {
+    public UserAggregate findByTelephone(String telephone) {
         // 1.根据手机号查询用户持久化对象
         UserPO po = userDao.findByTelephone(telephone);
 
         // 2.转换为用户聚合根
-        return po != null ? Optional.of(UserAggregate.create(UserConvertor.INSTANCE.toEntity(po))) : Optional.empty();
+        return po != null ? UserAggregate.create(UserConvertor.INSTANCE.toEntity(po)) : null;
     }
 
     @Override
-    public Optional<UserAggregate> findByInviteCode(String inviteCode) {
+    public UserAggregate findByInviteCode(String inviteCode) {
         // 1.根据邀请码查询用户持久化对象
         UserPO po = userDao.findByInviteCode(inviteCode);
 
         // 2.转换为用户聚合根
-        return po != null ? Optional.of(UserAggregate.create(UserConvertor.INSTANCE.toEntity(po))) : Optional.empty();
+        return po != null ? UserAggregate.create(UserConvertor.INSTANCE.toEntity(po)) : null;
     }
 
     @Override
@@ -136,8 +134,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserAggregate findByIdOrThrow(String id) {
         // 查找用户，如果不存在则抛出异常
-        return findById(id)
-                .orElseThrow(() -> UserException.of(UserErrorCode.USER_NOT_EXIST));
+        UserAggregate aggregate = findById(id);
+        if (aggregate == null) {
+            throw UserException.of(UserErrorCode.USER_NOT_EXIST);
+        }
+        return aggregate;
     }
 
     @Override

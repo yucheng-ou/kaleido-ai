@@ -38,8 +38,10 @@ public class UserDomainServiceImpl implements IUserDomainService {
         // 2.验证邀请码（如果提供）
         String inviterId = null;
         if (StrUtil.isNotBlank(inviteCode)) {
-            UserAggregate inviter = userRepository.findByInviteCode(inviteCode)
-                    .orElseThrow(() -> UserException.of(UserErrorCode.INVALID_INVITE_CODE));
+            UserAggregate inviter = userRepository.findByInviteCode(inviteCode);
+            if (inviter == null) {
+                throw UserException.of(UserErrorCode.INVALID_INVITE_CODE);
+            }
             inviterId = inviter.getId();
         }
 

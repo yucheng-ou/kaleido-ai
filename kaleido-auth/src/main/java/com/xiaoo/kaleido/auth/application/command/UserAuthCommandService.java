@@ -46,34 +46,6 @@ public class UserAuthCommandService {
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcUserService rpcUserService;
 
-    public SmsCodeResponse sendSmsCode(SendSmsCodeCommand command) {
-        log.info("发送短信验证码，手机号: {}", command.getMobile());
-
-        // 调用RPC服务发送短信验证码
-        SendSmsVerifyCodeCommand smsCommand = SendSmsVerifyCodeCommand.builder()
-                .mobile(command.getMobile())
-                .targetType(TargetTypeEnum.USER)
-                .build();
-
-        Result<String> result = rpcNoticeService.generateAndSendSmsVerifyCode(smsCommand);
-
-        if (!Boolean.TRUE.equals(result.getSuccess())) {
-            log.error("发送短信验证码失败，手机号: {}, 错误: {}", command.getMobile(), result.getMsg());
-            throw new AuthException(AuthErrorCode.AUTH_SERVICE_UNAVAILABLE);
-        }
-
-        // 构建响应
-        SmsCodeResponse response = SmsCodeResponse
-                .builder()
-                .mobile(command.getMobile())
-                .code(result.getData())
-                .sendTime(new Date())
-                .build();
-
-        log.info("短信验证码发送成功，手机号: {}", command.getMobile());
-        return response;
-    }
-
     public RegisterResponse register(RegisterUserCommand command) {
         log.info("用户注册，手机号: {}", command.getTelephone());
 

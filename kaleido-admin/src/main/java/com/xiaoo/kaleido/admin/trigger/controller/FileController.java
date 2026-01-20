@@ -14,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件控制器
- * <p>
- * 负责文件上传相关的HTTP接口
  *
  * @author ouyucheng
  * @date 2026/1/19

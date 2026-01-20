@@ -1,6 +1,6 @@
 spring:
   application:
-    name: kaleido-tag
+    name: kaleido-coin
   profiles:
     active: dev
   config:

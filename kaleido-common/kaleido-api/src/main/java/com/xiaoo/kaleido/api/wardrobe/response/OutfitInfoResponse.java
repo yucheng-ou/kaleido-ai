@@ -49,15 +49,9 @@ public class OutfitInfoResponse extends BaseResp {
      */
     private Date lastWornDate;
 
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
 
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
+
+
 
     /**
      * 服装信息列表

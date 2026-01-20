@@ -35,17 +35,14 @@ public class AdminController {
     private final IAdminQueryService adminQueryService;
 
     /**
-     * 更新管理员信息
+     * 更新管理员信息(用于修改用户自身信息 不需要鉴权)
      *
-     * @param adminId 管理员ID（从路径参数获取）
-     * @param command     更新管理员信息命令（不包含管理员ID）
+     * @param command 更新管理员信息命令（不包含管理员ID）
      * @return 操作结果
      */
-    @SaCheckPermission(value = "admin:user:update", type = StpAdminUtil.TYPE)
-    @PutMapping("/{adminId}")
-    public Result<Void> updateAdmin(
-            @PathVariable String adminId,
-            @Valid @RequestBody UpdateAdminCommand command) {
+    @PutMapping
+    public Result<Void> updateAdmin(@Valid @RequestBody UpdateAdminCommand command) {
+        String adminId = StpAdminUtil.getLoginId();
         adminCommandService.updateAdmin(adminId, command);
         return Result.success();
     }
@@ -82,7 +79,7 @@ public class AdminController {
      * 分配角色给管理员
      *
      * @param adminId 管理员ID（从路径参数获取）
-     * @param command     分配角色命令（不包含管理员ID）
+     * @param command 分配角色命令（不包含管理员ID）
      * @return 操作结果
      */
     @SaCheckPermission(value = "admin:user:assign-roles", type = StpAdminUtil.TYPE)

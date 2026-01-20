@@ -135,23 +135,6 @@ public class NoticeAggregate extends BaseEntity {
         }
     }
 
-    /**
-     * 验证通知数据
-     */
-    public void validate() {
-        if (noticeType == null) {
-            throw NoticeException.of(NoticeErrorCode.NOTICE_TYPE_EMPTY);
-        }
-        if (target == null) {
-            throw NoticeException.of(NoticeErrorCode.TARGET_USER_EMPTY);
-        }
-        if (businessType == null) {
-            throw NoticeException.of(NoticeErrorCode.BUSINESS_TYPE_EMPTY);
-        }
-        if (content == null) {
-            throw NoticeException.of(NoticeErrorCode.NOTICE_CONTENT_EMPTY);
-        }
-    }
 
     public static String generateVerifyCode() {
         return RandomUtil.randomNumbers(VERIFY_CODE_LENGTH);

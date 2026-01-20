@@ -20,8 +20,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="RoleColumns">
-        id, code, name, description,
-        created_at, updated_at, deleted, lock_version
+        id, code, name, description
     </sql>
     
     <!-- 3. 查询语句 -->

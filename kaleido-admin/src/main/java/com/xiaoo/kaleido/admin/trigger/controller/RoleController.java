@@ -37,7 +37,7 @@ public class RoleController {
      * @param command 创建角色命令
      * @return 角色ID
      */
-    @SaCheckPermission(value = "admin:role:create", type = StpAdminUtil.TYPE)
+    @SaCheckPermission(value = "admin:role:update", type = StpAdminUtil.TYPE)
     @PostMapping
     public Result<String> createRole(
             @Valid @RequestBody AddRoleCommand command) {

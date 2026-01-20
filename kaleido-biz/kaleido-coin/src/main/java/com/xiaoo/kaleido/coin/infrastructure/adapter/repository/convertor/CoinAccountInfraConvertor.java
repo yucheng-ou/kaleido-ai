@@ -28,6 +28,9 @@ public interface CoinAccountInfraConvertor {
      * @param aggregate 金币账户聚合根
      * @return 金币账户持久化对象
      */
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "balance", target = "balance")
+    @Mapping(target = "lockVersion", ignore = true)
     CoinAccountPO toPO(CoinAccountAggregate aggregate);
 
     /**

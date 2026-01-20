@@ -3,7 +3,6 @@ package com.xiaoo.kaleido.admin.domain.user.adapter.repository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 角色仓储接口
@@ -35,17 +34,17 @@ public interface IRoleRepository {
      * 根据ID查找角色
      *
      * @param id 角色ID
-     * @return 角色
+     * @return 角色，如果不存在则返回null
      */
-    Optional<RoleAggregate> findById(String id);
+    RoleAggregate findById(String id);
 
     /**
      * 根据编码查找角色
      *
      * @param code 角色编码
-     * @return 角色
+     * @return 角色，如果不存在则返回null
      */
-    Optional<RoleAggregate> findByCode(String code);
+    RoleAggregate findByCode(String code);
 
     /**
      * 根据ID列表查找角色

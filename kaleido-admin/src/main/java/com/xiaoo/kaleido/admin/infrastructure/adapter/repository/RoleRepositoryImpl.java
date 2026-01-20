@@ -15,7 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -57,11 +56,11 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
-    public Optional<RoleAggregate> findById(String id) {
+    public RoleAggregate findById(String id) {
         // 1. 根据ID查询PO
         RolePO po = roleDao.findById(id);
         if (po == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 2. 转换PO为聚合根
@@ -71,15 +70,15 @@ public class RoleRepositoryImpl implements IRoleRepository {
         loadPermissionIds(aggregate);
         
         // 4. 返回结果
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override
-    public Optional<RoleAggregate> findByCode(String code) {
+    public RoleAggregate findByCode(String code) {
         // 1. 根据编码查询PO
         RolePO po = roleDao.findByCode(code);
         if (po == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 2. 转换PO为聚合根
@@ -89,7 +88,7 @@ public class RoleRepositoryImpl implements IRoleRepository {
         loadPermissionIds(aggregate);
         
         // 4. 返回结果
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override

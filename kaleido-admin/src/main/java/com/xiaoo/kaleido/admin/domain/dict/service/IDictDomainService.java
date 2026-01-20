@@ -28,22 +28,14 @@ public interface IDictDomainService {
     /**
      * 更新字典信息
      *
-     * @param dictId    字典ID
+     * @param typeCode  字典类型编码
+     * @param dictCode  字典编码
      * @param typeName  字段类型名称
      * @param dictName  字典名称
      * @param dictValue 字典值
      * @param sort      排序
      * @return 更新后的字典
      */
-    DictAggregate updateDict(String dictId, String typeName, String dictName, String dictValue, Integer sort);
-
-
-    /**
-     * 删除字典
-     *
-     * @param dictId 字典ID
-     * @return 要删除的字典对象
-     */
-    DictAggregate deleteDict(String dictId);
+    DictAggregate updateDict(String typeCode, String dictCode, String typeName, String dictName, String dictValue, Integer sort);
 
 }

@@ -41,22 +41,6 @@ public interface DictQueryService {
     List<DictResponse> findByTypeCode(String typeCode);
 
     /**
-     * 根据字典类型编码查询启用的字典列表
-     *
-     * @param typeCode 字典类型编码
-     * @return 启用的字典响应对象列表
-     */
-    List<DictResponse> findEnabledByTypeCode(String typeCode);
-
-    /**
-     * 查询字典列表（根据查询条件）
-     *
-     * @param queryReq 查询条件
-     * @return 字典响应对象列表
-     */
-    List<DictResponse> queryDicts(DictQueryReq queryReq);
-
-    /**
      * 分页查询字典列表
      *
      * @param pageQueryReq 分页查询条件

@@ -33,31 +33,20 @@ public class DictDomainServiceImpl implements IDictDomainService {
         // 2. 创建字典
         DictAggregate dictAggregate = DictAggregate.create(typeCode, typeName, dictCode, dictName, dictValue, sort);
 
-        log.info("字典领域服务创建字典，字典ID: {}, 类型编码: {}, 字典编码: {}",
-                dictAggregate.getId(), typeCode, dictCode);
-
         return dictAggregate;
     }
 
     @Override
-    public DictAggregate updateDict(String dictId, String typeName, String dictName, String dictValue, Integer sort) {
+    public DictAggregate updateDict(String typeCode, String dictCode, String typeName, String dictName, String dictValue, Integer sort) {
         // 1. 获取字典
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
+        DictAggregate dictAggregate = dictRepository.findByTypeCodeAndDictCode(typeCode, dictCode);
+        if (dictAggregate == null) {
+            throw AdminException.of(AdminErrorCode.DICT_NOT_EXIST);
+        }
 
         // 2. 更新字典信息
         dictAggregate.updateInfo(typeName, dictName, dictValue, sort);
 
-        log.info("字典领域服务更新字典，字典ID: {}, 字典名称: {}", dictId, dictName);
         return dictAggregate;
     }
-
-    @Override
-    public DictAggregate deleteDict(String dictId) {
-        // 1. 获取字典（验证字典是否存在）
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
-
-        log.info("字典领域服务准备删除字典，字典ID: {}", dictId);
-        return dictAggregate;
-    }
-
 }

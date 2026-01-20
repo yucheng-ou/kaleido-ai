@@ -2,53 +2,21 @@ package com.xiaoo.kaleido.coin.infrastructure.adapter.repository.convertor;
 
 import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
 import com.xiaoo.kaleido.coin.infrastructure.dao.po.CoinStreamPO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 金币流水基础设施层转换器
  * <p>
  * 负责CoinStream和CoinStreamPO之间的转换
- * 使用MapStruct实现，编译时生成转换代码
  *
  * @author ouyucheng
  * @date 2026/1/19
  */
-@Mapper
-public interface CoinStreamInfraConvertor {
+public class CoinStreamInfraConvertor {
 
-    CoinStreamInfraConvertor INSTANCE = Mappers.getMapper(CoinStreamInfraConvertor.class);
-
-    /**
-     * CoinStream转换为CoinStreamPO
-     * <p>
-     * 用于将领域实体转换为持久化对象，便于保存到数据库
-     * 注意：数据库表中没有account_id字段，所以忽略accountId字段
-     *
-     * @param entity 金币流水实体
-     * @return 金币流水持久化对象
-     */
-    @Mapping(target = "type", expression = "java(entity.getType() != null ? entity.getType().name() : null)")
-    @Mapping(target = "bizType", expression = "java(entity.getBizType() != null ? entity.getBizType().name() : null)")
-    @Mapping(target = "accountId", ignore = true) // 数据库表中没有account_id字段
-    CoinStreamPO toPO(CoinStream entity);
-
-    /**
-     * CoinStreamPO转换为CoinStream
-     * <p>
-     * 用于将持久化对象转换为领域实体，便于业务逻辑处理
-     * 注意：数据库表中没有account_id字段，所以accountId需要从外部设置
-     *
-     * @param po 金币流水持久化对象
-     * @return 金币流水实体
-     */
-    @Mapping(target = "type", expression = "java(po.getType() != null ? CoinStream.StreamType.valueOf(po.getType()) : null)")
-    @Mapping(target = "bizType", expression = "java(po.getBizType() != null ? CoinStream.BizType.valueOf(po.getBizType()) : null)")
-    @Mapping(target = "accountId", ignore = true) // 数据库表中没有account_id字段，需要从外部设置
-    CoinStream toEntity(CoinStreamPO po);
+    public static final CoinStreamInfraConvertor INSTANCE = new CoinStreamInfraConvertor();
 
     /**
      * CoinStream列表转换为CoinStreamPO列表
@@ -58,15 +26,45 @@ public interface CoinStreamInfraConvertor {
      * @param entityList 金币流水实体列表
      * @return 金币流水持久化对象列表
      */
-    List<CoinStreamPO> toPOList(List<CoinStream> entityList);
+    public List<CoinStreamPO> toPOList(List<CoinStream> entityList) {
+        if (entityList == null) {
+            return null;
+        }
+
+        List<CoinStreamPO> list = new ArrayList<>(entityList.size());
+        for (CoinStream coinStream : entityList) {
+            list.add(toPO(coinStream));
+        }
+
+        return list;
+    }
 
     /**
-     * CoinStreamPO列表转换为CoinStream列表
-     * <p>
-     * 用于批量转换持久化对象列表为领域实体列表
+     * 单个CoinStream转换为CoinStreamPO
      *
-     * @param poList 金币流水持久化对象列表
-     * @return 金币流水实体列表
+     * @param coinStream 金币流水实体
+     * @return 金币流水持久化对象
      */
-    List<CoinStream> toEntityList(List<CoinStreamPO> poList);
+    public CoinStreamPO toPO(CoinStream coinStream) {
+        if (coinStream == null) {
+            return null;
+        }
+
+        CoinStreamPO po = new CoinStreamPO();
+        po.setId(coinStream.getId());
+        po.setCreatedAt(coinStream.getCreatedAt());
+        po.setUpdatedAt(coinStream.getUpdatedAt());
+        po.setDeleted(coinStream.getDeleted());
+        po.setUserId(coinStream.getUserId());
+        po.setType(coinStream.getType() != null ? coinStream.getType().name() : null);
+        po.setAmount(coinStream.getAmount());
+        po.setBalanceAfter(coinStream.getBalanceAfter());
+        po.setBizType(coinStream.getBizType() != null ? coinStream.getBizType().name() : null);
+        po.setBizId(coinStream.getBizId());
+        po.setRemark(coinStream.getRemark());
+        // 设置乐观锁版本号，默认为1（新记录）
+        po.setLockVersion(1);
+        
+        return po;
+    }
 }

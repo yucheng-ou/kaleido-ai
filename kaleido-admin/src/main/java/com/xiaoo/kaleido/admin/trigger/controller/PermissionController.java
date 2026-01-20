@@ -38,7 +38,7 @@ public class PermissionController {
      * @param command 创建权限命令
      * @return 权限ID
      */
-    @SaCheckPermission(value = "admin:permission:create", type = StpAdminUtil.TYPE)
+    @SaCheckPermission(value = "admin:permission:update", type = StpAdminUtil.TYPE)
     @PostMapping
     public Result<String> createPermission(
             @Valid @RequestBody AddPermissionCommand command) {

@@ -26,7 +26,7 @@
 
     <!-- 通知表字段列表 -->
     <sql id="NoticeColumns">
-        id, notice_type, target_address, status, business_type, content, result_message, sent_at, retry_num, next_retry_at, max_retry_num, created_at, updated_at, deleted, lock_version
+        id, notice_type, target_address, status, business_type, content, result_message, sent_at, retry_num, next_retry_at, max_retry_num
     </sql>
 
     <!-- 根据目标地址查找通知列表 -->

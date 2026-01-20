@@ -33,10 +33,13 @@ public class RoleQueryServiceImpl implements RoleQueryService {
         log.debug("根据ID查询角色，roleId={}", roleId);
 
         // 1. 调用仓储层查询角色聚合根
+        RoleAggregate role = roleRepository.findById(roleId);
+        
         // 2. 如果存在则转换为响应对象，否则返回null
-        return roleRepository.findById(roleId)
-                .map(roleConvertor::toResponse)
-                .orElse(null);
+        if (role != null) {
+            return roleConvertor.toResponse(role);
+        }
+        return null;
     }
 
     @Override
@@ -44,10 +47,13 @@ public class RoleQueryServiceImpl implements RoleQueryService {
         log.debug("根据编码查询角色，code={}", code);
 
         // 1. 调用仓储层根据编码查询角色聚合根
+        RoleAggregate role = roleRepository.findByCode(code);
+        
         // 2. 如果存在则转换为响应对象，否则返回null
-        return roleRepository.findByCode(code)
-                .map(roleConvertor::toResponse)
-                .orElse(null);
+        if (role != null) {
+            return roleConvertor.toResponse(role);
+        }
+        return null;
     }
 
     @Override

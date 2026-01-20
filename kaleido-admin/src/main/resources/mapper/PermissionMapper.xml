@@ -26,8 +26,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="PermissionColumns">
-        id, code, name, type, parent_id, sort, icon, path, component, is_hidden,
-        created_at, updated_at, deleted, lock_version
+        id, code, name, type, parent_id, sort, icon, path, component, is_hidden
     </sql>
     
     <!-- 3. 查询语句 -->

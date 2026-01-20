@@ -1,5 +1,9 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
+import com.alicp.jetcache.anno.Cached;
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.constant.AdminStatus;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
@@ -11,6 +15,7 @@ import com.xiaoo.kaleido.admin.infrastructure.dao.po.AdminRolePO;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
+import com.xiaoo.kaleido.redis.service.RedissonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,7 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +58,7 @@ public class AdminRepositoryImpl implements IAdminRepository {
     }
 
     @Override
+    @CacheInvalidate(name = ":admin:", key = "#admin.id")
     public AdminAggregate update(AdminAggregate admin) {
         // 1. 转换并保存管理员
         AdminPO po = AdminConvertor.INSTANCE.toPO(admin);
@@ -64,11 +70,13 @@ public class AdminRepositoryImpl implements IAdminRepository {
     }
 
     @Override
-    public Optional<AdminAggregate> findById(String id) {
+    @Cached(name = ":admin:", key = "#id", expire = 60, cacheType = CacheType.BOTH, cacheNullValue = true)
+    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.SECONDS)
+    public AdminAggregate findById(String id) {
         // 1. 查询管理员PO
         AdminPO po = adminDao.findById(id);
         if (po == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 2. 转换为聚合根
@@ -77,15 +85,15 @@ public class AdminRepositoryImpl implements IAdminRepository {
         // 3. 加载角色ID
         loadRoleIds(aggregate);
         
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override
-    public Optional<AdminAggregate> findByMobile(String mobile) {
+    public AdminAggregate findByMobile(String mobile) {
         // 1. 查询管理员PO
         AdminPO po = adminDao.findByMobile(mobile);
         if (po == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 2. 转换为聚合根
@@ -94,9 +102,9 @@ public class AdminRepositoryImpl implements IAdminRepository {
         // 3. 加载角色ID
         loadRoleIds(aggregate);
         
-        return Optional.of(aggregate);
+        return aggregate;
     }
-    
+
     @Override
     public boolean existsByMobile(String mobile) {
         return adminDao.existsByMobile(mobile);

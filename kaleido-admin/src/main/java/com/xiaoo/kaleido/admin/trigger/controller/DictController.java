@@ -39,26 +39,27 @@ public class DictController {
      * @return 字典ID
      */
     @PostMapping
-    @SaCheckPermission(value = "admin:dict:create", type = StpAdminUtil.TYPE)
-    public Result<String> createDict(
-            @Valid @RequestBody AddDictCommand command) {
+    @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
+    public Result<String> createDict(@Valid @RequestBody AddDictCommand command) {
         return Result.success(dictCommandService.createDict(command));
     }
 
     /**
      * 更新字典
      *
-     * @param dictId  字典ID
+     * @param typeCode 字典类型编码
+     * @param dictCode 字典编码
      * @param command 更新字典命令
      * @return 操作结果
      */
-    @PutMapping("/{dictId}")
+    @PutMapping("/{typeCode}/{dictCode}")
     @SaCheckPermission(value = "admin:dict:update", type = StpAdminUtil.TYPE)
     public Result<Void> updateDict(
-            @PathVariable String dictId,
+            @PathVariable String typeCode,
+            @PathVariable String dictCode,
             @Valid @RequestBody UpdateDictCommand command) {
 
-        dictCommandService.updateDict(dictId, command);
+        dictCommandService.updateDict(typeCode, dictCode, command);
         return Result.success();
 
     }
@@ -66,15 +67,17 @@ public class DictController {
     /**
      * 删除字典
      *
-     * @param dictId 字典ID
+     * @param typeCode 字典类型编码
+     * @param dictCode 字典编码
      * @return 操作结果
      */
-    @DeleteMapping("/{dictId}")
+    @DeleteMapping("/{typeCode}/{dictCode}")
     @SaCheckPermission(value = "admin:dict:delete", type = StpAdminUtil.TYPE)
     public Result<Void> deleteDict(
-            @PathVariable String dictId) {
+            @PathVariable String typeCode,
+            @PathVariable String dictCode) {
 
-        dictCommandService.deleteDict(dictId);
+        dictCommandService.deleteDict(typeCode, dictCode);
         return Result.success();
     }
 

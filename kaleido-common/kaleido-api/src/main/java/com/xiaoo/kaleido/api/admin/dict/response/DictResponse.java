@@ -52,15 +52,4 @@ public class DictResponse extends BaseResp {
      * 排序
      */
     private Integer sort;
-
-
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
-
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
 }

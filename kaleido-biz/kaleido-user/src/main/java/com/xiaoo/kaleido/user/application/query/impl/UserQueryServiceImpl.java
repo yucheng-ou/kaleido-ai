@@ -34,31 +34,31 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Override
     public UserInfoResponse findById(String userId) {
         // 1.调用仓储层查询用户聚合根
+        UserAggregate aggregate = userRepository.findById(userId);
+        
         // 2.使用转换器转换为响应对象
         // 3.如果用户不存在则返回null
-        return userRepository.findById(userId)
-                .map(userConvertor::toResponse)
-                .orElse(null);
+        return aggregate != null ? userConvertor.toResponse(aggregate) : null;
     }
 
     @Override
     public UserInfoResponse findByTelephone(String telephone) {
         // 1.调用仓储层根据手机号查询用户聚合根
+        UserAggregate aggregate = userRepository.findByTelephone(telephone);
+        
         // 2.使用转换器转换为响应对象
         // 3.如果用户不存在则返回null
-        return userRepository.findByTelephone(telephone)
-                .map(userConvertor::toResponse)
-                .orElse(null);
+        return aggregate != null ? userConvertor.toResponse(aggregate) : null;
     }
 
     @Override
     public UserInfoResponse findByInviteCode(String inviteCode) {
         // 1.调用仓储层根据邀请码查询用户聚合根
+        UserAggregate aggregate = userRepository.findByInviteCode(inviteCode);
+        
         // 2.使用转换器转换为响应对象
         // 3.如果用户不存在则返回null
-        return userRepository.findByInviteCode(inviteCode)
-                .map(userConvertor::toResponse)
-                .orElse(null);
+        return aggregate != null ? userConvertor.toResponse(aggregate) : null;
     }
 
     @Override

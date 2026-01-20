@@ -21,8 +21,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="AdminColumns">
-        id, real_name, mobile, status, last_login_time,
-        created_at, updated_at, deleted, lock_version
+        id, real_name, mobile, status, last_login_time
     </sql>
     
     <!-- 3. 查询语句 -->

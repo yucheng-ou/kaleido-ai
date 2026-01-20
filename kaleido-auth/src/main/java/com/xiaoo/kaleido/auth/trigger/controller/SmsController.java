@@ -2,6 +2,7 @@ package com.xiaoo.kaleido.auth.trigger.controller;
 
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
+import com.xiaoo.kaleido.auth.application.command.SmsCommandService;
 import com.xiaoo.kaleido.auth.application.command.UserAuthCommandService;
 import com.xiaoo.kaleido.base.result.Result;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SmsController {
     
-    private final UserAuthCommandService userAuthCommandService;
+    private final SmsCommandService smsCommandService;
     
     /**
      * 发送短信验证码
@@ -37,7 +38,7 @@ public class SmsController {
             @Valid @RequestBody SendSmsCodeCommand command) {
         
         log.info("接收发送短信验证码请求，手机号: {}", command.getMobile());
-        SmsCodeResponse response = userAuthCommandService.sendSmsCode(command);
+        SmsCodeResponse response = smsCommandService.sendSmsCode(command);
         return Result.success(response);
     }
 }

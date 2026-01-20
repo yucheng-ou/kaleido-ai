@@ -19,7 +19,7 @@
 
     <!-- 通知模板表字段列表 -->
     <sql id="NoticeTemplateColumns">
-        id, template_code, template_name, template_content, created_at, updated_at, deleted, lock_version
+        id, template_code, template_name, template_content
     </sql>
 
     <!-- 根据模板编码查找模板 -->
