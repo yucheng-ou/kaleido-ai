@@ -4,6 +4,7 @@ import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IAdminDomainService;
 import com.xiaoo.kaleido.api.admin.user.command.*;
+import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

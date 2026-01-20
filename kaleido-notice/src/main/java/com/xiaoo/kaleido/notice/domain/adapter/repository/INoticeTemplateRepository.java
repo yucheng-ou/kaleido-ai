@@ -18,17 +18,17 @@ public interface INoticeTemplateRepository {
      * 根据ID查找模板聚合根
      *
      * @param id 模板ID
-     * @return 模板聚合根（如果存在）
+     * @return 模板聚合根，如果不存在则返回null
      */
-    Optional<NoticeTemplateAggregate> findById(String id);
+    NoticeTemplateAggregate findById(String id);
 
     /**
-     * 根据ID查找模板聚合根
+     * 根据编码查找模板聚合根
      *
      * @param code 模板code
-     * @return 模板聚合根（如果存在）
+     * @return 模板聚合根，如果不存在则返回null
      */
-    Optional<NoticeTemplateAggregate> findByCode(String code);
+    NoticeTemplateAggregate findByCode(String code);
 
     /**
      * 根据ID查找模板聚合根，如果不存在则抛出异常

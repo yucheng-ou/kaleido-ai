@@ -32,31 +32,31 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
     private final NoticeTemplateDao noticeTemplateDao;
 
     @Override
-    public Optional<NoticeTemplateAggregate> findById(String id) {
+    public NoticeTemplateAggregate findById(String id) {
         // 1.调用DAO层查询持久化对象
         NoticeTemplatePO templatePO = noticeTemplateDao.selectById(id);
         
         // 2.判断查询结果
         if (templatePO == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 3.转换为聚合根并返回
-        return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
+        return NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO);
     }
 
     @Override
-    public Optional<NoticeTemplateAggregate> findByCode(String code) {
+    public NoticeTemplateAggregate findByCode(String code) {
         // 1.调用DAO层根据编码查询持久化对象
         NoticeTemplatePO templatePO = noticeTemplateDao.findByTemplateCode(code);
         
         // 2.判断查询结果
         if (templatePO == null) {
-            return Optional.empty();
+            return null;
         }
         
         // 3.转换为聚合根并返回
-        return Optional.of(NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO));
+        return NoticeTemplateConvertor.INSTANCE.toAggregate(templatePO);
     }
 
     @Override
@@ -77,17 +77,27 @@ public class NoticeTemplateRepositoryImpl implements INoticeTemplateRepository {
     @Override
     public NoticeTemplateAggregate findByIdOrThrow(String id) {
         // 1.调用findById方法查询
+        NoticeTemplateAggregate template = findById(id);
+        
         // 2.如果不存在则抛出异常
-        return findById(id)
-                .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
+        if (template == null) {
+            throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND);
+        }
+        
+        return template;
     }
 
     @Override
     public NoticeTemplateAggregate findByCodeOrThrow(String code) {
         // 1.调用findByCode方法查询
+        NoticeTemplateAggregate template = findByCode(code);
+        
         // 2.如果不存在则抛出异常
-        return findByCode(code)
-                .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND));
+        if (template == null) {
+            throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND);
+        }
+        
+        return template;
     }
 
     @Override

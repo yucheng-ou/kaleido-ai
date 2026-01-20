@@ -5,8 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.admin.application.convertor.DictConvertor;
 import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
 import com.xiaoo.kaleido.admin.domain.dict.aggregate.DictAggregate;
+import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
+import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
-import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.admin.application.query.DictQueryService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,10 @@ public class DictQueryServiceImpl implements DictQueryService {
         log.debug("根据ID查询字典信息，dictId={}", dictId);
         
         // 1. 调用仓储层查询字典聚合根
-        DictAggregate dictAggregate = dictRepository.findByIdOrThrow(dictId);
+        DictAggregate dictAggregate = dictRepository.findById(dictId);
+        if (dictAggregate == null) {
+            throw AdminException.of(AdminErrorCode.DICT_NOT_EXIST);
+        }
         
         // 2. 转换为响应对象
         return dictConvertor.toResponse(dictAggregate);
@@ -46,7 +50,10 @@ public class DictQueryServiceImpl implements DictQueryService {
         log.debug("根据类型编码和字典编码查询字典信息，typeCode={}, dictCode={}", typeCode, dictCode);
         
         // 1. 调用仓储层查询字典聚合根
-        DictAggregate dictAggregate = dictRepository.findByTypeCodeAndDictCodeOrThrow(typeCode, dictCode);
+        DictAggregate dictAggregate = dictRepository.findByTypeCodeAndDictCode(typeCode, dictCode);
+        if (dictAggregate == null) {
+            throw AdminException.of(AdminErrorCode.DICT_NOT_EXIST);
+        }
         
         // 2. 转换为响应对象
         return dictConvertor.toResponse(dictAggregate);
@@ -65,31 +72,6 @@ public class DictQueryServiceImpl implements DictQueryService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<DictResponse> findEnabledByTypeCode(String typeCode) {
-        log.debug("根据类型编码查询启用的字典列表，typeCode={}", typeCode);
-        
-        // 1. 调用仓储层查询启用的字典聚合根列表
-        List<DictAggregate> dictAggregateList = dictRepository.findEnabledByTypeCode(typeCode);
-        
-        // 2. 转换为响应对象列表
-        return dictAggregateList.stream()
-                .map(dictConvertor::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DictResponse> queryDicts(DictQueryReq queryReq) {
-        log.debug("根据条件查询字典列表，queryReq={}", queryReq);
-        
-        // 1. 调用仓储层根据条件查询字典聚合根列表
-        List<DictAggregate> dictAggregates = dictRepository.queryByCondition(queryReq);
-        
-        // 2. 转换为响应对象列表
-        return dictAggregates.stream()
-                .map(dictConvertor::toResponse)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public PageInfo<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq) {

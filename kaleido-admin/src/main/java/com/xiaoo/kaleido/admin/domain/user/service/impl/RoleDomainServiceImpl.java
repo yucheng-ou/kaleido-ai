@@ -37,9 +37,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         // 2. 创建角色
         RoleAggregate role = RoleAggregate.create(code, name, description);
 
-        log.info("角色领域服务创建角色，角色ID: {}, 角色编码: {}, 角色名称: {}",
-                role.getId(), code, name);
-
         return role;
     }
 
@@ -51,7 +48,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         // 2. 更新角色信息
         role.updateInfo(name, description);
 
-        log.info("角色领域服务更新角色，角色ID: {}, 角色名称: {}", roleId, name);
         return role;
     }
 
@@ -60,7 +56,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         // 1. 获取角色（验证角色是否存在）
         RoleAggregate role = findByIdOrThrow(roleId);
 
-        log.info("角色领域服务准备删除角色，角色ID: {}", roleId);
         return role;
     }
 
@@ -71,27 +66,34 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
 
         // 2. 验证权限是否存在
         for (String permissionId : permissionIds) {
-            PermissionAggregate permission = permissionRepository.findById(permissionId)
-                    .orElseThrow(() -> AdminException.of(AdminErrorCode.PERMISSION_NOT_EXIST, "权限不存在: " + permissionId));
+            PermissionAggregate permission = permissionRepository.findById(permissionId);
+            if (permission == null) {
+                throw AdminException.of(AdminErrorCode.PERMISSION_NOT_EXIST, "权限不存在: " + permissionId);
+            }
         }
 
         // 3. 分配权限
         role.addPermissions(permissionIds);
 
-        log.info("角色领域服务分配权限，角色ID: {}, 权限数量: {}", roleId, permissionIds.size());
         return role;
     }
 
     @Override
     public RoleAggregate findByIdOrThrow(String roleId) {
-        return roleRepository.findById(roleId)
-                .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST.getCode(), AdminErrorCode.ROLE_NOT_EXIST.getMessage()));
+        RoleAggregate role = roleRepository.findById(roleId);
+        if (role == null) {
+            throw AdminException.of(AdminErrorCode.ROLE_NOT_EXIST.getCode(), AdminErrorCode.ROLE_NOT_EXIST.getMessage());
+        }
+        return role;
     }
 
     @Override
     public RoleAggregate findByCodeOrThrow(String code) {
-        return roleRepository.findByCode(code)
-                .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST.getCode(), AdminErrorCode.ROLE_NOT_EXIST.getMessage()));
+        RoleAggregate role = roleRepository.findByCode(code);
+        if (role == null) {
+            throw AdminException.of(AdminErrorCode.ROLE_NOT_EXIST.getCode(), AdminErrorCode.ROLE_NOT_EXIST.getMessage());
+        }
+        return role;
     }
 
     @Override

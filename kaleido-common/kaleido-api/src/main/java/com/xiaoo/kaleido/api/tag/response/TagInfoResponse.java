@@ -52,15 +52,4 @@ public class TagInfoResponse extends BaseResp {
      * 使用次数
      */
     private Integer usageCount;
-
-
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
-
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
 }

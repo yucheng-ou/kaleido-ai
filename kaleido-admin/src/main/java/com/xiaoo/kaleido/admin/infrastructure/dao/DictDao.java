@@ -67,4 +67,13 @@ public interface DictDao extends BaseMapper<DictPO> {
      * @return 字典列表
      */
     List<DictPO> selectByPageCondition(@Param("pageQueryReq") DictPageQueryReq pageQueryReq);
+
+    /**
+     * 根据字典类型编码和字典编码删除字典
+     *
+     * @param typeCode 字典类型编码
+     * @param dictCode 字典编码
+     * @return 删除的行数
+     */
+    int deleteByTypeCodeAndDictCode(@Param("typeCode") String typeCode, @Param("dictCode") String dictCode);
 }

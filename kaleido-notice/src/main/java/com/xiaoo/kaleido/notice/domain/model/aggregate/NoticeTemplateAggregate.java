@@ -60,10 +60,7 @@ public class NoticeTemplateAggregate extends BaseEntity {
      * @param newName 模板新名称
      */
     public void updateName(String newName) {
-        if (newName == null || newName.trim().isEmpty()) {
-            throw NoticeException.of(NoticeErrorCode.NOTICE_TEMPLATE_NOT_FOUND);
-        }
-        this.name = newName.trim();
+        this.name = newName != null ? newName.trim() : "";
     }
 
     /**
@@ -72,10 +69,7 @@ public class NoticeTemplateAggregate extends BaseEntity {
      * @param newContent 模板新内容
      */
     public void updateContent(String newContent) {
-        if (newContent == null || newContent.trim().isEmpty()) {
-            throw NoticeException.of(NoticeErrorCode.NOTICE_CONTENT_EMPTY);
-        }
-        this.content = newContent.trim();
+        this.content = newContent != null ? newContent.trim() : "";
     }
 
     /**

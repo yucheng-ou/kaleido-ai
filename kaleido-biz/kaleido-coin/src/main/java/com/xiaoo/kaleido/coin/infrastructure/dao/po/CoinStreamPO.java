@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.coin.infrastructure.dao.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
+import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -20,7 +21,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("t_user_coin_stream")
-public class CoinStreamPO extends BaseEntity {
+public class CoinStreamPO extends BasePO {
 
     /**
      * 用户ID

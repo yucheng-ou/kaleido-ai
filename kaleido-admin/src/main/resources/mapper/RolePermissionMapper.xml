@@ -19,8 +19,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="RolePermissionColumns">
-        id, role_id, permission_id,
-        created_at, updated_at, deleted, lock_version
+        id, role_id, permission_id
     </sql>
     
     <!-- 3. 查询语句 -->

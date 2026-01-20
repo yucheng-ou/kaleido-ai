@@ -39,12 +39,12 @@ public interface UserRepository {
     /**
      * 根据ID查找用户聚合根（命令用途）
      * <p>
-     * 根据用户ID查询用户聚合根，返回Optional对象，用于查询场景
+     * 根据用户ID查询用户聚合根，直接返回聚合对象，用于查询场景
      *
      * @param id 用户ID，不能为空
-     * @return 用户聚合根（如果存在），Optional.empty()表示用户不存在
+     * @return 用户聚合根（如果存在），null表示用户不存在
      */
-    Optional<UserAggregate> findById(String id);
+    UserAggregate findById(String id);
 
     /**
      * 根据ID查找用户聚合根及其操作流水
@@ -52,9 +52,9 @@ public interface UserRepository {
      * 查询用户聚合根及其相关的操作流水记录，用于需要完整用户信息的场景
      *
      * @param id 用户ID，不能为空
-     * @return 用户聚合根及其操作流水（如果存在），Optional.empty()表示用户不存在
+     * @return 用户聚合根及其操作流水（如果存在），null表示用户不存在
      */
-    Optional<UserAggregate> findUserAndStreamById(String id);
+    UserAggregate findUserAndStreamById(String id);
 
     /**
      * 根据ID查找用户聚合根，如果不存在则抛出异常（命令用途）
@@ -73,9 +73,9 @@ public interface UserRepository {
      * 根据手机号查询用户聚合根，用于手机号登录等场景
      *
      * @param telephone 手机号，必须符合手机号格式规范
-     * @return 用户聚合根（如果存在），Optional.empty()表示用户不存在
+     * @return 用户聚合根（如果存在），null表示用户不存在
      */
-    Optional<UserAggregate> findByTelephone(String telephone);
+    UserAggregate findByTelephone(String telephone);
 
     /**
      * 根据邀请码查找用户聚合根
@@ -83,9 +83,9 @@ public interface UserRepository {
      * 根据邀请码查询用户聚合根，用于邀请关系查询等场景
      *
      * @param inviteCode 邀请码，不能为空
-     * @return 用户聚合根（如果存在），Optional.empty()表示用户不存在
+     * @return 用户聚合根（如果存在），null表示用户不存在
      */
-    Optional<UserAggregate> findByInviteCode(String inviteCode);
+    UserAggregate findByInviteCode(String inviteCode);
 
     /**
      * 检查手机号是否已存在

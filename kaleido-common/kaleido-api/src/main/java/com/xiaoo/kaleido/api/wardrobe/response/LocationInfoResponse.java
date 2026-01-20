@@ -49,15 +49,9 @@ public class LocationInfoResponse extends BaseResp {
      */
     private String primaryImageId;
 
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
 
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
+
+
 
     /**
      * 图片列表

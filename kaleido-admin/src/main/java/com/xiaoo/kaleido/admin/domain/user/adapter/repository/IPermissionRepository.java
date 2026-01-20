@@ -5,7 +5,6 @@ import com.xiaoo.kaleido.api.admin.user.enums.PermissionType;
 import com.xiaoo.kaleido.api.admin.user.request.PermissionPageQueryReq;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 权限仓储接口
@@ -44,17 +43,17 @@ public interface IPermissionRepository {
      * 根据ID查找权限
      *
      * @param id 权限ID
-     * @return 权限
+     * @return 权限，如果不存在则返回null
      */
-    Optional<PermissionAggregate> findById(String id);
+    PermissionAggregate findById(String id);
 
     /**
      * 根据编码查找权限
      *
      * @param code 权限编码
-     * @return 权限
+     * @return 权限，如果不存在则返回null
      */
-    Optional<PermissionAggregate> findByCode(String code);
+    PermissionAggregate findByCode(String code);
 
     /**
      * 根据父权限ID查找子权限列表

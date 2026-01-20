@@ -19,8 +19,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="AdminRoleColumns">
-        id, admin_id, role_id,
-        created_at, updated_at, deleted, lock_version
+        id, admin_id, role_id
     </sql>
     
     <!-- 3. 查询语句 -->

@@ -13,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -70,21 +69,21 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
     }
 
     @Override
-    public Optional<PermissionAggregate> findById(String id) {
+    public PermissionAggregate findById(String id) {
         // 1. 根据ID查询PO
         PermissionPO po = permissionDao.findById(id);
         
-        // 2. 如果PO存在则转换为聚合根，否则返回空Optional
-        return po != null ? Optional.of(PermissionConvertor.INSTANCE.toEntity(po)) : Optional.empty();
+        // 2. 如果PO存在则转换为聚合根，否则返回null
+        return po != null ? PermissionConvertor.INSTANCE.toEntity(po) : null;
     }
 
     @Override
-    public Optional<PermissionAggregate> findByCode(String code) {
+    public PermissionAggregate findByCode(String code) {
         // 1. 根据编码查询PO
         PermissionPO po = permissionDao.findByCode(code);
         
-        // 2. 如果PO存在则转换为聚合根，否则返回空Optional
-        return po != null ? Optional.of(PermissionConvertor.INSTANCE.toEntity(po)) : Optional.empty();
+        // 2. 如果PO存在则转换为聚合根，否则返回null
+        return po != null ? PermissionConvertor.INSTANCE.toEntity(po) : null;
     }
 
     @Override

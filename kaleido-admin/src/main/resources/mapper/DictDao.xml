@@ -23,8 +23,7 @@
     
     <!-- 2. 可重用SQL片段 -->
     <sql id="DictColumns">
-        id, type_code, type_name, dict_code, dict_name, dict_value, sort,
-        created_at, updated_at, deleted, lock_version
+        id, type_code, type_name, dict_code, dict_name, dict_value, sort
     </sql>
     
     <!-- 3. 查询条件片段 -->
@@ -128,4 +127,14 @@
         <include refid="DictPageQueryConditions"/>
         ORDER BY sort ASC
     </select>
+
+    <!-- 根据字典类型编码和字典编码删除字典（逻辑删除） -->
+    <update id="deleteByTypeCodeAndDictCode">
+        UPDATE t_dict
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE type_code = #{typeCode} 
+          AND dict_code = #{dictCode} 
+          AND deleted = 0
+    </update>
 </mapper>

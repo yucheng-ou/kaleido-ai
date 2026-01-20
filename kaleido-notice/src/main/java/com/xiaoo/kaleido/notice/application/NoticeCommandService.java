@@ -72,12 +72,10 @@ public class NoticeCommandService {
         String templateCode = dictResult.getData().getDictValue();
 
         // 5.根据编码查找模板
-        Optional<NoticeTemplateAggregate> templateOpt = noticeTemplateRepository.findByCode(templateCode);
-        if (templateOpt.isEmpty()) {
+        NoticeTemplateAggregate template = noticeTemplateRepository.findByCode(templateCode);
+        if (template == null) {
             throw NoticeException.of(NoticeErrorCode.VERIFICATION_CODE_TEMPLATE_EMPTY);
         }
-
-        NoticeTemplateAggregate template = templateOpt.get();
 
         // 6.生成验证码（调用领域服务）
         String verifyCode = noticeDomainService.generateVerifyCode();

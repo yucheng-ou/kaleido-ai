@@ -56,17 +56,17 @@ public class NoticeRepositoryImpl implements INoticeRepository {
     }
 
     @Override
-    public Optional<NoticeAggregate> findById(String id) {
+    public NoticeAggregate findById(String id) {
         // 1.调用DAO层查询持久化对象
         NoticePO noticePO = noticeDao.selectById(id);
 
         // 2.判断查询结果
         if (noticePO == null) {
-            return Optional.empty();
+            return null;
         }
 
         // 3.转换为聚合根并返回
-        return Optional.of(NoticeConvertor.INSTANCE.toAggregate(noticePO));
+        return NoticeConvertor.INSTANCE.toAggregate(noticePO);
     }
 
     @Override
@@ -130,19 +130,6 @@ public class NoticeRepositoryImpl implements INoticeRepository {
         return noticePOs.stream()
                 .map(NoticeConvertor.INSTANCE::toAggregate)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * 根据ID查找通知聚合根，如果不存在则抛出异常
-     *
-     * @param id 通知ID
-     * @return 通知聚合根
-     */
-    public NoticeAggregate findByIdOrThrow(String id) {
-        // 1.调用findById方法查询
-        // 2.如果不存在则抛出异常
-        return findById(id)
-                .orElseThrow(() -> NoticeException.of(NoticeErrorCode.NOTICE_RECORD_NOT_FOUND));
     }
 
     /**

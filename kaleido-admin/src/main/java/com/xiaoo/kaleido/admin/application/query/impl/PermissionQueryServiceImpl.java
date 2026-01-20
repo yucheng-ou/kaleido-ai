@@ -37,10 +37,13 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         log.debug("根据ID查询权限，permissionId={}", permissionId);
         
         // 1. 调用仓储层查询权限聚合根
+        PermissionAggregate permission = permissionRepository.findById(permissionId);
+        
         // 2. 如果存在则转换为响应对象，否则返回null
-        return permissionRepository.findById(permissionId)
-                .map(permissionConvertor::toResponse)
-                .orElse(null);
+        if (permission != null) {
+            return permissionConvertor.toResponse(permission);
+        }
+        return null;
     }
 
     @Override
@@ -48,10 +51,13 @@ public class PermissionQueryServiceImpl implements PermissionQueryService {
         log.debug("根据编码查询权限，code={}", code);
         
         // 1. 调用仓储层根据编码查询权限聚合根
+        PermissionAggregate permission = permissionRepository.findByCode(code);
+        
         // 2. 如果存在则转换为响应对象，否则返回null
-        return permissionRepository.findByCode(code)
-                .map(permissionConvertor::toResponse)
-                .orElse(null);
+        if (permission != null) {
+            return permissionConvertor.toResponse(permission);
+        }
+        return null;
     }
 
     @Override

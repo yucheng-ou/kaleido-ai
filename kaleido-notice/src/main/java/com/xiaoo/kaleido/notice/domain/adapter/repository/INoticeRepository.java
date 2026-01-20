@@ -41,17 +41,9 @@ public interface INoticeRepository {
      * 根据ID查找通知聚合根
      *
      * @param id 通知ID
-     * @return 通知聚合根（如果存在）
+     * @return 通知聚合根，如果不存在则返回null
      */
-    Optional<NoticeAggregate> findById(String id);
-
-    /**
-     * 根据ID查找通知聚合根，如果不存在则抛出异常
-     *
-     * @param id 通知ID
-     * @return 通知聚合根
-     */
-    NoticeAggregate findByIdOrThrow(String id);
+    NoticeAggregate findById(String id);
 
     /**
      * 保存通知聚合根

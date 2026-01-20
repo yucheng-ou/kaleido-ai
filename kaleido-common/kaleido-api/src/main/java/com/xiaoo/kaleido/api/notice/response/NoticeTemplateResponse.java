@@ -35,12 +35,4 @@ public class NoticeTemplateResponse extends BaseResp {
      */
     private String content;
 
-    /**
-     * 创建时间
-     */
-    private Date createdAt;
-    /**
-     * 更新时间
-     */
-    private Date updatedAt;
 }

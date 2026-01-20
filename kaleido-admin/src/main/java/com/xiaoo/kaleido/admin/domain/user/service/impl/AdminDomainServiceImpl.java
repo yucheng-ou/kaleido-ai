@@ -44,9 +44,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         // 2. 创建管理员
         AdminAggregate adminUser = AdminAggregate.create(mobile);
 
-        log.info("管理员领域服务创建管理员，管理员ID: {}, 手机号: {}",
-                adminUser.getId(), adminUser.getMobile());
-
         return adminUser;
     }
 
@@ -64,7 +61,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         // 3. 更新管理员信息
         adminUser.updateInfo(realName, mobile);
 
-        log.info("管理员领域服务更新管理员，管理员ID: {}, 真实姓名: {}", adminId, realName);
         return adminUser;
     }
 
@@ -106,8 +102,10 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
         // 1. 验证角色
         // 1.1 验证角色是否存在且启用
         for (String roleId : roleIds) {
-            roleRepository.findById(roleId)
-                    .orElseThrow(() -> AdminException.of(AdminErrorCode.ROLE_NOT_EXIST, "角色不存在: " + roleId));
+            RoleAggregate role = roleRepository.findById(roleId);
+            if (role == null) {
+                throw AdminException.of(AdminErrorCode.ROLE_NOT_EXIST, "角色不存在: " + roleId);
+            }
         }
 
         // 2. 分配角色
@@ -122,8 +120,11 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public AdminAggregate findByIdOrThrow(String adminId) {
-        return adminUserRepository.findById(adminId)
-                .orElseThrow(() -> AdminException.of(AdminErrorCode.ADMIN_USER_NOT_EXIST.getCode(), AdminErrorCode.ADMIN_USER_NOT_EXIST.getMessage()));
+        AdminAggregate admin = adminUserRepository.findById(adminId);
+        if (admin == null) {
+            throw AdminException.of(AdminErrorCode.ADMIN_USER_NOT_EXIST.getCode(), AdminErrorCode.ADMIN_USER_NOT_EXIST.getMessage());
+        }
+        return admin;
     }
 
     @Override
@@ -133,8 +134,7 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
     @Override
     public AdminAggregate findByMobile(String mobile) {
-        return adminUserRepository.findByMobile(mobile)
-                .orElse(null);
+        return adminUserRepository.findByMobile(mobile);
     }
 
     @Override
@@ -167,8 +167,6 @@ public class AdminDomainServiceImpl extends AbstractAdminDomainService<AdminAggr
 
         // 2. 验证管理员状态（必须为可用状态）
         if (!adminUser.isAvailable()) {
-            log.error("管理员登录失败，账号状态不可用，管理员ID: {}, 状态: {}",
-                    adminUser.getId(), adminUser.getStatus());
             throw AdminException.of(AdminErrorCode.ADMIN_USER_STATUS_ERROR);
         }
 

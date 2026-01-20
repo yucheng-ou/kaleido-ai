@@ -44,10 +44,11 @@ public class DictCommandService {
         return dictAggregate.getId();
     }
 
-    public void updateDict(String dictId, UpdateDictCommand command) {
+    public void updateDict(String typeCode, String dictCode, UpdateDictCommand command) {
         // 1. 调用领域服务更新字典
         DictAggregate dictAggregate = dictDomainService.updateDict(
-                dictId,
+                typeCode,
+                dictCode,
                 command.getTypeName(),
                 command.getDictName(),
                 command.getDictValue(),
@@ -57,17 +58,13 @@ public class DictCommandService {
         // 2. 保存字典
         dictRepository.update(dictAggregate);
 
-        log.info("字典更新成功，字典ID: {}", dictId);
+        log.info("字典更新成功，类型编码: {}, 字典编码: {}", typeCode, dictCode);
     }
 
-    @Transactional
-    public void deleteDict(String dictId) {
-        // 1. 调用领域服务获取要删除的字典对象
-        DictAggregate dictAggregate = dictDomainService.deleteDict(dictId);
+    public void deleteDict(String typeCode, String dictCode) {
+        // 1. 删除字典
+        dictRepository.deleteByTypeCodeAndDictCode(typeCode, dictCode);
 
-        // 2. 执行软删除：标记为删除状态并更新
-        dictRepository.deleteById(dictAggregate.getId());
-
-        log.info("字典软删除成功，字典ID: {}", dictId);
+        log.info("字典删除成功，类型编码: {}, 字典编码: {}", typeCode, dictCode);
     }
 }

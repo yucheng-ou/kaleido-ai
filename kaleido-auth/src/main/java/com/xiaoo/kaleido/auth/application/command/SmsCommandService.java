@@ -36,7 +36,6 @@ import java.util.Date;
  */
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class SmsCommandService {
 
@@ -49,7 +48,7 @@ public class SmsCommandService {
         // 调用RPC服务发送短信验证码
         SendSmsVerifyCodeCommand smsCommand = SendSmsVerifyCodeCommand.builder()
                 .mobile(command.getMobile())
-                .targetType(TargetTypeEnum.USER)
+                .targetType(command.getTargetType())
                 .build();
 
         Result<String> result = rpcNoticeService.generateAndSendSmsVerifyCode(smsCommand);
