@@ -70,8 +70,8 @@ public class AdminRepositoryImpl implements IAdminRepository {
     }
 
     @Override
-    @Cached(name = ":admin:", key = "#id", expire = 60, cacheType = CacheType.BOTH, cacheNullValue = true)
-    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.SECONDS)
+    @Cached(name = ":admin:", key = "#id", expire = 60, localExpire = 1, cacheType = CacheType.BOTH,timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
+    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.MINUTES)
     public AdminAggregate findById(String id) {
         // 1. 查询管理员PO
         AdminPO po = adminDao.findById(id);
