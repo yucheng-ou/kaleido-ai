@@ -54,8 +54,8 @@
 
     <!-- 通知模板查询条件片段 -->
     <sql id="NoticeTemplateQueryConditions">
-        <if test="req.templateCode != null and req.templateCode != ''">AND template_code LIKE CONCAT('%', #{req.templateCode}, '%')</if>
-        <if test="req.templateName != null and req.templateName != ''">AND template_name LIKE CONCAT('%', #{req.templateName}, '%')</if>
+        <if test="req.code != null and req.code != ''">AND template_code LIKE CONCAT('%', #{req.code}, '%')</if>
+        <if test="req.name != null and req.name != ''">AND template_name LIKE CONCAT('%', #{req.name}, '%')</if>
     </sql>
 
     <!-- 根据条件分页查询模板 -->

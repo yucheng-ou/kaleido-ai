@@ -63,7 +63,7 @@ public class LocationRecordAggregate extends BaseEntity {
 
     /**
      * 创建新位置记录聚合根
-     * <p>
+
      * 用于创建新位置记录时构建聚合根
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
@@ -91,7 +91,7 @@ public class LocationRecordAggregate extends BaseEntity {
 
     /**
      * 标记为非当前记录
-     * <p>
+
      * 用于服装位置变更时，将旧位置记录标记为非当前
      * 注意：调用前需要确保当前记录是当前位置记录
      */
@@ -101,7 +101,7 @@ public class LocationRecordAggregate extends BaseEntity {
 
     /**
      * 更新备注信息
-     * <p>
+
      * 更新位置记录的备注信息
      *
      * @param notes 新备注，可为空

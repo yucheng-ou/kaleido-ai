@@ -18,7 +18,7 @@ public interface IOutfitDomainService {
 
     /**
      * 创建穿搭（包含服装和图片）
-     * <p>
+
      * 根据用户ID、穿搭名称、描述等信息创建新穿搭，并包含服装列表和图片信息
      * 注意：用户只提供文件路径，图片的width、height、imageSize、imageType等字段后续通过MinIO服务获取
      *
@@ -39,7 +39,7 @@ public interface IOutfitDomainService {
 
     /**
      * 根据ID查找穿搭，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保穿搭存在的场景
      * 注意：会加载穿搭的基本信息、服装列表、图片列表和穿着记录
      *
@@ -50,8 +50,21 @@ public interface IOutfitDomainService {
     OutfitAggregate findByIdOrThrow(String outfitId);
 
     /**
+     * 根据ID和用户ID查找穿搭，如果不存在或用户不匹配则抛出异常
+
+     * 用于需要验证用户权限的查询场景
+     * 注意：会加载穿搭的基本信息、服装列表、图片列表和穿着记录
+     *
+     * @param outfitId 穿搭ID字符串，不能为空
+     * @param userId 用户ID字符串，不能为空
+     * @return 穿搭聚合根，包含完整的穿搭信息
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在或用户不匹配时抛出
+     */
+    OutfitAggregate findByIdAndUserIdOrThrow(String outfitId, String userId);
+
+    /**
      * 更新穿搭信息（包含服装和图片）
-     * <p>
+
      * 更新穿搭的基本信息、服装列表和图片信息
      * 注意：服装列表为全量替换，图片列表为全量替换
      *
@@ -74,7 +87,7 @@ public interface IOutfitDomainService {
 
     /**
      * 记录穿搭穿着
-     * <p>
+
      * 用户穿着该搭配时调用，更新穿着次数和最后穿着日期，并创建穿着记录
      * 注意：wearDate自动使用当前系统时间
      *
@@ -88,7 +101,7 @@ public interface IOutfitDomainService {
 
     /**
      * 删除穿搭
-     * <p>
+
      * 删除穿搭（逻辑删除或物理删除，根据业务规则）
      *
      * @param outfitId 穿搭ID，不能为空

@@ -19,8 +19,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, created_at, updated_at, deleted, lock_version,
-        location_id, path, image_order, is_primary, image_size, image_type, width, height
+        id, location_id, path, image_order, is_primary, image_size, image_type, width, height
     </sql>
 
     <select id="findByLocationId" resultMap="BaseResultMap">

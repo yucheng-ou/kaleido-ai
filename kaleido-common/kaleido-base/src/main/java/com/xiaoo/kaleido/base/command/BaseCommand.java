@@ -1,7 +1,5 @@
 package com.xiaoo.kaleido.base.command;
 
-import lombok.Value;
-
 import java.io.Serial;
 import java.io.Serializable;
 

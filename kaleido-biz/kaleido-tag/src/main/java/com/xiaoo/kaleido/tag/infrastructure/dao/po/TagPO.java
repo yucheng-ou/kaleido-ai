@@ -33,7 +33,7 @@ public class TagPO extends BasePO {
 
     /**
      * 标签类型编码
-     * <p>
+
      * 关联字典表t_dict.dict_code，字典类型为TAG_TYPE
      */
     @TableField("type_code")

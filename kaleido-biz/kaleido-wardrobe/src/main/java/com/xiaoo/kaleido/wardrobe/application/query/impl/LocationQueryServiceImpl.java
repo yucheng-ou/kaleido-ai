@@ -41,7 +41,7 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
     public LocationInfoResponse findById(String locationId) {
         try {
             // 1.查询位置聚合根
-            StorageLocationAggregate location = locationRepository.findByIdOrThrow(locationId);
+            StorageLocationAggregate location = locationRepository.findById(locationId);
 
             // 2.转换为DTO
             LocationDTO locationDTO = locationConvertor.toDTO(location);
@@ -58,6 +58,46 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
 
         } catch (Exception e) {
             log.error("查询位置详情失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
+            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置详情查询失败");
+        }
+    }
+
+    /**
+     * 根据位置ID和用户ID查询位置详情
+     *
+     * @param locationId 位置ID
+     * @param userId 用户ID
+     * @return 位置信息响应
+     */
+    @Override
+    public LocationInfoResponse findByIdAndUserId(String locationId, String userId) {
+        try {
+            // 1.查询位置聚合根
+            StorageLocationAggregate location = locationRepository.findById(locationId);
+
+            // 2.验证权限：确保位置属于当前用户
+            if (!location.getUserId().equals(userId)) {
+                throw WardrobeException.of("PERMISSION_DENIED", "无权访问该位置");
+            }
+
+            // 3.转换为DTO
+            LocationDTO locationDTO = locationConvertor.toDTO(location);
+            
+            // 4.获取图片列表
+            List<LocationImage> images = location.getImages();
+            List<LocationConvertor.LocationImageDTO> imageDTOs = locationConvertor.toImageDTOList(images);
+            
+            // 5.转换为Response
+            LocationInfoResponse response = locationConvertor.toResponse(locationDTO);
+            response.setImages(locationConvertor.toImageResponseList(imageDTOs));
+            
+            return response;
+
+        } catch (WardrobeException e) {
+            // 重新抛出权限相关的异常
+            throw e;
+        } catch (Exception e) {
+            log.error("查询位置详情失败，位置ID: {}, 用户ID: {}, 原因: {}", locationId, userId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置详情查询失败");
         }
     }
@@ -137,7 +177,14 @@ public class LocationQueryServiceImpl implements ILocationQueryService {
     @Override
     public boolean existsById(String locationId) {
         try {
-            return locationRepository.findById(locationId).isPresent();
+            locationRepository.findById(locationId);
+            return true;
+        } catch (WardrobeException e) {
+            if (WardrobeErrorCode.LOCATION_NOT_FOUND.equals(e.getErrorCode()) || 
+                com.xiaoo.kaleido.base.exception.BizErrorCode.DATA_NOT_EXIST.equals(e.getErrorCode())) {
+                return false;
+            }
+            throw e;
         } catch (Exception e) {
             log.error("检查位置存在性失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置存在性检查失败");

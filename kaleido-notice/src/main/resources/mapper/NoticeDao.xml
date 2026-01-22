@@ -57,11 +57,9 @@
     <!-- 通知查询条件片段 -->
     <sql id="NoticeQueryConditions">
         <if test="req.noticeType != null">AND notice_type = #{req.noticeType}</if>
-        <if test="req.targetAddress != null and req.targetAddress != ''">AND target_address LIKE CONCAT('%', #{req.targetAddress}, '%')</if>
+        <if test="req.target != null and req.target != ''">AND target_address LIKE CONCAT('%', #{req.target}, '%')</if>
         <if test="req.status != null">AND status = #{req.status}</if>
         <if test="req.businessType != null and req.businessType != ''">AND business_type = #{req.businessType}</if>
-        <if test="req.startTime != null">AND created_at >= #{req.startTime}</if>
-        <if test="req.endTime != null">AND created_at <![CDATA[ <= ]]> #{req.endTime}</if>
     </sql>
 
     <!-- 根据条件分页查询通知 -->

@@ -5,6 +5,7 @@ import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitClothing;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitImage;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.WearRecord;
+import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitClothingPO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitImagePO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitPO;
 import org.mapstruct.Mapper;
@@ -80,6 +81,38 @@ public interface OutfitInfraConvertor {
      * @return 持久化对象列表
      */
     List<OutfitImagePO> toImagePOs(List<OutfitImage> entities);
+
+    /**
+     * 将OutfitClothingPO转换为OutfitClothing
+     *
+     * @param po 持久化对象
+     * @return 领域实体
+     */
+    OutfitClothing toClothingEntity(OutfitClothingPO po);
+
+    /**
+     * 将OutfitClothing转换为OutfitClothingPO
+     *
+     * @param entity 领域实体
+     * @return 持久化对象
+     */
+    OutfitClothingPO toClothingPO(OutfitClothing entity);
+
+    /**
+     * 将OutfitClothingPO列表转换为OutfitClothing列表
+     *
+     * @param pos 持久化对象列表
+     * @return 领域实体列表
+     */
+    List<OutfitClothing> toClothingEntities(List<OutfitClothingPO> pos);
+
+    /**
+     * 将OutfitClothing列表转换为OutfitClothingPO列表
+     *
+     * @param entities 领域实体列表
+     * @return 持久化对象列表
+     */
+    List<OutfitClothingPO> toClothingPOs(List<OutfitClothing> entities);
 
     /**
      * 将字符串转换为ImageType枚举

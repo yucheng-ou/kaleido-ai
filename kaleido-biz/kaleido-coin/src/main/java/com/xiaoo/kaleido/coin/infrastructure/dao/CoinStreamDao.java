@@ -21,7 +21,7 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
 
     /**
      * 根据用户ID查询流水列表
-     * <p>
+
      * 用于查询指定用户的所有流水记录
      *
      * @param userId 用户ID，不能为空
@@ -32,7 +32,7 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
 
     /**
      * 根据业务类型和业务ID查询流水
-     * <p>
+
      * 用于幂等性检查，防止重复处理同一业务
      *
      * @param bizType 业务类型，不能为空
@@ -43,7 +43,7 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
 
     /**
      * 检查业务是否已处理
-     * <p>
+
      * 用于幂等性检查，检查指定业务是否已处理过
      *
      * @param bizType 业务类型，不能为空
@@ -54,7 +54,7 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
 
     /**
      * 根据用户ID删除流水记录
-     * <p>
+
      * 用于删除指定用户的所有流水记录
      *
      * @param userId 用户ID，不能为空
@@ -65,7 +65,7 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
 
     /**
      * 批量插入流水记录
-     * <p>
+
      * 用于高效插入多条流水记录
      *
      * @param streamList 流水记录列表，不能为空

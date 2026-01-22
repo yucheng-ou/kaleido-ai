@@ -18,7 +18,7 @@ public interface IOutfitRepository {
 
     /**
      * 保存穿搭聚合根
-     * <p>
+
      * 保存或更新穿搭聚合根，包括其关联的实体（服装、图片、穿着记录）
      *
      * @param outfitAggregate 穿搭聚合根，不能为空
@@ -28,27 +28,29 @@ public interface IOutfitRepository {
 
     /**
      * 根据ID查找穿搭聚合根
-     * <p>
+
      * 查找指定ID的穿搭聚合根，包含其关联的实体
      *
      * @param id 穿搭ID，不能为空
-     * @return 穿搭聚合根（如果存在），否则返回Optional.empty()
+     * @return 穿搭聚合根
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在时抛出
      */
-    Optional<OutfitAggregate> findById(String id);
+    OutfitAggregate findById(String id);
 
     /**
      * 根据ID查找穿搭聚合根（包含已删除的）
-     * <p>
+
      * 查找指定ID的穿搭聚合根，包含已逻辑删除的记录
      *
      * @param id 穿搭ID，不能为空
-     * @return 穿搭聚合根（如果存在），否则返回Optional.empty()
+     * @return 穿搭聚合根
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在时抛出
      */
-    Optional<OutfitAggregate> findByIdIncludeDeleted(String id);
+    OutfitAggregate findByIdIncludeDeleted(String id);
 
     /**
      * 根据用户ID查找穿搭聚合根列表
-     * <p>
+
      * 查找指定用户的所有穿搭，包含基本信息
      * 注意：可能不包含完整的关联实体，根据业务需求决定
      *
@@ -59,18 +61,19 @@ public interface IOutfitRepository {
 
     /**
      * 根据用户ID和穿搭名称查找穿搭聚合根
-     * <p>
+
      * 用于检查同一用户下穿搭名称是否重复
      *
      * @param userId 用户ID，不能为空
      * @param name   穿搭名称，不能为空
-     * @return 穿搭聚合根（如果存在），否则返回Optional.empty()
+     * @return 穿搭聚合根
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在时抛出
      */
-    Optional<OutfitAggregate> findByUserIdAndName(String userId, String name);
+    OutfitAggregate findByUserIdAndName(String userId, String name);
 
     /**
      * 删除穿搭聚合根
-     * <p>
+
      * 删除指定ID的穿搭聚合根（逻辑删除或物理删除，根据实现决定）
      *
      * @param id 穿搭ID，不能为空

@@ -16,7 +16,7 @@ public interface TagQueryService {
 
     /**
      * 根据ID查询标签信息
-     * <p>
+
      * 根据标签ID查询标签详细信息，如果标签不存在则返回null
      *
      * @param tagId 标签ID，不能为空
@@ -25,8 +25,20 @@ public interface TagQueryService {
     TagInfoResponse findById(String tagId);
 
     /**
+     * 根据ID和用户ID查询标签信息
+
+     * 根据标签ID和用户ID查询标签详细信息，用于权限验证
+     * 如果标签不存在或不属于该用户则返回null
+     *
+     * @param tagId 标签ID，不能为空
+     * @param userId 用户ID，不能为空
+     * @return 标签信息响应，如果标签不存在或不属于该用户则返回null
+     */
+    TagInfoResponse findByIdAndUserId(String tagId, String userId);
+
+    /**
      * 根据用户ID和类型编码查询标签列表
-     * <p>
+
      * 根据用户ID和标签类型编码查询标签列表，返回该用户下该类型的所有标签
      *
      * @param userId 用户ID，不能为空
@@ -37,7 +49,7 @@ public interface TagQueryService {
 
     /**
      * 根据标签ID查询关联的实体列表
-     * <p>
+
      * 根据标签ID查询该标签关联的所有实体ID列表
      *
      * @param tagId 标签ID，不能为空

@@ -24,7 +24,7 @@ public interface WardrobeConvertor {
 
     /**
      * 将品牌聚合根转换为品牌信息响应
-     * <p>
+
      * 将领域层的品牌聚合根转换为应用层的品牌信息响应DTO
      *
      * @param brandAggregate 品牌聚合根，不能为空
@@ -35,19 +35,18 @@ public interface WardrobeConvertor {
 
     /**
      * 将服装聚合根转换为服装信息响应
-     * <p>
+
      * 将领域层的服装聚合根转换为应用层的服装信息响应DTO
      *
      * @param clothingAggregate 服装聚合根，不能为空
      * @return 服装信息响应，包含服装的基本信息和图片信息
      */
     @Mapping(source = "id", target = "clothingId")
-    @Mapping(source = "images", target = "images")
     ClothingInfoResponse toClothingResponse(ClothingAggregate clothingAggregate);
 
     /**
      * 将服装图片实体列表转换为图片信息响应列表
-     * <p>
+
      * 将领域层的服装图片实体列表转换为应用层的图片信息响应DTO列表
      *
      * @param clothingImages 服装图片实体列表，不能为空

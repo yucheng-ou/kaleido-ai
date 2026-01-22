@@ -20,7 +20,7 @@ public interface UserConvertor {
 
     /**
      * 将用户聚合根转换为用户查询响应
-     * <p>
+
      * 将领域层的用户聚合根转换为应用层的用户查询响应DTO
      *
      * @param userAggregate 用户聚合根，不能为空

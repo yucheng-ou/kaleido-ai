@@ -16,7 +16,7 @@ public interface ITagDomainService {
 
     /**
      * 创建标签
-     * <p>
+
      * 根据用户ID、标签名称、类型编码等创建新标签，系统会自动生成标签ID并设置初始状态
      *
      * @param userId      用户ID，不能为空
@@ -30,7 +30,7 @@ public interface ITagDomainService {
 
     /**
      * 根据ID查找标签，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保标签存在的场景
      *
      * @param tagId 标签ID字符串，不能为空
@@ -40,21 +40,22 @@ public interface ITagDomainService {
 
     /**
      * 更新标签信息
-     * <p>
+
      * 更新标签的名称、颜色和描述信息
      *
+     * @param userId      用户ID，不能为空
      * @param tagId       标签ID，不能为空
      * @param name        新标签名称，不能为空
      * @param color       新标签颜色，可为空
      * @param description 新标签描述，可为空
      * @return 更新后的标签聚合根
      */
-    TagAggregate updateTag(String tagId, String name, String color, String description);
+    TagAggregate updateTag(String userId, String tagId, String name, String color, String description);
 
 
     /**
      * 关联实体到标签
-     * <p>
+
      * 将指定实体关联到标签，会自动验证标签类型与实体类型的匹配
      *
      * @param tagId          标签ID，不能为空
@@ -67,7 +68,7 @@ public interface ITagDomainService {
 
     /**
      * 取消标签与实体的关联
-     * <p>
+
      * 取消标签与指定实体的关联关系
      *
      * @param tagId    标签ID，不能为空
@@ -79,7 +80,7 @@ public interface ITagDomainService {
 
     /**
      * 验证标签名称在用户下的唯一性
-     * <p>
+
      * 验证同类型标签名称在用户下是否唯一
      *
      * @param userId   用户ID，不能为空

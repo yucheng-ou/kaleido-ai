@@ -1,17 +1,12 @@
 package com.xiaoo.kaleido.tag.trigger.rpc;
 
-import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.tag.IRpcTagService;
 import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
-import com.xiaoo.kaleido.api.tag.command.AssociateTagsCommand;
 import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
-import com.xiaoo.kaleido.api.tag.command.DissociateTagsCommand;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.tag.application.command.TagCommandService;
 import com.xiaoo.kaleido.tag.application.query.TagQueryService;
-import com.xiaoo.kaleido.tag.types.exception.TagException;
-import com.xiaoo.kaleido.tag.types.exception.TagErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +34,13 @@ public class RpcTagServiceImpl implements IRpcTagService {
 
     @Override
     public Result<Void> associateTags(@Valid AssociateEntityCommand command) {
-        tagCommandService.associateEntity(command);
+        tagCommandService.associateEntity(command.getUserId(), command);
         return Result.success();
     }
 
     @Override
     public Result<Void> dissociateTags(@Valid DissociateEntityCommand command) {
-        tagCommandService.dissociateEntity(command);
+        tagCommandService.dissociateEntity(command.getUserId(), command);
         return Result.success();
     }
 

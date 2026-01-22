@@ -6,8 +6,10 @@ import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitClothing;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.OutfitImage;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity.WearRecord;
 import com.xiaoo.kaleido.wardrobe.infrastructure.adapter.repository.convertor.OutfitInfraConvertor;
+import com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitClothingDao;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitDao;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitImageDao;
+import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitClothingPO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitPO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitImagePO;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * 穿搭仓储实现
- * <p>
- * 实现IOutfitRepository接口，负责穿搭聚合根的持久化操作
- * 遵循DDD仓储模式，隔离领域层和基础设施层
  *
  * @author ouyucheng
  * @date 2026/1/17
@@ -36,38 +34,35 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
 
     private final OutfitDao outfitDao;
     private final OutfitImageDao outfitImageDao;
+    private final OutfitClothingDao outfitClothingDao;
     private final OutfitInfraConvertor convertor = OutfitInfraConvertor.INSTANCE;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public OutfitAggregate save(OutfitAggregate outfitAggregate) {
-        log.debug("保存穿搭聚合根: outfitId={}", outfitAggregate.getId());
-
         // 保存穿搭基本信息
         OutfitPO outfitPO = convertor.toPO(outfitAggregate);
-        if (outfitAggregate.getId() == null) {
-            outfitDao.insert(outfitPO);
-        } else {
-            outfitDao.updateById(outfitPO);
-        }
+
+        outfitDao.insert(outfitPO);
 
         // 保存穿搭图片
         saveOutfitImages(outfitAggregate);
 
-        // TODO: 保存穿搭服装关联和穿着记录（需要创建相应的DAO）
+        // 保存穿搭服装关联
+        saveOutfitClothings(outfitAggregate);
 
-        return findById(outfitAggregate.getId()).orElseThrow(
-                () -> new RuntimeException("保存后查找穿搭失败: " + outfitAggregate.getId())
-        );
+        return outfitAggregate;
     }
 
     @Override
-    public Optional<OutfitAggregate> findById(String id) {
+    public OutfitAggregate findById(String id) {
         log.debug("根据ID查找穿搭聚合根: outfitId={}", id);
 
         OutfitPO outfitPO = outfitDao.findById(id);
         if (outfitPO == null) {
-            return Optional.empty();
+            throw new com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException(
+                    com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode.OUTFIT_NOT_FOUND
+            );
         }
 
         OutfitAggregate aggregate = convertor.toAggregate(outfitPO);
@@ -77,18 +72,20 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
         List<OutfitImage> images = convertor.toImageEntities(imagePOs);
         aggregate.setImages(images);
 
-        // TODO: 加载关联的服装和穿着记录
+        // 加载关联的服装
+        List<OutfitClothingPO> clothingPOs = outfitClothingDao.findByOutfitIds(Collections.singletonList(id));
+        List<OutfitClothing> clothings = convertor.toClothingEntities(clothingPOs);
+        aggregate.setClothings(clothings);
 
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override
-    public Optional<OutfitAggregate> findByIdIncludeDeleted(String id) {
-        log.debug("根据ID查找穿搭聚合根（包含已删除的）: outfitId={}", id);
+    public OutfitAggregate findByIdIncludeDeleted(String id) {
 
         OutfitPO outfitPO = outfitDao.findByIdIncludeDeleted(id);
         if (outfitPO == null) {
-            return Optional.empty();
+            return null;
         }
 
         OutfitAggregate aggregate = convertor.toAggregate(outfitPO);
@@ -98,13 +95,11 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
         List<OutfitImage> images = convertor.toImageEntities(imagePOs);
         aggregate.setImages(images);
 
-        return Optional.of(aggregate);
+        return aggregate;
     }
 
     @Override
     public List<OutfitAggregate> findByUserId(String userId) {
-        log.debug("根据用户ID查找穿搭聚合根列表: userId={}", userId);
-
         List<OutfitPO> outfitPOs = outfitDao.findByUserId(userId);
         if (outfitPOs.isEmpty()) {
             return Collections.emptyList();
@@ -117,6 +112,9 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
         // 批量加载图片
         List<OutfitImagePO> allImagePOs = outfitImageDao.findByOutfitIds(outfitIds);
 
+        // 批量加载服装关联
+        List<OutfitClothingPO> allClothingPOs = outfitClothingDao.findByOutfitIds(outfitIds);
+
         return outfitPOs.stream().map(outfitPO -> {
             OutfitAggregate aggregate = convertor.toAggregate(outfitPO);
 
@@ -127,17 +125,24 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
             List<OutfitImage> images = convertor.toImageEntities(imagePOs);
             aggregate.setImages(images);
 
+            // 过滤当前穿搭的服装关联
+            List<OutfitClothingPO> clothingPOs = allClothingPOs.stream()
+                    .filter(po -> po.getOutfitId().equals(outfitPO.getId()))
+                    .collect(Collectors.toList());
+            List<OutfitClothing> clothings = convertor.toClothingEntities(clothingPOs);
+            aggregate.setClothings(clothings);
+
             return aggregate;
         }).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<OutfitAggregate> findByUserIdAndName(String userId, String name) {
-        log.debug("根据用户ID和穿搭名称查找穿搭聚合根: userId={}, name={}", userId, name);
-
+    public OutfitAggregate findByUserIdAndName(String userId, String name) {
         OutfitPO outfitPO = outfitDao.findByUserIdAndName(userId, name);
         if (outfitPO == null) {
-            return Optional.empty();
+            throw new com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException(
+                    com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode.OUTFIT_NOT_FOUND
+            );
         }
 
         OutfitAggregate aggregate = convertor.toAggregate(outfitPO);
@@ -147,14 +152,17 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
         List<OutfitImage> images = convertor.toImageEntities(imagePOs);
         aggregate.setImages(images);
 
-        return Optional.of(aggregate);
+        // 加载关联的服装
+        List<OutfitClothingPO> clothingPOs = outfitClothingDao.findByOutfitIds(Collections.singletonList(outfitPO.getId()));
+        List<OutfitClothing> clothings = convertor.toClothingEntities(clothingPOs);
+        aggregate.setClothings(clothings);
+
+        return aggregate;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(String id) {
-        log.debug("删除穿搭聚合根: outfitId={}", id);
-
         // 逻辑删除穿搭
         OutfitPO outfitPO = outfitDao.findById(id);
         if (outfitPO != null) {
@@ -165,19 +173,18 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
         // 删除关联的图片
         outfitImageDao.deleteByOutfitId(id);
 
-        // TODO: 删除关联的服装和穿着记录
+        // 删除关联的服装
+        outfitClothingDao.deleteByOutfitId(id);
     }
 
     @Override
     public boolean existsById(String id) {
-        log.debug("检查穿搭是否存在: outfitId={}", id);
         OutfitPO outfitPO = outfitDao.findById(id);
         return outfitPO != null;
     }
 
     @Override
     public boolean existsByUserIdAndName(String userId, String name) {
-        log.debug("检查同一用户下穿搭名称是否已存在: userId={}, name={}", userId, name);
         return outfitDao.existsByUserIdAndName(userId, name);
     }
 
@@ -199,6 +206,27 @@ public class OutfitRepositoryImpl implements IOutfitRepository {
             for (OutfitImagePO po : imagePOs) {
                 outfitImageDao.insert(po);
             }
+        }
+    }
+
+    /**
+     * 保存穿搭服装关联
+     *
+     * @param aggregate 穿搭聚合根
+     */
+    private void saveOutfitClothings(OutfitAggregate aggregate) {
+        String outfitId = aggregate.getId();
+
+        // 先删除旧的关联
+        outfitClothingDao.deleteByOutfitId(outfitId);
+
+        // 保存新的关联
+        List<OutfitClothing> clothings = aggregate.getClothings();
+        if (clothings != null && !clothings.isEmpty()) {
+            List<OutfitClothingPO> clothingPOs = convertor.toClothingPOs(clothings);
+            // 设置关联的穿搭ID
+            clothingPOs.forEach(po -> po.setOutfitId(outfitId));
+            outfitClothingDao.batchInsert(clothingPOs);
         }
     }
 }

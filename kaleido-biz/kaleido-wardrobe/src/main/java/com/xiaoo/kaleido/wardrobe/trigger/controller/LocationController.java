@@ -4,6 +4,7 @@ import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
 import com.xiaoo.kaleido.api.wardrobe.response.LocationInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import com.xiaoo.kaleido.wardrobe.application.command.LocationCommandService;
 import com.xiaoo.kaleido.wardrobe.application.query.ILocationQueryService;
 import jakarta.validation.Valid;
@@ -39,7 +40,8 @@ public class LocationController {
      */
     @PostMapping
     public Result<String> createLocation(@Valid @RequestBody CreateLocationWithImagesCommand command) {
-        String locationId = locationCommandService.createLocation(command);
+        String userId = StpUserUtil.getLoginId();
+        String locationId = locationCommandService.createLocation(userId, command);
         return Result.success(locationId);
     }
 
@@ -47,7 +49,7 @@ public class LocationController {
      * 更新位置信息
      *
      * @param locationId 位置ID，不能为空
-     * @param command 更新位置命令
+     * @param command    更新位置命令
      * @return 空响应
      */
     @PutMapping("/{locationId}")
@@ -55,8 +57,9 @@ public class LocationController {
             @NotBlank(message = "位置ID不能为空")
             @PathVariable String locationId,
             @Valid @RequestBody UpdateLocationCommand command) {
+        String userId = StpUserUtil.getLoginId();
         command.setLocationId(locationId);
-        locationCommandService.updateLocation(command);
+        locationCommandService.updateLocation(userId, command);
         return Result.success();
     }
 
@@ -70,20 +73,19 @@ public class LocationController {
     public Result<Void> deleteLocation(
             @NotBlank(message = "位置ID不能为空")
             @PathVariable String locationId) {
-        locationCommandService.deleteLocation(locationId);
+        String userId = StpUserUtil.getLoginId();
+        locationCommandService.deleteLocation(userId, locationId);
         return Result.success();
     }
 
     /**
-     * 根据用户ID查询位置列表
+     * 查询当前登录用户的位置列表
      *
-     * @param userId 用户ID，不能为空
      * @return 位置信息响应列表
      */
     @GetMapping
-    public Result<List<LocationInfoResponse>> listLocations(
-            @NotBlank(message = "用户ID不能为空")
-            @RequestParam String userId) {
+    public Result<List<LocationInfoResponse>> listLocations() {
+        String userId = StpUserUtil.getLoginId();
         List<LocationInfoResponse> locationList = locationQueryService.findByUserId(userId);
         return Result.success(locationList);
     }
@@ -98,24 +100,8 @@ public class LocationController {
     public Result<LocationInfoResponse> getLocation(
             @NotBlank(message = "位置ID不能为空")
             @PathVariable String locationId) {
-        LocationInfoResponse locationInfo = locationQueryService.findById(locationId);
+        String userId = StpUserUtil.getLoginId();
+        LocationInfoResponse locationInfo = locationQueryService.findByIdAndUserId(locationId, userId);
         return Result.success(locationInfo);
-    }
-
-    /**
-     * 设置位置主图
-     *
-     * @param locationId 位置ID，不能为空
-     * @param imageId 图片ID，不能为空
-     * @return 空响应
-     */
-    @PutMapping("/{locationId}/primary-image/{imageId}")
-    public Result<Void> setPrimaryImage(
-            @NotBlank(message = "位置ID不能为空")
-            @PathVariable String locationId,
-            @NotBlank(message = "图片ID不能为空")
-            @PathVariable String imageId) {
-        locationCommandService.setPrimaryImage(locationId, imageId);
-        return Result.success();
     }
 }

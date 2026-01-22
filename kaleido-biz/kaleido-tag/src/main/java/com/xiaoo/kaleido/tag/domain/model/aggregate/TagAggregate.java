@@ -72,7 +72,7 @@ public class TagAggregate extends BaseEntity {
 
     /**
      * 创建新标签聚合根
-     * <p>
+
      * 用于创建新标签时构建聚合根
      *
      * @param userId      用户ID，不能为空
@@ -102,7 +102,7 @@ public class TagAggregate extends BaseEntity {
 
     /**
      * 更新标签信息
-     * <p>
+
      * 更新标签的名称、颜色和描述
      *
      * @param name        新标签名称，不能为空
@@ -118,7 +118,7 @@ public class TagAggregate extends BaseEntity {
 
     /**
      * 关联实体到标签
-     * <p>
+
      * 将指定实体关联到当前标签，会自动更新使用次数
      *
      * @param entityId 实体ID，不能为空
@@ -138,7 +138,7 @@ public class TagAggregate extends BaseEntity {
 
     /**
      * 验证标签是否可以关联到指定实体类型编码
-     * <p>
+
      * 根据设计文档，标签类型编码必须与实体类型编码匹配
      *
      * @param entityTypeCode 实体类型编码

@@ -32,27 +32,6 @@
         ORDER BY created_at DESC
     </select>
 
-    <select id="findByUserIdAndTypeCode" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_clothing 
-        WHERE user_id = #{userId} 
-          AND type_code = #{typeCode}
-          AND deleted = 0
-        ORDER BY created_at DESC
-    </select>
-
-    <select id="findByUserIdAndTypeCodeAndColorCode" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_clothing 
-        WHERE user_id = #{userId} 
-          AND deleted = 0
-        <if test="typeCode != null and typeCode != ''">
-          AND type_code = #{typeCode}
-        </if>
-        <if test="colorCode != null and colorCode != ''">
-          AND color_code = #{colorCode}
-        </if>
-        ORDER BY created_at DESC
-    </select>
-
     <select id="existsByUserIdAndName" resultType="boolean">
         SELECT COUNT(1) > 0 FROM t_wardrobe_clothing 
         WHERE user_id = #{userId} 

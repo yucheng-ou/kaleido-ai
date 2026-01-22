@@ -1,6 +1,6 @@
 spring:
   application:
-    name: kaleido-user
+    name: kaleido-wardrobe
   profiles:
     active: dev
   config:

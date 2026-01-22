@@ -15,7 +15,7 @@ public interface IBrandDomainService {
 
     /**
      * 创建品牌
-     * <p>
+
      * 根据品牌名称、Logo路径和描述创建新品牌，系统会自动生成品牌ID并设置初始状态
      *
      * @param name        品牌名称，不能为空
@@ -27,7 +27,7 @@ public interface IBrandDomainService {
 
     /**
      * 根据ID查找品牌，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保品牌存在的场景
      *
      * @param brandId 品牌ID字符串，不能为空
@@ -37,7 +37,7 @@ public interface IBrandDomainService {
 
     /**
      * 更新品牌信息
-     * <p>
+
      * 更新品牌的Logo路径和描述信息
      *
      * @param brandId     品牌ID，不能为空
@@ -49,7 +49,7 @@ public interface IBrandDomainService {
 
     /**
      * 验证品牌名称的唯一性
-     * <p>
+
      * 验证品牌名称是否全局唯一
      *
      * @param name 品牌名称，不能为空

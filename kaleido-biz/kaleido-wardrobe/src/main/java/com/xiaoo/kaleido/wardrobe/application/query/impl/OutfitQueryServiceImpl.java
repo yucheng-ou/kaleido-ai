@@ -41,22 +41,22 @@ public class OutfitQueryServiceImpl implements IOutfitQueryService {
     }
 
     @Override
-    public OutfitInfoResponse findById(String outfitId) {
-        log.info("查询穿搭详情，穿搭ID: {}", outfitId);
+    public OutfitInfoResponse findById(String outfitId, String userId) {
+        log.info("查询穿搭详情，穿搭ID: {}, 用户ID: {}", outfitId, userId);
         
-        // 调用领域服务查询穿搭
-        OutfitAggregate outfit = outfitDomainService.findByIdOrThrow(outfitId);
+        // 调用领域服务查询穿搭并进行用户权限校验
+        OutfitAggregate outfit = outfitDomainService.findByIdAndUserIdOrThrow(outfitId, userId);
         
         // 使用MapStruct转换器转换为响应对象
         return outfitConvertor.toOutfitResponse(outfit);
     }
 
     @Override
-    public List<WearRecordResponse> findWearRecordsByOutfitId(String outfitId) {
-        log.info("查询穿搭穿着记录，穿搭ID: {}", outfitId);
+    public List<WearRecordResponse> findWearRecordsByOutfitId(String outfitId, String userId) {
+        log.info("查询穿搭穿着记录，穿搭ID: {}, 用户ID: {}", outfitId, userId);
         
-        // 调用领域服务查询穿搭
-        OutfitAggregate outfit = outfitDomainService.findByIdOrThrow(outfitId);
+        // 调用领域服务查询穿搭并进行用户权限校验
+        OutfitAggregate outfit = outfitDomainService.findByIdAndUserIdOrThrow(outfitId, userId);
         
         // 使用MapStruct转换器转换穿着记录
         return outfit.getWearRecords().stream()

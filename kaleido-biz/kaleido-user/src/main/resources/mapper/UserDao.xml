@@ -27,7 +27,7 @@
         包含所有用户表的字段，用于SQL语句中的字段引用
     -->
     <sql id="UserColumns">
-        id, mobile, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender, created_at, updated_at, deleted, lock_version
+        id, mobile, nick_name, status, invite_code, inviter_id, last_login_time, avatar, gender
     </sql>
 
     <!-- 

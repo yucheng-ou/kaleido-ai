@@ -21,7 +21,7 @@ public interface IRpcTagService {
 
     /**
      * 关联标签
-     * <p>
+
      * 将指定的标签关联到实体，支持批量关联多个标签
      *
      * @param command 关联标签命令，包含标签ID列表、实体ID、用户ID和实体类型编码
@@ -30,7 +30,7 @@ public interface IRpcTagService {
 
     /**
      * 取消关联标签
-     * <p>
+
      * 取消标签与实体的关联关系，支持批量取消关联多个标签
      *
      * @param command 取消关联标签命令，包含标签ID列表、实体ID和用户ID
@@ -39,7 +39,7 @@ public interface IRpcTagService {
 
     /**
      * 查询标签关联的实体列表
-     * <p>
+
      * 根据标签ID查询该标签关联的所有实体ID列表
      *
      * @param tagId 标签ID，不能为空

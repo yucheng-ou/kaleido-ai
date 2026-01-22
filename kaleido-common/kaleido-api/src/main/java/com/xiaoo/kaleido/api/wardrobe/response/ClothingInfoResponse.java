@@ -102,10 +102,6 @@ public class ClothingInfoResponse extends BaseResp {
     private Date lastWornDate;
 
 
-
-
-
-
     /**
      * 图片信息列表
      */

@@ -19,7 +19,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 保存位置记录聚合根
-     * <p>
+
      * 保存位置记录聚合根到数据库
      *
      * @param locationRecordAggregate 位置记录聚合根，不能为空
@@ -28,7 +28,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 更新位置记录聚合根
-     * <p>
+
      * 更新位置记录聚合根信息到数据库
      *
      * @param locationRecordAggregate 位置记录聚合根，不能为空
@@ -37,7 +37,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据ID查找位置记录聚合根
-     * <p>
+
      * 根据位置记录ID查询位置记录聚合根，返回Optional对象
      *
      * @param id 位置记录ID，不能为空
@@ -47,7 +47,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据ID查找位置记录聚合根，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保位置记录存在的场景
      *
      * @param id 位置记录ID，不能为空
@@ -57,7 +57,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据服装ID查询当前位置记录
-     * <p>
+
      * 查询指定服装的当前位置记录（is_current = 1）
      *
      * @param clothingId 服装ID，不能为空
@@ -67,7 +67,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据位置ID查询所有当前位置记录
-     * <p>
+
      * 查询指定位置的所有当前位置记录（is_current = 1）
      *
      * @param locationId 位置ID，不能为空
@@ -77,7 +77,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据用户ID查询所有当前位置记录
-     * <p>
+
      * 查询指定用户的所有当前位置记录（is_current = 1）
      *
      * @param userId 用户ID，不能为空
@@ -87,7 +87,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 根据服装ID查询所有位置记录（历史记录）
-     * <p>
+
      * 查询指定服装的所有位置记录，按记录时间倒序排列
      *
      * @param clothingId 服装ID，不能为空
@@ -97,7 +97,6 @@ public interface ILocationRecordRepository {
 
     /**
      * 将服装的所有位置记录标记为非当前
-     * <p>
      * 将指定服装的所有位置记录的is_current字段更新为0
      * 用于服装位置变更时，将旧位置记录标记为非当前
      *
@@ -107,7 +106,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 检查服装是否在指定位置
-     * <p>
+
      * 检查指定服装是否在指定位置（存在is_current = 1的记录）
      *
      * @param clothingId 服装ID，不能为空
@@ -118,7 +117,7 @@ public interface ILocationRecordRepository {
 
     /**
      * 统计位置中的当前服装数量
-     * <p>
+
      * 统计指定位置中的当前服装数量（is_current = 1的记录数）
      *
      * @param locationId 位置ID，不能为空

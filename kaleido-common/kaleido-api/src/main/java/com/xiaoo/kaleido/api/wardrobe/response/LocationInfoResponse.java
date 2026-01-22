@@ -50,9 +50,6 @@ public class LocationInfoResponse extends BaseResp {
     private String primaryImageId;
 
 
-
-
-
     /**
      * 图片列表
      */

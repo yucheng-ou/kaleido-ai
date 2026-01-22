@@ -11,15 +11,27 @@ import com.xiaoo.kaleido.user.infrastructure.dao.po.UserPO;
 import com.xiaoo.kaleido.user.infrastructure.dao.po.UserOperateStreamPO;
 import com.xiaoo.kaleido.user.infrastructure.dao.UserDao;
 import com.xiaoo.kaleido.user.infrastructure.dao.UserOperateStreamDao;
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.CacheManager;
+import com.alicp.jetcache.anno.Cached;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.template.QuickConfig;
+import com.xiaoo.kaleido.redis.service.DelayDeleteService;
 import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import com.xiaoo.kaleido.user.types.exception.UserException;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +50,30 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserDao userDao;
     private final UserOperateStreamDao userOperateStreamDao;
     private final RBloomFilter<String> inviteCodeBloomFilter;
+    private final CacheManager cacheManager;
+    private final DelayDeleteService delayDeleteService;
+
+    @Lazy
+    @Resource
+    private UserRepository self;
+
+    /**
+     * 通过用户ID对用户信息做的缓存
+     */
+    private Cache<String, UserAggregate> userCache;
+
+    /**
+     * 初始化用户id缓存 cacheManager
+     */
+    @PostConstruct
+    public void init() {
+        QuickConfig idQc = QuickConfig.newBuilder(":user:")
+                .cacheType(CacheType.REMOTE)
+                .expire(Duration.ofHours(1))
+                .syncLocal(true)
+                .build();
+        userCache = cacheManager.getOrCreateCache(idQc);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -54,16 +90,24 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(UserAggregate userAggregate) {
-        // 1.修改用户信息
+        // 1.第一次手动删除缓存
+        userCache.remove(userAggregate.getUser().getId());
+
+        // 2.修改用户信息
         User user = userAggregate.getUser();
         UserPO userPO = UserConvertor.INSTANCE.toPO(user);
         userDao.updateById(userPO);
 
-        // 2.保存用户操作流水
+        // 3.保存用户操作流水
         batchSaveOperateStream(userAggregate.getOperateStreams());
+
+        // 4.第二次延迟双删
+        delayDeleteService.delayedCacheDelete(userCache, userAggregate.getUser().getId());
     }
 
     @Override
+    @Cached(name = ":user:", key = "#id", expire = 60, cacheType = CacheType.REMOTE, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
+    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.MINUTES)
     public UserAggregate findById(String id) {
         // 1.查询用户持久化对象
         UserPO userPO = userDao.findById(id);
@@ -132,16 +176,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public UserAggregate findByIdOrThrow(String id) {
-        // 查找用户，如果不存在则抛出异常
-        UserAggregate aggregate = findById(id);
-        if (aggregate == null) {
-            throw UserException.of(UserErrorCode.USER_NOT_EXIST);
-        }
-        return aggregate;
-    }
-
-    @Override
     public List<UserAggregate> pageQuery(UserPageQueryReq req) {
         // 1.执行分页查询（PageHelper已在Service层启动）
         List<UserPO> poList = userDao.selectByCondition(req);
@@ -171,7 +205,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     /**
      * 批量保存用户操作流水
-     * <p>
      * 将用户操作流水列表批量保存到数据库
      *
      * @param userOperateStreamList 用户操作流水列表，不能为空

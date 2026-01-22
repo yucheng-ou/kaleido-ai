@@ -19,7 +19,7 @@ public interface ILocationRepository {
 
     /**
      * 保存位置聚合根
-     * <p>
+
      * 保存位置聚合根到数据库
      *
      * @param locationAggregate 位置聚合根，不能为空
@@ -29,7 +29,7 @@ public interface ILocationRepository {
 
     /**
      * 更新位置聚合根
-     * <p>
+
      * 更新位置聚合根信息到数据库
      *
      * @param locationAggregate 位置聚合根，不能为空
@@ -39,7 +39,7 @@ public interface ILocationRepository {
 
     /**
      * 删除位置（逻辑删除）
-     * <p>
+
      * 将位置标记为已删除状态
      *
      * @param locationId 位置ID，不能为空
@@ -49,30 +49,19 @@ public interface ILocationRepository {
 
     /**
      * 根据ID查找位置聚合根
-     * <p>
-     * 根据位置ID查询位置聚合根，返回Optional对象
+
+     * 根据位置ID查询位置聚合根，如果不存在或已删除则抛出异常
      * 注意：已删除的位置不会返回
      *
      * @param locationId 位置ID，不能为空
-     * @return 位置聚合根（如果存在且未删除），Optional.empty()表示位置不存在或已删除
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当查询失败时抛出
-     */
-    Optional<StorageLocationAggregate> findById(String locationId);
-
-    /**
-     * 根据ID查找位置聚合根，如果不存在或已删除则抛出异常
-     * <p>
-     * 用于命令操作中需要确保位置存在的场景，如果位置不存在或已删除则抛出异常
-     *
-     * @param locationId 位置ID，不能为空
      * @return 位置聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当位置不存在或已删除时抛出
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当位置不存在、已删除或查询失败时抛出
      */
-    StorageLocationAggregate findByIdOrThrow(String locationId);
+    StorageLocationAggregate findById(String locationId);
 
     /**
      * 检查位置名称的唯一性
-     * <p>
+
      * 检查同一用户下位置名称是否唯一（排除已删除的位置）
      * 对应数据库唯一索引：uk_user_id_name (user_id, name)
      *
@@ -85,7 +74,7 @@ public interface ILocationRepository {
 
     /**
      * 检查位置是否被服装引用
-     * <p>
+
      * 检查是否有服装的current_location_id引用该位置
      * 用于删除位置前的校验
      *
@@ -97,7 +86,7 @@ public interface ILocationRepository {
 
     /**
      * 根据用户ID查询所有位置
-     * <p>
+
      * 查询指定用户的所有位置列表，按创建时间倒序排列
      * 注意：已删除的位置不会返回
      *
@@ -109,7 +98,7 @@ public interface ILocationRepository {
 
     /**
      * 根据位置ID列表查询位置
-     * <p>
+
      * 根据位置ID列表查询位置聚合根列表
      * 注意：已删除的位置不会返回
      *

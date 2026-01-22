@@ -50,7 +50,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 创建新账户
-     * <p>
+
      * 用于用户注册时初始化金币账户
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
@@ -84,7 +84,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 增加金币（收入）
-     * <p>
+
      * 用于邀请奖励等收入场景
      * 注意：参数校验在Service层完成，这里只负责业务逻辑
      *
@@ -115,7 +115,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 减少金币（支出）
-     * <p>
+
      * 用于位置创建、搭配创建等支出场景
      * 注意：参数校验在Service层完成，这里只负责业务逻辑
      *
@@ -152,7 +152,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 检查余额是否足够
-     * <p>
+
      * 用于业务操作前的余额检查
      *
      * @param amount 需要检查的金额，必须大于0
@@ -167,7 +167,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 获取最近N条流水记录
-     * <p>
+
      * 用于查询最近的流水记录
      *
      * @param limit 限制条数，必须大于0
@@ -184,7 +184,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 根据业务类型和业务ID查找流水记录
-     * <p>
+
      * 用于防止重复处理同一业务
      *
      * @param bizType 业务类型，不能为空
@@ -203,7 +203,7 @@ public class CoinAccountAggregate extends BaseEntity {
 
     /**
      * 检查是否已处理过指定业务
-     * <p>
+
      * 用于幂等性检查
      *
      * @param bizType 业务类型，不能为空

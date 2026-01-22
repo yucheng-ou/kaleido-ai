@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,9 +16,10 @@ import java.util.List;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateLocationCommand {
+public class UpdateLocationCommand extends BaseCommand {
 
     /**
      * 位置ID

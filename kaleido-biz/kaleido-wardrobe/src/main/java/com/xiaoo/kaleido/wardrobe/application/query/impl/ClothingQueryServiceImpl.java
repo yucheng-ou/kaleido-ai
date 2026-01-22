@@ -40,11 +40,11 @@ public class ClothingQueryServiceImpl implements IClothingQueryService {
     }
 
     @Override
-    public ClothingInfoResponse findById(String clothingId) {
-        log.info("查询服装详情，服装ID: {}", clothingId);
+    public ClothingInfoResponse findById(String clothingId, String userId) {
+        log.info("查询服装详情，服装ID: {}, 用户ID: {}", clothingId, userId);
         
-        // 调用领域服务查询服装
-        ClothingAggregate clothing = clothingDomainService.findByIdOrThrow(clothingId);
+        // 调用领域服务查询服装并进行用户权限校验
+        ClothingAggregate clothing = clothingDomainService.findByIdAndUserIdOrThrow(clothingId, userId);
         
         // 使用MapStruct转换器转换为响应对象
         return wardrobeConvertor.toClothingResponse(clothing);

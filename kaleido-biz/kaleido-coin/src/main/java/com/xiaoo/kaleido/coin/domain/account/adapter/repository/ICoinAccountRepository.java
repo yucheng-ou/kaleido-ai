@@ -18,7 +18,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 保存账户聚合根
-     * <p>
+
      * 保存账户聚合根到数据库，如果是新账户则插入，如果是已存在账户则更新
      * 注意：需要同时保存账户基本信息和流水记录列表
      *
@@ -28,7 +28,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 更新账户聚合根
-     * <p>
+
      * 更新账户聚合根信息到数据库
      * 注意：需要同时更新账户基本信息和流水记录列表
      *
@@ -38,7 +38,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 根据ID查找账户聚合根
-     * <p>
+
      * 根据账户ID查询账户聚合根，返回Optional对象
      * 注意：需要同时加载账户的基本信息和流水记录列表
      *
@@ -49,7 +49,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 根据用户ID查找账户聚合根
-     * <p>
+
      * 根据用户ID查询账户聚合根，返回Optional对象
      * 注意：需要同时加载账户的基本信息和流水记录列表
      *
@@ -60,7 +60,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 根据用户ID查找账户聚合根，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保账户存在的场景，如果账户不存在则抛出异常
      * 注意：需要同时加载账户的基本信息和流水记录列表
      *
@@ -71,7 +71,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 检查账户是否存在
-     * <p>
+
      * 检查指定用户ID的账户是否存在
      *
      * @param userId 用户ID，不能为空
@@ -81,7 +81,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 删除账户
-     * <p>
+
      * 删除指定账户（逻辑删除或物理删除，根据业务规则）
      *
      * @param accountId 账户ID，不能为空
@@ -90,7 +90,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 根据用户ID删除账户
-     * <p>
+
      * 删除指定用户的账户
      *
      * @param userId 用户ID，不能为空
@@ -99,7 +99,7 @@ public interface ICoinAccountRepository {
 
     /**
      * 检查业务是否已处理
-     * <p>
+
      * 检查指定业务类型和业务ID是否已处理过（用于幂等性检查）
      *
      * @param bizType 业务类型，不能为空

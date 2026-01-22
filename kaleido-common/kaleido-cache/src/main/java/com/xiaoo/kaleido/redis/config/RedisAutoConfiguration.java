@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.redis.config;
 
 import com.alicp.jetcache.anno.config.EnableMethodCache;
+import com.xiaoo.kaleido.redis.service.DelayDeleteService;
 import com.xiaoo.kaleido.redis.service.RedissonService;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import;
  */
 @AutoConfiguration
 @EnableMethodCache(basePackages = "com.xiaoo.kaleido")
-@Import({RedissonService.class})
+@Import({RedissonService.class, DelayDeleteService.class})
 public class RedisAutoConfiguration {
 
 }

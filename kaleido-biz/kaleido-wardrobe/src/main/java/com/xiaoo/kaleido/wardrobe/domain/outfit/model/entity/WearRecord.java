@@ -47,7 +47,7 @@ public class WearRecord extends BaseEntity {
 
     /**
      * 创建穿着记录
-     * <p>
+
      * 根据用户ID、穿搭ID和备注信息创建新的穿着记录
      * 注意：wearDate自动设置为当前系统时间
      *

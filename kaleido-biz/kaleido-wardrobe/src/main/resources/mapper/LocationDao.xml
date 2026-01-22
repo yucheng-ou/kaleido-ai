@@ -16,8 +16,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, created_at, updated_at, deleted, lock_version,
-        user_id, name, description, address, primary_image_id
+        id, user_id, name, description, address, primary_image_id
     </sql>
 
     <select id="findById" resultMap="BaseResultMap">
@@ -54,13 +53,6 @@
         WHERE current_location_id = #{locationId} AND deleted = 0
     </select>
 
-    <select id="selectList" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_wardrobe_storage_location
-        WHERE deleted = 0
-    </select>
-
     <select id="findByIds" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -71,34 +63,5 @@
         </foreach>
         AND deleted = 0
     </select>
-
-    <insert id="insert" parameterType="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO">
-        INSERT INTO t_wardrobe_storage_location (
-            id, created_at, updated_at, deleted, lock_version,
-            user_id, name, description, address, primary_image_id
-        ) VALUES (
-            #{id}, #{createdAt}, #{updatedAt}, #{deleted}, #{lockVersion},
-            #{userId}, #{name}, #{description}, #{address}, #{primaryImageId}
-        )
-    </insert>
-
-    <update id="updateById" parameterType="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO">
-        UPDATE t_wardrobe_storage_location
-        SET
-            updated_at = #{updatedAt},
-            lock_version = #{lockVersion},
-            user_id = #{userId},
-            name = #{name},
-            description = #{description},
-            address = #{address},
-            primary_image_id = #{primaryImageId}
-        WHERE id = #{id} AND deleted = 0
-    </update>
-
-    <update id="deleteById">
-        UPDATE t_wardrobe_storage_location
-        SET deleted = 1, updated_at = NOW()
-        WHERE id = #{id} AND deleted = 0
-    </update>
 
 </mapper>

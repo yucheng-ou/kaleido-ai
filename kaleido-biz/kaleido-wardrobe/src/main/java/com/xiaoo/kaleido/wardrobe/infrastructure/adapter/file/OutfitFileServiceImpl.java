@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file;
 
 import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.file.IOutfitFileService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class OutfitFileServiceImpl implements IOutfitFileService {
                                 .imageSize(minioInfo.getFileSize())
                                 .width(minioInfo.getWidth())
                                 .height(minioInfo.getHeight())
+                                .imageType(ImageType.fromMimeType(minioInfo.getMimeType()))
                                 .build();
                     } else {
                         return OutfitImageInfoDTO.builder()

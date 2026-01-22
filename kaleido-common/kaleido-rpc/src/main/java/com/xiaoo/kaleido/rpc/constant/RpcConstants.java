@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.rpc.constant;
 
 /**
- * 用户RPC常量
+ * RPC常量
  *
  * @author ouyucheng
  * @date 2025/12/17

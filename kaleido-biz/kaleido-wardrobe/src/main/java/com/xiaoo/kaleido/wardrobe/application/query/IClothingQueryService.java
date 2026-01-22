@@ -16,7 +16,7 @@ public interface IClothingQueryService {
 
     /**
      * 根据用户ID查询服装列表
-     * <p>
+
      * 根据用户ID查询该用户的所有服装列表
      *
      * @param userId 用户ID，不能为空
@@ -26,11 +26,12 @@ public interface IClothingQueryService {
 
     /**
      * 根据ID查询服装信息
-     * <p>
-     * 根据服装ID查询服装详细信息，如果服装不存在则返回null
+
+     * 根据服装ID查询服装详细信息，如果服装不存在或用户不匹配则返回null
      *
      * @param clothingId 服装ID，不能为空
-     * @return 服装信息响应，如果服装不存在则返回null
+     * @param userId 用户ID，不能为空
+     * @return 服装信息响应，如果服装不存在或用户不匹配则返回null
      */
-    ClothingInfoResponse findById(String clothingId);
+    ClothingInfoResponse findById(String clothingId, String userId);
 }

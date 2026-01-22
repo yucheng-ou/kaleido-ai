@@ -95,7 +95,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 创建新穿搭聚合根
-     * <p>
+
      * 用于创建新穿搭时构建聚合根
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
@@ -116,7 +116,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 更新穿搭信息
-     * <p>
+
      * 更新穿搭的基本信息，不包括服装、图片和穿着记录
      * 注意：参数和状态校验在Service层完成，这里只负责更新信息
      *
@@ -130,7 +130,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 更新服装列表（全量替换）
-     * <p>
+
      * 用于更新穿搭包含的服装列表
      * 注意：参数和状态校验在Service层完成，这里只负责更新服装列表
      *
@@ -145,7 +145,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 批量添加图片
-     * <p>
+
      * 用于一次性添加多张图片的场景
      * 注意：参数和状态校验在Service层完成，这里只负责添加图片
      *
@@ -159,7 +159,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 记录穿着行为
-     * <p>
+
      * 用户穿着该搭配时调用，更新穿着次数和最后穿着日期，并创建穿着记录
      * 注意：wearDate自动使用当前系统时间
      *
@@ -195,7 +195,7 @@ public class OutfitAggregate extends BaseEntity {
 
     /**
      * 设置主图（包含业务规则）
-     * <p>
+
      * 设置指定图片为主图，同时更新图片实体的isPrimary状态
      * 注意：调用前需要确保图片存在且属于当前穿搭
      *

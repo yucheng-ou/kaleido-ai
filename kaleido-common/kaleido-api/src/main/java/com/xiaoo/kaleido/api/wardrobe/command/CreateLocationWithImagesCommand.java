@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,16 +16,10 @@ import java.util.List;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateLocationWithImagesCommand {
-
-    /**
-     * 用户ID
-     */
-    @NotBlank(message = "用户ID不能为空")
-    @Size(max = 50, message = "用户ID长度不能超过50个字符")
-    private String userId;
+public class CreateLocationWithImagesCommand extends BaseCommand {
 
     /**
      * 位置名称

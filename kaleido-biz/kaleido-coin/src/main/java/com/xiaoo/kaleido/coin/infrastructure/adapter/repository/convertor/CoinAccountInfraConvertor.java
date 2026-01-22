@@ -22,7 +22,7 @@ public interface CoinAccountInfraConvertor {
 
     /**
      * CoinAccountAggregate转换为CoinAccountPO
-     * <p>
+
      * 用于将领域聚合根转换为持久化对象，便于保存到数据库
      *
      * @param aggregate 金币账户聚合根
@@ -35,7 +35,7 @@ public interface CoinAccountInfraConvertor {
 
     /**
      * CoinAccountPO转换为CoinAccountAggregate
-     * <p>
+
      * 用于将持久化对象转换为领域聚合根，便于业务逻辑处理
      * 注意：streams字段需要单独处理，这里忽略
      *

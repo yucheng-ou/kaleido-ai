@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateClothingWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.ClothingImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateClothingCommand;
@@ -8,17 +9,18 @@ import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRe
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRecordRepository;
+import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.LocationRecordAggregate;
+import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationRecordDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * 服装命令服务
- * <p>
- * 负责编排服装相关的命令操作，包括创建、更新等
- * 遵循应用层职责：只负责编排，不包含业务逻辑
  *
  * @author ouyucheng
  * @date 2026/1/16
@@ -31,6 +33,8 @@ public class ClothingCommandService {
     private final IClothingDomainService clothingDomainService;
     private final IClothingRepository clothingRepository;
     private final IClothingFileService clothingFileService;
+    private final ILocationRecordDomainService locationRecordDomainService;
+    private final ILocationRecordRepository locationRecordRepository;
 
     /**
      * 创建服装（包含图片）
@@ -38,7 +42,8 @@ public class ClothingCommandService {
      * @param command 创建服装命令
      * @return 创建的服装ID
      */
-    public String createClothingWithImages(CreateClothingWithImagesCommand command) {
+    @Transactional(rollbackFor = Exception.class)
+    public String createClothingWithImages(String userId,CreateClothingWithImagesCommand command) {
         // 1.准备图片信息
         List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
@@ -47,7 +52,7 @@ public class ClothingCommandService {
 
         // 3.调用领域服务创建服装
         ClothingAggregate clothing = clothingDomainService.createClothingWithImages(
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getTypeCode(),
                 command.getColorCode(),
@@ -64,9 +69,23 @@ public class ClothingCommandService {
         // 4.保存服装
         clothingRepository.save(clothing);
 
-        // 5.记录日志
+        // 5.如果提供了位置ID，创建位置记录
+        if (StrUtil.isNotBlank(command.getCurrentLocationId())) {
+            LocationRecordAggregate locationRecord = locationRecordDomainService.createLocationRecord(
+                    clothing.getId(),
+                    command.getCurrentLocationId(),
+                    userId,
+                    "服装创建时的初始位置"
+            );
+            locationRecordRepository.save(locationRecord);
+            
+            log.info("服装位置记录创建成功，服装ID: {}, 位置ID: {}, 位置记录ID: {}",
+                    clothing.getId(), command.getCurrentLocationId(), locationRecord.getId());
+        }
+
+        // 6.记录日志
         log.info("服装创建成功，服装ID: {}, 用户ID: {}, 服装名称: {}",
-                clothing.getId(), command.getUserId(), command.getName());
+                clothing.getId(), userId, command.getName());
 
         return clothing.getId();
     }
@@ -76,17 +95,23 @@ public class ClothingCommandService {
      *
      * @param command 更新服装命令
      */
-    public void updateClothing(UpdateClothingCommand command) {
-        // 1.准备图片信息
+    @Transactional(rollbackFor = Exception.class)
+    public void updateClothing(String userId, UpdateClothingCommand command) {
+        // 1.获取更新前的服装信息，用于比较位置变化
+        ClothingAggregate existingClothing = clothingDomainService.findByIdOrThrow(command.getClothingId());
+        String oldLocationId = existingClothing.getCurrentLocationId();
+        String newLocationId = command.getCurrentLocationId();
+        
+        // 2.准备图片信息
         List<ClothingImageInfoCommand> imageInfos = command.getImages();
 
-        // 2.使用图片处理服务转换图片信息
+        // 3.使用图片处理服务转换图片信息
         List<ClothingImageInfoDTO> domainImageInfos = clothingFileService.convertorImageInfo(imageInfos);
 
-        // 3.调用领域服务更新服装
+        // 4.调用领域服务更新服装
         ClothingAggregate clothing = clothingDomainService.updateClothing(
                 command.getClothingId(),
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getTypeCode(),
                 command.getColorCode(),
@@ -100,12 +125,31 @@ public class ClothingCommandService {
                 domainImageInfos
         );
 
-        // 4.保存服装
+        // 5.保存服装
         clothingRepository.update(clothing);
 
-        // 5.记录日志
+        // 6.检查位置是否发生变化，如果变化则创建位置记录
+        boolean locationChanged = checkLocationChanged(oldLocationId, newLocationId);
+        if (locationChanged && StrUtil.isNotBlank(newLocationId)) {
+            // 将旧位置记录标记为非当前
+            locationRecordRepository.markAllAsNotCurrentByClothingId(command.getClothingId());
+            
+            // 创建新的位置记录
+            LocationRecordAggregate locationRecord = locationRecordDomainService.createLocationRecord(
+                    command.getClothingId(),
+                    newLocationId,
+                    userId,
+                    "服装更新时的位置变更"
+            );
+            locationRecordRepository.save(locationRecord);
+            
+            log.info("服装位置变更记录创建成功，服装ID: {}, 旧位置ID: {}, 新位置ID: {}, 位置记录ID: {}",
+                    command.getClothingId(), oldLocationId, newLocationId, locationRecord.getId());
+        }
+
+        // 7.记录日志
         log.info("服装更新成功，服装ID: {}, 用户ID: {}, 新名称: {}",
-                command.getClothingId(), command.getUserId(), command.getName());
+                command.getClothingId(), userId, command.getName());
     }
 
     /**
@@ -115,7 +159,7 @@ public class ClothingCommandService {
      * @param userId     用户ID
      */
     public void deleteClothing(String clothingId, String userId) {
-        // 1.调用领域服务删除服装（逻辑删除，将状态设置为DISABLE）
+        // 1.调用领域服务删除服装
         ClothingAggregate clothing = clothingDomainService.deleteClothing(clothingId, userId);
 
         // 2.更新服装状态（逻辑删除）
@@ -123,5 +167,32 @@ public class ClothingCommandService {
 
         // 3.记录日志
         log.info("服装删除成功，服装ID: {}, 用户ID: {}", clothingId, userId);
+    }
+
+    /**
+     * 检查位置是否发生变化
+     *
+     * @param oldLocationId 旧位置ID
+     * @param newLocationId 新位置ID
+     * @return 如果位置发生变化返回true，否则返回false
+     */
+    private boolean checkLocationChanged(String oldLocationId, String newLocationId) {
+        // 如果旧位置ID和新位置ID都为null，表示没有变化
+        if (oldLocationId == null && newLocationId == null) {
+            return false;
+        }
+        
+        // 如果旧位置ID为null，新位置ID不为null，表示从无位置变为有位置
+        if (oldLocationId == null) {
+            return true;
+        }
+        
+        // 如果旧位置ID不为null，新位置ID为null，表示从有位置变为无位置
+        if (newLocationId == null) {
+            return true;
+        }
+        
+        // 如果都不为null，比较是否相等
+        return !oldLocationId.equals(newLocationId);
     }
 }

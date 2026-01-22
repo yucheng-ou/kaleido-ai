@@ -15,7 +15,7 @@ public interface IUserDomainService {
 
     /**
      * 创建用户
-     * <p>
+
      * 根据手机号和邀请码创建新用户，系统会自动生成用户ID并设置初始状态
      *
      * @param telephone  手机号，必须符合手机号格式规范
@@ -27,7 +27,7 @@ public interface IUserDomainService {
 
     /**
      * 根据ID查找用户，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保用户存在的场景
      *
      * @param userId 用户ID，不能为空
@@ -38,7 +38,7 @@ public interface IUserDomainService {
 
     /**
      * 修改用户昵称
-     * <p>
+
      * 更新用户的昵称信息，会记录操作日志
      *
      * @param userId   用户ID，不能为空
@@ -50,7 +50,7 @@ public interface IUserDomainService {
 
     /**
      * 冻结用户
-     * <p>
+
      * 将用户状态设置为冻结，冻结后用户无法登录和操作
      *
      * @param userId 用户ID，不能为空
@@ -61,7 +61,7 @@ public interface IUserDomainService {
 
     /**
      * 解冻用户
-     * <p>
+
      * 将用户状态从冻结恢复为正常
      *
      * @param userId 用户ID，不能为空
@@ -72,7 +72,7 @@ public interface IUserDomainService {
 
     /**
      * 删除用户（软删除）
-     * <p>
+
      * 将用户标记为删除状态，实际数据保留
      *
      * @param userId 用户ID，不能为空
@@ -83,7 +83,7 @@ public interface IUserDomainService {
 
     /**
      * 更新用户头像
-     * <p>
+
      * 更新用户的头像URL
      *
      * @param userId    用户ID，不能为空
@@ -95,7 +95,7 @@ public interface IUserDomainService {
 
     /**
      * 用户登录
-     * <p>
+
      * 记录用户登录操作，更新最后登录时间
      *
      * @param userId 用户ID，不能为空
@@ -106,7 +106,7 @@ public interface IUserDomainService {
 
     /**
      * 用户登出
-     * <p>
+
      * 记录用户登出操作
      *
      * @param userId 用户ID，不能为空
@@ -117,7 +117,7 @@ public interface IUserDomainService {
 
     /**
      * 生成邀请码
-     * <p>
+
      * 为用户生成唯一的邀请码，用于邀请新用户注册
      *
      * @return 邀请码值对象，包含邀请码字符串和生成时间
