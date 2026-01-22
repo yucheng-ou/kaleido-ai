@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.admin.domain.user.model.aggregate;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.Builder;
@@ -68,7 +69,7 @@ public class RoleAggregate extends BaseEntity {
      * @param description 角色描述
      */
     public void updateInfo(String name, String description) {
-        if (name != null && !name.trim().isEmpty()) {
+        if (StrUtil.isNotBlank(name)) {
             this.name = name;
         }
         if (description != null) {

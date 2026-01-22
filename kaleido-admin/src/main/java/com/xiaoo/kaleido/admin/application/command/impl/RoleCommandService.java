@@ -1,5 +1,6 @@
-package com.xiaoo.kaleido.admin.application.command;
+package com.xiaoo.kaleido.admin.application.command.impl;
 
+import com.xiaoo.kaleido.admin.application.command.IRoleCommandService;
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoleCommandService {
+public class RoleCommandService implements IRoleCommandService {
 
     private final IRoleRepository roleRepository;
     private final IRoleDomainService roleDomainService;
@@ -54,11 +55,8 @@ public class RoleCommandService {
     }
 
     public void deleteRole(String roleId) {
-        // 1. 调用领域服务获取要删除的角色（验证角色是否存在）
-        RoleAggregate roleAggregate = roleDomainService.deleteRole(roleId);
-
-        // 2. 调用仓储层删除角色
-        roleRepository.deleteById(roleAggregate.getId());
+        // 1. 调用仓储层删除角色
+        roleRepository.deleteById(roleId);
 
         log.info("角色删除成功，角色ID: {}", roleId);
     }
@@ -75,17 +73,5 @@ public class RoleCommandService {
 
         log.info("权限分配成功，角色ID: {}, 权限数量: {}",
                 roleId, command.getPermissionIds().size());
-    }
-
-    public boolean isCodeAvailable(String code) {
-        return roleDomainService.isCodeAvailable(code);
-    }
-
-    public boolean isValidRole(String roleId) {
-        return roleDomainService.isValidRole(roleId);
-    }
-
-    public boolean hasPermission(String roleId, String permissionId) {
-        return roleDomainService.hasPermission(roleId, permissionId);
     }
 }

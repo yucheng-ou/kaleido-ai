@@ -6,8 +6,8 @@ import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
-import com.xiaoo.kaleido.admin.application.command.DictCommandService;
-import com.xiaoo.kaleido.admin.application.query.DictQueryService;
+import com.xiaoo.kaleido.admin.application.command.impl.DictCommandService;
+import com.xiaoo.kaleido.admin.application.query.IDictQueryService;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class DictController {
 
     private final DictCommandService dictCommandService;
-    private final DictQueryService dictQueryService;
+    private final IDictQueryService IDictQueryService;
 
     /**
      * 创建字典
@@ -92,6 +92,6 @@ public class DictController {
     public Result<PageInfo<DictResponse>> pageDicts(
             DictPageQueryReq pageQueryReq) {
 
-        return Result.success(dictQueryService.pageQueryDicts(pageQueryReq));
+        return Result.success(IDictQueryService.pageQueryDicts(pageQueryReq));
     }
 }

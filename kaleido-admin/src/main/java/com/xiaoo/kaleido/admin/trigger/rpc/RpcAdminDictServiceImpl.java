@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.rpc;
 
-import com.xiaoo.kaleido.admin.application.query.DictQueryService;
+import com.xiaoo.kaleido.admin.application.query.IDictQueryService;
 import com.xiaoo.kaleido.api.admin.dict.IRpcAdminDictService;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 import com.xiaoo.kaleido.base.result.Result;
@@ -24,13 +24,13 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class RpcAdminDictServiceImpl implements IRpcAdminDictService {
 
-    private final DictQueryService dictQueryService;
+    private final IDictQueryService IDictQueryService;
 
     @Override
     public Result<DictResponse> getDictByCode(String typeCode, String dictCode) {
 
         // 查询字典
-        DictResponse dictResponse = dictQueryService.findByTypeCodeAndDictCode(typeCode, dictCode);
+        DictResponse dictResponse = IDictQueryService.findByTypeCodeAndDictCode(typeCode, dictCode);
 
         log.info("RPC查询字典成功，typeCode={}, dictCode={}", typeCode, dictCode);
         return Result.success(dictResponse);

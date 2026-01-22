@@ -1,8 +1,7 @@
-package com.xiaoo.kaleido.admin.application.command;
+package com.xiaoo.kaleido.admin.application.command.impl;
 
-import com.xiaoo.kaleido.api.file.command.GetUploadUrlCommand;
+import com.xiaoo.kaleido.admin.application.command.IFileCommandService;
 import com.xiaoo.kaleido.api.file.response.FileUploadResponse;
-import com.xiaoo.kaleido.api.file.response.GetUploadUrlResponse;
 import com.xiaoo.kaleido.file.service.IMinIOService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import java.util.UUID;
 
 /**
  * 文件命令服务（应用层）
- * <p>
  * 负责文件上传相关的业务逻辑编排
  *
  * @author ouyucheng
@@ -26,45 +24,9 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FileCommandService {
+public class FileCommandService implements IFileCommandService {
 
     private final IMinIOService minIOService;
-
-    /**
-     * 获取文件上传URL
-     *
-     * @param command 获取上传URL命令
-     * @return 上传URL响应
-     */
-    public GetUploadUrlResponse getUploadUrl(GetUploadUrlCommand command) {
-        try {
-            log.info("获取文件上传URL，文件名: {}", command.getFileName());
-
-            // 1. 生成对象名称
-            String objectName = generateObjectName(command.getFileName());
-
-            // 2. 获取预签名URL
-            String presignedUrl = minIOService.getPresignedObjectUrl(objectName);
-
-            // 3. 获取基础URL并构建完整文件路径
-            String basisUrl = minIOService.getBasisUrl();
-            String filePath = basisUrl + objectName;
-
-            // 4. 构建响应
-            GetUploadUrlResponse response = GetUploadUrlResponse.builder()
-                    .presignedUrl(presignedUrl)
-                    .objectName(objectName)
-                    .filePath(filePath)
-                    .build();
-
-            log.info("文件上传URL生成成功，对象名称: {}, 预签名URL: {}", objectName, presignedUrl);
-            return response;
-
-        } catch (Exception e) {
-            log.error("获取文件上传URL失败，文件名: {}", command.getFileName(), e);
-            throw new RuntimeException("获取文件上传URL失败", e);
-        }
-    }
 
     /**
      * 上传文件
@@ -74,12 +36,12 @@ public class FileCommandService {
      */
     public FileUploadResponse uploadFile(MultipartFile file) {
         try {
-            log.info("开始上传文件，原始文件名: {}, 文件大小: {} bytes", 
+            log.info("开始上传文件，原始文件名: {}, 文件大小: {} bytes",
                     file.getOriginalFilename(), file.getSize());
 
             // 1. 生成UUID作为文件标识
             String fileIdentifier = UUID.randomUUID().toString();
-            
+
             // 2. 生成对象名称
             String originalFilename = Optional.ofNullable(file.getOriginalFilename())
                     .orElse("unknown");
@@ -113,21 +75,9 @@ public class FileCommandService {
     }
 
     /**
-     * 生成对象名称（基于UUID）
-     *
-     * @param fileName 原始文件名
-     * @return 对象名称
-     */
-    private String generateObjectName(String fileName) {
-        // 使用UUID作为文件标识
-        String uuid = UUID.randomUUID().toString();
-        return generateObjectName(fileName, uuid);
-    }
-
-    /**
      * 生成对象名称（基于文件标识）
      *
-     * @param fileName 原始文件名
+     * @param fileName       原始文件名
      * @param fileIdentifier 文件标识（UUID）
      * @return 对象名称
      */

@@ -34,14 +34,6 @@ public interface IRoleDomainService {
     RoleAggregate updateRole(String roleId, String name, String description);
 
     /**
-     * 删除角色
-     *
-     * @param roleId 角色ID
-     * @return 要删除的角色
-     */
-    RoleAggregate deleteRole(String roleId);
-
-    /**
      * 分配权限给角色
      *
      * @param roleId        角色ID
@@ -80,29 +72,4 @@ public interface IRoleDomainService {
      * @return 是否存在
      */
     boolean existsByCode(String code);
-
-    /**
-     * 检查角色是否存在
-     *
-     * @param roleId 角色ID
-     * @return 是否存在
-     */
-    boolean isValidRole(String roleId);
-
-    /**
-     * 验证角色编码是否可用
-     *
-     * @param code 角色编码
-     * @return 是否可用
-     */
-    boolean isCodeAvailable(String code);
-
-    /**
-     * 验证角色是否拥有某个权限
-     *
-     * @param roleId       角色ID
-     * @param permissionId 权限ID
-     * @return 是否拥有
-     */
-    boolean hasPermission(String roleId, String permissionId);
 }

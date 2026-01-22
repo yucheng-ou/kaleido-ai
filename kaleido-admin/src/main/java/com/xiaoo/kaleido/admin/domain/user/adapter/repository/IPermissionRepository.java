@@ -64,13 +64,6 @@ public interface IPermissionRepository {
     List<PermissionAggregate> findByParentId(String parentId);
 
     /**
-     * 查找根权限列表
-     *
-     * @return 根权限列表
-     */
-    List<PermissionAggregate> findRootPermissions();
-
-    /**
      * 获取权限树
      *
      * @return 权限树根节点列表
@@ -107,4 +100,12 @@ public interface IPermissionRepository {
      * @return 权限编码列表
      */
     List<String> findCodesByRoleIds(List<String> roleIds);
+
+    /**
+     * 根据管理员ID查询权限编码
+     *
+     * @param adminId 管理员ID
+     * @return 权限编码列表
+     */
+    List<String> findCodesByAdminId(String adminId);
 }

@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.trigger.rpc;
 
-import com.xiaoo.kaleido.admin.application.command.AdminCommandService;
+import com.xiaoo.kaleido.admin.application.command.impl.AdminCommandService;
 import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
 import com.xiaoo.kaleido.api.admin.user.IRpcAdminAuthService;
 import com.xiaoo.kaleido.api.admin.user.command.RegisterAdminCommand;

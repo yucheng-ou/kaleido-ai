@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.admin.application.query;
 
 import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
-import com.xiaoo.kaleido.api.admin.user.response.RoleTreeResponse;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +11,7 @@ import java.util.Set;
  * @author ouyucheng
  * @date 2025/12/31
  */
-public interface RoleQueryService {
+public interface IRoleQueryService {
     
     /**
      * 根据ID查询角色信息

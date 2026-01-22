@@ -61,14 +61,6 @@
         ORDER BY sort ASC, created_at ASC
     </select>
     
-    <!-- 查找根权限列表 -->
-    <select id="findRootPermissions" resultMap="PermissionMap">
-        SELECT <include refid="PermissionColumns"/>
-        FROM t_permission
-        WHERE deleted = 0 AND parent_id IS NULL
-        ORDER BY sort ASC, created_at ASC
-    </select>
-    
     <!-- 根据类型查找权限列表 -->
     <select id="findByType" resultMap="PermissionMap">
         SELECT <include refid="PermissionColumns"/>
@@ -165,5 +157,17 @@
         <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
             #{roleId}
         </foreach>
+    </select>
+
+    <!-- 根据管理员ID查询权限编码 -->
+    <select id="findCodesByAdminId" resultType="string">
+        SELECT DISTINCT p.code
+        FROM t_permission p
+        INNER JOIN t_role_permission rp ON p.id = rp.permission_id
+        INNER JOIN t_admin_role aur ON rp.role_id = aur.role_id
+        WHERE p.deleted = 0 
+          AND rp.deleted = 0 
+          AND aur.deleted = 0 
+          AND aur.admin_id = #{adminId}
     </select>
 </mapper>

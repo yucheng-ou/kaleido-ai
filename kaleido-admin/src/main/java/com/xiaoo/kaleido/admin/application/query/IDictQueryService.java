@@ -2,7 +2,6 @@ package com.xiaoo.kaleido.admin.application.query;
 
 import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
-import com.xiaoo.kaleido.api.admin.dict.query.DictQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
  * @author ouyucheng
  * @date 2025/12/25
  */
-public interface DictQueryService {
+public interface IDictQueryService {
 
     /**
      * 根据字典ID查询字典

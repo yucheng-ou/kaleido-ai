@@ -35,9 +35,7 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
         }
 
         // 2. 创建角色
-        RoleAggregate role = RoleAggregate.create(code, name, description);
-
-        return role;
+        return RoleAggregate.create(code, name, description);
     }
 
     @Override
@@ -47,14 +45,6 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
 
         // 2. 更新角色信息
         role.updateInfo(name, description);
-
-        return role;
-    }
-
-    @Override
-    public RoleAggregate deleteRole(String roleId) {
-        // 1. 获取角色（验证角色是否存在）
-        RoleAggregate role = findByIdOrThrow(roleId);
 
         return role;
     }
@@ -104,35 +94,5 @@ public class RoleDomainServiceImpl implements IRoleDomainService {
     @Override
     public boolean existsByCode(String code) {
         return roleRepository.existsByCode(code);
-    }
-
-    @Override
-    public boolean isValidRole(String roleId) {
-        try {
-            // 1. 获取角色
-            findByIdOrThrow(roleId);
-            // 2. 角色存在时返回true
-            return true;
-        } catch (AdminException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean isCodeAvailable(String code) {
-        return !roleRepository.existsByCode(code);
-    }
-
-    @Override
-    public boolean hasPermission(String roleId, String permissionId) {
-        try {
-            // 1. 获取角色
-            RoleAggregate role = findByIdOrThrow(roleId);
-            
-            // 2. 检查角色是否拥有指定权限
-            return role.hasPermission(permissionId);
-        } catch (AdminException e) {
-            return false;
-        }
     }
 }

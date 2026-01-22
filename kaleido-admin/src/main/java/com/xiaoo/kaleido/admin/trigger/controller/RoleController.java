@@ -3,8 +3,8 @@ package com.xiaoo.kaleido.admin.trigger.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.response.RoleInfoResponse;
-import com.xiaoo.kaleido.admin.application.command.RoleCommandService;
-import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
+import com.xiaoo.kaleido.admin.application.command.impl.RoleCommandService;
+import com.xiaoo.kaleido.admin.application.query.IRoleQueryService;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ import java.util.List;
 public class RoleController {
 
     private final RoleCommandService roleCommandService;
-    private final RoleQueryService roleQueryService;
+    private final IRoleQueryService IRoleQueryService;
 
     /**
      * 创建角色
@@ -102,7 +102,7 @@ public class RoleController {
     @GetMapping("/{roleId}")
     public Result<RoleInfoResponse> getRoleById(
             @PathVariable String roleId) {
-        RoleInfoResponse role = roleQueryService.findById(roleId);
+        RoleInfoResponse role = IRoleQueryService.findById(roleId);
         return Result.success(role);
     }
 
@@ -116,7 +116,7 @@ public class RoleController {
     @GetMapping("/code/{code}")
     public Result<RoleInfoResponse> getRoleByCode(
             @PathVariable String code) {
-        RoleInfoResponse role = roleQueryService.findByCode(code);
+        RoleInfoResponse role = IRoleQueryService.findByCode(code);
         return Result.success(role);
     }
 
@@ -129,7 +129,7 @@ public class RoleController {
     @SaCheckPermission(value = "admin:role:read", type = StpAdminUtil.TYPE)
     @GetMapping("/list")
     public Result<List<RoleInfoResponse>> getRoleList() {
-        List<RoleInfoResponse> roleList = roleQueryService.getRoleList();
+        List<RoleInfoResponse> roleList = IRoleQueryService.getRoleList();
         return Result.success(roleList);
     }
 }

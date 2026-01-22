@@ -2,8 +2,8 @@ package com.xiaoo.kaleido.admin.types.config.satoken;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.core.collection.CollUtil;
-import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
-import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
+import com.xiaoo.kaleido.admin.application.query.IPermissionQueryService;
+import com.xiaoo.kaleido.admin.application.query.IRoleQueryService;
 import com.xiaoo.kaleido.admin.types.constant.SysConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,8 +15,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class StpInterfaceImpl implements StpInterface {
 
-    private final PermissionQueryService permissionQueryService;
-    private final RoleQueryService roleQueryService;
+    private final IPermissionQueryService IPermissionQueryService;
+    private final IRoleQueryService IRoleQueryService;
 
 
     /**
@@ -29,11 +29,11 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
         String adminId = String.valueOf(loginId);
-        Set<String> roleCodeSet = roleQueryService.getRoleCodesId(adminId);
+        Set<String> roleCodeSet = IRoleQueryService.getRoleCodesId(adminId);
         if(roleCodeSet.contains(SysConstants.SUPER_ROLE_CODE)){
             return CollUtil.newArrayList(SysConstants.SUPER_ROLE_PERMISSION);
         }
-        Set<String> permCodes = permissionQueryService.getPermCodesById(adminId);
+        Set<String> permCodes = IPermissionQueryService.getPermCodesById(adminId);
         return CollUtil.newArrayList(permCodes);
     }
 
@@ -48,7 +48,7 @@ public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         String adminId = String.valueOf(loginId);
-        Set<String> roles = roleQueryService.getRoleCodesId(adminId);
+        Set<String> roles = IRoleQueryService.getRoleCodesId(adminId);
         return CollUtil.newArrayList(roles);
     }
 }

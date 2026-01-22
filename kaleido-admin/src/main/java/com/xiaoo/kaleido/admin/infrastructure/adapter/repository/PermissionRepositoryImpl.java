@@ -1,9 +1,13 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
+import cn.hutool.core.util.StrUtil;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.PermissionAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.PermissionConvertor;
 import com.xiaoo.kaleido.admin.infrastructure.dao.PermissionDao;
+import com.xiaoo.kaleido.admin.infrastructure.dao.RolePermissionDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.PermissionPO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -27,9 +32,9 @@ import java.util.stream.Collectors;
 public class PermissionRepositoryImpl implements IPermissionRepository {
 
     private final PermissionDao permissionDao;
+    private final RolePermissionDao rolePermissionDao;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public PermissionAggregate save(PermissionAggregate permission) {
         // 1. 转换聚合根为PO
         PermissionPO po = PermissionConvertor.INSTANCE.toPO(permission);
@@ -96,15 +101,6 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
     }
 
     @Override
-    public List<PermissionAggregate> findRootPermissions() {
-        // 1. 查询根权限PO列表
-        List<PermissionPO> poList = permissionDao.findRootPermissions();
-        
-        // 2. 转换PO列表为聚合根列表
-        return convertList(poList);
-    }
-
-    @Override
     public List<PermissionAggregate> getPermissionTree() {
         // 1. 查询权限树PO列表
         List<PermissionPO> poList = permissionDao.getPermissionTree();
@@ -114,8 +110,12 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteById(String id) {
-        // 根据ID删除权限
+        // 1. 删除角色-权限关联关系
+        rolePermissionDao.deleteByPermissionId(id);
+        
+        // 2. 删除权限
         permissionDao.deleteById(id);
     }
 
@@ -145,6 +145,7 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
     }
 
     @Override
+    @Cached(name = ":admin:perms:", key = "#roleIds", expire = 60, cacheType = CacheType.REMOTE, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
     public List<String> findCodesByRoleIds(List<String> roleIds) {
         // 1. 检查角色ID列表是否为空
         if (CollectionUtils.isEmpty(roleIds)) {
@@ -153,5 +154,17 @@ public class PermissionRepositoryImpl implements IPermissionRepository {
         
         // 2. 查询角色关联的权限编码列表
         return permissionDao.findCodesByRoleIds(roleIds);
+    }
+
+    @Override
+    @Cached(name = ":admin:perms:", key = "#adminId", expire = 60, cacheType = CacheType.REMOTE, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
+    public List<String> findCodesByAdminId(String adminId) {
+        // 1. 检查管理员ID是否有效
+        if (StrUtil.isBlank(adminId)) {
+            return new ArrayList<>();
+        }
+        
+        // 2. 查询管理员关联的权限编码
+        return permissionDao.findCodesByAdminId(adminId);
     }
 }
