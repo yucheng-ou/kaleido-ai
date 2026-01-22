@@ -1,5 +1,8 @@
 package com.xiaoo.kaleido.admin.infrastructure.adapter.repository;
 
+import cn.hutool.core.util.StrUtil;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
 import com.xiaoo.kaleido.admin.infrastructure.convertor.RoleConvertor;
@@ -7,6 +10,7 @@ import com.xiaoo.kaleido.admin.infrastructure.dao.RoleDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.RolePermissionDao;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePO;
 import com.xiaoo.kaleido.admin.infrastructure.dao.po.RolePermissionPO;
+import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -15,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -162,6 +167,7 @@ public class RoleRepositoryImpl implements IRoleRepository {
         List<RolePermissionPO> permissionPOs = permissionIds.stream()
                 .map(permissionId -> {
                     RolePermissionPO po = new RolePermissionPO();
+                    po.setId(SnowflakeUtil.newSnowflakeId());
                     po.setRoleId(roleId);
                     po.setPermissionId(permissionId);
                     return po;
@@ -236,9 +242,10 @@ public class RoleRepositoryImpl implements IRoleRepository {
     }
 
     @Override
+    @Cached(name = ":admin:roles:", key = "#adminId", expire = 60, cacheType = CacheType.REMOTE, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
     public List<String> findCodesByAdminId(String adminId) {
         // 1. 检查管理员ID是否有效
-        if (adminId == null || adminId.trim().isEmpty()) {
+        if (StrUtil.isBlank(adminId)) {
             return new ArrayList<>();
         }
         

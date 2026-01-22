@@ -6,7 +6,7 @@ import com.xiaoo.kaleido.api.admin.user.command.*;
 import com.xiaoo.kaleido.api.admin.user.request.AdminPageQueryReq;
 import com.xiaoo.kaleido.api.admin.user.response.AdminInfoResponse;
 import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
-import com.xiaoo.kaleido.admin.application.command.AdminCommandService;
+import com.xiaoo.kaleido.admin.application.command.impl.AdminCommandService;
 import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
@@ -105,6 +105,16 @@ public class AdminController {
         return Result.success(admin);
     }
 
+    /**
+     * 查询管理员自身信息 不需要鉴权
+     *
+     * @return 管理员信息
+     */
+    @GetMapping
+    public Result<AdminInfoResponse> getAdminInfo() {
+        AdminInfoResponse admin = adminQueryService.findById(StpAdminUtil.getLoginId());
+        return Result.success(admin);
+    }
 
     /**
      * 分页查询管理员

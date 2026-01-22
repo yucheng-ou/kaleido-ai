@@ -9,7 +9,7 @@ import com.xiaoo.kaleido.admin.types.exception.AdminErrorCode;
 import com.xiaoo.kaleido.admin.types.exception.AdminException;
 import com.xiaoo.kaleido.api.admin.dict.query.DictPageQueryReq;
 import com.xiaoo.kaleido.api.admin.dict.response.DictResponse;
-import com.xiaoo.kaleido.admin.application.query.DictQueryService;
+import com.xiaoo.kaleido.admin.application.query.IDictQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,15 +26,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DictQueryServiceImpl implements DictQueryService {
+public class DictQueryServiceImpl implements IDictQueryService {
 
     private final IDictRepository dictRepository;
     private final DictConvertor dictConvertor;
 
     @Override
     public DictResponse findById(String dictId) {
-        log.debug("根据ID查询字典信息，dictId={}", dictId);
-        
         // 1. 调用仓储层查询字典聚合根
         DictAggregate dictAggregate = dictRepository.findById(dictId);
         if (dictAggregate == null) {
@@ -47,8 +45,6 @@ public class DictQueryServiceImpl implements DictQueryService {
 
     @Override
     public DictResponse findByTypeCodeAndDictCode(String typeCode, String dictCode) {
-        log.debug("根据类型编码和字典编码查询字典信息，typeCode={}, dictCode={}", typeCode, dictCode);
-        
         // 1. 调用仓储层查询字典聚合根
         DictAggregate dictAggregate = dictRepository.findByTypeCodeAndDictCode(typeCode, dictCode);
         if (dictAggregate == null) {
@@ -61,8 +57,6 @@ public class DictQueryServiceImpl implements DictQueryService {
 
     @Override
     public List<DictResponse> findByTypeCode(String typeCode) {
-        log.debug("根据类型编码查询字典列表，typeCode={}", typeCode);
-        
         // 1. 调用仓储层查询字典聚合根列表
         List<DictAggregate> dictAggregateList = dictRepository.findByTypeCode(typeCode);
         
@@ -75,8 +69,6 @@ public class DictQueryServiceImpl implements DictQueryService {
 
     @Override
     public PageInfo<DictResponse> pageQueryDicts(DictPageQueryReq pageQueryReq) {
-        log.debug("分页查询字典列表，pageQueryReq={}", pageQueryReq);
-        
         // 1. 启动PageHelper分页
         PageHelper.startPage(pageQueryReq.getPageNum(), pageQueryReq.getPageSize());
         

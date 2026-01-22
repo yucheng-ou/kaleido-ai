@@ -4,8 +4,8 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.xiaoo.kaleido.api.admin.user.command.AddPermissionCommand;
 import com.xiaoo.kaleido.api.admin.user.command.UpdatePermissionCommand;
 import com.xiaoo.kaleido.api.admin.user.response.PermissionInfoResponse;
-import com.xiaoo.kaleido.admin.application.command.PermissionCommandService;
-import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
+import com.xiaoo.kaleido.admin.application.command.impl.PermissionCommandService;
+import com.xiaoo.kaleido.admin.application.query.IPermissionQueryService;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ import java.util.List;
 public class PermissionController {
 
     private final PermissionCommandService permissionCommandService;
-    private final PermissionQueryService permissionQueryService;
+    private final IPermissionQueryService IPermissionQueryService;
 
     /**
      * 创建权限
@@ -102,7 +102,7 @@ public class PermissionController {
     @GetMapping("/{permissionId}")
     public Result<PermissionInfoResponse> getPermissionById(
             @PathVariable String permissionId) {
-        PermissionInfoResponse permission = permissionQueryService.findById(permissionId);
+        PermissionInfoResponse permission = IPermissionQueryService.findById(permissionId);
         return Result.success(permission);
     }
 
@@ -116,7 +116,7 @@ public class PermissionController {
     @GetMapping("/code/{code}")
     public Result<PermissionInfoResponse> getPermissionByCode(
             @PathVariable String code) {
-        PermissionInfoResponse permission = permissionQueryService.findByCode(code);
+        PermissionInfoResponse permission = IPermissionQueryService.findByCode(code);
         return Result.success(permission);
     }
 
@@ -130,19 +130,7 @@ public class PermissionController {
     @GetMapping("/parent/{parentId}")
     public Result<List<PermissionInfoResponse>> getPermissionsByParentId(
             @PathVariable String parentId) {
-        List<PermissionInfoResponse> permissions = permissionQueryService.findByParentId(parentId);
-        return Result.success(permissions);
-    }
-
-    /**
-     * 查询根权限列表
-     *
-     * @return 根权限列表
-     */
-    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
-    @GetMapping("/root")
-    public Result<List<PermissionInfoResponse>> getRootPermissions() {
-        List<PermissionInfoResponse> permissions = permissionQueryService.findRootPermissions();
+        List<PermissionInfoResponse> permissions = IPermissionQueryService.findByParentId(parentId);
         return Result.success(permissions);
     }
 
@@ -154,35 +142,7 @@ public class PermissionController {
     @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
     @GetMapping("/tree")
     public Result<List<PermissionInfoResponse>> getPermissionTree() {
-        List<PermissionInfoResponse> permissionTree = permissionQueryService.getPermissionTree();
+        List<PermissionInfoResponse> permissionTree = IPermissionQueryService.getPermissionTree();
         return Result.success(permissionTree);
-    }
-
-    /**
-     * 检查权限编码是否可用
-     *
-     * @param code 权限编码
-     * @return 是否可用
-     */
-    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
-    @GetMapping("/check-code")
-    public Result<Boolean> checkCodeAvailable(
-            @RequestParam String code) {
-        boolean isAvailable = permissionCommandService.isCodeAvailable(code);
-        return Result.success(isAvailable);
-    }
-
-    /**
-     * 检查权限是否存在且有效
-     *
-     * @param permissionId 权限ID
-     * @return 是否存在且有效
-     */
-    @SaCheckPermission(value = "admin:permission:read", type = StpAdminUtil.TYPE)
-    @GetMapping("/check-valid")
-    public Result<Boolean> checkPermissionValid(
-            @RequestParam String permissionId) {
-        boolean isValid = permissionCommandService.isValidPermission(permissionId);
-        return Result.success(isValid);
     }
 }

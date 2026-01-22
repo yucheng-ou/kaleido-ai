@@ -1,5 +1,6 @@
-package com.xiaoo.kaleido.admin.application.command;
+package com.xiaoo.kaleido.admin.application.command.impl;
 
+import com.xiaoo.kaleido.admin.application.command.IDictCommandService;
 import com.xiaoo.kaleido.api.admin.dict.command.AddDictCommand;
 import com.xiaoo.kaleido.api.admin.dict.command.UpdateDictCommand;
 import com.xiaoo.kaleido.admin.domain.dict.adapter.repository.IDictRepository;
@@ -8,7 +9,6 @@ import com.xiaoo.kaleido.admin.domain.dict.service.IDictDomainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 字典命令服务（应用层）
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DictCommandService {
+public class DictCommandService implements IDictCommandService {
 
     private final IDictRepository dictRepository;
     private final IDictDomainService dictDomainService;

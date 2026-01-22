@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class DictRepositoryImpl implements IDictRepository {
 
     private final DictDao dictDao;
-    private final RedissonService redissonService;
 
     @Override
     public void save(DictAggregate dictAggregate) {

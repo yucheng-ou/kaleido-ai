@@ -1,5 +1,6 @@
-package com.xiaoo.kaleido.admin.application.command;
+package com.xiaoo.kaleido.admin.application.command.impl;
 
+import com.xiaoo.kaleido.admin.application.command.IPermissionCommandService;
 import com.xiaoo.kaleido.api.admin.user.command.AddPermissionCommand;
 import com.xiaoo.kaleido.api.admin.user.command.UpdatePermissionCommand;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IPermissionRepository;
@@ -20,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PermissionCommandService {
+public class PermissionCommandService implements IPermissionCommandService {
 
     private final IPermissionRepository permissionRepository;
     private final IPermissionDomainService permissionDomainService;
@@ -72,7 +73,7 @@ public class PermissionCommandService {
         // 1. 调用领域服务更新权限编码
         PermissionAggregate permissionAggregate = permissionDomainService.updatePermissionCode(permissionId, code);
 
-        // 2. 保存权限
+        // 2. 更新权限
         permissionRepository.update(permissionAggregate);
 
         log.info("权限编码更新成功，权限ID: {}, 新编码: {}", permissionId, code);

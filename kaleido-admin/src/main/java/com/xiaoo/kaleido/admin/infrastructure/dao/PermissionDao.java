@@ -33,11 +33,6 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
     List<PermissionPO> findByParentId(@Param("parentId") String parentId);
 
     /**
-     * 查找根权限列表
-     */
-    List<PermissionPO> findRootPermissions();
-
-    /**
      * 查找所有权限
      */
     List<PermissionPO> findAll();
@@ -78,4 +73,9 @@ public interface PermissionDao extends BaseMapper<PermissionPO> {
      * 根据角色ID列表查询权限编码
      */
     List<String> findCodesByRoleIds(@Param("roleIds") List<String> roleIds);
+
+    /**
+     * 根据管理员ID查询权限编码
+     */
+    List<String> findCodesByAdminId(@Param("adminId") String adminId);
 }

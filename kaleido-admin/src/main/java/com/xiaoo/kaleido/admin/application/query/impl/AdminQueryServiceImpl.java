@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xiaoo.kaleido.admin.application.convertor.AdminConvertor;
 import com.xiaoo.kaleido.admin.application.query.IAdminQueryService;
-import com.xiaoo.kaleido.admin.application.query.PermissionQueryService;
+import com.xiaoo.kaleido.admin.application.query.IPermissionQueryService;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IAdminDomainService;
@@ -33,7 +33,7 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
     private final IAdminRepository adminRepository;
     private final IAdminDomainService adminDomainService;
     private final AdminConvertor adminConvertor;
-    private final PermissionQueryService permissionQueryService;
+    private final IPermissionQueryService IPermissionQueryService;
 
     @Override
     public AdminInfoResponse findById(String adminId) {
@@ -102,7 +102,7 @@ public class AdminQueryServiceImpl implements IAdminQueryService {
         // 2. 查询权限详情并过滤掉按钮类型
         List<PermissionInfoResponse> allPermissions = new ArrayList<>();
         for (String permissionId : permissionIds) {
-            PermissionInfoResponse permission = permissionQueryService.findById(permissionId);
+            PermissionInfoResponse permission = IPermissionQueryService.findById(permissionId);
             if (permission != null && !permission.getType().isButton()) {
                 allPermissions.add(permission);
             }

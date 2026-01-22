@@ -43,11 +43,9 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
         }
 
         // 3. 创建权限
-        PermissionAggregate permission = PermissionAggregate.create(
+        return PermissionAggregate.create(
                 code, name, type, parentId, sort, icon, path, component, isHidden
         );
-
-        return permission;
     }
 
     @Override
@@ -122,11 +120,6 @@ public class PermissionDomainServiceImpl implements IPermissionDomainService {
     @Override
     public List<PermissionAggregate> findByParentId(String parentId) {
         return permissionRepository.findByParentId(parentId);
-    }
-
-    @Override
-    public List<PermissionAggregate> findRootPermissions() {
-        return permissionRepository.findRootPermissions();
     }
 
     @Override

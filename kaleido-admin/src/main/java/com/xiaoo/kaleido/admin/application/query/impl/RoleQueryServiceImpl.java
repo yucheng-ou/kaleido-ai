@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.admin.application.query.impl;
 
-import com.xiaoo.kaleido.admin.application.query.RoleQueryService;
+import com.xiaoo.kaleido.admin.application.query.IRoleQueryService;
 import com.xiaoo.kaleido.admin.application.convertor.RoleConvertor;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IRoleRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.RoleAggregate;
@@ -23,15 +23,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RoleQueryServiceImpl implements RoleQueryService {
+public class RoleQueryServiceImpl implements IRoleQueryService {
 
     private final IRoleRepository roleRepository;
     private final RoleConvertor roleConvertor;
 
     @Override
     public RoleInfoResponse findById(String roleId) {
-        log.debug("根据ID查询角色，roleId={}", roleId);
-
         // 1. 调用仓储层查询角色聚合根
         RoleAggregate role = roleRepository.findById(roleId);
         
@@ -44,8 +42,6 @@ public class RoleQueryServiceImpl implements RoleQueryService {
 
     @Override
     public RoleInfoResponse findByCode(String code) {
-        log.debug("根据编码查询角色，code={}", code);
-
         // 1. 调用仓储层根据编码查询角色聚合根
         RoleAggregate role = roleRepository.findByCode(code);
         
@@ -58,8 +54,6 @@ public class RoleQueryServiceImpl implements RoleQueryService {
 
     @Override
     public List<RoleInfoResponse> getRoleList() {
-        log.debug("获取角色列表");
-
         // 1. 调用仓储层查询所有角色聚合根列表
         List<RoleAggregate> aggregateList = roleRepository.findAll();
         
@@ -71,16 +65,12 @@ public class RoleQueryServiceImpl implements RoleQueryService {
 
     @Override
     public boolean existsByCode(String code) {
-        log.debug("检查角色编码是否存在，code={}", code);
-
         // 调用仓储层检查角色编码是否存在
         return roleRepository.existsByCode(code);
     }
 
     @Override
     public Set<String> getRoleCodesId(String adminId) {
-        log.debug("根据管理员ID查询角色编码，adminId={}", adminId);
-
         // 1. 调用仓储层查询管理员关联的角色编码
         List<String> roleCodes = roleRepository.findCodesByAdminId(adminId);
         

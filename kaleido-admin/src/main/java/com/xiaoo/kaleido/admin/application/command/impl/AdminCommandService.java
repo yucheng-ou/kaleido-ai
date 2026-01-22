@@ -1,10 +1,12 @@
-package com.xiaoo.kaleido.admin.application.command;
+package com.xiaoo.kaleido.admin.application.command.impl;
 
+import com.xiaoo.kaleido.admin.application.command.IAdminCommandService;
 import com.xiaoo.kaleido.admin.domain.user.adapter.repository.IAdminRepository;
 import com.xiaoo.kaleido.admin.domain.user.model.aggregate.AdminAggregate;
 import com.xiaoo.kaleido.admin.domain.user.service.IAdminDomainService;
+import com.xiaoo.kaleido.admin.domain.user.adapter.event.AuthChangeEvent;
+import com.xiaoo.kaleido.mq.event.EventPublisher;
 import com.xiaoo.kaleido.api.admin.user.command.*;
-import com.xiaoo.kaleido.satoken.util.StpAdminUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,12 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AdminCommandService {
+public class AdminCommandService implements IAdminCommandService {
 
     private final IAdminRepository adminRepository;
     private final IAdminDomainService adminDomainService;
+    private final EventPublisher eventPublisher;
+    private final AuthChangeEvent authChangeEvent;
 
     public String createAdmin(RegisterAdminCommand command) {
         // 1. 调用领域服务创建管理员
@@ -71,6 +75,12 @@ public class AdminCommandService {
 
         // 2. 调用仓储服务分配角色
         adminRepository.assignRoles(adminAggregate);
+
+        // 3. 发布权限变更事件
+        AuthChangeEvent.AuthChangeMessage message = AuthChangeEvent.AuthChangeMessage.builder()
+                .adminId(adminId)
+                .build();
+        eventPublisher.publish(authChangeEvent.topic(), authChangeEvent.buildEventMessage(message));
 
         log.info("角色分配成功，管理员ID: {}, 角色数量: {}", adminId, command.getRoleIds().size());
     }

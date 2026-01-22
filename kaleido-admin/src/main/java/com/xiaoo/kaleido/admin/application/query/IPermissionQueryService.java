@@ -10,7 +10,7 @@ import java.util.Set;
  * @author ouyucheng
  * @date 2025/12/31
  */
-public interface PermissionQueryService {
+public interface IPermissionQueryService {
     
     /**
      * 根据ID查询权限信息
@@ -35,13 +35,6 @@ public interface PermissionQueryService {
      * @return 子权限列表
      */
     List<PermissionInfoResponse> findByParentId(String parentId);
-    
-    /**
-     * 查询根权限列表
-     *
-     * @return 根权限列表
-     */
-    List<PermissionInfoResponse> findRootPermissions();
     
     /**
      * 获取权限树
