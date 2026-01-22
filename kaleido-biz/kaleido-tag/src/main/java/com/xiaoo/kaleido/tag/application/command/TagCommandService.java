@@ -31,12 +31,13 @@ public class TagCommandService {
     /**
      * 创建标签
      *
+     * @param userId 用户ID
      * @param command 创建标签命令
      */
-    public void createTag(CreateTagCommand command) {
+    public void createTag(String userId, CreateTagCommand command) {
         // 1.调用领域服务创建标签
         TagAggregate tag = tagDomainService.createTag(
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getTypeCode(),
                 command.getColor(),
@@ -48,18 +49,20 @@ public class TagCommandService {
 
         // 3.记录日志
         log.info("标签创建成功，标签ID: {}, 用户ID: {}, 标签名称: {}",
-                tag.getId(), command.getUserId(), command.getName());
+                tag.getId(), userId, command.getName());
     }
 
     /**
      * 更新标签
      *
+     * @param userId  用户ID
      * @param tagId   标签ID
      * @param command 更新标签命令
      */
-    public void updateTag(String tagId, UpdateTagCommand command) {
+    public void updateTag(String userId, String tagId, UpdateTagCommand command) {
         // 1.调用领域服务更新标签
         TagAggregate tag = tagDomainService.updateTag(
+                userId,
                 tagId,
                 command.getName(),
                 command.getColor(),
@@ -70,21 +73,22 @@ public class TagCommandService {
         tagRepository.update(tag);
 
         // 3.记录日志
-        log.info("标签更新成功，标签ID: {}, 新名称: {}", tagId, command.getName());
+        log.info("标签更新成功，标签ID: {}, 用户ID: {}, 新名称: {}", tagId, userId, command.getName());
     }
 
 
     /**
      * 关联实体到标签
      *
+     * @param userId  用户ID
      * @param command 关联实体命令
      */
-    public void associateEntity(AssociateEntityCommand command) {
+    public void associateEntity(String userId, AssociateEntityCommand command) {
         // 1.调用领域服务关联实体
         TagAggregate tag = tagDomainService.associateEntity(
                 command.getTagId(),
                 command.getEntityId(),
-                command.getUserId(),
+                userId,
                 command.getEntityTypeCode()
         );
 
@@ -93,20 +97,21 @@ public class TagCommandService {
 
         // 3.记录日志
         log.info("标签关联实体成功，标签ID: {}, 实体ID: {}, 用户ID: {}",
-                command.getTagId(), command.getEntityId(), command.getUserId());
+                command.getTagId(), command.getEntityId(), userId);
     }
 
     /**
      * 取消标签与实体的关联
      *
+     * @param userId  用户ID
      * @param command 取消关联实体命令
      */
-    public void dissociateEntity(DissociateEntityCommand command) {
+    public void dissociateEntity(String userId, DissociateEntityCommand command) {
         // 1.调用领域服务取消关联
         TagAggregate tag = tagDomainService.dissociateEntity(
                 command.getTagId(),
                 command.getEntityId(),
-                command.getUserId()
+                userId
         );
 
         // 2.删除关联关系
@@ -114,6 +119,6 @@ public class TagCommandService {
 
         // 3.记录日志
         log.info("标签取消关联实体成功，标签ID: {}, 实体ID: {}, 用户ID: {}",
-                command.getTagId(), command.getEntityId(), command.getUserId());
+                command.getTagId(), command.getEntityId(), userId);
     }
 }

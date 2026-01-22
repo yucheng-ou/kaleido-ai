@@ -40,7 +40,7 @@ public class OutfitCommandService {
      * @param command 创建穿搭命令
      * @return 创建的穿搭ID
      */
-    public String createOutfitWithClothingsAndImages(CreateOutfitWithClothingsCommand command) {
+    public String createOutfitWithClothingsAndImages(String userId,CreateOutfitWithClothingsCommand command) {
         // 1.准备图片信息
         List<OutfitImageInfoCommand> imageInfos = command.getImages();
 
@@ -49,7 +49,7 @@ public class OutfitCommandService {
 
         // 3.调用领域服务创建穿搭
         OutfitAggregate outfit = outfitDomainService.createOutfitWithClothingsAndImages(
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getDescription(),
                 command.getClothingIds(),
@@ -61,7 +61,7 @@ public class OutfitCommandService {
 
         // 5.记录日志
         log.info("穿搭创建成功，穿搭ID: {}, 用户ID: {}, 穿搭名称: {}, 服装数量: {}, 图片数量: {}",
-                outfit.getId(), command.getUserId(), command.getName(),
+                outfit.getId(), userId, command.getName(),
                 command.getClothingIds().size(), command.getImages().size());
 
         return outfit.getId();
@@ -72,7 +72,7 @@ public class OutfitCommandService {
      *
      * @param command 更新穿搭命令
      */
-    public void updateOutfit(UpdateOutfitCommand command) {
+    public void updateOutfit(String userId,UpdateOutfitCommand command) {
         // 1.准备图片信息
         List<OutfitImageInfoCommand> imageInfos = command.getImages();
 
@@ -82,7 +82,7 @@ public class OutfitCommandService {
         // 3.调用领域服务更新穿搭
         OutfitAggregate outfit = outfitDomainService.updateOutfit(
                 command.getOutfitId(),
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getDescription(),
                 command.getClothingIds(),
@@ -94,7 +94,7 @@ public class OutfitCommandService {
 
         // 5.记录日志
         log.info("穿搭更新成功，穿搭ID: {}, 用户ID: {}, 新名称: {}, 服装数量: {}, 图片数量: {}",
-                command.getOutfitId(), command.getUserId(), command.getName(),
+                command.getOutfitId(), userId, command.getName(),
                 command.getClothingIds().size(), command.getImages().size());
     }
 
@@ -120,11 +120,11 @@ public class OutfitCommandService {
      *
      * @param command 记录穿着命令
      */
-    public void recordOutfitWear(RecordOutfitWearCommand command) {
+    public void recordOutfitWear(String userId,RecordOutfitWearCommand command) {
         // 1.调用领域服务记录穿着
         OutfitAggregate outfit = outfitDomainService.recordOutfitWear(
                 command.getOutfitId(),
-                command.getUserId(),
+                userId,
                 command.getNotes()
         );
 
@@ -133,6 +133,6 @@ public class OutfitCommandService {
 
         // 3.记录日志
         log.info("穿搭穿着记录成功，穿搭ID: {}, 用户ID: {}, 穿着日期: {}",
-                command.getOutfitId(), command.getUserId(), command.getWearDate());
+                command.getOutfitId(), userId, command.getWearDate());
     }
 }

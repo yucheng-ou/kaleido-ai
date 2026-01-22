@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 品牌命令服务
- * <p>
- * 负责编排品牌相关的命令操作，包括创建、更新、删除等
- * 遵循应用层职责：只负责编排，不包含业务逻辑
  *
  * @author ouyucheng
  * @date 2026/1/16
@@ -54,7 +51,7 @@ public class BrandCommandService {
      *
      * @param command 更新品牌命令
      */
-    public void updateBrand(String brandId,UpdateBrandCommand command) {
+    public void updateBrand(String brandId, UpdateBrandCommand command) {
         // 1.调用领域服务更新品牌
         BrandAggregate brand = brandDomainService.updateBrand(
                 brandId,

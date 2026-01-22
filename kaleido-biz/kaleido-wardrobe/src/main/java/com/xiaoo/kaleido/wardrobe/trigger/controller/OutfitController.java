@@ -6,6 +6,7 @@ import com.xiaoo.kaleido.api.wardrobe.command.UpdateOutfitCommand;
 import com.xiaoo.kaleido.api.wardrobe.response.OutfitInfoResponse;
 import com.xiaoo.kaleido.api.wardrobe.response.WearRecordResponse;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import com.xiaoo.kaleido.wardrobe.application.command.OutfitCommandService;
 import com.xiaoo.kaleido.wardrobe.application.query.IOutfitQueryService;
 import jakarta.validation.Valid;
@@ -41,7 +42,8 @@ public class OutfitController {
      */
     @PostMapping
     public Result<String> createOutfit(@Valid @RequestBody CreateOutfitWithClothingsCommand command) {
-        String outfitId = outfitCommandService.createOutfitWithClothingsAndImages(command);
+        String userId = StpUserUtil.getLoginId();
+        String outfitId = outfitCommandService.createOutfitWithClothingsAndImages(userId, command);
         return Result.success(outfitId);
     }
 
@@ -49,7 +51,7 @@ public class OutfitController {
      * 更新穿搭信息（包含服装和图片）
      *
      * @param outfitId 穿搭ID，不能为空
-     * @param command 更新穿搭命令
+     * @param command  更新穿搭命令
      * @return 空响应
      */
     @PutMapping("/{outfitId}")
@@ -57,8 +59,9 @@ public class OutfitController {
             @NotBlank(message = "穿搭ID不能为空")
             @PathVariable String outfitId,
             @Valid @RequestBody UpdateOutfitCommand command) {
+        String userId = StpUserUtil.getLoginId();
         command.setOutfitId(outfitId);
-        outfitCommandService.updateOutfit(command);
+        outfitCommandService.updateOutfit(userId, command);
         return Result.success();
     }
 
@@ -66,7 +69,7 @@ public class OutfitController {
      * 删除穿搭
      *
      * @param outfitId 穿搭ID，不能为空
-     * @param userId 用户ID，不能为空
+     * @param userId   用户ID，不能为空
      * @return 空响应
      */
     @DeleteMapping("/{outfitId}")
@@ -83,7 +86,7 @@ public class OutfitController {
      * 记录穿搭穿着
      *
      * @param outfitId 穿搭ID，不能为空
-     * @param command 记录穿着命令
+     * @param command  记录穿着命令
      * @return 空响应
      */
     @PostMapping("/{outfitId}/wear")
@@ -92,7 +95,8 @@ public class OutfitController {
             @PathVariable String outfitId,
             @Valid @RequestBody RecordOutfitWearCommand command) {
         command.setOutfitId(outfitId);
-        outfitCommandService.recordOutfitWear(command);
+        String userId = StpUserUtil.getLoginId();
+        outfitCommandService.recordOutfitWear(userId,command);
         return Result.success();
     }
 
@@ -120,7 +124,8 @@ public class OutfitController {
     public Result<OutfitInfoResponse> getOutfit(
             @NotBlank(message = "穿搭ID不能为空")
             @PathVariable String outfitId) {
-        OutfitInfoResponse outfitInfo = outfitQueryService.findById(outfitId);
+        String userId = StpUserUtil.getLoginId();
+        OutfitInfoResponse outfitInfo = outfitQueryService.findById(outfitId, userId);
         return Result.success(outfitInfo);
     }
 
@@ -134,7 +139,8 @@ public class OutfitController {
     public Result<List<WearRecordResponse>> getOutfitWearRecords(
             @NotBlank(message = "穿搭ID不能为空")
             @PathVariable String outfitId) {
-        List<WearRecordResponse> wearRecords = outfitQueryService.findWearRecordsByOutfitId(outfitId);
+        String userId = StpUserUtil.getLoginId();
+        List<WearRecordResponse> wearRecords = outfitQueryService.findWearRecordsByOutfitId(outfitId, userId);
         return Result.success(wearRecords);
     }
 }

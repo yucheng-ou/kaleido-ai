@@ -19,9 +19,6 @@ import java.util.List;
 
 /**
  * 位置命令服务
- * <p>
- * 负责编排位置相关的命令操作，包括创建、更新、删除等
- * 遵循应用层职责：只负责编排，不包含业务逻辑
  *
  * @author ouyucheng
  * @date 2026/1/17
@@ -34,7 +31,6 @@ public class LocationCommandService {
     private final ILocationDomainService locationDomainService;
     private final ILocationRepository locationRepository;
     private final ILocationFileService locationFileService;
-    private final LocationRecordCommandService locationRecordCommandService;
 
     /**
      * 创建位置（包含图片）
@@ -42,13 +38,13 @@ public class LocationCommandService {
      * @param command 创建位置命令
      * @return 创建的位置ID
      */
-    public String createLocation(CreateLocationWithImagesCommand command) {
+    public String createLocation(String userId, CreateLocationWithImagesCommand command) {
         // 1. 使用模板方法转换图片信息
         List<LocationImageInfoDTO> imageInfoDTOS = locationFileService.convertorImageInfo(command.getImages());
 
         // 2. 调用原有方法
         return createLocationWithImages(
-                command.getUserId(),
+                userId,
                 command.getName(),
                 command.getDescription(),
                 command.getAddress(),
@@ -95,13 +91,20 @@ public class LocationCommandService {
     /**
      * 更新位置信息
      *
+     * @param userId  用户ID
      * @param command 更新位置命令
      */
-    public void updateLocation(UpdateLocationCommand command) {
-        // 1. 使用模板方法转换图片信息
+    public void updateLocation(String userId, UpdateLocationCommand command) {
+        // 1. 验证权限：确保位置属于当前用户
+        StorageLocationAggregate existingLocation = locationRepository.findById(command.getLocationId());
+        if (!existingLocation.getUserId().equals(userId)) {
+            throw WardrobeException.of("PERMISSION_DENIED", "无权更新该位置");
+        }
+
+        // 2. 使用模板方法转换图片信息
         List<LocationImageInfoDTO> imageInfoDTOS = locationFileService.convertorImageInfo(command.getImages());
 
-        // 2. 调用原有方法
+        // 3. 调用原有方法
         updateLocationWithImages(
                 command.getLocationId(),
                 command.getName(),
@@ -147,44 +150,24 @@ public class LocationCommandService {
     /**
      * 删除位置（逻辑删除）
      *
+     * @param userId     用户ID
      * @param locationId 位置ID
      */
-    public void deleteLocation(String locationId) {
-        // 1. 调用领域服务验证并获取可删除的位置聚合根
+    public void deleteLocation(String userId, String locationId) {
+        // 1. 验证权限：确保位置属于当前用户
+        StorageLocationAggregate existingLocation = locationRepository.findById(locationId);
+        if (!existingLocation.getUserId().equals(userId)) {
+            throw WardrobeException.of("PERMISSION_DENIED", "无权删除该位置");
+        }
+
+        // 2. 调用领域服务验证并获取可删除的位置聚合根
         // Domain Service负责业务规则校验（如是否有服装引用）
         StorageLocationAggregate location = locationDomainService.validateAndGetForDeletion(locationId);
-        
-        // 2. 删除位置
+
+        // 3. 删除位置
         locationRepository.delete(locationId);
 
-        // 3. 记录日志
-        log.info("位置删除成功，位置ID: {}", locationId);
-    }
-
-    /**
-     * 设置主图
-     *
-     * @param locationId 位置ID
-     * @param imageId    图片ID
-     */
-    public void setPrimaryImage(String locationId, String imageId) {
-        // 1. 调用领域服务设置主图
-        StorageLocationAggregate location = locationDomainService.setPrimaryImage(locationId, imageId);
-
-        // 2. 更新位置
-        locationRepository.update(location);
-
-        // 3. 记录日志
-        log.info("位置主图设置成功，位置ID: {}, 主图ID: {}", locationId, imageId);
-    }
-
-    /**
-     * 将衣服添加到位置
-     *
-     * @param command 将衣服添加到位置命令
-     */
-    public void addClothingToLocation(AddClothingToLocationCommand command) {
-        // 调用位置记录命令服务
-        locationRecordCommandService.addClothingToLocation(command);
+        // 4. 记录日志
+        log.info("位置删除成功，位置ID: {}, 用户ID: {}", locationId, userId);
     }
 }

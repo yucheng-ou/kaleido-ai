@@ -75,7 +75,7 @@ public class User extends BaseEntity {
 
     /**
      * 创建用户实体
-     * <p>
+
      * 用于新用户注册时创建用户实体，会自动生成用户ID并设置初始状态
      *
      * @param telephone  手机号，必须符合手机号格式规范

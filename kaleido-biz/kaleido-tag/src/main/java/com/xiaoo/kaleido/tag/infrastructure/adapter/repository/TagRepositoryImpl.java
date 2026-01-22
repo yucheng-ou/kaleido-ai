@@ -82,6 +82,25 @@ public class TagRepositoryImpl implements ITagRepository {
     }
 
     @Override
+    public Optional<TagAggregate> findByIdAndUserId(String tagId, String userId) {
+        try {
+            // 1.查询标签基本信息
+            TagPO tagPO = tagDao.findByIdAndUserId(tagId, userId);
+            if (tagPO == null) {
+                return Optional.empty();
+            }
+
+            // 2.转换为TagAggregate
+            TagAggregate tagAggregate = TagInfraConvertor.INSTANCE.toAggregate(tagPO);
+
+            return Optional.of(tagAggregate);
+        } catch (Exception e) {
+            log.error("查询标签失败，标签ID: {}, 用户ID: {}, 原因: {}", tagId, userId, e.getMessage(), e);
+            throw TagException.of(TagErrorCode.TAG_QUERY_FAIL);
+        }
+    }
+
+    @Override
     public TagAggregate findByIdOrThrow(String tagId) {
         return findById(tagId)
                 .orElseThrow(() -> TagException.of(BizErrorCode.DATA_NOT_EXIST));
@@ -138,7 +157,7 @@ public class TagRepositoryImpl implements ITagRepository {
 
     /**
      * 批量保存标签关联关系
-     * <p>
+
      * 将标签关联关系列表批量保存到数据库
      *
      * @param tagAggregate 标签聚合根，包含关联关系列表

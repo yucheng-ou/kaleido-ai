@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitClothingDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitClothingPO">
+        <id column="id" property="id"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+        <result column="lock_version" property="lockVersion"/>
+        <result column="outfit_id" property="outfitId"/>
+        <result column="clothing_id" property="clothingId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, outfit_id, clothing_id
+    </sql>
+
+    <select id="findClothingIdsByOutfitId" resultType="java.lang.String">
+        SELECT clothing_id
+        FROM t_wardrobe_outfit_clothing
+        WHERE outfit_id = #{outfitId} AND deleted = 0
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findOutfitIdsByClothingId" resultType="java.lang.String">
+        SELECT outfit_id
+        FROM t_wardrobe_outfit_clothing
+        WHERE clothing_id = #{clothingId} AND deleted = 0
+        ORDER BY created_at ASC
+    </select>
+
+    <select id="findByOutfitIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit_clothing
+        WHERE outfit_id IN
+        <foreach collection="outfitIds" item="outfitId" open="(" separator="," close=")">
+            #{outfitId}
+        </foreach>
+        AND deleted = 0
+        ORDER BY outfit_id, created_at ASC
+    </select>
+
+    <update id="deleteByOutfitId">
+        UPDATE t_wardrobe_outfit_clothing
+        SET deleted = 1, updated_at = NOW()
+        WHERE outfit_id = #{outfitId} AND deleted = 0
+    </update>
+
+    <update id="deleteByClothingId">
+        UPDATE t_wardrobe_outfit_clothing
+        SET deleted = 1, updated_at = NOW()
+        WHERE clothing_id = #{clothingId} AND deleted = 0
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_wardrobe_outfit_clothing (
+            id, outfit_id, clothing_id, created_at, updated_at, deleted, lock_version
+        ) VALUES
+        <foreach collection="records" item="record" separator=",">
+            (
+                #{record.id},
+                #{record.outfitId},
+                #{record.clothingId},
+                #{record.createdAt},
+                #{record.updatedAt},
+                #{record.deleted},
+                #{record.lockVersion}
+            )
+        </foreach>
+    </insert>
+
+    <select id="existsByOutfitIdAndClothingId" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_outfit_clothing
+        WHERE outfit_id = #{outfitId} AND clothing_id = #{clothingId} AND deleted = 0
+    </select>
+
+</mapper>

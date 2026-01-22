@@ -17,26 +17,9 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, created_at, updated_at, deleted, lock_version,
-        clothing_id, location_id, user_id, record_time, notes, is_current
+        id, clothing_id, location_id, user_id, record_time, notes, is_current
     </sql>
 
-    <insert id="insert" parameterType="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationRecordPO">
-        INSERT INTO t_wardrobe_location_record (
-            id, created_at, updated_at, deleted, lock_version,
-            clothing_id, location_id, user_id, record_time, notes, is_current
-        ) VALUES (
-            #{id}, #{createdAt}, #{updatedAt}, #{deleted}, #{lockVersion},
-            #{clothingId}, #{locationId}, #{userId}, #{recordTime}, #{notes}, #{isCurrent}
-        )
-    </insert>
-
-    <select id="selectById" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_wardrobe_location_record
-        WHERE id = #{id} AND deleted = 0
-    </select>
 
     <select id="selectCurrentByClothingId" resultMap="BaseResultMap">
         SELECT
@@ -84,8 +67,10 @@
 
     <update id="delete">
         UPDATE t_wardrobe_location_record
-        SET deleted = 1, updated_at = NOW()
-        WHERE id = #{id} AND deleted = 0
+        SET deleted    = 1,
+            updated_at = NOW()
+        WHERE id = #{id}
+          AND deleted = 0
     </update>
 
     <select id="existsCurrentByClothingIdAndLocationId" resultType="boolean">

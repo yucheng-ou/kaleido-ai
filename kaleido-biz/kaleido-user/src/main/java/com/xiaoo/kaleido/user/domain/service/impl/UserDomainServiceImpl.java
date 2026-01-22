@@ -15,8 +15,6 @@ import java.util.UUID;
 
 /**
  * 用户领域服务实现
- * <p>
- * 用户领域服务的具体实现，处理跨实体的用户业务逻辑
  *
  * @author ouyucheng
  * @date 2025/12/16
@@ -60,54 +58,58 @@ public class UserDomainServiceImpl implements IUserDomainService {
 
     @Override
     public UserAggregate findByIdOrThrow(String userId) {
-        return userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = userRepository.findById(userId);
+        if (aggregate == null) {
+            throw UserException.of(UserErrorCode.USER_NOT_EXIST);
+        }
+        return aggregate;
     }
 
     @Override
     public UserAggregate changeNickName(String userId, String nickName) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.changeNickName(nickName);
         return aggregate;
     }
 
     @Override
     public UserAggregate freezeUser(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.freeze();
         return aggregate;
     }
 
     @Override
     public UserAggregate unfreezeUser(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.unfreeze();
         return aggregate;
     }
 
     @Override
     public UserAggregate deleteUser(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.delete();
         return aggregate;
     }
 
     @Override
     public UserAggregate updateAvatar(String userId, String avatarUrl) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.updateAvatar(avatarUrl);
         return aggregate;
     }
 
     @Override
     public UserAggregate login(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.login();
         return aggregate;
     }
 
     @Override
     public UserAggregate logout(String userId) {
-        UserAggregate aggregate = userRepository.findByIdOrThrow(userId);
+        UserAggregate aggregate = findByIdOrThrow(userId);
         aggregate.logout();
         return aggregate;
     }

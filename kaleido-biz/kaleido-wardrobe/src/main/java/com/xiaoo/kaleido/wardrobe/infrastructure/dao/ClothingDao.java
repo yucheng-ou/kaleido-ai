@@ -35,28 +35,6 @@ public interface ClothingDao extends BaseMapper<ClothingPO> {
     List<ClothingPO> findByUserId(@Param("userId") String userId);
 
     /**
-     * 根据用户ID和类型编码查询服装列表
-     *
-     * @param userId   用户ID
-     * @param typeCode 服装类型编码
-     * @return 服装列表
-     */
-    List<ClothingPO> findByUserIdAndTypeCode(@Param("userId") String userId, @Param("typeCode") String typeCode);
-
-    /**
-     * 根据用户ID、类型编码和颜色编码查询服装列表
-     *
-     * @param userId    用户ID
-     * @param typeCode  服装类型编码
-     * @param colorCode 颜色编码
-     * @return 服装列表
-     */
-    List<ClothingPO> findByUserIdAndTypeCodeAndColorCode(
-            @Param("userId") String userId,
-            @Param("typeCode") String typeCode,
-            @Param("colorCode") String colorCode);
-
-    /**
      * 检查用户下服装名称是否已存在
      *
      * @param userId 用户ID

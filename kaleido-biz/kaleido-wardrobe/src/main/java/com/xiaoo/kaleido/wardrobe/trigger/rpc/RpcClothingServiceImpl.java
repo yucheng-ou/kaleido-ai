@@ -4,7 +4,9 @@ import com.xiaoo.kaleido.api.wardrobe.IRpcClothingService;
 import com.xiaoo.kaleido.api.wardrobe.response.ClothingInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
+import com.xiaoo.kaleido.wardrobe.application.convertor.WardrobeConvertor;
 import com.xiaoo.kaleido.wardrobe.application.query.IClothingQueryService;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ import java.util.List;
 public class RpcClothingServiceImpl implements IRpcClothingService {
 
     private final IClothingQueryService clothingQueryService;
+    private final IClothingDomainService clothingDomainService;
+    private final WardrobeConvertor wardrobeConvertor;
 
     @Override
     public Result<List<ClothingInfoResponse>> getClothingListByUserId(@NotBlank String userId) {
@@ -41,7 +45,9 @@ public class RpcClothingServiceImpl implements IRpcClothingService {
     public Result<ClothingInfoResponse> getClothingById(@NotBlank String clothingId) {
         log.info("RPC查询服装详情，服装ID: {}", clothingId);
         
-        ClothingInfoResponse clothingInfo = clothingQueryService.findById(clothingId);
+        // RPC服务是内部服务调用，不进行用户权限校验，直接查询服装信息
+        var clothing = clothingDomainService.findByIdOrThrow(clothingId);
+        ClothingInfoResponse clothingInfo = wardrobeConvertor.toClothingResponse(clothing);
         return Result.success(clothingInfo);
     }
 }

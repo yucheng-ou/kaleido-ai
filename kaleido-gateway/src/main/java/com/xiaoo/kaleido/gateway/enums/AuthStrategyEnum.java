@@ -13,7 +13,7 @@ import lombok.Getter;
 public enum AuthStrategyEnum {
     /**
      * 公共路径策略
-     * <p>
+
      * 无需任何认证，任何人都可以访问
      * 适用于登录页面、公开API接口等
      */
@@ -21,7 +21,7 @@ public enum AuthStrategyEnum {
 
     /**
      * 用户路径策略
-     * <p>
+
      * 需要用户登录认证
      * 适用于用户个人中心、用户相关API接口等
      */
@@ -29,7 +29,7 @@ public enum AuthStrategyEnum {
 
     /**
      * 管理员路径策略
-     * <p>
+
      * 需要管理员登录认证
      * 适用于管理后台、管理员相关API接口等
      */

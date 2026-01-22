@@ -37,6 +37,14 @@ public class TagQueryServiceImpl implements TagQueryService {
     }
 
     @Override
+    public TagInfoResponse findByIdAndUserId(String tagId, String userId) {
+        // 1.查询标签
+        return tagRepository.findByIdAndUserId(tagId, userId)
+                .map(tagConvertor::toResponse)
+                .orElse(null);
+    }
+
+    @Override
     public List<TagInfoResponse> findByUserIdAndTypeCode(String userId, String typeCode) {
         try {
             // 1.查询标签列表

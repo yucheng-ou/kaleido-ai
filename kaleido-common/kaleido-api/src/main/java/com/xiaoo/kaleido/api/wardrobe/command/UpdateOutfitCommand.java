@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,21 +16,16 @@ import java.util.List;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateOutfitCommand {
+public class UpdateOutfitCommand extends BaseCommand {
     
     /**
      * 穿搭ID
      */
     @NotBlank(message = "穿搭ID不能为空")
     private String outfitId;
-    
-    /**
-     * 用户ID
-     */
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
     
     /**
      * 穿搭名称

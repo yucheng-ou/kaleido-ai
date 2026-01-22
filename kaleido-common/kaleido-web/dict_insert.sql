@@ -1,0 +1,424 @@
+-- 字典表数据插入
+-- 生成时间: 2026-01-22 16:17:44
+
+-- 服装类型 (CLOTHING_TYPE)
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '8647adcb-a2a9-423d-bdb5-04ca35c2c8e1',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'TSHIRT',
+    'T恤',
+    NULL,
+    1
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '980c29f4-a508-48db-b2fd-033eda53bf0b',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SHIRT',
+    '衬衫',
+    NULL,
+    2
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '45f543df-0f08-4ecf-905c-ed7438b58afb',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'PANTS',
+    '裤子',
+    NULL,
+    3
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '76f6bafa-ea11-43ee-a54b-47367ae6095d',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'COAT',
+    '外套',
+    NULL,
+    4
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '5171cebd-133c-4a91-ba9d-e5b39944dfb2',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SWEATER',
+    '毛衣',
+    NULL,
+    5
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '290420b9-64b5-4634-9baa-5a26e208efd6',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SKIRT',
+    '裙子',
+    NULL,
+    6
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'd92585eb-73de-4886-8630-11aa8bfd75c0',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'DRESS',
+    '连衣裙',
+    NULL,
+    7
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '1ea320c1-cc86-4d81-9a87-785ef6b61cbf',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SHORTS',
+    '短裤',
+    NULL,
+    8
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'ca96f6c4-4db6-4ce6-89b4-2e451142a06b',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'JEANS',
+    '牛仔裤',
+    NULL,
+    9
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'e9ab540a-f01e-4042-bc43-6082840e4bdd',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SPORTSWEAR',
+    '运动服',
+    NULL,
+    10
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '3521a3f2-ae87-4e2c-b82c-b12f5e4726d7',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'PAJAMAS',
+    '睡衣',
+    NULL,
+    11
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'dd0cf331-50b2-45e5-81dd-0f4329258980',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'UNDERWEAR',
+    '内衣',
+    NULL,
+    12
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '25a24393-0e8e-4d4e-921a-b1515ac341a2',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SOCKS',
+    '袜子',
+    NULL,
+    13
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '9a8af17c-c66b-48c3-bf01-a95852a45407',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'HAT',
+    '帽子',
+    NULL,
+    14
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '6e814050-4a44-4e6b-82a4-6c0d63fe2836',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'CLOTHING_TYPE',
+    '服装类型',
+    'SHOES',
+    '鞋子',
+    NULL,
+    15
+);
+
+-- 颜色 (COLOR)
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'b7a93631-446f-4e0b-a610-ae8eeaae4879',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'RED',
+    '红色',
+    '#FF0000',
+    1
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '18124a76-158d-48eb-a0ff-d1a2399e1283',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'ORANGE',
+    '橙色',
+    '#FFA500',
+    2
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'b5199205-25a2-43c5-a05e-9cb12a58486a',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'YELLOW',
+    '黄色',
+    '#FFFF00',
+    3
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '765726f8-d2ee-462c-b45d-cbbdecf17f19',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'GREEN',
+    '绿色',
+    '#00FF00',
+    4
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '6d0a2b17-fe15-458f-8032-674a68356247',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'BLUE',
+    '蓝色',
+    '#0000FF',
+    5
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '5bd78600-9af3-4ad0-850a-b7025b632abd',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'PURPLE',
+    '紫色',
+    '#800080',
+    6
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '217ad027-d4e8-4bec-a3c4-4e9782058b61',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'BLACK',
+    '黑色',
+    '#000000',
+    7
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '1e954af9-23ae-47e5-b4c4-83bca0dda529',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'WHITE',
+    '白色',
+    '#FFFFFF',
+    8
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '16938b19-d4ba-4acf-b606-b227862ae7cb',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'GRAY',
+    '灰色',
+    '#808080',
+    9
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '07434c19-f12b-4493-b1df-456a632310d9',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'BROWN',
+    '棕色',
+    '#A52A2A',
+    10
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'ed61cf71-ce8e-4b8a-a21d-651c67d0a268',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'PINK',
+    '粉色',
+    '#FFC0CB',
+    11
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'f98a3df8-bcb8-4c5c-8ca7-da9d78c9bc10',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'SILVER',
+    '银色',
+    '#C0C0C0',
+    12
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    'cc5bc3a1-4b74-48d2-9749-bbcb10f7496f',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'COLOR',
+    '颜色',
+    'GOLD',
+    '金色',
+    '#FFD700',
+    13
+);
+
+-- 季节 (SEASON)
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '548b5baa-bdad-42d6-8fa5-733075fe6902',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'SEASON',
+    '季节',
+    'SPRING',
+    '春季',
+    NULL,
+    1
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '2e40127b-2efc-4f6d-87df-61ffd79cb242',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'SEASON',
+    '季节',
+    'SUMMER',
+    '夏季',
+    NULL,
+    2
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '660e8523-54b8-4eb7-8e26-b7d165cde2f3',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'SEASON',
+    '季节',
+    'AUTUMN',
+    '秋季',
+    NULL,
+    3
+);
+INSERT INTO `t_dict` (`id`, `created_at`, `updated_at`, `deleted`, `lock_version`, `type_code`, `type_name`, `dict_code`, `dict_name`, `dict_value`, `sort`) VALUES (
+    '70565b07-d58d-4a7a-a132-ac1111f6d46b',
+    NOW(),
+    NOW(),
+    0,
+    0,
+    'SEASON',
+    '季节',
+    'WINTER',
+    '冬季',
+    NULL,
+    4
+);

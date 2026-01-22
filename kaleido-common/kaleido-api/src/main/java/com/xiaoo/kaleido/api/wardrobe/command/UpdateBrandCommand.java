@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,9 +13,10 @@ import lombok.*;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateBrandCommand {
+public class UpdateBrandCommand extends BaseCommand {
     
     /**
      * Logo路径（在MinIO中的文件路径）

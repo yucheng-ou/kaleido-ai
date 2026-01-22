@@ -41,7 +41,7 @@ public class TagRelation extends BaseEntity {
 
     /**
      * 创建标签关联
-     * <p>
+
      * 根据标签ID、实体ID和用户ID创建新的标签关联
      *
      * @param tagId    标签ID，不能为空

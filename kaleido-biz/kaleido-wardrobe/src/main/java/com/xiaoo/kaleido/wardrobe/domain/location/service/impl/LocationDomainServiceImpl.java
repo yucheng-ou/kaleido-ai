@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 
 /**
  * 位置领域服务实现类
- * <p>
- * 实现位置领域服务的所有业务逻辑，包括参数校验、业务规则验证、异常处理等
- * 遵循领域服务职责：包含参数校验与聚合根的修改，可以查询数据库进行参数校验
  *
  * @author ouyucheng
  * @date 2026/1/17
@@ -68,9 +65,13 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
             throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "位置ID不能为空");
         }
 
-        // 2. 查找位置
-        return locationRepository.findById(locationId)
-                .orElseThrow(() -> WardrobeException.of(WardrobeErrorCode.LOCATION_NOT_FOUND));
+        // 2. 判断数据是否存在
+        StorageLocationAggregate locationAggregate = locationRepository.findById(locationId);
+        if(locationAggregate == null) {
+            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NOT_FOUND);
+        }
+
+        return locationAggregate;
     }
 
     @Override
@@ -160,28 +161,6 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
     }
 
     @Override
-    public StorageLocationAggregate setPrimaryImage(String locationId, String imageId) {
-        // 1. 查找位置
-        StorageLocationAggregate location = findByIdOrThrow(locationId);
-
-        // 2. 参数校验
-        if (StrUtil.isBlank(imageId)) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "图片ID不能为空");
-        }
-
-        // 3. 设置主图
-        boolean success = location.setAsPrimaryImage(imageId);
-        if (!success) {
-            throw WardrobeException.of(WardrobeErrorCode.IMAGE_NOT_FOUND);
-        }
-
-        // 4. 记录日志
-        log.info("位置主图设置完成，位置ID: {}, 主图ID: {}", locationId, imageId);
-
-        return location;
-    }
-
-    @Override
     public List<StorageLocationAggregate> findByUserId(String userId) {
         // 1. 参数校验
         if (StrUtil.isBlank(userId)) {
@@ -250,15 +229,11 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
         location.addImages(locationImages);
 
         // 6. 如果新图片中有主图，设置主图
+        // 找到对应的实体ID
         images.stream()
                 .filter(image -> Boolean.TRUE.equals(image.getIsPrimary()))
-                .findFirst()
-                .ifPresent(primaryImage -> {
-                    // 找到对应的实体ID
-                    locationImages.stream()
-                            .filter(img -> img.getPath().equals(primaryImage.getPath()))
-                            .findFirst()
-                            .ifPresent(img -> location.setAsPrimaryImage(img.getId()));
-                });
+                .findFirst().flatMap(primaryImage -> locationImages.stream()
+                        .filter(img -> img.getPath().equals(primaryImage.getPath()))
+                        .findFirst()).ifPresent(img -> location.setAsPrimaryImage(img.getId()));
     }
 }

@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 
 /**
  * 服装仓储实现（基础设施层）
- * <p>
- * 服装仓储接口的具体实现，负责服装聚合根的持久化和查询
  *
  * @author ouyucheng
  * @date 2026/1/16
@@ -102,12 +100,12 @@ public class ClothingRepositoryImpl implements IClothingRepository {
     }
 
     @Override
-    public Optional<ClothingAggregate> findById(String clothingId) {
+    public ClothingAggregate findById(String clothingId) {
         try {
             // 1.查询服装基本信息
             ClothingPO clothingPO = clothingDao.findById(clothingId);
             if (clothingPO == null) {
-                return Optional.empty();
+                throw WardrobeException.of(BizErrorCode.DATA_NOT_EXIST);
             }
 
             // 2.转换为ClothingAggregate
@@ -118,17 +116,13 @@ public class ClothingRepositoryImpl implements IClothingRepository {
             List<ClothingImage> images = ClothingImageInfraConvertor.INSTANCE.toEntityList(imagePOs);
             clothingAggregate.addImages(images);
 
-            return Optional.of(clothingAggregate);
+            return clothingAggregate;
+        } catch (WardrobeException e) {
+            throw e;
         } catch (Exception e) {
             log.error("查询服装失败，服装ID: {}, 原因: {}", clothingId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "服装查询失败");
         }
-    }
-
-    @Override
-    public ClothingAggregate findByIdOrThrow(String clothingId) {
-        return findById(clothingId)
-                .orElseThrow(() -> WardrobeException.of(BizErrorCode.DATA_NOT_EXIST));
     }
 
     @Override
@@ -155,40 +149,6 @@ public class ClothingRepositoryImpl implements IClothingRepository {
         } catch (Exception e) {
             log.error("查询用户服装列表失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户服装列表查询失败");
-        }
-    }
-
-    @Override
-    public List<ClothingAggregate> findByUserIdAndTypeCode(String userId, String typeCode) {
-        try {
-            // 1.查询服装基本信息列表
-            List<ClothingPO> clothingPOs = clothingDao.findByUserIdAndTypeCode(userId, typeCode);
-
-            // 2.转换为ClothingAggregate列表（不加载图片，按需加载）
-            return clothingPOs.stream()
-                    .map(ClothingInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询用户类型服装列表失败，用户ID: {}, 类型编码: {}, 原因: {}",
-                    userId, typeCode, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户类型服装列表查询失败");
-        }
-    }
-
-    @Override
-    public List<ClothingAggregate> findByUserIdAndTypeCodeAndColorCode(String userId, String typeCode, String colorCode) {
-        try {
-            // 1.查询服装基本信息列表
-            List<ClothingPO> clothingPOs = clothingDao.findByUserIdAndTypeCodeAndColorCode(userId, typeCode, colorCode);
-
-            // 2.转换为ClothingAggregate列表（不加载图片，按需加载）
-            return clothingPOs.stream()
-                    .map(ClothingInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询用户类型颜色服装列表失败，用户ID: {}, 类型编码: {}, 颜色编码: {}, 原因: {}",
-                    userId, typeCode, colorCode, e.getMessage(), e);
-            throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "用户类型颜色服装列表查询失败");
         }
     }
 

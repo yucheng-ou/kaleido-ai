@@ -23,7 +23,7 @@
         包含所有用户操作流水表的字段，用于SQL语句中的字段引用
     -->
     <sql id="UserOperateStreamColumns">
-        id, operate_type, operate_detail, operator_id, operate_time, created_at, updated_at, deleted, lock_version
+        id, operate_type, operate_detail, operator_id, operate_time
     </sql>
 
     <!-- 

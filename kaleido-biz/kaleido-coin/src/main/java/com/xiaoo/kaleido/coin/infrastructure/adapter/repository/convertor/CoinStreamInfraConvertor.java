@@ -20,7 +20,7 @@ public class CoinStreamInfraConvertor {
 
     /**
      * CoinStream列表转换为CoinStreamPO列表
-     * <p>
+
      * 用于批量转换领域实体列表为持久化对象列表
      *
      * @param entityList 金币流水实体列表

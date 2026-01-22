@@ -19,7 +19,7 @@ public interface CoinAccountDao extends BaseMapper<CoinAccountPO> {
 
     /**
      * 根据用户ID查询账户
-     * <p>
+
      * 用于按用户ID查找账户信息
      *
      * @param userId 用户ID，不能为空
@@ -29,7 +29,7 @@ public interface CoinAccountDao extends BaseMapper<CoinAccountPO> {
 
     /**
      * 检查用户账户是否存在
-     * <p>
+
      * 用于检查指定用户ID的账户是否存在
      *
      * @param userId 用户ID，不能为空
@@ -39,7 +39,7 @@ public interface CoinAccountDao extends BaseMapper<CoinAccountPO> {
 
     /**
      * 根据用户ID删除账户（逻辑删除）
-     * <p>
+
      * 用于删除指定用户的账户
      *
      * @param userId 用户ID，不能为空
@@ -49,7 +49,7 @@ public interface CoinAccountDao extends BaseMapper<CoinAccountPO> {
 
     /**
      * 根据账户ID查询账户
-     * <p>
+
      * 用于按账户ID查找账户信息
      *
      * @param accountId 账户ID，不能为空

@@ -67,7 +67,6 @@ public class BrandRepositoryImpl implements IBrandRepository {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(String brandId) {
         try {
             // 删除品牌
@@ -81,28 +80,22 @@ public class BrandRepositoryImpl implements IBrandRepository {
     }
 
     @Override
-    public Optional<BrandAggregate> findById(String brandId) {
+    public BrandAggregate findById(String brandId) {
         try {
             // 1.查询品牌基本信息
             BrandPO brandPO = brandDao.findById(brandId);
             if (brandPO == null) {
-                return Optional.empty();
+                throw WardrobeException.of(BizErrorCode.DATA_NOT_EXIST);
             }
 
             // 2.转换为BrandAggregate
-            BrandAggregate brandAggregate = BrandInfraConvertor.INSTANCE.toAggregate(brandPO);
-
-            return Optional.of(brandAggregate);
+            return BrandInfraConvertor.INSTANCE.toAggregate(brandPO);
+        } catch (WardrobeException e) {
+            throw e;
         } catch (Exception e) {
             log.error("查询品牌失败，品牌ID: {}, 原因: {}", brandId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "品牌查询失败");
         }
-    }
-
-    @Override
-    public BrandAggregate findByIdOrThrow(String brandId) {
-        return findById(brandId)
-                .orElseThrow(() -> WardrobeException.of(BizErrorCode.DATA_NOT_EXIST));
     }
 
     @Override

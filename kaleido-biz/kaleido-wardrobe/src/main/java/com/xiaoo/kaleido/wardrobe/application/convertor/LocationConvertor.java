@@ -25,23 +25,17 @@ public interface LocationConvertor {
 
     /**
      * 将位置聚合根转换为位置DTO
-     * <p>
+
      * 将领域层的位置聚合根转换为应用层的位置DTO
      *
      * @param locationAggregate 位置聚合根，不能为空
      * @return 位置DTO，包含位置的基本信息
      */
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "userId", target = "userId")
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "address", target = "address")
-    @Mapping(source = "primaryImageId", target = "primaryImageId")
     LocationQueryServiceImpl.LocationDTO toDTO(StorageLocationAggregate locationAggregate);
 
     /**
      * 将位置图片实体转换为图片信息DTO
-     * <p>
+
      * 将领域层的位置图片实体转换为应用层的图片信息DTO
      *
      * @param locationImage 位置图片实体，不能为空
@@ -52,7 +46,7 @@ public interface LocationConvertor {
 
     /**
      * 将位置图片信息DTO转换为API响应
-     * <p>
+
      * 将应用层的图片信息DTO转换为API层的图片响应
      *
      * @param imageDTO 图片信息DTO，不能为空
@@ -62,7 +56,7 @@ public interface LocationConvertor {
 
     /**
      * 将位置图片信息DTO列表转换为API响应列表
-     * <p>
+
      * 将应用层的图片信息DTO列表转换为API层的图片响应列表
      *
      * @param imageDTOs 图片信息DTO列表，不能为空
@@ -72,7 +66,7 @@ public interface LocationConvertor {
 
     /**
      * 将位置图片实体列表转换为图片信息DTO列表
-     * <p>
+
      * 将领域层的位置图片实体列表转换为应用层的图片信息DTO列表
      *
      * @param locationImages 位置图片实体列表，不能为空
@@ -82,7 +76,7 @@ public interface LocationConvertor {
 
     /**
      * 将位置DTO转换为API响应
-     * <p>
+
      * 将应用层的位置DTO转换为API层的位置信息响应
      *
      * @param locationDTO 位置DTO，不能为空

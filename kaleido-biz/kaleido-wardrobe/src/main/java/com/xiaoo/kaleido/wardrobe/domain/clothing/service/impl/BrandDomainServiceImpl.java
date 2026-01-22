@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 品牌领域服务实现类
- * <p>
- * 实现品牌领域服务的所有业务逻辑，包括参数校验、业务规则验证、异常处理等
  *
  * @author ouyucheng
  * @date 2026/1/15
@@ -49,8 +47,14 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
         }
 
         // 2.查找品牌
-        return brandRepository.findById(brandId)
-                .orElseThrow(() -> WardrobeException.of(WardrobeErrorCode.BRAND_NOT_FOUND));
+        BrandAggregate brandAggregate = brandRepository.findById(brandId);
+
+        // 3.校验品牌是否为空
+        if (brandAggregate == null) {
+            throw WardrobeException.of(WardrobeErrorCode.BRAND_NOT_FOUND);
+        }
+
+        return brandAggregate;
     }
 
     @Override

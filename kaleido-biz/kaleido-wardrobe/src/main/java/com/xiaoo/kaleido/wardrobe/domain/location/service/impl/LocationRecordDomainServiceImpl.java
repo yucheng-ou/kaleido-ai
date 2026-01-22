@@ -60,14 +60,11 @@ public class LocationRecordDomainServiceImpl implements ILocationRecordDomainSer
             throw WardrobeException.of(WardrobeErrorCode.OPERATE_FAILED, "服装已在目标位置");
         }
 
-        // 5. 将服装的旧位置记录标记为非当前
-        markAllAsNotCurrentByClothingId(clothingId);
-
-        // 6. 创建新的位置记录
+        // 5. 创建新的位置记录
         LocationRecordAggregate locationRecord = LocationRecordAggregate.create(
                 clothingId, locationId, userId, notes);
 
-        // 7. 记录日志
+        // 6. 记录日志
         log.info("位置记录创建完成，记录ID: {}, 服装ID: {}, 位置ID: {}, 用户ID: {}",
                 locationRecord.getId(), clothingId, locationId, userId);
 
@@ -142,17 +139,6 @@ public class LocationRecordDomainServiceImpl implements ILocationRecordDomainSer
 
         // 2. 统计位置中的当前服装数量
         return locationRecordRepository.countCurrentByLocationId(locationId);
-    }
-
-    @Override
-    public void markAllAsNotCurrentByClothingId(String clothingId) {
-        // 1. 参数校验
-        if (StrUtil.isBlank(clothingId)) {
-            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装ID不能为空");
-        }
-
-        // 2. 将服装的所有位置记录标记为非当前
-        locationRecordRepository.markAllAsNotCurrentByClothingId(clothingId);
     }
 
     /**

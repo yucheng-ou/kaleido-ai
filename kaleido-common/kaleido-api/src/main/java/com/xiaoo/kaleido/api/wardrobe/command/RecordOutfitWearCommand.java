@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -14,21 +15,12 @@ import java.util.Date;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecordOutfitWearCommand {
-    
-    /**
-     * 穿搭ID
-     */
-    @NotBlank(message = "穿搭ID不能为空")
+public class RecordOutfitWearCommand extends BaseCommand {
+
     private String outfitId;
-    
-    /**
-     * 用户ID
-     */
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
     
     /**
      * 穿着日期（可选，默认为当前日期）

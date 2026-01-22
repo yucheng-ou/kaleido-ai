@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.dao.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.xiaoo.kaleido.ds.po.BasePO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TableName("t_wardrobe_location_record")
 public class LocationRecordPO extends BasePO {
 
     /**

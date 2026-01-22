@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 金币命令服务
- * <p>
- * 负责编排金币相关的命令操作，包括账户初始化、金币操作等
- * 遵循应用层职责：只负责编排，不包含业务逻辑
  *
  * @author ouyucheng
  * @date 2026/1/19
@@ -59,7 +56,7 @@ public class CoinCommandService {
         coinAccountRepository.update(account);
 
         // 3. 记录日志
-        log.info("应用层：邀请奖励处理完成，邀请人用户ID：{}，新用户ID：{}", 
+        log.info("应用层：邀请奖励处理完成，邀请人用户ID：{}，新用户ID：{}",
                 command.getInviterUserId(), command.getNewUserId());
     }
 
@@ -77,7 +74,7 @@ public class CoinCommandService {
         coinAccountRepository.update(account);
 
         // 3. 记录日志
-        log.info("应用层：位置创建扣费处理完成，用户ID：{}，位置ID：{}", 
+        log.info("应用层：位置创建扣费处理完成，用户ID：{}，位置ID：{}",
                 command.getUserId(), command.getLocationId());
     }
 
@@ -95,7 +92,7 @@ public class CoinCommandService {
         coinAccountRepository.update(account);
 
         // 3. 记录日志
-        log.info("应用层：搭配创建扣费处理完成，用户ID：{}，搭配ID：{}", 
+        log.info("应用层：搭配创建扣费处理完成，用户ID：{}，搭配ID：{}",
                 command.getUserId(), command.getOutfitId());
     }
 
@@ -106,12 +103,12 @@ public class CoinCommandService {
      */
     public void deposit(DepositCommand command) {
         // 1. 将String类型的bizType转换为枚举
-        com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType bizTypeEnum = 
+        com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType bizTypeEnum =
                 com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType.valueOf(command.getBizType());
-        
+
         // 2. 创建操作DTO
         CoinOperationDTO operationDTO = CoinOperationDTO.createIncome(
-                command.getUserId(), 
+                command.getUserId(),
                 command.getAmount(),
                 bizTypeEnum,
                 command.getBizId(),
@@ -124,7 +121,7 @@ public class CoinCommandService {
         coinAccountRepository.update(account);
 
         // 5. 记录日志
-        log.info("应用层：金币增加操作完成，用户ID：{}，金额：{}，业务类型：{}", 
+        log.info("应用层：金币增加操作完成，用户ID：{}，金额：{}，业务类型：{}",
                 command.getUserId(), command.getAmount(), command.getBizType());
     }
 
@@ -135,12 +132,12 @@ public class CoinCommandService {
      */
     public void withdraw(WithdrawCommand command) {
         // 1. 将String类型的bizType转换为枚举
-        com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType bizTypeEnum = 
+        com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType bizTypeEnum =
                 com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream.BizType.valueOf(command.getBizType());
-        
+
         // 2. 创建操作DTO
         CoinOperationDTO operationDTO = CoinOperationDTO.createExpense(
-                command.getUserId(), 
+                command.getUserId(),
                 command.getAmount(),
                 bizTypeEnum,
                 command.getBizId(),
@@ -153,7 +150,7 @@ public class CoinCommandService {
         coinAccountRepository.update(account);
 
         // 5. 记录日志
-        log.info("应用层：金币减少操作完成，用户ID：{}，金额：{}，业务类型：{}", 
+        log.info("应用层：金币减少操作完成，用户ID：{}，金额：{}，业务类型：{}",
                 command.getUserId(), command.getAmount(), command.getBizType());
     }
 }

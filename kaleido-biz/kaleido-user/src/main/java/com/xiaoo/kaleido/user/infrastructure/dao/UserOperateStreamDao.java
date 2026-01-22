@@ -18,7 +18,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 根据用户ID查找用户操作流水列表
-     * <p>
+
      * 查询指定用户的所有操作流水记录，按操作时间倒序排列
      *
      * @param id 用户ID，不能为空
@@ -28,7 +28,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 根据用户ID和操作类型查找用户操作流水列表
-     * <p>
+
      * 查询指定用户特定操作类型的流水记录，按操作时间倒序排列
      *
      * @param id          用户ID，不能为空
@@ -39,7 +39,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 根据操作者ID查找用户操作流水列表
-     * <p>
+
      * 查询指定操作者执行的所有操作流水记录，按操作时间倒序排列
      *
      * @param operatorId 操作者ID，不能为空
@@ -49,7 +49,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 根据用户ID分页查询操作流水
-     * <p>
+
      * 查询指定用户的操作流水记录，支持分页查询，按操作时间倒序排列
      *
      * @param id       用户ID，不能为空
@@ -61,7 +61,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 根据用户ID查询操作流水（限制条数）
-     * <p>
+
      * 查询指定用户的最新操作流水记录，限制返回条数，按操作时间倒序排列
      *
      * @param id    用户ID，不能为空
@@ -72,7 +72,7 @@ public interface UserOperateStreamDao extends BaseMapper<UserOperateStreamPO> {
 
     /**
      * 统计用户操作流水数量
-     * <p>
+
      * 统计指定用户的操作流水记录总数
      *
      * @param id 用户ID，不能为空

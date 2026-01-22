@@ -106,7 +106,7 @@ public class ClothingAggregate extends BaseEntity {
 
     /**
      * 创建新服装聚合根
-     * <p>
+
      * 用于创建新服装时构建聚合根
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
@@ -153,7 +153,7 @@ public class ClothingAggregate extends BaseEntity {
 
     /**
      * 更新服装信息
-     * <p>
+
      * 更新服装的基本信息，不包括图片和位置
      * 注意：参数和状态校验在Service层完成，这里只负责更新信息
      *
@@ -202,7 +202,7 @@ public class ClothingAggregate extends BaseEntity {
 
     /**
      * 批量添加图片
-     * <p>
+
      * 用于一次性添加多张图片的场景
      * 注意：参数和状态校验在Service层完成，这里只负责添加图片
      *
@@ -231,7 +231,7 @@ public class ClothingAggregate extends BaseEntity {
 
     /**
      * 设置主图（包含业务规则）
-     * <p>
+
      * 设置指定图片为主图，同时更新图片实体的isPrimary状态
      * 注意：调用前需要确保图片存在且属于当前服装
      *

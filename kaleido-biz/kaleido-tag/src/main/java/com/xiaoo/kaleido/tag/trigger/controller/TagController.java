@@ -6,6 +6,7 @@ import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.UpdateTagCommand;
 import com.xiaoo.kaleido.api.tag.response.TagInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import com.xiaoo.kaleido.tag.application.command.TagCommandService;
 import com.xiaoo.kaleido.tag.application.query.TagQueryService;
 import jakarta.validation.Valid;
@@ -41,7 +42,8 @@ public class TagController {
      */
     @PostMapping
     public Result<Void> createTag(@Valid @RequestBody CreateTagCommand command) {
-        tagCommandService.createTag(command);
+        String userId = StpUserUtil.getLoginId();
+        tagCommandService.createTag(userId, command);
         return Result.success();
     }
 
@@ -57,7 +59,8 @@ public class TagController {
             @NotBlank(message = "标签ID不能为空")
             @PathVariable String tagId,
             @Valid @RequestBody UpdateTagCommand command) {
-        tagCommandService.updateTag(tagId, command);
+        String userId = StpUserUtil.getLoginId();
+        tagCommandService.updateTag(userId, tagId, command);
         return Result.success();
     }
 
@@ -72,23 +75,22 @@ public class TagController {
     public Result<TagInfoResponse> getTag(
             @NotBlank(message = "标签ID不能为空")
             @PathVariable String tagId) {
-        TagInfoResponse tagInfo = tagQueryService.findById(tagId);
+        String userId = StpUserUtil.getLoginId();
+        TagInfoResponse tagInfo = tagQueryService.findByIdAndUserId(tagId, userId);
         return Result.success(tagInfo);
     }
 
     /**
      * 查询标签列表
      *
-     * @param userId   用户ID，不能为空
      * @param typeCode 标签类型编码，不能为空
      * @return 标签信息响应列表
      */
     @GetMapping("/list")
     public Result<List<TagInfoResponse>> listTags(
-            @NotBlank(message = "用户ID不能为空")
-            @RequestParam String userId,
             @NotBlank(message = "标签类型编码不能为空")
             @RequestParam String typeCode) {
+        String userId = StpUserUtil.getLoginId();
         List<TagInfoResponse> tagList = tagQueryService.findByUserIdAndTypeCode(userId, typeCode);
         return Result.success(tagList);
     }
@@ -101,7 +103,8 @@ public class TagController {
      */
     @PostMapping("/associate")
     public Result<Void> associateEntity(@Valid @RequestBody AssociateEntityCommand command) {
-        tagCommandService.associateEntity(command);
+        String userId = StpUserUtil.getLoginId();
+        tagCommandService.associateEntity(userId, command);
         return Result.success();
     }
 
@@ -113,7 +116,8 @@ public class TagController {
      */
     @PostMapping("/dissociate")
     public Result<Void> dissociateEntity(@Valid @RequestBody DissociateEntityCommand command) {
-        tagCommandService.dissociateEntity(command);
+        String userId = StpUserUtil.getLoginId();
+        tagCommandService.dissociateEntity(userId, command);
         return Result.success();
     }
 }

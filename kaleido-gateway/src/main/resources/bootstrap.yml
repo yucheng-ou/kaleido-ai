@@ -8,3 +8,6 @@ spring:
       - classpath:nacos.yml
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
       - nacos:kaleido-cache.yml
+# 服务器配置
+server:
+  port: 9010  # 网关服务端口

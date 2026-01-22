@@ -69,7 +69,7 @@ public class OutfitImage extends BaseEntity {
 
     /**
      * 创建穿搭图片
-     * <p>
+
      * 根据穿搭ID、图片路径和其他信息创建新的穿搭图片
      * 注意：参数校验在Service层完成，这里只负责构建实体
      *

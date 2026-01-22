@@ -64,7 +64,7 @@ public class LocationImage extends BaseEntity {
 
     /**
      * 创建位置图片
-     * <p>
+
      * 根据位置ID、图片路径和其他信息创建新的位置图片
      * 注意：参数校验在Service层完成，这里只负责构建实体
      *

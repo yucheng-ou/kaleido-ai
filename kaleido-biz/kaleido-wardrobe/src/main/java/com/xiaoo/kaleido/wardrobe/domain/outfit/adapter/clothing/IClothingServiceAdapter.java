@@ -13,7 +13,7 @@ public interface IClothingServiceAdapter {
 
     /**
      * 验证服装是否属于指定用户
-     * <p>
+
      * 用于业务规则校验：确保穿搭中的服装都属于同一用户
      *
      * @param clothingId 服装ID，不能为空
@@ -25,7 +25,7 @@ public interface IClothingServiceAdapter {
 
     /**
      * 批量验证服装列表是否都属于指定用户
-     * <p>
+
      * 用于业务规则校验：确保穿搭中的所有服装都属于同一用户
      *
      * @param clothingIds 服装ID列表，不能为空

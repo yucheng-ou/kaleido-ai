@@ -1,11 +1,9 @@
 package com.xiaoo.kaleido.api.wardrobe.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 将衣服添加到位置命令
@@ -17,9 +15,10 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddClothingToLocationCommand {
+public class AddClothingToLocationCommand extends BaseCommand {
 
     /**
      * 服装ID
@@ -34,13 +33,6 @@ public class AddClothingToLocationCommand {
      */
     @NotBlank(message = "位置ID不能为空")
     private String locationId;
-
-    /**
-     * 用户ID
-     * 用于验证权限，确保用户只能操作自己的服装和位置
-     */
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
 
     /**
      * 备注

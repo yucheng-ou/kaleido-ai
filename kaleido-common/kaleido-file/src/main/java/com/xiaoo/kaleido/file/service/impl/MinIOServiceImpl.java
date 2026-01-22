@@ -323,6 +323,7 @@ public class MinIOServiceImpl implements IMinIOService {
         imageInfo.setWidth(width);
         imageInfo.setHeight(height);
         imageInfo.setMimeType(mimeType);
+        imageInfo.setImageType(imageType);
         imageInfo.setExtension(extension);
         imageInfo.setCreateTime(stat.lastModified().toString());
         imageInfo.setLastModified(stat.lastModified().toString());

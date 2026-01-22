@@ -18,13 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * 位置仓储实现（基础设施层）
- * <p>
- * 位置仓储接口的具体实现，负责位置聚合根的持久化和查询
  *
  * @author ouyucheng
  * @date 2026/1/17
@@ -107,12 +104,12 @@ public class LocationRepositoryImpl implements ILocationRepository {
     }
 
     @Override
-    public Optional<StorageLocationAggregate> findById(String locationId) {
+    public StorageLocationAggregate findById(String locationId) {
         try {
             // 1.查询位置基本信息
             LocationPO locationPO = locationDao.findById(locationId);
             if (locationPO == null) {
-                return Optional.empty();
+                throw WardrobeException.of(BizErrorCode.DATA_NOT_EXIST);
             }
 
             // 2.查询该位置的所有图片
@@ -133,17 +130,13 @@ public class LocationRepositoryImpl implements ILocationRepository {
                         .ifPresent(primaryImage -> locationAggregate.setPrimaryImageId(primaryImage.getId()));
             }
 
-            return Optional.of(locationAggregate);
+            return locationAggregate;
+        } catch (WardrobeException e) {
+            throw e;
         } catch (Exception e) {
             log.error("查询位置失败，位置ID: {}, 原因: {}", locationId, e.getMessage(), e);
             throw WardrobeException.of(WardrobeErrorCode.QUERY_FAIL, "位置查询失败");
         }
-    }
-
-    @Override
-    public StorageLocationAggregate findByIdOrThrow(String locationId) {
-        return findById(locationId)
-                .orElseThrow(() -> WardrobeException.of(BizErrorCode.DATA_NOT_EXIST));
     }
 
     @Override

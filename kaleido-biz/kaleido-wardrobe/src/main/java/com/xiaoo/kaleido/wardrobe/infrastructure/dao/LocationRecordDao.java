@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationImagePO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationRecordPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,23 +17,7 @@ import java.util.List;
  * @date 2026/1/19
  */
 @Mapper
-public interface LocationRecordDao {
-
-    /**
-     * 插入位置记录
-     *
-     * @param locationRecordPO 位置记录持久化对象
-     * @return 插入记录数
-     */
-    int insert(LocationRecordPO locationRecordPO);
-
-    /**
-     * 根据ID查询位置记录
-     *
-     * @param id 位置记录ID
-     * @return 位置记录持久化对象
-     */
-    LocationRecordPO selectById(@Param("id") String id);
+public interface LocationRecordDao extends BaseMapper<LocationRecordPO> {
 
     /**
      * 根据服装ID查询当前位置记录

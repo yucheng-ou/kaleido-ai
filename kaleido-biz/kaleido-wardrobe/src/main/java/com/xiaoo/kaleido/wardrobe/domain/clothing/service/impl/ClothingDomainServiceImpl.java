@@ -19,9 +19,6 @@ import java.util.stream.Collectors;
 
 /**
  * 服装领域服务实现类
- * <p>
- * 实现服装领域服务的所有业务逻辑，包括参数校验、业务规则验证、异常处理等
- * 遵循DDD原则：负责参数校验（针对controller未校验部分）+ 业务规则验证 + 聚合根操作
  *
  * @author ouyucheng
  * @date 2026/1/15
@@ -32,9 +29,6 @@ import java.util.stream.Collectors;
 public class ClothingDomainServiceImpl implements IClothingDomainService {
 
     private final IClothingRepository clothingRepository;
-
-    // ==================== 服装基本信息管理 ====================
-
 
     @Override
     public ClothingAggregate createClothingWithImages(
@@ -110,9 +104,29 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装ID不能为空");
         }
 
-        // 2.查找服装（包含图片列表）
-        return clothingRepository.findById(clothingId)
-                .orElseThrow(() -> WardrobeException.of(WardrobeErrorCode.CLOTHING_NOT_FOUND));
+        // 2.查找服装（包含图片列表）- 仓储层已处理不存在的情况
+        return clothingRepository.findById(clothingId);
+    }
+
+    @Override
+    public ClothingAggregate findByIdAndUserIdOrThrow(String clothingId, String userId) {
+        // 1.参数校验
+        if (StrUtil.isBlank(clothingId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "服装ID不能为空");
+        }
+        if (StrUtil.isBlank(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
+        }
+
+        // 2.查找服装
+        ClothingAggregate clothing = findByIdOrThrow(clothingId);
+
+        // 3.验证用户权限（只有服装所有者可以查询）
+        if (!clothing.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_OWNER_MISMATCH);
+        }
+
+        return clothing;
     }
 
     @Override
@@ -157,16 +171,41 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
             throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
         }
 
-        // 8.更新服装基本信息
+        // 6.清理现有图片并添加新图片（完整更新）
+        clothing.getImages().clear();
+
+        // 7.批量创建新图片实体
+        List<ClothingImage> imageEntities = images.stream()
+                .map(img -> ClothingImage.create(
+                        clothingId, 
+                        img.getPath(), 
+                        img.getImageOrder(), 
+                        img.getIsPrimary(),
+                        img.getImageSize(),
+                        img.getImageType() != null ? img.getImageType().name() : null,
+                        img.getWidth(),
+                        img.getHeight()
+                ))
+                .collect(Collectors.toList());
+
+        clothing.addImages(imageEntities);
+
+        // 8.设置主图（如果有）
+        imageEntities.stream()
+                .filter(img -> Boolean.TRUE.equals(img.isPrimaryImage()))
+                .findFirst()
+                .ifPresent(primaryImage -> clothing.setAsPrimaryImage(primaryImage.getId()));
+
+        // 9.更新服装基本信息
         clothing.updateInfo(name, typeCode, colorCode, seasonCode, brandId,
                 size, purchaseDate, price, description);
         
-        // 9.更新位置（如果有）
+        // 10.更新位置（如果有）
         if (currentLocationId != null) {
             clothing.changeLocation(currentLocationId);
         }
 
-        // 10.记录日志
+        // 11.记录日志
         log.info("服装信息更新成功（包含图片），服装ID: {}, 用户ID: {}, 新名称: {}, 图片数量: {}", 
                 clothingId, userId, name, images.size());
 

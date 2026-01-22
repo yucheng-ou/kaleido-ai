@@ -37,7 +37,7 @@ public class BrandAggregate extends BaseEntity {
 
     /**
      * 创建新品牌聚合根
-     * <p>
+
      * 用于创建新品牌时构建聚合根
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
@@ -60,7 +60,7 @@ public class BrandAggregate extends BaseEntity {
 
     /**
      * 更新品牌信息
-     * <p>
+
      * 更新品牌的Logo和描述信息
      * 注意：状态校验在Service层完成，这里只负责更新信息
      *

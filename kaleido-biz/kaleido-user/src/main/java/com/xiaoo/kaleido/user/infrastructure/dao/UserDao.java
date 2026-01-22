@@ -19,7 +19,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 根据ID查找用户
-     * <p>
+
      * 根据用户ID查询用户详细信息，只返回未删除的用户
      *
      * @param id 用户ID，不能为空
@@ -30,7 +30,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 根据手机号查找用户
-     * <p>
+
      * 根据手机号查询用户详细信息，只返回未删除的用户
      *
      * @param telephone 手机号，必须符合手机号格式规范
@@ -41,7 +41,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 根据邀请码查找用户
-     * <p>
+
      * 根据邀请码查询用户详细信息，只返回未删除的用户
      *
      * @param inviteCode 邀请码，不能为空
@@ -52,7 +52,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 检查用户ID是否存在
-     * <p>
+
      * 检查指定用户ID的用户是否存在且未删除
      *
      * @param id 用户ID，不能为空
@@ -63,7 +63,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 检查手机号是否存在
-     * <p>
+
      * 检查指定手机号的用户是否存在且未删除
      *
      * @param telephone 手机号，必须符合手机号格式规范
@@ -74,7 +74,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 检查邀请码是否存在
-     * <p>
+
      * 检查指定邀请码的用户是否存在且未删除
      *
      * @param inviteCode 邀请码，不能为空
@@ -85,7 +85,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 检查昵称是否存在
-     * <p>
+
      * 检查指定昵称的用户是否存在且未删除
      *
      * @param nickName 昵称，不能为空
@@ -96,7 +96,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 根据条件分页查询用户
-     * <p>
+
      * 根据查询条件分页查询用户列表，支持多种查询条件组合
      *
      * @param req 查询条件，包含分页参数和过滤条件
@@ -107,7 +107,7 @@ public interface UserDao extends BaseMapper<UserPO> {
 
     /**
      * 分页查询邀请码（用于布隆过滤器初始化）
-     * <p>
+
      * 分批查询数据库中的邀请码，用于服务启动时加载到布隆过滤器
      *
      * @param offset 偏移量

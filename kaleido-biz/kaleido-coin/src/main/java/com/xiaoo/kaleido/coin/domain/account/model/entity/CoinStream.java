@@ -113,7 +113,7 @@ public class CoinStream extends BaseEntity {
 
     /**
      * 创建收入流水
-     * <p>
+
      * 用于记录金币收入场景
      *
      * @param accountId    账户ID，不能为空
@@ -163,7 +163,7 @@ public class CoinStream extends BaseEntity {
 
     /**
      * 创建支出流水
-     * <p>
+
      * 用于记录金币支出场景
      *
      * @param accountId    账户ID，不能为空

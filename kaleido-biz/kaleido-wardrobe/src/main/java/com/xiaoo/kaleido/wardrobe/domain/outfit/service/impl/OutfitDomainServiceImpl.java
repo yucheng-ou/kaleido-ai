@@ -98,8 +98,29 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
         }
 
         // 2.查找穿搭（包含服装列表、图片列表和穿着记录）
-        return outfitRepository.findById(outfitId)
-                .orElseThrow(() -> WardrobeException.of(WardrobeErrorCode.OUTFIT_NOT_FOUND));
+        // 注意：outfitRepository.findById 已经会抛出异常，所以直接返回即可
+        return outfitRepository.findById(outfitId);
+    }
+
+    @Override
+    public OutfitAggregate findByIdAndUserIdOrThrow(String outfitId, String userId) {
+        // 1.参数校验
+        if (StrUtil.isBlank(outfitId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "穿搭ID不能为空");
+        }
+        if (StrUtil.isBlank(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PARAM_NOT_NULL, "用户ID不能为空");
+        }
+
+        // 2.查找穿搭
+        OutfitAggregate outfit = findByIdOrThrow(outfitId);
+
+        // 3.验证用户权限（只有穿搭所有者可以查询）
+        if (!outfit.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.DATA_NOT_BELONG_TO_USER);
+        }
+
+        return outfit;
     }
 
     @Override

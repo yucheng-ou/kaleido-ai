@@ -19,12 +19,6 @@ import lombok.*;
 public class CreateTagCommand extends BaseCommand {
 
     /**
-     * 用户ID
-     */
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
-
-    /**
      * 标签名称
      */
     @NotBlank(message = "标签名称不能为空")

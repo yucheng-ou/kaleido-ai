@@ -50,7 +50,7 @@ public class UserOperateStream extends BaseEntity {
 
     /**
      * 创建用户操作流水实体
-     * <p>
+
      * 用于记录用户操作时创建操作流水实体
      *
      * @param userId        用户ID，不能为空

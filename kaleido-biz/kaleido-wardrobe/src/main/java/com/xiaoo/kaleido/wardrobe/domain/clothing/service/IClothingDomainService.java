@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * 服装领域服务接口
- * <p>
- * 处理服装相关的业务逻辑，包括服装创建、状态管理、信息更新、图片管理、位置变更等核心领域操作
- * 遵循DDD原则：负责参数校验（针对controller未校验部分）+ 业务规则验证 + 聚合根操作
  *
  * @author ouyucheng
  * @date 2026/1/15
@@ -21,7 +18,7 @@ public interface IClothingDomainService {
 
     /**
      * 创建服装（包含图片）
-     * <p>
+
      * 根据用户ID、服装名称、类型编码等信息创建新服装，并包含图片信息
      * 注意：用户只提供文件路径，图片的width、height、fileSize、mimeType等字段后续通过MinIO服务获取
      *
@@ -56,7 +53,7 @@ public interface IClothingDomainService {
 
     /**
      * 根据ID查找服装，如果不存在则抛出异常
-     * <p>
+
      * 用于命令操作中需要确保服装存在的场景
      * 注意：会加载服装的基本信息和图片列表
      *
@@ -67,8 +64,21 @@ public interface IClothingDomainService {
     ClothingAggregate findByIdOrThrow(String clothingId);
 
     /**
+     * 根据ID和用户ID查找服装，如果不存在或用户不匹配则抛出异常
+
+     * 用于需要验证用户权限的查询场景
+     * 注意：会加载服装的基本信息和图片列表
+     *
+     * @param clothingId 服装ID字符串，不能为空
+     * @param userId 用户ID字符串，不能为空
+     * @return 服装聚合根，包含完整的服装信息和图片列表
+     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当服装不存在或用户不匹配时抛出
+     */
+    ClothingAggregate findByIdAndUserIdOrThrow(String clothingId, String userId);
+
+    /**
      * 更新服装信息（包含图片）
-     * <p>
+
      * 更新服装的基本信息和图片信息
      *
      * @param clothingId         服装ID，不能为空
@@ -114,7 +124,7 @@ public interface IClothingDomainService {
 
     /**
      * 删除服装
-     * <p>
+
      * 删除服装（逻辑删除或物理删除，根据业务规则）
      *
      * @param clothingId 服装ID，不能为空

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitPO">
+        <id column="id" property="id"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+        <result column="lock_version" property="lockVersion"/>
+        <result column="user_id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="season_type" property="seasonType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, name, description, season_type
+    </sql>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit
+        WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit
+        WHERE user_id = #{userId} AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByUserIdAndName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit
+        WHERE user_id = #{userId} AND name = #{name} AND deleted = 0
+    </select>
+
+    <select id="existsByUserIdAndName" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_outfit
+        WHERE user_id = #{userId} AND name = #{name} AND deleted = 0
+    </select>
+
+    <select id="findByIdIncludeDeleted" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit
+        WHERE id = #{id}
+    </select>
+
+</mapper>

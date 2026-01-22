@@ -62,7 +62,7 @@ public class LocationRecord extends BaseEntity {
 
     /**
      * 创建位置记录
-     * <p>
+
      * 用于记录服装位置变更
      * 注意：参数校验在Service层完成，这里只负责构建实体
      *

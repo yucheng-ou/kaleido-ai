@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file;
 
 import com.xiaoo.kaleido.api.wardrobe.command.LocationImageInfoCommand;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.file.ILocationFileService;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.dto.LocationImageInfoDTO;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class LocationFileServiceImpl implements ILocationFileService {
                                 .imageSize(minioInfo.getFileSize())
                                 .width(minioInfo.getWidth())
                                 .height(minioInfo.getHeight())
+                                .imageType(ImageType.fromMimeType(minioInfo.getMimeType()))
                                 .build();
                     } else {
                         return LocationImageInfoDTO.builder()

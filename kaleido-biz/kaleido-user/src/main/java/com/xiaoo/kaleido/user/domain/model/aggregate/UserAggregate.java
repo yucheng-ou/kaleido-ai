@@ -6,12 +6,13 @@ import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 用户聚合根
- * <p>
  * 用户领域模型的核心聚合根，封装用户实体及其操作流水，确保业务规则的一致性
  *
  * @author ouyucheng
@@ -19,7 +20,10 @@ import java.util.List;
  */
 @Data
 @Builder
-public class UserAggregate {
+public class UserAggregate implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户实体（聚合根内的核心实体）
@@ -36,7 +40,6 @@ public class UserAggregate {
 
     /**
      * 创建用户聚合根（基于已有用户实体）
-     * <p>
      * 用于从数据库加载已有用户时构建聚合根
      *
      * @param user 用户实体，不能为空
@@ -54,7 +57,6 @@ public class UserAggregate {
 
     /**
      * 创建用户聚合根（基于业务参数）
-     * <p>
      * 用于新用户注册时创建聚合根，会自动创建用户实体并记录创建操作流水
      *
      * @param telephone  手机号，必须符合手机号格式规范
@@ -94,7 +96,6 @@ public class UserAggregate {
 
     /**
      * 修改昵称
-     *
      * @param newNickName 新昵称
      */
     public void changeNickName(String newNickName) {

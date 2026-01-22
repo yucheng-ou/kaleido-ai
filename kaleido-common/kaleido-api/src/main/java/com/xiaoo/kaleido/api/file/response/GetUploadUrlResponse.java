@@ -21,21 +21,21 @@ public class GetUploadUrlResponse {
 
     /**
      * 预签名URL
-     * <p>
+
      * 用于前端直接上传文件到MinIO的URL
      */
     private String presignedUrl;
 
     /**
      * 对象名称
-     * <p>
+
      * 文件在MinIO中的存储路径，格式：yyyyMMdd/fileHash.extension
      */
     private String objectName;
 
     /**
      * 文件路径
-     * <p>
+
      * 完整的文件访问路径，包含MinIO的基础URL
      */
     private String filePath;

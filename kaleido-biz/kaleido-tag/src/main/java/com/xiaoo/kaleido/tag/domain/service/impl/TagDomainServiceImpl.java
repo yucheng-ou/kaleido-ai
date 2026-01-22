@@ -59,15 +59,21 @@ public class TagDomainServiceImpl implements ITagDomainService {
     }
 
     @Override
-    public TagAggregate updateTag(String tagId, String name, String color, String description) {
-        // 1.查询标签（findByIdOrThrow内部会校验tagId）
-        TagAggregate tag = findByIdOrThrow(tagId);
+    public TagAggregate updateTag(String userId, String tagId, String name, String color, String description) {
+        // 1.查询标签（需要验证标签属于当前用户）
+        TagAggregate tag = tagRepository.findByIdAndUserId(tagId, userId)
+                .orElseThrow(() -> TagException.of(TagErrorCode.TAG_NOT_FOUND));
 
-        // 2.更新标签信息
+        // 2.验证标签名称在用户下的唯一性（同类型）
+        if (!tag.getName().equals(name) && !isTagNameUnique(userId, name, tag.getTypeCode())) {
+            throw TagException.of(TagErrorCode.TAG_NAME_EXISTS);
+        }
+
+        // 3.更新标签信息
         tag.updateInfo(name, color, description);
 
-        // 3.记录日志
-        log.info("标签信息更新成功，标签ID: {}, 新名称: {}", tagId, name);
+        // 4.记录日志
+        log.info("标签信息更新成功，标签ID: {}, 用户ID: {}, 新名称: {}", tagId, userId, name);
 
         return tag;
     }

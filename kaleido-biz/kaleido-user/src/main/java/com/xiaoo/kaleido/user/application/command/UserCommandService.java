@@ -28,7 +28,6 @@ public class UserCommandService {
 
     /**
      * 创建用户
-     * <p>
      * 处理用户注册请求，创建新用户并保存到数据库
      *
      * @param command 创建用户命令，包含手机号和邀请码等信息
@@ -53,29 +52,25 @@ public class UserCommandService {
 
     /**
      * 修改昵称
-     * <p>
      * 处理用户昵称修改请求，更新用户昵称并记录操作流水
      *
-     * @param command 修改昵称命令，包含用户ID和新昵称
+     * @param userId 用户ID，不能为空
+     * @param nickName 新昵称，不能为空
      * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许修改时抛出
      */
-    public void changeNickName(ChangeNickNameCommand command) {
+    public void changeNickName(String userId, String nickName) {
         // 1.调用领域服务修改昵称
-        UserAggregate userAggregate = userDomainService.changeNickName(
-                command.getUserId(),
-                command.getNickName()
-        );
+        UserAggregate userAggregate = userDomainService.changeNickName(userId, nickName);
 
         // 2.保存更新后的用户
         userRepository.update(userAggregate);
 
         // 3.记录操作日志
-        log.info("用户昵称修改成功，用户ID: {}, 新昵称: {}", command.getUserId(), command.getNickName());
+        log.info("用户昵称修改成功，用户ID: {}, 新昵称: {}", userId, nickName);
     }
 
     /**
      * 冻结用户
-     * <p>
      * 处理用户冻结请求，将用户状态设置为冻结并记录操作流水
      *
      * @param userId 用户ID，不能为空
@@ -94,7 +89,6 @@ public class UserCommandService {
 
     /**
      * 解冻用户
-     * <p>
      * 处理用户解冻请求，将用户状态恢复为活跃并记录操作流水
      *
      * @param userId 用户ID，不能为空
@@ -113,7 +107,6 @@ public class UserCommandService {
 
     /**
      * 删除用户
-     * <p>
      * 处理用户删除请求，将用户状态设置为删除（软删除）并记录操作流水
      *
      * @param userId 用户ID，不能为空
@@ -124,7 +117,7 @@ public class UserCommandService {
         UserAggregate userAggregate = userDomainService.deleteUser(userId);
 
         // 2.保存更新后的用户
-        userRepository.save(userAggregate);
+        userRepository.update(userAggregate);
 
         // 3.记录操作日志
         log.info("用户删除成功，用户ID: {}", userId);
@@ -132,7 +125,6 @@ public class UserCommandService {
 
     /**
      * 更新用户头像
-     * <p>
      * 处理用户头像更新请求，更新用户头像URL并记录操作流水
      *
      * @param userId    用户ID，不能为空
@@ -144,7 +136,7 @@ public class UserCommandService {
         UserAggregate userAggregate = userDomainService.updateAvatar(userId, avatarUrl);
 
         // 2.保存更新后的用户
-        userRepository.save(userAggregate);
+        userRepository.update(userAggregate);
 
         // 3.记录操作日志
         log.info("用户头像更新成功，用户ID: {}", userId);
@@ -152,7 +144,6 @@ public class UserCommandService {
 
     /**
      * 记录用户登录
-     * <p>
      * 处理用户登录请求，更新最后登录时间并记录登录操作流水
      *
      * @param userId 用户ID，不能为空
@@ -172,7 +163,6 @@ public class UserCommandService {
 
     /**
      * 记录用户登出
-     * <p>
      * 处理用户登出请求，记录登出操作流水
      *
      * @param userId 用户ID，不能为空

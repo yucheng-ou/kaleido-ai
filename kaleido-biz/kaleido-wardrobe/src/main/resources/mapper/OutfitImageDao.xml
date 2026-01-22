@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.OutfitImageDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitImagePO">
+        <id column="id" property="id"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+        <result column="lock_version" property="lockVersion"/>
+        <result column="outfit_id" property="outfitId"/>
+        <result column="path" property="path"/>
+        <result column="image_order" property="imageOrder"/>
+        <result column="is_primary" property="isPrimary"/>
+        <result column="image_size" property="imageSize"/>
+        <result column="image_type" property="imageType"/>
+        <result column="width" property="width"/>
+        <result column="height" property="height"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, outfit_id, path, image_order, is_primary, image_size, 
+        image_type, width, height, description
+    </sql>
+
+    <select id="findByOutfitId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId} AND deleted = 0
+        ORDER BY image_order ASC
+    </select>
+
+    <select id="findByOutfitIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id IN
+        <foreach collection="outfitIds" item="outfitId" open="(" separator="," close=")">
+            #{outfitId}
+        </foreach>
+        AND deleted = 0
+        ORDER BY outfit_id, image_order ASC
+    </select>
+
+    <delete id="deleteByOutfitId">
+        DELETE FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId}
+    </delete>
+
+    <select id="findPrimaryByOutfitId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId} AND is_primary = true AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <select id="findByOutfitIdAndImageId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId} AND id = #{imageId} AND deleted = 0
+    </select>
+
+    <select id="existsByOutfitId" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId} AND deleted = 0
+    </select>
+
+    <select id="existsPrimaryByOutfitId" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_wardrobe_outfit_image
+        WHERE outfit_id = #{outfitId} AND is_primary = true AND deleted = 0
+    </select>
+
+</mapper>

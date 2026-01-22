@@ -19,7 +19,7 @@ public interface ICoinDomainService {
 
     /**
      * 初始化用户账户
-     * <p>
+
      * 用户注册时调用，创建初始金币账户
      * 注意：用户ID已在controller层校验
      *
@@ -30,7 +30,7 @@ public interface ICoinDomainService {
 
     /**
      * 处理邀请奖励
-     * <p>
+
      * 邀请新用户注册时，给邀请人发放奖励
      * 注意：幂等性检查，避免重复奖励
      *
@@ -42,7 +42,7 @@ public interface ICoinDomainService {
 
     /**
      * 处理位置创建扣费
-     * <p>
+
      * 用户创建存储位置时扣减金币
      * 注意：余额不足检查，幂等性检查
      *
@@ -54,7 +54,7 @@ public interface ICoinDomainService {
 
     /**
      * 处理搭配创建扣费
-     * <p>
+
      * 用户创建穿搭搭配时扣减金币
      * 注意：余额不足检查，幂等性检查
      *
@@ -66,7 +66,7 @@ public interface ICoinDomainService {
 
     /**
      * 增加金币（通用方法）
-     * <p>
+
      * 通用的金币增加操作，支持各种业务场景
      * 注意：参数校验在Service层完成
      *
@@ -77,7 +77,7 @@ public interface ICoinDomainService {
 
     /**
      * 减少金币（通用方法）
-     * <p>
+
      * 通用的金币减少操作，支持各种业务场景
      * 注意：参数校验在Service层完成，包含余额检查
      *
@@ -88,7 +88,7 @@ public interface ICoinDomainService {
 
     /**
      * 根据用户ID查询账户
-     * <p>
+
      * 查询用户的金币账户信息
      * 注意：如果账户不存在，根据业务规则决定是否创建或抛出异常
      *
@@ -99,7 +99,7 @@ public interface ICoinDomainService {
 
     /**
      * 查询账户余额
-     * <p>
+
      * 查询用户的金币余额
      *
      * @param userId 用户ID，不能为空
@@ -109,7 +109,7 @@ public interface ICoinDomainService {
 
     /**
      * 查询流水记录
-     * <p>
+
      * 查询用户的金币流水记录
      *
      * @param userId 用户ID，不能为空
@@ -128,7 +128,7 @@ public interface ICoinDomainService {
 
     /**
      * 检查余额是否足够
-     * <p>
+
      * 检查用户余额是否足够支付指定金额
      *
      * @param userId 用户ID，不能为空
