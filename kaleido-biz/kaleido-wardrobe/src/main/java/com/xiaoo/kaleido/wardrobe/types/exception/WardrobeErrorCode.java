@@ -189,7 +189,29 @@ public enum WardrobeErrorCode implements ErrorCode {
     /**
      * 位置记录创建失败：位置记录创建操作失败
      */
-    LOCATION_RECORD_CREATE_FAILED("WARDROBE_LOCATION_RECORD_CREATE_FAILED", "位置记录创建失败");
+    LOCATION_RECORD_CREATE_FAILED("WARDROBE_LOCATION_RECORD_CREATE_FAILED", "位置记录创建失败"),
+
+    // ========== 标签相关错误码 ==========
+    /**
+     * 标签关联失败：标签关联操作失败
+     */
+    TAG_ASSOCIATION_FAILED("WARDROBE_TAG_ASSOCIATION_FAILED", "标签关联失败"),
+
+    /**
+     * 标签取消关联失败：标签取消关联操作失败
+     */
+    TAG_DISSOCIATION_FAILED("WARDROBE_TAG_DISSOCIATION_FAILED", "标签取消关联失败"),
+
+    // ========== 金币相关错误码 ==========
+    /**
+     * 金币扣减失败：金币扣减操作失败
+     */
+    COIN_DEDUCTION_FAILED("WARDROBE_COIN_DEDUCTION_FAILED", "金币扣减失败"),
+
+    /**
+     * 金币服务不可用：调用金币服务时发生异常
+     */
+    COIN_SERVICE_UNAVAILABLE("WARDROBE_COIN_SERVICE_UNAVAILABLE", "金币服务不可用");
 
     /**
      * 错误码

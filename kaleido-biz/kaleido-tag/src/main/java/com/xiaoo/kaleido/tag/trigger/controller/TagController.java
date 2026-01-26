@@ -1,8 +1,6 @@
 package com.xiaoo.kaleido.tag.trigger.controller;
 
-import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.CreateTagCommand;
-import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.UpdateTagCommand;
 import com.xiaoo.kaleido.api.tag.response.TagInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
@@ -93,31 +91,5 @@ public class TagController {
         String userId = StpUserUtil.getLoginId();
         List<TagInfoResponse> tagList = tagQueryService.findByUserIdAndTypeCode(userId, typeCode);
         return Result.success(tagList);
-    }
-
-    /**
-     * 关联实体到标签
-     *
-     * @param command 关联实体命令
-     * @return 空响应
-     */
-    @PostMapping("/associate")
-    public Result<Void> associateEntity(@Valid @RequestBody AssociateEntityCommand command) {
-        String userId = StpUserUtil.getLoginId();
-        tagCommandService.associateEntity(userId, command);
-        return Result.success();
-    }
-
-    /**
-     * 取消标签与实体的关联
-     *
-     * @param command 取消关联实体命令
-     * @return 空响应
-     */
-    @PostMapping("/dissociate")
-    public Result<Void> dissociateEntity(@Valid @RequestBody DissociateEntityCommand command) {
-        String userId = StpUserUtil.getLoginId();
-        tagCommandService.dissociateEntity(userId, command);
-        return Result.success();
     }
 }

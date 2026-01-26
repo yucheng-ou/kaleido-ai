@@ -134,7 +134,7 @@ public class UserRepositoryImpl implements UserRepository {
         User user = UserConvertor.INSTANCE.toEntity(userPO);
 
         // 3.加载操作流水（最近100条）
-        List<UserOperateStreamPO> streamPOs = userOperateStreamDao.findByIdWithLimit(userPO.getId(), 100);
+        List<UserOperateStreamPO> streamPOs = userOperateStreamDao.findByUserIdWithLimit(userPO.getId(), 100);
         List<UserOperateStream> streams = streamPOs.stream()
                 .map(UserOperateStreamConvertor.INSTANCE::toEntity)
                 .toList();
@@ -166,13 +166,17 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean existsByTelephone(String telephone) {
         // 检查手机号是否已存在
-        return userDao.existsByTelephone(telephone);
+        // 使用findByTelephone替代existsByTelephone，避免分库分表下的TooManyResultsException
+        UserPO po = userDao.findByTelephone(telephone);
+        return po != null;
     }
 
     @Override
     public boolean existsByInviteCode(String inviteCode) {
         // 检查邀请码是否已存在
-        return userDao.existsByInviteCode(inviteCode);
+        // 使用findByInviteCode替代existsByInviteCode，避免分库分表下的TooManyResultsException
+        UserPO po = userDao.findByInviteCode(inviteCode);
+        return po != null;
     }
 
     @Override

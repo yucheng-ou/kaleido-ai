@@ -1,0 +1,103 @@
+# 数据源配置: https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/data-source/
+dataSources:
+  ds_0: # 逻辑数据源名称
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.4.131.17:3307/kaleido_0?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: xhorse123
+    # Druid 特有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+
+  ds_1:
+    dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.4.131.17:3307/kaleido_1?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: xhorse123
+    # Druid 特有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+
+
+# 分片规则配置: https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/sharding/
+rules:
+  - !SHARDING # 分片规则配置
+    tables: # 手工分片规则配置
+      t_user:
+        actualDataNodes: ds_${0..1}.t_user_${0..1} # 实际数据节点
+        databaseStrategy: # 分库策略
+          standard: # 用于单分片键的标准分片场景
+            shardingColumn: id # 分片列名称
+            shardingAlgorithmName: user_db_inline # 分片算法名称
+        tableStrategy: # 分表策略
+          standard:
+            shardingColumn: id  # 分片列名称
+            shardingAlgorithmName: user_inline # 分片算法名称
+      t_user_operate_stream:
+        actualDataNodes: ds_${0..1}.t_user_operate_stream_${0..1} # 实际数据节点
+        databaseStrategy: # 分库策略
+          standard: # 用于单分片键的标准分片场景
+            shardingColumn: user_id # 分片列名称
+            shardingAlgorithmName: user_stream_db_inline # 分片算法名称
+        tableStrategy: # 分表策略
+          standard:
+            shardingColumn: user_id  # 分片列名称
+            shardingAlgorithmName: user_stream_inline # 分片算法名称
+
+    shardingAlgorithms: # 分片算法
+      user_db_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_${Math.abs(id.hashCode()%2)} # 分库，ds_0, ds_1，id 为字符串，所以要转换为数字再进行运算
+      user_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_user_${Math.abs(id.hashCode()%4).intdiv(2)} # 分表，t_user_0, t_user_1
+      user_stream_db_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_${Math.abs(user_id.hashCode()%2)} # 分库，ds_0, ds_1，id 为字符串，所以要转换为数字再进行运算
+      user_stream_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_user_operate_stream_${Math.abs(user_id.hashCode()%4).intdiv(2)} # 分表，t_user_0, t_user_1
+
+  - !SINGLE # 单表规则配置，单表规则优先级高于分库分表规则
+    tables:
+      # 系统管理表（不分片）
+      - ds_0.t_admin
+      - ds_0.t_admin_role
+      - ds_0.t_notice
+      - ds_0.t_notice_template
+      - ds_0.t_permission
+      - ds_0.t_role
+      - ds_0.t_role_permission
+      - ds_0.t_dict
+      # 品牌表（不分片）
+      - ds_0.t_wardrobe_brand
+      # 用户相关表（不分片）
+      - ds_0.t_user_coin_account
+      - ds_0.t_user_coin_stream
+      # 服装相关表（不分片）
+      - ds_0.t_wardrobe_clothing
+      - ds_0.t_wardrobe_clothing_image
+      - ds_0.t_wardrobe_storage_location
+      - ds_0.t_wardrobe_location_image
+      - ds_0.t_wardrobe_outfit
+      - ds_0.t_wardrobe_outfit_image
+      - ds_0.t_wardrobe_outfit_clothing
+      - ds_0.t_wardrobe_location_record
+      # 标签相关表（不分片）
+      - ds_0.t_tag
+      - ds_0.t_tag_relation
+
+# 属性配置：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/props/
+props:
+  sql-show: true # 控制台打印改写后的 SQL，便于排错，默认为 false
+  check-table-metadata-enabled: false # 在程序启动和更新时，是否检查分片元数据的结构一致性，默认为 false

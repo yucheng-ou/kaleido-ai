@@ -1,9 +1,7 @@
 package com.xiaoo.kaleido.auth.trigger.controller;
 
 import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
-import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
-import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
 import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
 import com.xiaoo.kaleido.api.user.response.UserLoginResponse;
 import com.xiaoo.kaleido.auth.application.command.UserAuthCommandService;

@@ -12,8 +12,3 @@ spring:
       - nacos:kaleido-file.yml
       - nacos:kaleido-cache.yml
       - nacos:kaleido-mq.yml
-
-#  rabbitmq:
-  rabbitmq:
-    topic:
-      auth-change: auth-change

@@ -6,10 +6,6 @@ import java.util.List;
 
 /**
  * 位置记录领域服务接口
- * <p>
- * 处理位置记录相关的业务逻辑，包括位置记录创建、查询等核心领域操作
- * 遵循领域服务职责：包含参数校验与聚合根的修改，可以查询数据库进行参数校验
- * 注意：不能直接调用仓储层写入或更新数据库，只返回聚合根
  *
  * @author ouyucheng
  * @date 2026/1/19
@@ -18,21 +14,18 @@ public interface ILocationRecordDomainService {
 
     /**
      * 创建位置记录
-
      * 创建新的位置记录，用于记录服装位置变更
      * 包含参数校验：服装和位置的存在性校验、服装是否已在目标位置校验等
      *
      * @param clothingId 服装ID，不能为空
      * @param locationId 位置ID，不能为空
      * @param userId     用户ID，不能为空
-     * @param notes      备注，可为空
      * @return 位置记录聚合根
      */
     LocationRecordAggregate createLocationRecord(
             String clothingId,
             String locationId,
-            String userId,
-            String notes);
+            String userId);
 
     /**
      * 根据服装ID查询当前位置记录

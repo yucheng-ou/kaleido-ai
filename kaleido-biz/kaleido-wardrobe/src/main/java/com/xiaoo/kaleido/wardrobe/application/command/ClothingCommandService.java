@@ -1,9 +1,14 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
 import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.api.tag.IRpcTagService;
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateClothingWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.ClothingImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateClothingCommand;
+import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.file.IClothingFileService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
@@ -12,8 +17,12 @@ import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoD
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRecordRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.LocationRecordAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationRecordDomainService;
+import com.xiaoo.kaleido.wardrobe.types.EntityTypeConstants;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +44,9 @@ public class ClothingCommandService {
     private final IClothingFileService clothingFileService;
     private final ILocationRecordDomainService locationRecordDomainService;
     private final ILocationRecordRepository locationRecordRepository;
+
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcTagService rpcTagService;
 
     /**
      * 创建服装（包含图片）
@@ -74,8 +86,7 @@ public class ClothingCommandService {
             LocationRecordAggregate locationRecord = locationRecordDomainService.createLocationRecord(
                     clothing.getId(),
                     command.getCurrentLocationId(),
-                    userId,
-                    "服装创建时的初始位置"
+                    userId
             );
             locationRecordRepository.save(locationRecord);
             
@@ -138,8 +149,7 @@ public class ClothingCommandService {
             LocationRecordAggregate locationRecord = locationRecordDomainService.createLocationRecord(
                     command.getClothingId(),
                     newLocationId,
-                    userId,
-                    "服装更新时的位置变更"
+                    userId
             );
             locationRecordRepository.save(locationRecord);
             
@@ -167,6 +177,67 @@ public class ClothingCommandService {
 
         // 3.记录日志
         log.info("服装删除成功，服装ID: {}, 用户ID: {}", clothingId, userId);
+    }
+
+    /**
+     * 为服装添加标签
+     *
+     * @param userId     用户ID
+     * @param clothingId 服装ID
+     * @param tagId      标签ID
+     */
+    public void associateTagToClothing(String userId, String clothingId, String tagId) {
+        // 1. 验证服装是否存在且属于当前用户
+        ClothingAggregate clothing = clothingDomainService.findByIdOrThrow(clothingId);
+        if (!clothing.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_OWNER_MISMATCH, "只有服装所有者可以操作");
+        }
+        
+        // 2. 构建标签关联命令
+        AssociateEntityCommand command = AssociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(clothingId)
+                .entityTypeCode(EntityTypeConstants.CLOTHING)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.associateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_ASSOCIATION_FAILED, "标签关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("服装标签关联成功，用户ID: {}, 服装ID: {}, 标签ID: {}", userId, clothingId, tagId);
+    }
+
+    /**
+     * 从服装移除标签
+     *
+     * @param userId     用户ID
+     * @param clothingId 服装ID
+     * @param tagId      标签ID
+     */
+    public void dissociateTagFromClothing(String userId, String clothingId, String tagId) {
+        // 1. 验证服装是否存在且属于当前用户
+        ClothingAggregate clothing = clothingDomainService.findByIdOrThrow(clothingId);
+        if (!clothing.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_OWNER_MISMATCH, "只有服装所有者可以操作");
+        }
+        
+        // 2. 构建标签取消关联命令
+        DissociateEntityCommand command = DissociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(clothingId)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.dissociateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_DISSOCIATION_FAILED, "标签取消关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("服装标签取消关联成功，用户ID: {}, 服装ID: {}, 标签ID: {}", userId, clothingId, tagId);
     }
 
     /**

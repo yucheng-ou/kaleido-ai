@@ -153,4 +153,22 @@ public class CoinCommandService {
         log.info("应用层：金币减少操作完成，用户ID：{}，金额：{}，业务类型：{}",
                 command.getUserId(), command.getAmount(), command.getBizType());
     }
+
+    /**
+     * 处理推荐生成扣费
+     *
+     * @param command 处理推荐生成扣费命令
+     */
+    public void processRecommendGeneration(ProcessRecommendGenerationCommand command) {
+        // 1. 调用领域服务处理推荐生成扣费
+        CoinAccountAggregate account = coinDomainService.processRecommendGeneration(
+                command.getUserId(), command.getRecommendRecordId());
+
+        // 2. 保存账户
+        coinAccountRepository.update(account);
+
+        // 3. 记录日志
+        log.info("应用层：推荐生成扣费处理完成，用户ID：{}，推荐记录ID：{}",
+                command.getUserId(), command.getRecommendRecordId());
+    }
 }

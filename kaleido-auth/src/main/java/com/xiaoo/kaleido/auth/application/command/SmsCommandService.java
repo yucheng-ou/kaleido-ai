@@ -1,28 +1,17 @@
 package com.xiaoo.kaleido.auth.application.command;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
-import com.xiaoo.kaleido.api.admin.user.command.AdminLoginCommand;
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
-import com.xiaoo.kaleido.api.admin.user.response.RegisterResponse;
 import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
 import com.xiaoo.kaleido.api.notice.IRpcNoticeService;
-import com.xiaoo.kaleido.api.notice.command.CheckSmsVerifyCodeCommand;
 import com.xiaoo.kaleido.api.notice.command.SendSmsVerifyCodeCommand;
-import com.xiaoo.kaleido.api.notice.enums.TargetTypeEnum;
-import com.xiaoo.kaleido.api.user.IRpcUserService;
-import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
-import com.xiaoo.kaleido.api.user.response.UserInfoResponse;
-import com.xiaoo.kaleido.api.user.response.UserLoginResponse;
 import com.xiaoo.kaleido.auth.types.exception.AuthErrorCode;
 import com.xiaoo.kaleido.auth.types.exception.AuthException;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
-import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -55,7 +44,7 @@ public class SmsCommandService {
 
         if (!Boolean.TRUE.equals(result.getSuccess())) {
             log.error("发送短信验证码失败，手机号: {}, 错误: {}", command.getMobile(), result.getMsg());
-            throw new AuthException(AuthErrorCode.AUTH_SERVICE_UNAVAILABLE);
+            throw new AuthException(AuthErrorCode.NOTICE_SERVICE_UNAVAILABLE);
         }
 
         // 构建响应

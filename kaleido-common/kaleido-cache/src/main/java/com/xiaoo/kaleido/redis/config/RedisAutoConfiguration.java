@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Import;
 
 /**
+ * Redis 自动配置
+ *
  * @author ouyucheng
  * @date 2025/11/20
- * @description
  */
 @AutoConfiguration
 @EnableMethodCache(basePackages = "com.xiaoo.kaleido")

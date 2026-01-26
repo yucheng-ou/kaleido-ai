@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.coin.infrastructure.dao.CoinAccountDao">
+
+    <!-- 金币账户表映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.coin.infrastructure.dao.po.CoinAccountPO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!-- 基础列名 -->
+    <sql id="Base_Column_List">
+        id, created_at, updated_at, deleted, lock_version, user_id, balance
+    </sql>
+
+    <!-- 根据用户ID查询账户 -->
+    <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_user_coin_account
+        WHERE user_id = #{userId, jdbcType=VARCHAR}
+        AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <!-- 检查用户账户是否存在 -->
+    <select id="existsByUserId" resultType="java.lang.Boolean" parameterType="java.lang.String">
+        SELECT COUNT(1) > 0
+        FROM t_user_coin_account
+        WHERE user_id = #{userId, jdbcType=VARCHAR}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据用户ID删除账户（逻辑删除） -->
+    <update id="deleteByUserId" parameterType="java.lang.String">
+        UPDATE t_user_coin_account
+        SET deleted = 1, updated_at = NOW()
+        WHERE user_id = #{userId, jdbcType=VARCHAR}
+        AND deleted = 0
+    </update>
+
+    <!-- 根据账户ID查询账户 -->
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_user_coin_account
+        WHERE id = #{accountId, jdbcType=VARCHAR}
+        AND deleted = 0
+    </select>
+
+</mapper>

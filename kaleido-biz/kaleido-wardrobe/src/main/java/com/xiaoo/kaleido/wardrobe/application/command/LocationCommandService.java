@@ -1,19 +1,29 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import com.xiaoo.kaleido.api.coin.IRpcCoinService;
+import com.xiaoo.kaleido.api.coin.command.ProcessLocationCreationCommand;
+import com.xiaoo.kaleido.api.tag.IRpcTagService;
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.AddClothingToLocationCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
+import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.file.ILocationFileService;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.dto.LocationImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file.ImageProcessingService;
+import com.xiaoo.kaleido.wardrobe.types.EntityTypeConstants;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,12 +42,19 @@ public class LocationCommandService {
     private final ILocationRepository locationRepository;
     private final ILocationFileService locationFileService;
 
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcTagService rpcTagService;
+
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcCoinService rpcCoinService;
+
     /**
      * 创建位置（包含图片）
      *
      * @param command 创建位置命令
      * @return 创建的位置ID
      */
+    @Transactional(rollbackFor = Exception.class)
     public String createLocation(String userId, CreateLocationWithImagesCommand command) {
         // 1. 使用模板方法转换图片信息
         List<LocationImageInfoDTO> imageInfoDTOS = locationFileService.convertorImageInfo(command.getImages());
@@ -62,6 +79,7 @@ public class LocationCommandService {
      * @param images      图片信息列表
      * @return 创建的位置ID
      */
+    @Transactional(rollbackFor = Exception.class)
     public String createLocationWithImages(
             String userId,
             String name,
@@ -84,6 +102,9 @@ public class LocationCommandService {
         // 4. 记录日志
         log.info("位置创建成功，位置ID: {}, 位置名称: {}, 用户ID: {}, 图片数量: {}",
                 location.getId(), location.getName(), userId, images.size());
+
+        // 5. 调用金币服务扣减金币
+        deductCoinsForLocationCreation(userId, location.getId());
 
         return location.getId();
     }
@@ -169,5 +190,102 @@ public class LocationCommandService {
 
         // 4. 记录日志
         log.info("位置删除成功，位置ID: {}, 用户ID: {}", locationId, userId);
+    }
+
+    /**
+     * 为位置添加标签
+     *
+     * @param userId     用户ID
+     * @param locationId 位置ID
+     * @param tagId      标签ID
+     */
+    public void associateTagToLocation(String userId, String locationId, String tagId) {
+        // 1. 验证位置是否存在且属于当前用户
+        StorageLocationAggregate location = locationRepository.findById(locationId);
+        if (location == null) {
+            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NOT_FOUND, "位置不存在");
+        }
+        if (!location.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PERMISSION_DENIED, "无权操作该位置");
+        }
+        
+        // 2. 构建标签关联命令
+        AssociateEntityCommand command = AssociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(locationId)
+                .entityTypeCode(EntityTypeConstants.LOCATION)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.associateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_ASSOCIATION_FAILED, "标签关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("位置标签关联成功，用户ID: {}, 位置ID: {}, 标签ID: {}", userId, locationId, tagId);
+    }
+
+    /**
+     * 从位置移除标签
+     *
+     * @param userId     用户ID
+     * @param locationId 位置ID
+     * @param tagId      标签ID
+     */
+    public void dissociateTagFromLocation(String userId, String locationId, String tagId) {
+        // 1. 验证位置是否存在且属于当前用户
+        StorageLocationAggregate location = locationRepository.findById(locationId);
+        if (location == null) {
+            throw WardrobeException.of(WardrobeErrorCode.LOCATION_NOT_FOUND, "位置不存在");
+        }
+        if (!location.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.PERMISSION_DENIED, "无权操作该位置");
+        }
+        
+        // 2. 构建标签取消关联命令
+        DissociateEntityCommand command = DissociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(locationId)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.dissociateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_DISSOCIATION_FAILED, "标签取消关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("位置标签取消关联成功，用户ID: {}, 位置ID: {}, 标签ID: {}", userId, locationId, tagId);
+    }
+
+    /**
+     * 为位置创建扣减金币
+     *
+     * @param userId     用户ID
+     * @param locationId 位置ID
+     */
+    private void deductCoinsForLocationCreation(String userId, String locationId) {
+        try {
+            ProcessLocationCreationCommand command = ProcessLocationCreationCommand.builder()
+                    .userId(userId)
+                    .locationId(locationId)
+                    .build();
+            
+            Result<Void> result = rpcCoinService.processLocationCreation(userId, command);
+            
+            if (!Boolean.TRUE.equals(result.getSuccess())) {
+                log.error("位置创建金币扣减失败，位置ID: {}, 用户ID: {}, 错误: {}", 
+                        locationId, userId, result.getMsg());
+                throw WardrobeException.of(WardrobeErrorCode.COIN_DEDUCTION_FAILED, 
+                        "金币扣减失败: " + result.getMsg());
+            } else {
+                log.info("位置创建金币扣减成功，位置ID: {}, 用户ID: {}", locationId, userId);
+            }
+        } catch (Exception e) {
+            log.error("调用金币服务异常，位置ID: {}, 用户ID: {}", locationId, userId, e);
+            throw WardrobeException.of(WardrobeErrorCode.COIN_SERVICE_UNAVAILABLE, 
+                    "金币服务不可用: " + e.getMessage());
+        }
     }
 }

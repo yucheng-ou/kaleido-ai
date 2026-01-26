@@ -40,12 +40,6 @@ public class WearRecord extends BaseEntity {
     private Date wearDate;
 
     /**
-     * 备注
-     * 用户可选的备注信息
-     */
-    private String notes;
-
-    /**
      * 创建穿着记录
 
      * 根据用户ID、穿搭ID和备注信息创建新的穿着记录
@@ -62,7 +56,6 @@ public class WearRecord extends BaseEntity {
                 .userId(userId)
                 .outfitId(outfitId)
                 .wearDate(new Date())  // 使用当前系统时间
-                .notes(notes)
                 .build();
     }
 

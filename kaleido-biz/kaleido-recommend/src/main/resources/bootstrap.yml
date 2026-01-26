@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: kaleido-recommend
+  profiles:
+    active: dev
+  config:
+    import:
+      - classpath:nacos.yml
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+      - nacos:kaleido-ds.yml
+      - nacos:kaleido-rpc.yml
+      - nacos:kaleido-cache.yml
+      - nacos:kaleido-file.yml
+      - nacos:kaleido-sentinel.yml

@@ -50,6 +50,7 @@ public class GlobalExceptionHandler {
         return result;
     }
 
+
     /**
      * 处理所有未捕获的系统异常
      *
@@ -59,7 +60,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.OK)
     public Result<Void> throwableHandler(Throwable throwable) {
+        // 使用反射判断是否是 Sentinel 的 BlockException
+        // 避免直接依赖 Sentinel，保持模块独立性
+        if (isBlockException(throwable)) {
+            // 重新抛出，让 Sentinel 的 blockHandler 处理
+            // BlockException 是 RuntimeException 的子类，所以可以安全转换
+            throw (RuntimeException) throwable;
+        }
+        
         log.error("系统异常：", throwable);
         return Result.error(ResponseCode.SERVER_INNER_ERROR.name(), "服务器忙碌，请稍后再试...");
+    }
+
+    /**
+     * 判断异常是否是 Sentinel 的 BlockException
+     * 使用反射避免直接依赖 Sentinel
+     */
+    private boolean isBlockException(Throwable throwable) {
+        try {
+            // 使用类名判断，避免直接依赖
+            Class<?> blockExceptionClass = Class.forName("com.alibaba.csp.sentinel.slots.block.BlockException");
+            return blockExceptionClass.isInstance(throwable);
+        } catch (ClassNotFoundException e) {
+            // Sentinel 未引入，不是 BlockException
+            return false;
+        }
     }
 }

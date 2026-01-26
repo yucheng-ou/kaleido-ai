@@ -4,10 +4,6 @@
 
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.OutfitImagePO">
         <id column="id" property="id"/>
-        <result column="created_at" property="createdAt"/>
-        <result column="updated_at" property="updatedAt"/>
-        <result column="deleted" property="deleted"/>
-        <result column="lock_version" property="lockVersion"/>
         <result column="outfit_id" property="outfitId"/>
         <result column="path" property="path"/>
         <result column="image_order" property="imageOrder"/>

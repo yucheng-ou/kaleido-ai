@@ -5,9 +5,6 @@ import lombok.*;
 
 /**
  * 图片信息DTO
- * <p>
- * 用于在领域服务中传递图片数据的传输对象
- * 实现IClothingDomainService.ImageInfo接口
  *
  * @author ouyucheng
  * @date 2026/1/16

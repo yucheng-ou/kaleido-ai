@@ -8,6 +8,7 @@ import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.tag.application.command.TagCommandService;
 import com.xiaoo.kaleido.tag.application.query.TagQueryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -33,19 +34,19 @@ public class RpcTagServiceImpl implements IRpcTagService {
     private final TagQueryService tagQueryService;
 
     @Override
-    public Result<Void> associateTags(@Valid AssociateEntityCommand command) {
-        tagCommandService.associateEntity(command.getUserId(), command);
+    public Result<Void> associateTags(@NotBlank String userId, @Valid AssociateEntityCommand command) {
+        tagCommandService.associateEntity(userId, command);
         return Result.success();
     }
 
     @Override
-    public Result<Void> dissociateTags(@Valid DissociateEntityCommand command) {
-        tagCommandService.dissociateEntity(command.getUserId(), command);
+    public Result<Void> dissociateTags(@NotBlank String userId, @Valid DissociateEntityCommand command) {
+        tagCommandService.dissociateEntity(userId, command);
         return Result.success();
     }
 
     @Override
-    public Result<List<String>> getEntityIdsByTagId(String tagId) {
+    public Result<List<String>> getEntityIdsByTagId(@NotBlank String tagId) {
         List<String> entityIds = tagQueryService.findEntityIdsByTagId(tagId);
         return Result.success(entityIds);
     }

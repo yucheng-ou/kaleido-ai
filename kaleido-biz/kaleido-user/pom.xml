@@ -74,11 +74,6 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-doc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sa-token</artifactId>
             <exclusions>
                 <exclusion>
@@ -86,6 +81,16 @@
                     <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-doc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-mq</artifactId>
         </dependency>
 
     </dependencies>

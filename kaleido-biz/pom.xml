@@ -19,6 +19,7 @@
         <module>kaleido-wardrobe</module>
         <module>kaleido-tag</module>
         <module>kaleido-coin</module>
+        <module>kaleido-recommend</module>
     </modules>
 
     <properties>

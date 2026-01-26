@@ -65,6 +65,18 @@ public interface ICoinDomainService {
     CoinAccountAggregate processOutfitCreation(String userId, String outfitId);
 
     /**
+     * 处理推荐生成扣费
+
+     * 用户生成AI推荐时扣减金币
+     * 注意：余额不足检查，幂等性检查
+     *
+     * @param userId 用户ID，不能为空
+     * @param recommendRecordId 推荐记录ID，不能为空
+     * @return 处理后的账户聚合根
+     */
+    CoinAccountAggregate processRecommendGeneration(String userId, String recommendRecordId);
+
+    /**
      * 增加金币（通用方法）
 
      * 通用的金币增加操作，支持各种业务场景
