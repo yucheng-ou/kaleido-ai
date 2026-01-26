@@ -104,4 +104,40 @@ public class LocationController {
         LocationInfoResponse locationInfo = locationQueryService.findByIdAndUserId(locationId, userId);
         return Result.success(locationInfo);
     }
+
+    /**
+     * 为位置添加标签
+     *
+     * @param locationId 位置ID，不能为空
+     * @param tagId      标签ID，不能为空
+     * @return 空响应
+     */
+    @PostMapping("/{locationId}/tags/{tagId}")
+    public Result<Void> associateTagToLocation(
+            @NotBlank(message = "位置ID不能为空")
+            @PathVariable String locationId,
+            @NotBlank(message = "标签ID不能为空")
+            @PathVariable String tagId) {
+        String userId = StpUserUtil.getLoginId();
+        locationCommandService.associateTagToLocation(userId, locationId, tagId);
+        return Result.success();
+    }
+
+    /**
+     * 从位置移除标签
+     *
+     * @param locationId 位置ID，不能为空
+     * @param tagId      标签ID，不能为空
+     * @return 空响应
+     */
+    @DeleteMapping("/{locationId}/tags/{tagId}")
+    public Result<Void> dissociateTagFromLocation(
+            @NotBlank(message = "位置ID不能为空")
+            @PathVariable String locationId,
+            @NotBlank(message = "标签ID不能为空")
+            @PathVariable String tagId) {
+        String userId = StpUserUtil.getLoginId();
+        locationCommandService.dissociateTagFromLocation(userId, locationId, tagId);
+        return Result.success();
+    }
 }

@@ -1,7 +1,8 @@
 package com.xiaoo.kaleido.user.application.command;
 
 import com.xiaoo.kaleido.api.user.command.RegisterUserCommand;
-import com.xiaoo.kaleido.api.user.command.ChangeNickNameCommand;
+import com.xiaoo.kaleido.mq.event.EventPublisher;
+import com.xiaoo.kaleido.user.domain.adapter.event.UserRegisteredEvent;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;
 import com.xiaoo.kaleido.user.domain.service.IUserDomainService;
@@ -25,6 +26,8 @@ public class UserCommandService {
 
     private final UserRepository userRepository;
     private final IUserDomainService userDomainService;
+    private final EventPublisher eventPublisher;
+    private final UserRegisteredEvent userRegisteredEvent;
 
     /**
      * 创建用户
@@ -44,7 +47,16 @@ public class UserCommandService {
         // 2.保存用户到数据库
         userRepository.save(userAggregate);
 
-        // 3.记录操作日志
+        // 3.发布用户注册事件
+        UserRegisteredEvent.UserRegisteredMessage message = UserRegisteredEvent.UserRegisteredMessage.builder()
+                .userId(userAggregate.getId())
+                .telephone(command.getTelephone())
+                .inviterId(userAggregate.getInviterId())
+                .inviteCode(userAggregate.getInviteCode())
+                .build();
+        eventPublisher.publish(userRegisteredEvent.topic(), userRegisteredEvent.buildEventMessage(message));
+
+        // 4.记录操作日志
         log.info("用户创建成功，用户ID: {}, 手机号: {}", userAggregate.getId(), command.getTelephone());
 
         return userAggregate.getId();

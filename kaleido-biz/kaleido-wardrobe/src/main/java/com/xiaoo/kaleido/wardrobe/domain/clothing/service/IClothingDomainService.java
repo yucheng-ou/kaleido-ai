@@ -18,7 +18,6 @@ public interface IClothingDomainService {
 
     /**
      * 创建服装（包含图片）
-
      * 根据用户ID、服装名称、类型编码等信息创建新服装，并包含图片信息
      * 注意：用户只提供文件路径，图片的width、height、fileSize、mimeType等字段后续通过MinIO服务获取
      *
@@ -53,9 +52,7 @@ public interface IClothingDomainService {
 
     /**
      * 根据ID查找服装，如果不存在则抛出异常
-
      * 用于命令操作中需要确保服装存在的场景
-     * 注意：会加载服装的基本信息和图片列表
      *
      * @param clothingId 服装ID字符串，不能为空
      * @return 服装聚合根，包含完整的服装信息和图片列表
@@ -65,9 +62,7 @@ public interface IClothingDomainService {
 
     /**
      * 根据ID和用户ID查找服装，如果不存在或用户不匹配则抛出异常
-
      * 用于需要验证用户权限的查询场景
-     * 注意：会加载服装的基本信息和图片列表
      *
      * @param clothingId 服装ID字符串，不能为空
      * @param userId 用户ID字符串，不能为空
@@ -78,7 +73,6 @@ public interface IClothingDomainService {
 
     /**
      * 更新服装信息（包含图片）
-
      * 更新服装的基本信息和图片信息
      *
      * @param clothingId         服装ID，不能为空

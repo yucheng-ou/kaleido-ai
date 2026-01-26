@@ -86,6 +86,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-sentinel</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

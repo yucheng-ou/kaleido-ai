@@ -1,7 +1,8 @@
 package com.xiaoo.kaleido.redis.service;
 
 import com.alicp.jetcache.Cache;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,8 +14,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author ouyucheng
  */
-@Slf4j
 public class DelayDeleteService implements DisposableBean {
+    
+    private static final Logger log = LoggerFactory.getLogger(DelayDeleteService.class);
 
     private final ScheduledExecutorService scheduler = new ScheduledThreadPoolExecutor(5);
 

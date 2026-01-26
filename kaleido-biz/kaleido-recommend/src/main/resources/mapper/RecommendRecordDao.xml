@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.recommend.infrastructure.dao.RecommendRecordDao">
+
+    <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.recommend.infrastructure.dao.po.RecommendRecordPO">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="prompt" property="prompt" />
+        <result column="outfit_id" property="outfitId" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="deleted" property="deleted" />
+        <result column="lock_version" property="lockVersion" />
+    </resultMap>
+
+    <select id="findByIdIncludeDeleted" resultMap="BaseResultMap">
+        SELECT * FROM t_recommend_record WHERE id = #{id}
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_recommend_record 
+        WHERE user_id = #{userId} 
+          AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByOutfitId" resultMap="BaseResultMap">
+        SELECT * FROM t_recommend_record 
+        WHERE outfit_id = #{outfitId} 
+          AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(1) FROM t_recommend_record 
+        WHERE user_id = #{userId} 
+          AND deleted = 0
+    </select>
+
+    <select id="findByUserIdAndHasOutfit" resultMap="BaseResultMap">
+        SELECT * FROM t_recommend_record 
+        WHERE user_id = #{userId} 
+          AND deleted = 0
+          <if test="hasOutfit == true">
+            AND outfit_id IS NOT NULL
+          </if>
+          <if test="hasOutfit == false">
+            AND outfit_id IS NULL
+          </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM t_recommend_record WHERE id = #{id} AND deleted = 0
+    </select>
+
+</mapper>

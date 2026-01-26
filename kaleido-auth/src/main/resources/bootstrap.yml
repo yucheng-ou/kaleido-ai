@@ -7,6 +7,6 @@ spring:
     import:
       - classpath:nacos.yml
       - nacos:${spring.application.name}-${spring.profiles.active}.yml
-      - nacos:kaleido-ds.yml
       - nacos:kaleido-rpc.yml
-      - nacos:kaleido-cache.yml
+      - nacos:kaleido-cache.yml     #satoken需要用到redis
+      - nacos:kaleido-sentinel.yml

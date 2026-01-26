@@ -18,9 +18,6 @@ import java.util.List;
 
 /**
  * 位置记录领域服务实现类
- * <p>
- * 实现位置记录领域服务的所有业务逻辑，包括参数校验、业务规则验证、异常处理等
- * 遵循领域服务职责：包含参数校验与聚合根的修改，可以查询数据库进行参数校验
  *
  * @author ouyucheng
  * @date 2026/1/19
@@ -38,8 +35,7 @@ public class LocationRecordDomainServiceImpl implements ILocationRecordDomainSer
     public LocationRecordAggregate createLocationRecord(
             String clothingId,
             String locationId,
-            String userId,
-            String notes) {
+            String userId) {
         // 1. 参数校验
         validateCreateParams(clothingId, locationId, userId);
 
@@ -62,7 +58,7 @@ public class LocationRecordDomainServiceImpl implements ILocationRecordDomainSer
 
         // 5. 创建新的位置记录
         LocationRecordAggregate locationRecord = LocationRecordAggregate.create(
-                clothingId, locationId, userId, notes);
+                clothingId, locationId, userId);
 
         // 6. 记录日志
         log.info("位置记录创建完成，记录ID: {}, 服装ID: {}, 位置ID: {}, 用户ID: {}",

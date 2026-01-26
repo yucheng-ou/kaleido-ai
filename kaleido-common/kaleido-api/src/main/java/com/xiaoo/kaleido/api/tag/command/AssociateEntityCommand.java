@@ -31,12 +31,6 @@ public class AssociateEntityCommand extends BaseCommand {
     private String entityId;
 
     /**
-     * 用户ID
-     */
-    @NotBlank(message = "用户ID不能为空")
-    private String userId;
-
-    /**
      * 实体类型编码
      * 用于验证标签类型与实体类型是否匹配
      */

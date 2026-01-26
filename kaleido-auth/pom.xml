@@ -75,6 +75,16 @@
             <artifactId>kaleido-cache</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-limiter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-sentinel</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

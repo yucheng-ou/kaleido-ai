@@ -48,6 +48,7 @@
         SELECT <include refid="UserColumns"/>
         FROM t_user
         WHERE mobile = #{telephone} AND deleted = 0
+        LIMIT 1
     </select>
 
     <!-- 
@@ -58,6 +59,7 @@
         SELECT <include refid="UserColumns"/>
         FROM t_user
         WHERE invite_code = #{inviteCode} AND deleted = 0
+        LIMIT 1
     </select>
 
     <!-- 

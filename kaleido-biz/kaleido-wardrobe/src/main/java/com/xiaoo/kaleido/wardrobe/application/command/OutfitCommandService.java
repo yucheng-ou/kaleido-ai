@@ -1,17 +1,25 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import com.xiaoo.kaleido.api.coin.IRpcCoinService;
+import com.xiaoo.kaleido.api.coin.command.ProcessOutfitCreationCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.RecordOutfitWearCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateOutfitCommand;
+import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.file.IOutfitFileService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitRepository;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,12 +42,16 @@ public class OutfitCommandService {
     private final IOutfitRepository outfitRepository;
     private final IOutfitFileService outfitFileService;
 
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcCoinService rpcCoinService;
+
     /**
      * 创建穿搭（包含服装和图片）
      *
      * @param command 创建穿搭命令
      * @return 创建的穿搭ID
      */
+    @Transactional(rollbackFor = Exception.class)
     public String createOutfitWithClothingsAndImages(String userId,CreateOutfitWithClothingsCommand command) {
         // 1.准备图片信息
         List<OutfitImageInfoCommand> imageInfos = command.getImages();
@@ -63,6 +75,9 @@ public class OutfitCommandService {
         log.info("穿搭创建成功，穿搭ID: {}, 用户ID: {}, 穿搭名称: {}, 服装数量: {}, 图片数量: {}",
                 outfit.getId(), userId, command.getName(),
                 command.getClothingIds().size(), command.getImages().size());
+
+        // 6.调用金币服务扣减金币
+        deductCoinsForOutfitCreation(userId, outfit.getId());
 
         return outfit.getId();
     }
@@ -134,5 +149,35 @@ public class OutfitCommandService {
         // 3.记录日志
         log.info("穿搭穿着记录成功，穿搭ID: {}, 用户ID: {}, 穿着日期: {}",
                 command.getOutfitId(), userId, command.getWearDate());
+    }
+
+    /**
+     * 为穿搭创建扣减金币
+     *
+     * @param userId  用户ID
+     * @param outfitId 穿搭ID
+     */
+    private void deductCoinsForOutfitCreation(String userId, String outfitId) {
+        try {
+            ProcessOutfitCreationCommand command = ProcessOutfitCreationCommand.builder()
+                    .userId(userId)
+                    .outfitId(outfitId)
+                    .build();
+            
+            Result<Void> result = rpcCoinService.processOutfitCreation(userId, command);
+            
+            if (!Boolean.TRUE.equals(result.getSuccess())) {
+                log.error("穿搭创建金币扣减失败，穿搭ID: {}, 用户ID: {}, 错误: {}", 
+                        outfitId, userId, result.getMsg());
+                throw WardrobeException.of(WardrobeErrorCode.COIN_DEDUCTION_FAILED,
+                        "金币扣减失败: " + result.getMsg());
+            } else {
+                log.info("穿搭创建金币扣减成功，穿搭ID: {}, 用户ID: {}", outfitId, userId);
+            }
+        } catch (Exception e) {
+            log.error("调用金币服务异常，穿搭ID: {}, 用户ID: {}", outfitId, userId, e);
+            throw WardrobeException.of(WardrobeErrorCode.COIN_SERVICE_UNAVAILABLE, 
+                    "金币服务不可用: " + e.getMessage());
+        }
     }
 }

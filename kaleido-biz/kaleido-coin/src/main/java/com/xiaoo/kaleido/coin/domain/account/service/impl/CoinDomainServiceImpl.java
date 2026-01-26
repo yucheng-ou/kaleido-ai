@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.coin.domain.account.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.coin.domain.account.adapter.repository.ICoinAccountRepository;
 import com.xiaoo.kaleido.coin.domain.account.model.aggregate.CoinAccountAggregate;
 import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
@@ -15,9 +16,6 @@ import java.util.List;
 
 /**
  * 金币领域服务实现类
- * <p>
- * 实现金币领域服务的所有业务逻辑
- * 遵循DDD原则：负责参数校验（针对controller未校验部分）+ 业务规则验证 + 聚合根操作
  *
  * @author ouyucheng
  * @date 2026/1/19
@@ -59,10 +57,10 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
     @Override
     public CoinAccountAggregate processInviteReward(String inviterUserId, String newUserId) {
         // 1. 参数校验（针对controller未校验部分）
-        if (inviterUserId == null || inviterUserId.trim().isEmpty()) {
+        if (StrUtil.isBlank(inviterUserId)) {
             throw CoinException.paramNotNull("邀请人用户ID");
         }
-        if (newUserId == null || newUserId.trim().isEmpty()) {
+        if (StrUtil.isBlank(newUserId)) {
             throw CoinException.paramNotNull("新用户ID");
         }
 
@@ -99,10 +97,10 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
     @Override
     public CoinAccountAggregate processLocationCreation(String userId, String locationId) {
         // 1. 参数校验（针对controller未校验部分）
-        if (userId == null || userId.trim().isEmpty()) {
+        if (StrUtil.isBlank(userId)) {
             throw CoinException.paramNotNull("用户ID");
         }
-        if (locationId == null || locationId.trim().isEmpty()) {
+        if (StrUtil.isBlank(locationId)) {
             throw CoinException.paramNotNull("位置ID");
         }
 
@@ -184,6 +182,52 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
         log.info("处理搭配创建扣费成功，用户ID：{}，搭配ID：{}，消耗金额：{}",
                 userId, outfitId, outfitCost);
         return account;
+    }
+
+    @Override
+    public CoinAccountAggregate processRecommendGeneration(String userId, String recommendRecordId) {
+        // 1. 参数校验（针对controller未校验部分）
+        if (StrUtil.isBlank(userId)) {
+            throw CoinException.paramNotNull("用户ID");
+        }
+        if (StrUtil.isBlank(recommendRecordId)) {
+            throw CoinException.paramNotNull("推荐记录ID");
+        }
+
+//        // 2. 验证配置
+//        coinDictConfigService.validateConfig();
+//
+//        // 3. 幂等性检查：检查是否已处理过该推荐生成
+//        if (coinAccountRepository.existsByBizTypeAndBizId(
+//                CoinStream.BizType.RECOMMEND.name(), recommendRecordId)) {
+//            log.warn("推荐生成扣费已处理过，用户ID：{}，推荐记录ID：{}", userId, recommendRecordId);
+//            return coinAccountRepository.findByUserIdOrThrow(userId);
+//        }
+//
+//        // 4. 获取推荐生成消耗金额
+//        Long recommendCost = coinDictConfigService.getRecommendCost();
+//
+//        // 5. 获取用户账户
+//        CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
+//
+//        // 6. 检查余额是否足够
+//        if (!account.hasSufficientBalance(recommendCost)) {
+//            throw CoinException.balanceInsufficient();
+//        }
+//
+//        // 7. 扣减金币
+//        CoinStream stream = account.withdraw(
+//                recommendCost,
+//                CoinStream.BizType.RECOMMEND,
+//                recommendRecordId,
+//                "生成AI推荐消耗"
+//        );
+
+        // 8. 记录日志
+//        log.info("处理推荐生成扣费成功，用户ID：{}，推荐记录ID：{}，消耗金额：{}",
+//                userId, recommendRecordId, recommendCost);
+//        return account;
+        return null;
     }
 
     @Override
@@ -277,7 +321,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 2. 查询账户
         CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
-        
+
         // 3. 返回余额
         return account.getBalance();
     }
@@ -294,7 +338,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 2. 查询账户
         CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
-        
+
         // 3. 返回流水记录
         return account.getRecentStreams(limit);
     }
@@ -322,7 +366,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 2. 查询账户
         CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
-        
+
         // 3. 检查余额是否足够
         return account.hasSufficientBalance(amount);
     }

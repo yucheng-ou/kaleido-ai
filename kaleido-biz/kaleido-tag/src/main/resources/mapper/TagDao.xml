@@ -10,7 +10,6 @@
         <result column="color" property="color" />
         <result column="description" property="description" />
         <result column="usage_count" property="usageCount" />
-        <result column="status" property="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
         <result column="lock_version" property="lockVersion" />
@@ -73,9 +72,6 @@
         </if>
         <if test="queryReq.name != null and queryReq.name != ''">
             AND name LIKE CONCAT('%', #{queryReq.name}, '%')
-        </if>
-        <if test="queryReq.status != null">
-            AND status = #{queryReq.status}
         </if>
         ORDER BY created_at DESC
     </select>

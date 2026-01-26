@@ -4,15 +4,10 @@
 
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationRecordPO">
         <id column="id" property="id"/>
-        <result column="created_at" property="createdAt"/>
-        <result column="updated_at" property="updatedAt"/>
-        <result column="deleted" property="deleted"/>
-        <result column="lock_version" property="lockVersion"/>
         <result column="clothing_id" property="clothingId"/>
         <result column="location_id" property="locationId"/>
         <result column="user_id" property="userId"/>
         <result column="record_time" property="recordTime"/>
-        <result column="notes" property="notes"/>
         <result column="is_current" property="isCurrent"/>
     </resultMap>
 

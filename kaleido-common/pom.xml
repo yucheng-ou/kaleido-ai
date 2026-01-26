@@ -30,6 +30,8 @@
         <module>kaleido-dynamic-tp</module>
         <module>kaleido-mq</module>
         <module>kaleido-file</module>
+        <module>kaleido-sentinel</module>
+        <module>kaleido-limiter</module>
     </modules>
 
     <dependencies>

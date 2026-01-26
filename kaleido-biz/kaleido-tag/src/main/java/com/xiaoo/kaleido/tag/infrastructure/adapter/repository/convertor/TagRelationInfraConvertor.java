@@ -27,8 +27,6 @@ public interface TagRelationInfraConvertor {
      * @param relation 标签关联实体
      * @return 标签关联持久化对象
      */
-    @Mapping(target = "id", ignore = true) // ID由数据库生成
-    @Mapping(target = "updatedAt", ignore = true) // 更新时间由数据库自动设置
     TagRelationPO toPO(TagRelation relation);
 
     /**
