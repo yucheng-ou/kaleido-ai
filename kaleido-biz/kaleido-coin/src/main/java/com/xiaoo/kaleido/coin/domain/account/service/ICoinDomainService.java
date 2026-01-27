@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.coin.domain.account.service;
 
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.coin.domain.account.model.aggregate.CoinAccountAggregate;
 import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
 import com.xiaoo.kaleido.coin.domain.account.service.dto.CoinOperationDTO;
@@ -65,7 +66,7 @@ public interface ICoinDomainService {
     CoinAccountAggregate processOutfitCreation(String userId, String outfitId);
 
     /**
-     * 处理推荐生成扣费
+     * 处理搭配推荐生成扣费
 
      * 用户生成AI推荐时扣减金币
      * 注意：余额不足检查，幂等性检查
@@ -74,7 +75,7 @@ public interface ICoinDomainService {
      * @param recommendRecordId 推荐记录ID，不能为空
      * @return 处理后的账户聚合根
      */
-    CoinAccountAggregate processRecommendGeneration(String userId, String recommendRecordId);
+    CoinAccountAggregate processOutfitRecommendGeneration(String userId, String recommendRecordId);
 
     /**
      * 增加金币（通用方法）
@@ -155,4 +156,13 @@ public interface ICoinDomainService {
      * @return 当前配置描述信息
      */
     String getCurrentConfigDescription();
+
+    /**
+     * 根据业务类型检查余额是否足够
+     *
+     * @param userId 用户ID，不能为空
+     * @param bizType 业务类型，不能为空
+     * @return true-足够，false-不足
+     */
+    boolean hasSufficientBalanceForBizType(String userId, CoinBizTypeEnum bizType);
 }

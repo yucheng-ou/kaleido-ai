@@ -73,7 +73,17 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-seata</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-mq</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-lock</artifactId>
         </dependency>
     </dependencies>
 

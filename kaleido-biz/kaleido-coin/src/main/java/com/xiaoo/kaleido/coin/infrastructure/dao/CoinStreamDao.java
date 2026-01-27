@@ -62,14 +62,4 @@ public interface CoinStreamDao extends BaseMapper<CoinStreamPO> {
      */
     int deleteByUserId(@Param("userId") String userId);
 
-
-    /**
-     * 批量插入流水记录
-
-     * 用于高效插入多条流水记录
-     *
-     * @param streamList 流水记录列表，不能为空
-     * @return 插入的行数
-     */
-    int batchInsert(@Param("list") List<CoinStreamPO> streamList);
 }

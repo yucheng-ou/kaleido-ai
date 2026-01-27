@@ -1,13 +1,12 @@
 package com.xiaoo.kaleido.coin.domain.account.model.entity;
 
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.coin.types.exception.CoinErrorCode;
 import com.xiaoo.kaleido.coin.types.exception.CoinException;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 /**
  * 金币流水实体
@@ -40,30 +39,6 @@ public class CoinStream extends BaseEntity {
         EXPENSE
     }
 
-    /**
-     * 业务类型枚举
-     */
-    public enum BizType {
-        /**
-         * 邀请奖励
-         */
-        INVITE,
-
-        /**
-         * 位置创建
-         */
-        LOCATION,
-
-        /**
-         * 搭配创建
-         */
-        OUTFIT,
-
-        /**
-         * 账户初始化
-         */
-        INITIAL
-    }
 
     /**
      * 账户ID
@@ -98,7 +73,7 @@ public class CoinStream extends BaseEntity {
      * 业务类型
      * INVITE-邀请, LOCATION-位置, OUTFIT-搭配, INITIAL-初始化
      */
-    private BizType bizType;
+    private CoinBizTypeEnum bizType;
 
     /**
      * 业务ID
@@ -131,7 +106,7 @@ public class CoinStream extends BaseEntity {
             String userId,
             Long amount,
             Long balanceAfter,
-            BizType bizType,
+            CoinBizTypeEnum bizType,
             String bizId,
             String remark) {
         // 参数校验
@@ -181,7 +156,7 @@ public class CoinStream extends BaseEntity {
             String userId,
             Long amount,
             Long balanceAfter,
-            BizType bizType,
+            CoinBizTypeEnum bizType,
             String bizId,
             String remark) {
         // 参数校验
@@ -253,6 +228,7 @@ public class CoinStream extends BaseEntity {
             case INVITE -> "邀请奖励";
             case LOCATION -> "位置创建";
             case OUTFIT -> "搭配创建";
+            case OUTFIT_RECOMMEND -> "搭配推荐";
             case INITIAL -> "账户初始化";
         };
     }

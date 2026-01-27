@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.coin.domain.account.model.aggregate;
 
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
 import com.xiaoo.kaleido.coin.types.exception.CoinErrorCode;
@@ -72,7 +73,7 @@ public class CoinAccountAggregate extends BaseEntity {
                     userId,
                     initialBalance,
                     initialBalance,
-                    CoinStream.BizType.INITIAL,
+                    CoinBizTypeEnum.INITIAL,
                     null,
                     "账户初始化"
             );
@@ -94,7 +95,7 @@ public class CoinAccountAggregate extends BaseEntity {
      * @param remark 备注，可为空
      * @return 创建的流水记录
      */
-    public CoinStream deposit(Long amount, CoinStream.BizType bizType, String bizId, String remark) {
+    public CoinStream deposit(Long amount, CoinBizTypeEnum bizType, String bizId, String remark) {
         // 更新余额
         this.balance += amount;
 
@@ -126,7 +127,7 @@ public class CoinAccountAggregate extends BaseEntity {
      * @return 创建的流水记录
      * @throws CoinException 当余额不足时抛出
      */
-    public CoinStream withdraw(Long amount, CoinStream.BizType bizType, String bizId, String remark) {
+    public CoinStream withdraw(Long amount, CoinBizTypeEnum bizType, String bizId, String remark) {
         // 检查余额是否足够
         if (!hasSufficientBalance(amount)) {
             throw CoinException.balanceInsufficient();
@@ -191,7 +192,7 @@ public class CoinAccountAggregate extends BaseEntity {
      * @param bizId 业务ID，不能为空
      * @return 流水记录（如果存在），否则返回Optional.empty()
      */
-    public Optional<CoinStream> findStreamByBizTypeAndBizId(CoinStream.BizType bizType, String bizId) {
+    public Optional<CoinStream> findStreamByBizTypeAndBizId(CoinBizTypeEnum bizType, String bizId) {
         if (bizType == null || bizId == null || bizId.trim().isEmpty()) {
             return Optional.empty();
         }
@@ -210,7 +211,7 @@ public class CoinAccountAggregate extends BaseEntity {
      * @param bizId 业务ID，不能为空
      * @return true-已处理过，false-未处理过
      */
-    public boolean hasProcessedBiz(CoinStream.BizType bizType, String bizId) {
+    public boolean hasProcessedBiz(CoinBizTypeEnum bizType, String bizId) {
         return findStreamByBizTypeAndBizId(bizType, bizId).isPresent();
     }
 
