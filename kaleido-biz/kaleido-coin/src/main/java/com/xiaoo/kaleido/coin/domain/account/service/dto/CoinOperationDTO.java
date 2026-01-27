@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.coin.domain.account.service.dto;
 
-import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import lombok.Data;
 
 /**
@@ -27,7 +27,7 @@ public class CoinOperationDTO {
     /**
      * 业务类型
      */
-    private CoinStream.BizType bizType;
+    private CoinBizTypeEnum bizType;
 
     /**
      * 业务ID
@@ -52,7 +52,7 @@ public class CoinOperationDTO {
     public static CoinOperationDTO createIncome(
             String userId,
             Long amount,
-            CoinStream.BizType bizType,
+            CoinBizTypeEnum bizType,
             String bizId,
             String remark) {
         CoinOperationDTO dto = new CoinOperationDTO();
@@ -77,7 +77,7 @@ public class CoinOperationDTO {
     public static CoinOperationDTO createExpense(
             String userId,
             Long amount,
-            CoinStream.BizType bizType,
+            CoinBizTypeEnum bizType,
             String bizId,
             String remark) {
         CoinOperationDTO dto = new CoinOperationDTO();

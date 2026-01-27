@@ -222,7 +222,7 @@ public class CoinAccountRepositoryImpl implements ICoinAccountRepository {
 
         // 批量插入
         if (!streamPOs.isEmpty()) {
-            coinStreamDao.batchInsert(streamPOs);
+            coinStreamDao.insert(streamPOs);
         }
     }
 }

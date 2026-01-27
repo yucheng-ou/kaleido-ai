@@ -4,14 +4,14 @@
 
     <!-- 金币流水表映射结果 -->
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.coin.infrastructure.dao.po.CoinStreamPO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
-        <result column="type" property="type" jdbcType="VARCHAR"/>
-        <result column="amount" property="amount" jdbcType="BIGINT"/>
-        <result column="balance_after" property="balanceAfter" jdbcType="BIGINT"/>
-        <result column="biz_type" property="bizType" jdbcType="VARCHAR"/>
-        <result column="biz_id" property="bizId" jdbcType="VARCHAR"/>
-        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="type" property="type" />
+        <result column="amount" property="amount" />
+        <result column="balance_after" property="balanceAfter" />
+        <result column="biz_type" property="bizType" />
+        <result column="biz_id" property="bizId" />
+        <result column="remark" property="remark" />
     </resultMap>
 
     <!-- 基础列名 -->
@@ -24,7 +24,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_user_coin_stream
-        WHERE user_id = #{userId, jdbcType=VARCHAR}
+        WHERE user_id = #{userId}
         AND deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -34,8 +34,8 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_user_coin_stream
-        WHERE biz_type = #{bizType, jdbcType=VARCHAR}
-        AND biz_id = #{bizId, jdbcType=VARCHAR}
+        WHERE biz_type = #{bizType}
+        AND biz_id = #{bizId}
         AND deleted = 0
         LIMIT 1
     </select>
@@ -44,8 +44,8 @@
     <select id="existsByBizTypeAndBizId" resultType="java.lang.Boolean">
         SELECT COUNT(1) > 0
         FROM t_user_coin_stream
-        WHERE biz_type = #{bizType, jdbcType=VARCHAR}
-        AND biz_id = #{bizId, jdbcType=VARCHAR}
+        WHERE biz_type = #{bizType}
+        AND biz_id = #{bizId}
         AND deleted = 0
     </select>
 
@@ -53,32 +53,8 @@
     <update id="deleteByUserId" parameterType="java.lang.String">
         UPDATE t_user_coin_stream
         SET deleted = 1, updated_at = NOW()
-        WHERE user_id = #{userId, jdbcType=VARCHAR}
+        WHERE user_id = #{userId}
         AND deleted = 0
     </update>
-
-    <!-- 批量插入流水记录 -->
-    <insert id="batchInsert" parameterType="java.util.List">
-        INSERT INTO t_user_coin_stream (
-            id, created_at, updated_at, deleted, lock_version,
-            user_id, type, amount, balance_after, biz_type, biz_id, remark
-        ) VALUES
-        <foreach collection="list" item="item" separator=",">
-            (
-            #{item.id, jdbcType=VARCHAR},
-            #{item.createdAt, jdbcType=TIMESTAMP},
-            #{item.updatedAt, jdbcType=TIMESTAMP},
-            #{item.deleted, jdbcType=INTEGER},
-            #{item.lockVersion, jdbcType=INTEGER},
-            #{item.userId, jdbcType=VARCHAR},
-            #{item.type, jdbcType=VARCHAR},
-            #{item.amount, jdbcType=BIGINT},
-            #{item.balanceAfter, jdbcType=BIGINT},
-            #{item.bizType, jdbcType=VARCHAR},
-            #{item.bizId, jdbcType=VARCHAR},
-            #{item.remark, jdbcType=VARCHAR}
-            )
-        </foreach>
-    </insert>
 
 </mapper>

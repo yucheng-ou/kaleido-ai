@@ -69,6 +69,15 @@ public class CoinDictConfigService {
     }
 
     /**
+     * 获取搭配创建消耗
+     *
+     * @return 搭配创建消耗金额
+     */
+    public Long getOutfitRecommendCost() {
+        return getDictValue("OUTFIT_RECOMMEND_COST", 5L);
+    }
+
+    /**
      * 根据业务类型获取金额
      *
      * @param bizType 业务类型
@@ -83,6 +92,7 @@ public class CoinDictConfigService {
             case "INVITE" -> getInviteReward();
             case "LOCATION" -> getLocationCost();
             case "OUTFIT" -> getOutfitCost();
+            case "OUTFIT_RECOMMEND" -> getOutfitRecommendCost();
             case "INITIAL" -> getInitialBalance();
             default -> throw new CoinException(CoinErrorCode.STREAM_BIZ_TYPE_INVALID);
         };

@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.coin.domain.account.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.coin.domain.account.adapter.repository.ICoinAccountRepository;
 import com.xiaoo.kaleido.coin.domain.account.model.aggregate.CoinAccountAggregate;
 import com.xiaoo.kaleido.coin.domain.account.model.entity.CoinStream;
@@ -69,7 +70,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 3. 幂等性检查：检查是否已处理过该邀请
         if (coinAccountRepository.existsByBizTypeAndBizId(
-                CoinStream.BizType.INVITE.name(), newUserId)) {
+                CoinBizTypeEnum.INVITE.name(), newUserId)) {
             log.warn("邀请奖励已处理过，邀请人用户ID：{}，新用户ID：{}", inviterUserId, newUserId);
             return coinAccountRepository.findByUserIdOrThrow(inviterUserId);
         }
@@ -83,7 +84,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
         // 6. 发放邀请奖励
         CoinStream stream = account.deposit(
                 inviteReward,
-                CoinStream.BizType.INVITE,
+                CoinBizTypeEnum.INVITE,
                 newUserId,
                 "邀请新用户注册奖励"
         );
@@ -109,7 +110,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 3. 幂等性检查：检查是否已处理过该位置创建
         if (coinAccountRepository.existsByBizTypeAndBizId(
-                CoinStream.BizType.LOCATION.name(), locationId)) {
+                CoinBizTypeEnum.LOCATION.name(), locationId)) {
             log.warn("位置创建扣费已处理过，用户ID：{}，位置ID：{}", userId, locationId);
             return coinAccountRepository.findByUserIdOrThrow(userId);
         }
@@ -128,7 +129,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
         // 7. 扣减金币
         CoinStream stream = account.withdraw(
                 locationCost,
-                CoinStream.BizType.LOCATION,
+                CoinBizTypeEnum.LOCATION,
                 locationId,
                 "创建存储位置消耗"
         );
@@ -154,7 +155,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
 
         // 3. 幂等性检查：检查是否已处理过该搭配创建
         if (coinAccountRepository.existsByBizTypeAndBizId(
-                CoinStream.BizType.OUTFIT.name(), outfitId)) {
+                CoinBizTypeEnum.OUTFIT.name(), outfitId)) {
             log.warn("搭配创建扣费已处理过，用户ID：{}，搭配ID：{}", userId, outfitId);
             return coinAccountRepository.findByUserIdOrThrow(userId);
         }
@@ -173,7 +174,7 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
         // 7. 扣减金币
         CoinStream stream = account.withdraw(
                 outfitCost,
-                CoinStream.BizType.OUTFIT,
+                CoinBizTypeEnum.OUTFIT,
                 outfitId,
                 "创建穿搭搭配消耗"
         );
@@ -185,8 +186,8 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
     }
 
     @Override
-    public CoinAccountAggregate processRecommendGeneration(String userId, String recommendRecordId) {
-        // 1. 参数校验（针对controller未校验部分）
+    public CoinAccountAggregate processOutfitRecommendGeneration(String userId, String recommendRecordId) {
+        // 1. 参数校验
         if (StrUtil.isBlank(userId)) {
             throw CoinException.paramNotNull("用户ID");
         }
@@ -194,40 +195,39 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
             throw CoinException.paramNotNull("推荐记录ID");
         }
 
-//        // 2. 验证配置
-//        coinDictConfigService.validateConfig();
-//
-//        // 3. 幂等性检查：检查是否已处理过该推荐生成
-//        if (coinAccountRepository.existsByBizTypeAndBizId(
-//                CoinStream.BizType.RECOMMEND.name(), recommendRecordId)) {
-//            log.warn("推荐生成扣费已处理过，用户ID：{}，推荐记录ID：{}", userId, recommendRecordId);
-//            return coinAccountRepository.findByUserIdOrThrow(userId);
-//        }
-//
-//        // 4. 获取推荐生成消耗金额
-//        Long recommendCost = coinDictConfigService.getRecommendCost();
-//
-//        // 5. 获取用户账户
-//        CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
-//
-//        // 6. 检查余额是否足够
-//        if (!account.hasSufficientBalance(recommendCost)) {
-//            throw CoinException.balanceInsufficient();
-//        }
-//
-//        // 7. 扣减金币
-//        CoinStream stream = account.withdraw(
-//                recommendCost,
-//                CoinStream.BizType.RECOMMEND,
-//                recommendRecordId,
-//                "生成AI推荐消耗"
-//        );
+        // 2. 验证配置
+        coinDictConfigService.validateConfig();
+
+        // 3. 幂等性检查：检查是否已处理过该推荐生成
+        if (coinAccountRepository.existsByBizTypeAndBizId(
+                CoinBizTypeEnum.OUTFIT_RECOMMEND.name(), recommendRecordId)) {
+            log.warn("推荐生成扣费已处理过，用户ID：{}，推荐记录ID：{}", userId, recommendRecordId);
+            return coinAccountRepository.findByUserIdOrThrow(userId);
+        }
+
+        // 4. 获取推荐生成消耗金额
+        Long recommendCost = coinDictConfigService.getOutfitRecommendCost();
+
+        // 5. 获取用户账户
+        CoinAccountAggregate account = coinAccountRepository.findByUserIdOrThrow(userId);
+
+        // 6. 检查余额是否足够
+        if (!account.hasSufficientBalance(recommendCost)) {
+            throw CoinException.balanceInsufficient();
+        }
+
+        // 7. 扣减金币
+        account.withdraw(
+                recommendCost,
+                CoinBizTypeEnum.OUTFIT_RECOMMEND,
+                recommendRecordId,
+                "生成AI穿搭推荐消耗"
+        );
 
         // 8. 记录日志
-//        log.info("处理推荐生成扣费成功，用户ID：{}，推荐记录ID：{}，消耗金额：{}",
-//                userId, recommendRecordId, recommendCost);
-//        return account;
-        return null;
+        log.info("处理推荐生成扣费成功，用户ID：{}，推荐记录ID：{}，消耗金额：{}",
+                userId, recommendRecordId, recommendCost);
+        return account;
     }
 
     @Override
@@ -374,5 +374,22 @@ public class CoinDomainServiceImpl implements ICoinDomainService {
     @Override
     public String getCurrentConfigDescription() {
         return coinDictConfigService.getDescription();
+    }
+
+    @Override
+    public boolean hasSufficientBalanceForBizType(String userId, CoinBizTypeEnum bizType) {
+        // 1. 参数校验
+        if (userId == null || userId.trim().isEmpty()) {
+            throw CoinException.paramNotNull("用户ID");
+        }
+        if (bizType == null) {
+            throw CoinException.paramNotNull("业务类型");
+        }
+
+        // 2. 根据业务类型获取金额
+        Long amount = coinDictConfigService.getAmountByBizType(bizType.name());
+
+        // 3. 检查余额是否足够
+        return hasSufficientBalance(userId, amount);
     }
 }
