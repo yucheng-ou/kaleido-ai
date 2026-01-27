@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.auth.trigger.controller;
 import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
 import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
 import com.xiaoo.kaleido.auth.application.command.SmsCommandService;
+import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.base.result.Result;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
@@ -42,7 +43,7 @@ public class SmsController {
             fallback = "sendSmsCodeFallback",
             exceptionsToIgnore = {IllegalArgumentException.class, BizException.class}
     )
-    @RateLimit(key = "'user:mobile:' + #command.mobile", limit = 1, window = 60,message = "请求频繁，请稍后再试")
+    @RateLimit(key = "'sms:mobile:' + #command.mobile", limit = 1, window = 60,message = "请求频繁，请稍后再试")
     @PostMapping("/verify-code")
     public Result<SmsCodeResponse> sendSmsCode(
             @Valid @RequestBody SendSmsCodeCommand command) {
@@ -62,7 +63,7 @@ public class SmsController {
     public Result<SmsCodeResponse> sendSmsCodeBlockHandler(
             SendSmsCodeCommand command, BlockException ex) {
         log.warn("短信验证码发送接口触发限流，手机号: {}, 异常: {}", command.getMobile(), ex.getClass().getSimpleName());
-        return Result.<SmsCodeResponse>error("TOO_MANY_REQUESTS", "请求过于频繁，请1分钟后再试");
+        return Result.error(BizErrorCode.SYSTEM_BUSY, "请求过于频繁，请1分钟后再试");
     }
 
     /**
@@ -75,6 +76,6 @@ public class SmsController {
     public Result<SmsCodeResponse> sendSmsCodeFallback(
             SendSmsCodeCommand command, Throwable throwable) {
         log.error("短信验证码发送接口触发降级，手机号: {}, 异常: {}", command.getMobile(), throwable.getMessage(), throwable);
-        return Result.<SmsCodeResponse>error("SERVICE_DEGRADED", "服务暂时不可用，请稍后重试");
+        return Result.error(BizErrorCode.SYSTEM_BUSY, "服务暂时不可用，请稍后重试");
     }
 }

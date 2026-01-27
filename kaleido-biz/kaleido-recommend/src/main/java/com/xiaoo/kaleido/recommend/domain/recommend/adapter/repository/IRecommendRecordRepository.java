@@ -38,17 +38,6 @@ public interface IRecommendRecordRepository {
     RecommendRecordAggregate findById(String id);
 
     /**
-     * 根据ID查找推荐记录聚合根（包含已删除的）
-     * <p>
-     * 查找指定ID的推荐记录聚合根，包含已逻辑删除的记录
-     *
-     * @param id 推荐记录ID，不能为空
-     * @return 推荐记录聚合根
-     * @throws com.xiaoo.kaleido.recommend.types.exception.RecommendException 当推荐记录不存在时抛出
-     */
-    RecommendRecordAggregate findByIdIncludeDeleted(String id);
-
-    /**
      * 根据用户ID查找推荐记录聚合根列表
      * <p>
      * 查找指定用户的所有推荐记录，按创建时间倒序排列
@@ -76,22 +65,6 @@ public interface IRecommendRecordRepository {
      * @param id 推荐记录ID，不能为空
      */
     void deleteById(String id);
-
-    /**
-     * 检查推荐记录是否存在
-     *
-     * @param id 推荐记录ID，不能为空
-     * @return 如果存在返回true，否则返回false
-     */
-    boolean existsById(String id);
-
-    /**
-     * 根据用户ID统计推荐记录数量
-     *
-     * @param userId 用户ID，不能为空
-     * @return 推荐记录数量
-     */
-    long countByUserId(String userId);
 
     /**
      * 根据用户ID和是否有关联穿搭查找推荐记录

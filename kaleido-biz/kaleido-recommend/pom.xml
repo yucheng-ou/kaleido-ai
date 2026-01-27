@@ -72,11 +72,6 @@
 
         <dependency>
             <groupId>com.xiaoo</groupId>
-            <artifactId>kaleido-file</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sa-token</artifactId>
             <exclusions>
                 <exclusion>
@@ -89,6 +84,21 @@
         <dependency>
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-sentinel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-seata</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-limiter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-lock</artifactId>
         </dependency>
 
     </dependencies>

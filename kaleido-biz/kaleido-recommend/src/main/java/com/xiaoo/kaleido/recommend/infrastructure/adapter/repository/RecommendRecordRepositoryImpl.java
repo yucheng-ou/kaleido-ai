@@ -36,14 +36,8 @@ public class RecommendRecordRepositoryImpl implements IRecommendRecordRepository
             // 1.转换RecommendRecordAggregate为RecommendRecordPO
             RecommendRecordPO recommendRecordPO = RecommendRecordInfraConvertor.INSTANCE.toPO(recommendRecordAggregate);
 
-            // 2.判断是新增还是更新
-            if (recommendRecordPO.getId() == null) {
-                // 新增
-                recommendRecordDao.insert(recommendRecordPO);
-            } else {
-                // 更新
-                recommendRecordDao.updateById(recommendRecordPO);
-            }
+            // 2.保存推荐记录
+            recommendRecordDao.insert(recommendRecordPO);
 
             log.info("推荐记录保存成功，记录ID: {}, 用户ID: {}, 提示词长度: {}, 穿搭ID: {}",
                     recommendRecordAggregate.getId(), recommendRecordAggregate.getUserId(),
@@ -72,25 +66,6 @@ public class RecommendRecordRepositoryImpl implements IRecommendRecordRepository
             throw e;
         } catch (Exception e) {
             log.error("查询推荐记录失败，记录ID: {}, 原因: {}", id, e.getMessage(), e);
-            throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "推荐记录查询失败");
-        }
-    }
-
-    @Override
-    public RecommendRecordAggregate findByIdIncludeDeleted(String id) {
-        try {
-            // 1.查询推荐记录基本信息（包含已删除的）
-            RecommendRecordPO recommendRecordPO = recommendRecordDao.findByIdIncludeDeleted(id);
-            if (recommendRecordPO == null) {
-                throw RecommendException.of(BizErrorCode.DATA_NOT_EXIST);
-            }
-
-            // 2.转换为RecommendRecordAggregate
-            return RecommendRecordInfraConvertor.INSTANCE.toAggregate(recommendRecordPO);
-        } catch (RecommendException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("查询推荐记录失败（包含已删除），记录ID: {}, 原因: {}", id, e.getMessage(), e);
             throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "推荐记录查询失败");
         }
     }
@@ -129,7 +104,6 @@ public class RecommendRecordRepositoryImpl implements IRecommendRecordRepository
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void deleteById(String id) {
         try {
             // 逻辑删除
@@ -139,26 +113,6 @@ public class RecommendRecordRepositoryImpl implements IRecommendRecordRepository
         } catch (Exception e) {
             log.error("推荐记录删除失败，记录ID: {}, 原因: {}", id, e.getMessage(), e);
             throw RecommendException.of(RecommendErrorCode.OPERATE_FAILED, "推荐记录删除失败");
-        }
-    }
-
-    @Override
-    public boolean existsById(String id) {
-        try {
-            return recommendRecordDao.selectById(id) != null;
-        } catch (Exception e) {
-            log.error("检查推荐记录是否存在失败，记录ID: {}, 原因: {}", id, e.getMessage(), e);
-            throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "推荐记录存在性检查失败");
-        }
-    }
-
-    @Override
-    public long countByUserId(String userId) {
-        try {
-            return recommendRecordDao.countByUserId(userId);
-        } catch (Exception e) {
-            log.error("统计用户推荐记录数量失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "用户推荐记录数量统计失败");
         }
     }
 

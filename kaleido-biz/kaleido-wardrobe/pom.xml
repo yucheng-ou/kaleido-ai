@@ -91,6 +91,11 @@
             <artifactId>kaleido-sentinel</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-seata</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -32,6 +32,7 @@
         <module>kaleido-file</module>
         <module>kaleido-sentinel</module>
         <module>kaleido-limiter</module>
+        <module>kaleido-lock</module>
     </modules>
 
     <dependencies>

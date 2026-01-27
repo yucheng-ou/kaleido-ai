@@ -10,5 +10,5 @@ spring:
       - nacos:kaleido-ds.yml
       - nacos:kaleido-rpc.yml
       - nacos:kaleido-cache.yml
-      - nacos:kaleido-file.yml
       - nacos:kaleido-sentinel.yml
+      - nacos:kaleido-seata.yml

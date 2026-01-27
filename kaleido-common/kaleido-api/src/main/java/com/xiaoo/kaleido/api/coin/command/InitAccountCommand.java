@@ -1,11 +1,9 @@
 package com.xiaoo.kaleido.api.coin.command;
 
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 初始化账户命令
@@ -16,10 +14,11 @@ import lombok.NoArgsConstructor;
  * @date 2026/1/19
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InitAccountCommand {
+public class InitAccountCommand extends BaseCommand {
 
     /**
      * 用户ID

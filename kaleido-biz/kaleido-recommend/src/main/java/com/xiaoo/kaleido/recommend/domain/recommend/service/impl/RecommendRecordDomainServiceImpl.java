@@ -34,22 +34,22 @@ public class RecommendRecordDomainServiceImpl implements IRecommendRecordDomainS
     private final IRecommendRecordRepository recommendRecordRepository;
 
     @Override
-    public RecommendRecordAggregate createRecommendRecord(String userId, String prompt) {
+    public RecommendRecordAggregate createRecommendRecord(String userId, String prompt, String outfitId) {
         // 1.参数校验
         validateUserId(userId);
         validatePrompt(prompt);
 
         // 2.业务规则校验：提示词长度限制
         if (prompt.length() > MAX_PROMPT_LENGTH) {
-            throw RecommendException.of(RecommendErrorCode.PROMPT_TOO_LONG, 
+            throw RecommendException.of(RecommendErrorCode.PROMPT_TOO_LONG,
                     String.format("提示词长度不能超过%d个字符", MAX_PROMPT_LENGTH));
         }
 
         // 3.创建推荐记录聚合根
-        RecommendRecordAggregate recommendRecord = RecommendRecordAggregate.create(userId, prompt);
+        RecommendRecordAggregate recommendRecord = RecommendRecordAggregate.create(userId, prompt, outfitId);
 
         // 4.记录日志
-        log.info("推荐记录创建成功，记录ID: {}, 用户ID: {}, 提示词长度: {}", 
+        log.info("推荐记录创建成功，记录ID: {}, 用户ID: {}, 提示词长度: {}",
                 recommendRecord.getId(), userId, prompt.length());
 
         return recommendRecord;
