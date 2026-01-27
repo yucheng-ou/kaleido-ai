@@ -19,14 +19,6 @@ import java.util.List;
 public interface RecommendRecordDao extends BaseMapper<RecommendRecordPO> {
 
     /**
-     * 根据ID查询推荐记录（包含已删除的）
-     *
-     * @param id 推荐记录ID
-     * @return 推荐记录持久化对象
-     */
-    RecommendRecordPO findByIdIncludeDeleted(@Param("id") String id);
-
-    /**
      * 根据用户ID查询推荐记录列表
      *
      * @param userId 用户ID
@@ -41,14 +33,6 @@ public interface RecommendRecordDao extends BaseMapper<RecommendRecordPO> {
      * @return 推荐记录持久化对象
      */
     RecommendRecordPO findByOutfitId(@Param("outfitId") String outfitId);
-
-    /**
-     * 根据用户ID统计推荐记录数量
-     *
-     * @param userId 用户ID
-     * @return 推荐记录数量
-     */
-    long countByUserId(@Param("userId") String userId);
 
     /**
      * 根据用户ID和是否有关联穿搭查询推荐记录

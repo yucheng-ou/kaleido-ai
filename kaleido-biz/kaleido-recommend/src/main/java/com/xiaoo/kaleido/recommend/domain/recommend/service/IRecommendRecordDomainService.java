@@ -22,12 +22,13 @@ public interface IRecommendRecordDomainService {
      * 根据用户ID和提示词创建新的推荐记录
      * 注意：参数校验在Service层完成
      *
-     * @param userId 用户ID，不能为空
-     * @param prompt 用户输入的推荐需求提示词，不能为空
+     * @param userId   用户ID，不能为空
+     * @param prompt   用户输入的推荐需求提示词，不能为空
+     * @param outfitId 穿搭id
      * @return 推荐记录聚合根
      * @throws RecommendException 当业务规则校验失败时抛出
      */
-    RecommendRecordAggregate createRecommendRecord(String userId, String prompt);
+    RecommendRecordAggregate createRecommendRecord(String userId, String prompt, String outfitId);
 
     /**
      * 根据ID查找推荐记录，如果不存在则抛出异常
@@ -46,7 +47,7 @@ public interface IRecommendRecordDomainService {
      * 用于需要验证用户权限的查询场景
      *
      * @param recommendRecordId 推荐记录ID字符串，不能为空
-     * @param userId 用户ID字符串，不能为空
+     * @param userId            用户ID字符串，不能为空
      * @return 推荐记录聚合根
      * @throws RecommendException 当推荐记录不存在或用户不匹配时抛出
      */

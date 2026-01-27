@@ -49,6 +49,16 @@ rules:
           standard:
             shardingColumn: user_id  # 分片列名称
             shardingAlgorithmName: user_stream_inline # 分片算法名称
+      t_recommend_record:
+        actualDataNodes: ds_${0..1}.t_recommend_record_${0..1} # 实际数据节点
+        databaseStrategy: # 分库策略
+          standard: # 用于单分片键的标准分片场景
+            shardingColumn: user_id # 分片列名称
+            shardingAlgorithmName: recommend_record_db_inline # 分片算法名称
+        tableStrategy: # 分表策略
+          standard:
+            shardingColumn: user_id  # 分片列名称
+            shardingAlgorithmName: recommend_record_inline # 分片算法名称
 
     shardingAlgorithms: # 分片算法
       user_db_inline:
@@ -67,6 +77,14 @@ rules:
         type: INLINE
         props:
           algorithm-expression: t_user_operate_stream_${Math.abs(user_id.hashCode()%4).intdiv(2)} # 分表，t_user_0, t_user_1
+      recommend_record_db_inline:
+        type: INLINE
+        props:
+          algorithm-expression: ds_${Math.abs(user_id.hashCode()%2)} # 分库，ds_0, ds_1，id 为字符串，所以要转换为数字再进行运算
+      recommend_record_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_recommend_record_${Math.abs(user_id.hashCode()%4).intdiv(2)} # 分表，t_user_0, t_user_1
 
   - !SINGLE # 单表规则配置，单表规则优先级高于分库分表规则
     tables:

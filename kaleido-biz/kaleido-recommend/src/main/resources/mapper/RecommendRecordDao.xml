@@ -13,10 +13,6 @@
         <result column="lock_version" property="lockVersion" />
     </resultMap>
 
-    <select id="findByIdIncludeDeleted" resultMap="BaseResultMap">
-        SELECT * FROM t_recommend_record WHERE id = #{id}
-    </select>
-
     <select id="findByUserId" resultMap="BaseResultMap">
         SELECT * FROM t_recommend_record 
         WHERE user_id = #{userId} 
@@ -29,12 +25,6 @@
         WHERE outfit_id = #{outfitId} 
           AND deleted = 0
         LIMIT 1
-    </select>
-
-    <select id="countByUserId" resultType="long">
-        SELECT COUNT(1) FROM t_recommend_record 
-        WHERE user_id = #{userId} 
-          AND deleted = 0
     </select>
 
     <select id="findByUserIdAndHasOutfit" resultMap="BaseResultMap">

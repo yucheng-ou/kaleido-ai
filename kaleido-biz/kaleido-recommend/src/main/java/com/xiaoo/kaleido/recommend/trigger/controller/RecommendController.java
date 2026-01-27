@@ -45,19 +45,6 @@ public class RecommendController {
     }
 
     /**
-     * 删除推荐记录
-     *
-     * @param recommendRecordId 推荐记录ID
-     * @return 空响应
-     */
-    @DeleteMapping("/{recommendRecordId}")
-    public Result<Void> deleteRecommendRecord(@PathVariable String recommendRecordId) {
-        String userId = StpUserUtil.getLoginId();
-        recommendCommandService.deleteRecommendRecord(recommendRecordId, userId);
-        return Result.success();
-    }
-
-    /**
      * 查询单个推荐记录详情
      *
      * @param recommendRecordId 推荐记录ID

@@ -43,25 +43,18 @@ public class RecommendRecordAggregate extends BaseEntity {
      * 用于创建新推荐记录时构建聚合根
      * 注意：参数校验在Service层完成，这里只负责构建聚合根
      *
-     * @param userId 用户ID，不能为空
-     * @param prompt 用户输入的推荐需求提示词，不能为空
+     * @param userId   用户ID，不能为空
+     * @param prompt   用户输入的推荐需求提示词，不能为空
+     * @param outfitId 穿搭id
      * @return 推荐记录聚合根
      */
-    public static RecommendRecordAggregate create(String userId, String prompt) {
+    public static RecommendRecordAggregate create(String userId, String prompt, String outfitId) {
         return RecommendRecordAggregate.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
                 .userId(userId)
                 .prompt(prompt)
+                .outfitId(outfitId)
                 .build();
-    }
-
-    /**
-     * 检查是否已生成穿搭
-     *
-     * @return 如果已生成穿搭返回true，否则返回false
-     */
-    public boolean hasOutfit() {
-        return outfitId != null && !outfitId.trim().isEmpty();
     }
 
     /**
@@ -71,14 +64,5 @@ public class RecommendRecordAggregate extends BaseEntity {
      */
     public int getPromptLength() {
         return prompt != null ? prompt.length() : 0;
-    }
-
-    /**
-     * 检查提示词是否为空
-     *
-     * @return 如果提示词为空返回true，否则返回false
-     */
-    public boolean isPromptEmpty() {
-        return prompt == null || prompt.trim().isEmpty();
     }
 }

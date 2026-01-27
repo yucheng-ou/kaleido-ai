@@ -20,6 +20,7 @@
         <module>kaleido-tag</module>
         <module>kaleido-coin</module>
         <module>kaleido-recommend</module>
+        <module>kaleido-ai</module>
     </modules>
 
     <properties>

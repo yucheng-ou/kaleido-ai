@@ -152,7 +152,23 @@ public enum RecommendErrorCode implements ErrorCode {
     /**
      * 穿搭保存失败：保存AI生成的穿搭时发生异常
      */
-    OUTFIT_SAVE_FAILED("RECOMMEND_OUTFIT_SAVE_FAILED", "穿搭保存失败");
+    OUTFIT_SAVE_FAILED("RECOMMEND_OUTFIT_SAVE_FAILED", "穿搭保存失败"),
+
+    // ========== 系统错误码 ==========
+    /**
+     * 系统错误：系统内部异常
+     */
+    SYSTEM_ERROR("RECOMMEND_SYSTEM_ERROR", "系统异常"),
+
+    /**
+     * 系统繁忙：系统限流或过载
+     */
+    SYSTEM_BUSY("RECOMMEND_SYSTEM_BUSY", "系统繁忙，请稍后再试"),
+
+    /**
+     * 系统降级：系统触发降级保护
+     */
+    SYSTEM_DEGRADED("RECOMMEND_SYSTEM_DEGRADED", "系统暂时不可用，请稍后重试");
 
     /**
      * 错误码

@@ -1,13 +1,12 @@
 package com.xiaoo.kaleido.api.coin.command;
 
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
+import com.xiaoo.kaleido.base.command.BaseCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 增加金币命令
@@ -18,10 +17,11 @@ import lombok.NoArgsConstructor;
  * @date 2026/1/19
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepositCommand {
+public class DepositCommand extends BaseCommand {
 
     /**
      * 用户ID
@@ -40,9 +40,8 @@ public class DepositCommand {
     /**
      * 业务类型
      */
-    @NotBlank(message = "业务类型不能为空")
-    @Size(max = 20, message = "业务类型长度不能超过20个字符")
-    private String bizType;
+    @NotNull(message = "业务类型不能为空")
+    private CoinBizTypeEnum bizType;
 
     /**
      * 业务ID

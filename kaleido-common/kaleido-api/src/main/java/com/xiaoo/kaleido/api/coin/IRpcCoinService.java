@@ -1,8 +1,11 @@
 package com.xiaoo.kaleido.api.coin;
 
 import com.xiaoo.kaleido.api.coin.command.*;
+import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.base.result.Result;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 金币RPC服务接口
@@ -24,7 +27,7 @@ public interface IRpcCoinService {
      * @param command 初始化账户命令，包含用户ID等信息
      * @return 创建的账户ID
      */
-    Result<String> initAccount(String userId, @Valid InitAccountCommand command);
+    Result<String> initAccount(@NotBlank String userId, @Valid InitAccountCommand command);
 
     /**
      * 处理邀请奖励
@@ -34,7 +37,7 @@ public interface IRpcCoinService {
      * @param userId  用户ID（邀请人用户ID）
      * @param command 处理邀请奖励命令，包含邀请人用户ID和新用户ID
      */
-    Result<Void> processInviteReward(String userId, @Valid ProcessInviteRewardCommand command);
+    Result<Void> processInviteReward(@NotBlank String userId, @Valid ProcessInviteRewardCommand command);
 
     /**
      * 处理位置创建扣费
@@ -44,7 +47,7 @@ public interface IRpcCoinService {
      * @param userId  用户ID
      * @param command 处理位置创建扣费命令，包含用户ID和位置ID
      */
-    Result<Void> processLocationCreation(String userId, @Valid ProcessLocationCreationCommand command);
+    Result<Void> processLocationCreation(@NotBlank String userId, @Valid ProcessLocationCreationCommand command);
 
     /**
      * 处理搭配创建扣费
@@ -54,7 +57,7 @@ public interface IRpcCoinService {
      * @param userId  用户ID
      * @param command 处理搭配创建扣费命令，包含用户ID和搭配ID
      */
-    Result<Void> processOutfitCreation(String userId, @Valid ProcessOutfitCreationCommand command);
+    Result<Void> processOutfitCreation(@NotBlank String userId, @Valid ProcessOutfitCreationCommand command);
 
     /**
      * 增加金币
@@ -64,7 +67,7 @@ public interface IRpcCoinService {
      * @param userId  用户ID
      * @param command 增加金币命令，包含用户ID、金额、业务类型等信息
      */
-    Result<Void> deposit(String userId, @Valid DepositCommand command);
+    Result<Void> deposit(@NotBlank String userId, @Valid DepositCommand command);
 
     /**
      * 减少金币
@@ -74,15 +77,26 @@ public interface IRpcCoinService {
      * @param userId  用户ID
      * @param command 减少金币命令，包含用户ID、金额、业务类型等信息
      */
-    Result<Void> withdraw(String userId, @Valid WithdrawCommand command);
+    Result<Void> withdraw(@NotBlank String userId, @Valid WithdrawCommand command);
 
     /**
      * 处理推荐生成扣费
      * <p>
      * 当用户生成AI推荐时，扣除相应的金币费用
      *
-     * @param userId  用户ID
-     * @param command 处理推荐生成扣费命令，包含用户ID和推荐记录ID
+     * @param userId            用户ID
+     * @param recommendRecordId 推荐记录ID
      */
-    Result<Void> processRecommendGeneration(String userId, @Valid ProcessRecommendGenerationCommand command);
+    Result<Void> processRecommendGeneration(@NotBlank String userId, @NotBlank String recommendRecordId);
+
+    /**
+     * 校验金币是否足够
+     * <p>
+     * 根据业务类型校验用户金币余额是否足够
+     *
+     * @param userId  用户ID
+     * @param bizType 业务类型
+     * @return 是否足够
+     */
+    Result<Boolean> checkBalance(@NotBlank String userId, @NotNull CoinBizTypeEnum bizType);
 }
