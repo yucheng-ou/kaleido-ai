@@ -11,6 +11,51 @@ spring:
       - nacos:kaleido-rpc.yml
       - nacos:kaleido-cache.yml
   ai:
-    dashscope:
+    openai:
+      base-url: https://xm.xhorse.net.cn/llms-oai-gateway
       api-key: ${AI_DASHSCOPE_API_KEY}
-      base-url: ${AI_DASHSCOPE_BASE_URL}
+      chat:
+        options:
+          model: deepseek-v3
+        completions-path: /v1/chat/completions
+
+    chat:
+      memory:
+        repository:
+          mongo:
+            create-indices: false
+    mcp:
+      client:
+        sse:
+          connections:
+            local-mcp-server:
+              url: http://localhost:9021
+              sse-endpoint: /sse
+        type: sync
+        annotation-scanner:
+          enabled: true
+
+    vectorstore:
+      milvus:
+        client:
+          host: 10.4.131.17
+          port: 19530
+          username: root
+          password: Milvus
+        database-name: kaleido
+        collection-name: kaleido_collection
+        initialize-schema: true
+        embedding-dimension: 1536
+        indexType: IVF_FLAT
+        metricType: COSINE
+
+
+
+  data:
+    mongodb:
+      host: 10.4.131.17
+      port: 27017
+      username: root
+      password: xhorse123
+      database: chat_memory_db
+      authentication-database: admin

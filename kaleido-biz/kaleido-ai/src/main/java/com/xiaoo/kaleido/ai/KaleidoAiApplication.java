@@ -12,11 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.ai")
 public class KaleidoAiApplication {
 
-    /**
-     * 应用主入口
-     *
-     * @param args 命令行参数
-     */
     public static void main(String[] args) {
         SpringApplication.run(KaleidoAiApplication.class, args);
     }
