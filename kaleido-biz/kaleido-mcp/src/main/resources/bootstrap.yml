@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: kaleido-mcp
+  profiles:
+    active: dev
+  config:
+    import:
+      - classpath:nacos.yml
+      - nacos:${spring.application.name}-${spring.profiles.active}.yml
+  ai:
+    mcp:
+      server:
+        type: sync
+        name: mcp-server
+        annotation-scanner:
+          enabled: true
