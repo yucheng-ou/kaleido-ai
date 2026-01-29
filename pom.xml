@@ -26,6 +26,7 @@
         <module>kaleido-notice</module>
         <module>kaleido-admin</module>
         <module>kaleido-common/kaleido-seata</module>
+        <module>kaleido-biz/kaleido-mcp</module>
     </modules>
 
     <properties>
@@ -35,8 +36,9 @@
 
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2025.0.0.0</spring-cloud-alibaba.version>
-        <spring-boot.version>3.5.2</spring-boot.version>
-        <spring-ai-alibaba.version>1.1.0.0-RC2</spring-ai-alibaba.version>
+        <spring-boot.version>3.5.6</spring-boot.version>
+        <spring-ai.version>1.1.2</spring-ai.version>
+
 
         <redisson.version>3.52.0</redisson.version>
         <caffeine.version>3.2.3</caffeine.version>
@@ -104,6 +106,22 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -397,17 +415,17 @@
                 <version>${shardingsphere.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-agent-framework</artifactId>
-                <version>${spring-ai-alibaba.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba.cloud.ai</groupId>-->
+<!--                <artifactId>spring-ai-alibaba-agent-framework</artifactId>-->
+<!--                <version>${spring-ai-alibaba.version}</version>-->
+<!--            </dependency>-->
 
-            <dependency>
-                <groupId>com.alibaba.cloud.ai</groupId>
-                <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
-                <version>${spring-ai-alibaba.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba.cloud.ai</groupId>-->
+<!--                <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>-->
+<!--                <version>${spring-ai-alibaba.version}</version>-->
+<!--            </dependency>-->
 
         </dependencies>
     </dependencyManagement>

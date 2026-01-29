@@ -21,6 +21,7 @@
         <module>kaleido-coin</module>
         <module>kaleido-recommend</module>
         <module>kaleido-ai</module>
+        <module>kaleido-mcp</module>
     </modules>
 
     <properties>
