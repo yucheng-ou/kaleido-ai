@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.ai.trigger.controller;
 
-import com.xiaoo.kaleido.ai.application.service.AgentChatService;
-import com.xiaoo.kaleido.web.result.Result;
+import com.xiaoo.kaleido.ai.domain.chat.service.IChatService;
+import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +15,11 @@ import reactor.core.publisher.Flux;
  */
 @Slf4j
 @RestController
-@RequestMapping("/ai/agent")
+@RequestMapping("/ai/chat")
 @RequiredArgsConstructor
 public class AgentChatController {
 
-    private final AgentChatService agentChatService;
+    private final IChatService chatService;
 
     /**
      * 与Agent进行聊天
@@ -38,34 +38,24 @@ public class AgentChatController {
         log.info("收到Agent聊天请求，Agent ID: {}, 会话ID: {}, 消息长度: {}",
                 agentId, conversationId, message.length());
 
-        return agentChatService.chat(agentId, message, conversationId);
+        return chatService.chatWithAgent(agentId, message, conversationId);
     }
 
     /**
-     * 检查Agent是否可用
+     * 默认聊天 不三使用agent
      *
-     * @param agentId Agent ID
-     * @return 可用性检查结果
+     * @param message        用户消息
+     * @param conversationId 会话ID（可选）
+     * @return 聊天响应流
      */
-    @GetMapping("/{agentId}/available")
-    public Result<Boolean> checkAvailable(@PathVariable String agentId) {
-        log.debug("检查Agent可用性，Agent ID: {}", agentId);
+    @GetMapping(value = "/chat")
+    public Flux<String> chat(
+            @RequestParam("message") String message,
+            @RequestParam(required = false) String conversationId) {
 
-        boolean available = agentChatService.isAgentAvailable(agentId);
-        return Result.success(available);
-    }
+        String userId = StpUserUtil.getLoginId();
 
-    /**
-     * 获取Agent状态
-     *
-     * @param agentId Agent ID
-     * @return Agent状态信息
-     */
-    @GetMapping("/{agentId}/status")
-    public Result<String> getStatus(@PathVariable String agentId) {
-        log.debug("获取Agent状态，Agent ID: {}", agentId);
-
-        String status = agentChatService.getAgentStatus(agentId);
-        return Result.success(status);
+        // 使用ChatService的默认聊天方法（带用户ID过滤）
+        return chatService.chatWithDefault(message, conversationId, userId);
     }
 }
