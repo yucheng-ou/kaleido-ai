@@ -25,7 +25,6 @@
         <module>kaleido-biz</module>
         <module>kaleido-notice</module>
         <module>kaleido-admin</module>
-        <module>kaleido-common/kaleido-seata</module>
     </modules>
 
     <properties>

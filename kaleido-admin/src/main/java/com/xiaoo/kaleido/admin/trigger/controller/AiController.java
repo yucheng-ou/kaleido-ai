@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * AI管理API（管理后台）
- * <p>
- * 提供AI相关的管理功能，包括Agent和工作流的管理
+ * AI管理API
  *
  * @author ouyucheng
  * @date 2026/1/30
