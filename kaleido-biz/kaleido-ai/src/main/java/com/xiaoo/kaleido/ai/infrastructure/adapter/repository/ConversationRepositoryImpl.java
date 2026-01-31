@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IConversationRepository;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.ConversationAggregate;
+import com.xiaoo.kaleido.ai.domain.chat.adapter.repository.IConversationRepository;
+import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor.ConversationInfraConvertor;
 import com.xiaoo.kaleido.ai.infrastructure.dao.ConversationDao;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.ConversationPO;
@@ -11,7 +11,6 @@ import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;

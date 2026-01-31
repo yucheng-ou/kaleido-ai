@@ -1,9 +1,9 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IAgentRepository;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.AgentAggregate;
-import com.xiaoo.kaleido.ai.domain.model.entity.AgentTool;
+import com.xiaoo.kaleido.ai.domain.agent.adapter.repository.IAgentRepository;
+import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
+import com.xiaoo.kaleido.ai.domain.agent.model.entity.AgentTool;
 import com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor.AgentInfraConvertor;
 import com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor.AgentToolInfraConvertor;
 import com.xiaoo.kaleido.ai.infrastructure.dao.AgentDao;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -151,23 +150,6 @@ public class AgentRepositoryImpl implements IAgentRepository {
     }
 
     @Override
-    public List<AgentAggregate> findByToolType(String toolType) {
-        try {
-            // 1.根据工具类型查询Agent基本信息
-            List<AgentPO> agentPOs = agentDao.findByToolType(toolType);
-
-            // 2.转换为AgentAggregate列表
-            return agentPOs.stream()
-                    .map(AgentInfraConvertor.INSTANCE::toAggregate)
-                    .peek(this::loadTools)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("根据工具类型查询Agent失败，工具类型: {}, 原因: {}", toolType, e.getMessage(), e);
-            throw AiException.of(AiErrorCode.AGENT_QUERY_FAIL);
-        }
-    }
-
-    @Override
     public List<AgentAggregate> findAllNotDeleted() {
         try {
             // 1.查询所有未被删除的Agent基本信息
@@ -182,35 +164,6 @@ public class AgentRepositoryImpl implements IAgentRepository {
             log.error("查询所有未被删除的Agent失败，原因: {}", e.getMessage(), e);
             throw AiException.of(AiErrorCode.AGENT_QUERY_FAIL);
         }
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void saveTools(AgentAggregate agent) {
-        // 1.获取并清空工具列表
-        List<AgentTool> tools = agent.getAndClearTools();
-        if (tools == null || tools.isEmpty()) {
-            return;
-        }
-
-        // 2.转换AgentTool为AgentToolPO
-        List<AgentToolPO> toolPOs = AgentToolInfraConvertor.INSTANCE.toPOList(tools);
-
-        // 3.批量插入工具
-        if (!toolPOs.isEmpty()) {
-            agentToolDao.batchInsert(toolPOs);
-        }
-
-        log.info("Agent工具保存成功，Agent ID: {}, 工具数量: {}", agent.getId(), tools.size());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteTools(AgentAggregate agent) {
-        // 1.删除所有工具
-        int deletedCount = agentToolDao.deleteByAgentId(agent.getId());
-
-        log.info("Agent工具删除成功，Agent ID: {}, 删除工具数量: {}", agent.getId(), deletedCount);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.application.service;
 
-import com.xiaoo.kaleido.ai.application.registry.AgentRegistry;
+import com.xiaoo.kaleido.ai.domain.agent.armory.AgentFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AgentChatService {
 
-    private final AgentRegistry agentRegistry;
+    private final AgentFactory agentFactory;
 
     /**
      * 与Agent进行聊天
@@ -38,7 +38,7 @@ public class AgentChatService {
                 agentId, conversationId, message.length());
 
         // 获取ChatClient
-        ChatClient chatClient = agentRegistry.getChatClient(agentId);
+        ChatClient chatClient = agentFactory.getChatClient(agentId);
 
         // 生成或使用提供的会话ID
         String memoryId = conversationId != null && !conversationId.isEmpty()
@@ -63,7 +63,7 @@ public class AgentChatService {
      */
     public boolean isAgentAvailable(String agentId) {
         try {
-            agentRegistry.getChatClient(agentId);
+            agentFactory.getChatClient(agentId);
             return true;
         } catch (Exception e) {
             log.debug("Agent不可用，Agent ID: {}, 原因: {}", agentId, e.getMessage());
@@ -78,7 +78,7 @@ public class AgentChatService {
      * @return 状态信息
      */
     public String getAgentStatus(String agentId) {
-        if (agentRegistry.isAgentRegistered(agentId)) {
+        if (agentFactory.isAgentRegistered(agentId)) {
             return "REGISTERED";
         } else if (isAgentAvailable(agentId)) {
             return "AVAILABLE";

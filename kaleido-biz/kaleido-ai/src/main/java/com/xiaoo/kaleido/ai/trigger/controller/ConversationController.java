@@ -5,7 +5,7 @@ import com.xiaoo.kaleido.api.ai.command.UpdateConversationTitleCommand;
 import com.xiaoo.kaleido.api.ai.response.ConversationInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpUserUtil;
-import com.xiaoo.kaleido.ai.application.command.ChatCommandService;
+import com.xiaoo.kaleido.ai.application.command.ConversationCommandService;
 import com.xiaoo.kaleido.ai.application.query.ConversationQueryService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -29,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConversationController {
 
-    private final ChatCommandService chatCommandService;
+    private final ConversationCommandService conversationCommandService;
     private final ConversationQueryService conversationQueryService;
 
     /**
@@ -41,7 +41,7 @@ public class ConversationController {
     @PostMapping
     public Result<String> createConversation(@Valid @RequestBody CreateConversationCommand command) {
         String userId = StpUserUtil.getLoginId();
-        String conversationId = chatCommandService.createConversation(userId, command);
+        String conversationId = conversationCommandService.createConversation(userId, command);
         log.info("用户创建会话成功，用户ID: {}, 会话ID: {}", userId, conversationId);
         return Result.success(conversationId);
     }
@@ -59,7 +59,7 @@ public class ConversationController {
             @PathVariable String conversationId,
             @Valid @RequestBody UpdateConversationTitleCommand command) {
         String userId = StpUserUtil.getLoginId();
-        chatCommandService.updateConversationTitle(conversationId, command);
+        conversationCommandService.updateConversationTitle(conversationId, command);
         log.info("用户更新会话标题成功，用户ID: {}, 会话ID: {}, 新标题: {}", userId, conversationId, command.getTitle());
         return Result.success();
     }
@@ -104,7 +104,7 @@ public class ConversationController {
             @NotBlank(message = "会话ID不能为空")
             @PathVariable String conversationId) {
         String userId = StpUserUtil.getLoginId();
-        chatCommandService.deleteConversation(conversationId, userId);
+        conversationCommandService.deleteConversation(conversationId, userId);
         log.info("用户删除会话成功，用户ID: {}, 会话ID: {}", userId, conversationId);
         return Result.success();
     }

@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.ai.application.convertor;
 
 import com.xiaoo.kaleido.api.ai.response.AgentInfoResponse;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.AgentAggregate;
-import com.xiaoo.kaleido.ai.domain.model.entity.AgentTool;
+import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
+import com.xiaoo.kaleido.ai.domain.agent.model.entity.AgentTool;
 import com.xiaoo.kaleido.api.ai.response.AgentToolResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
