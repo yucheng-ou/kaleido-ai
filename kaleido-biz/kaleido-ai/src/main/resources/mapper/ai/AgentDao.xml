@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.ai.infrastructure.dao.AgentDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, code, name, description, system_prompt, model_name,
+        temperature, max_tokens, status
+    </sql>
+
+    <!-- 根据ID查询Agent -->
+    <select id="findById" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据编码查询Agent -->
+    <select id="findByCode" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent
+        WHERE code = #{code}
+        AND deleted = 0
+    </select>
+
+    <!-- 检查Agent编码是否唯一 -->
+    <select id="existsByCode" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_ai_agent
+        WHERE code = #{code}
+        AND deleted = 0
+    </select>
+
+    <!-- 查找所有启用的Agent -->
+    <select id="findAllEnabled" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent
+        WHERE status = 'NORMAL'
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据工具类型查找Agent -->
+    <select id="findByToolType" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO">
+        SELECT DISTINCT a.*
+        FROM t_ai_agent a
+        INNER JOIN t_ai_agent_tool t ON a.id = t.agent_id
+        WHERE a.status = 'NORMAL'
+        AND a.deleted = 0
+        AND t.deleted = 0
+        AND t.tool_type = #{toolType}
+        ORDER BY a.created_at DESC
+    </select>
+
+    <!-- 查询所有未被删除的Agent -->
+    <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+</mapper>

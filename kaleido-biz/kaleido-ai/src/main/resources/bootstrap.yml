@@ -13,7 +13,7 @@ spring:
   ai:
     openai:
       base-url: https://xm.xhorse.net.cn/llms-oai-gateway
-      api-key: ${AI_DASHSCOPE_API_KEY}
+      api-key: ${AI_API_KEY}
       chat:
         options:
           model: deepseek-v3

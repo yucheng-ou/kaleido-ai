@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.ai.infrastructure.dao.WorkflowExecutionDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, execution_id, workflow_id, status, input_data, output_data,
+        error_message, started_at, completed_at
+    </sql>
+
+    <!-- 根据执行ID查询工作流执行记录 -->
+    <select id="findByExecutionId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow_execution
+        WHERE execution_id = #{executionId}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据工作流ID查询执行记录 -->
+    <select id="findByWorkflowId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow_execution
+        WHERE workflow_id = #{workflowId}
+        AND deleted = 0
+        ORDER BY started_at DESC
+    </select>
+
+    <!-- 根据状态查询工作流执行记录 -->
+    <select id="findByStatus" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow_execution
+        WHERE status = #{status}
+        AND deleted = 0
+        ORDER BY started_at DESC
+    </select>
+
+    <!-- 查找超时的工作流执行记录 -->
+    <select id="findTimeoutExecutions" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow_execution
+        WHERE status = 'RUNNING'
+        AND deleted = 0
+        <![CDATA[AND started_at < DATE_SUB(#{currentTime}, INTERVAL #{timeoutMillis} MILLISECOND)]]>
+        ORDER BY started_at ASC
+    </select>
+
+    <!-- 删除超时的工作流执行记录 -->
+    <delete id="deleteTimeoutExecutions">
+        UPDATE t_ai_workflow_execution
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE status = 'RUNNING'
+        AND deleted = 0
+        <![CDATA[AND started_at < DATE_SUB(#{currentTime}, INTERVAL #{timeoutMillis} MILLISECOND)]]>
+    </delete>
+
+</mapper>

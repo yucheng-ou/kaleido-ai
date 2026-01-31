@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.ai.trigger.controller;
 
+import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import io.modelcontextprotocol.client.McpSyncClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +39,9 @@ public class ChatController {
     @GetMapping(value = "/chat")
     public Flux<String> chat(
             @RequestParam("message") String message,
-            @RequestParam("userId") String userId,
             @RequestParam("conversationId") String conversationId) {
+
+        String userId = StpUserUtil.getLoginId();
 
         // 自动生成会话ID（如果未提供）
         if (conversationId == null || conversationId.isEmpty()) {

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.ai.infrastructure.dao.WorkflowDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, code, name, description, definition, status, created_by
+    </sql>
+
+    <!-- 根据ID查询工作流 -->
+    <select id="findById" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据编码查询工作流 -->
+    <select id="findByCode" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow
+        WHERE code = #{code}
+        AND deleted = 0
+    </select>
+
+    <!-- 检查工作流编码是否唯一 -->
+    <select id="existsByCode" resultType="boolean">
+        SELECT COUNT(1) > 0
+        FROM t_ai_workflow
+        WHERE code = #{code}
+        AND deleted = 0
+    </select>
+
+    <!-- 查找所有启用的工作流 -->
+    <select id="findAllEnabled" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow
+        WHERE status = 'NORMAL'
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+</mapper>
