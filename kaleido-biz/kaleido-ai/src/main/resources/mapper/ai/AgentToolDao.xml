@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.ai.infrastructure.dao.AgentToolDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, agent_id, tool_code, tool_name, tool_type, tool_config
+    </sql>
+
+    <!-- 根据Agent ID查询工具列表 -->
+    <select id="findByAgentId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentToolPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent_tool
+        WHERE agent_id = #{agentId}
+        AND deleted = 0
+        ORDER BY created_at ASC
+    </select>
+
+    <!-- 根据Agent ID和工具编码查询工具 -->
+    <select id="findByAgentIdAndToolCode" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentToolPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_agent_tool
+        WHERE agent_id = #{agentId}
+        AND tool_code = #{toolCode}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据Agent ID删除所有工具 -->
+    <delete id="deleteByAgentId">
+        UPDATE t_ai_agent_tool
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE agent_id = #{agentId}
+        AND deleted = 0
+    </delete>
+
+    <!-- 根据Agent ID和工具编码删除工具 -->
+    <delete id="deleteByAgentIdAndToolCode">
+        UPDATE t_ai_agent_tool
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE agent_id = #{agentId}
+        AND tool_code = #{toolCode}
+        AND deleted = 0
+    </delete>
+
+    <!-- 批量插入工具 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO t_ai_agent_tool (
+            id, created_at, updated_at, deleted, lock_version,
+            agent_id, tool_code, tool_name, tool_type, tool_config
+        ) VALUES
+        <foreach collection="tools" item="tool" separator=",">
+            (
+            #{tool.id}, NOW(), NOW(), 0, 0,
+            #{tool.agentId}, #{tool.toolCode}, #{tool.toolName},
+            #{tool.toolType}, #{tool.toolConfig}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

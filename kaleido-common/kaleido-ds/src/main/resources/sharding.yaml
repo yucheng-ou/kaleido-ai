@@ -114,6 +114,12 @@ rules:
       # 标签相关表（不分片）
       - ds_0.t_tag
       - ds_0.t_tag_relation
+      # ai相关表（不分片）
+      - ds_0.t_ai_agent
+      - ds_0.t_ai_agent_tool
+      - ds_0.t_ai_conversation
+      - ds_0.t_ai_workflow
+      - ds_0.t_ai_workflow_execution
 
 # 属性配置：https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/props/
 props:
