@@ -24,6 +24,7 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.milvus.MilvusVectorStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -49,6 +50,7 @@ public class AgentChatClientArmory {
     private final ObjectMapper objectMapper;
     private final MongoChatMemoryRepository mongoChatMemoryRepository;
     private final ChatMemory myChatMemory;
+    private final List<McpSyncClient> mcpSyncClients = new ArrayList<>();
 
     /**
      * 根据Agent配置创建ChatClient
@@ -74,6 +76,51 @@ public class AgentChatClientArmory {
         log.info("ChatClient创建成功，Agent ID: {}", agent.getId());
 
         return chatClient;
+    }
+
+    /**
+     * 创建默认ChatClient
+     * <p>
+     * 创建与ChatController中完全一样的ChatClient配置
+     * 包含：记忆工具、向量存储工具、MCP工具
+     *
+     * @return 默认ChatClient实例
+     */
+    public ChatClient createDefaultChatClient() {
+        log.info("开始创建默认ChatClient");
+        
+        // 1. 构建ChatModel（与ChatController中相同）
+        ChatModel chatModel = OpenAiChatModel.builder()
+                .openAiApi(openAiApi)
+                .defaultOptions(OpenAiChatOptions.builder()
+                        .model("deepseek-v3")
+                        .build())
+                .build();
+        
+        // 2. 构建ChatClient.Builder
+        ChatClient.Builder builder = ChatClient.builder(chatModel);
+        
+        // 3. 添加默认Advisors（与ChatController中相同）
+        // 3.1 记忆工具
+        builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(myChatMemory).build());
+        
+        // 3.2 向量存储工具
+        builder.defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore)
+                .searchRequest(SearchRequest.builder().build())
+                .build());
+        
+        // 4. 添加MCP工具回调（如果可用）
+        if (!mcpSyncClients.isEmpty()) {
+            SyncMcpToolCallbackProvider callbackProvider = SyncMcpToolCallbackProvider.builder()
+                    .mcpClients(mcpSyncClients)
+                    .build();
+            builder.defaultToolCallbacks(callbackProvider);
+        }
+        
+        ChatClient defaultChatClient = builder.build();
+        log.info("默认ChatClient创建成功");
+        
+        return defaultChatClient;
     }
 
     /**

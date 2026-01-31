@@ -35,7 +35,6 @@ public class ConversationDomainServiceImpl implements IConversationDomainService
             String conversationId,
             String userId,
             String title) {
-        // 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
         // 这里校验业务规则，比如会话ID唯一性
         if (conversationRepository.existsById(conversationId)) {
             throw AiException.of(AiErrorCode.CONVERSATION_ID_EXISTS, "会话ID已存在: " + conversationId);

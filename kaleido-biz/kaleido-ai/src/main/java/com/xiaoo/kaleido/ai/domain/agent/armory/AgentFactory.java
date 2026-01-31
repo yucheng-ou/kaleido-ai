@@ -18,6 +18,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  * <p>
  * 负责管理Agent的注册状态和ChatClient实例
  * 提供线程安全的缓存管理和懒加载机制
+ * 支持默认ChatClient的创建和管理
  *
  * @author ouyucheng
  * @date 2026/1/30
@@ -25,6 +26,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 @Slf4j
 @Component
 public class AgentFactory {
+
+    /**
+     * 默认Agent ID常量
+     */
+    public static final String DEFAULT_AGENT_ID = "system_default";
 
     /**
      * ChatClient缓存
@@ -42,6 +48,11 @@ public class AgentFactory {
 
     private final AgentChatClientArmory chatClientFactory;
     private final IAgentRepository agentRepository;
+
+    /**
+     * 默认ChatClient实例（单例）
+     */
+    private volatile ChatClient defaultChatClient;
 
     /**
      * 构造函数，初始化Caffeine缓存
@@ -125,11 +136,19 @@ public class AgentFactory {
 
     /**
      * 获取ChatClient
+     * <p>
+     * 如果agentId为null、空字符串或等于DEFAULT_AGENT_ID，则返回默认ChatClient
+     * 否则返回指定Agent的ChatClient
      *
-     * @param agentId Agent ID
+     * @param agentId Agent ID，如果为null或空则返回默认ChatClient
      * @return ChatClient实例，如果不存在或状态异常则返回null
      */
     public ChatClient getChatClient(String agentId) {
+        // 如果agentId为null、空或默认Agent ID，返回默认ChatClient
+        if (agentId == null || agentId.isEmpty() || DEFAULT_AGENT_ID.equals(agentId)) {
+            return getDefaultChatClient();
+        }
+
         // 先尝试从缓存获取
         ChatClient chatClient = chatClientCache.getIfPresent(agentId);
         if (chatClient != null) {
@@ -155,6 +174,33 @@ public class AgentFactory {
             log.error("创建ChatClient失败，Agent ID: {}, 错误: {}", agentId, e.getMessage(), e);
             return null;
         }
+    }
+
+    /**
+     * 获取默认ChatClient
+     *
+     * @return 默认ChatClient实例
+     */
+    public ChatClient getDefaultChatClient() {
+        if (defaultChatClient == null) {
+            synchronized (this) {
+                if (defaultChatClient == null) {
+                    defaultChatClient = chatClientFactory.createDefaultChatClient();
+                    log.info("默认ChatClient初始化完成");
+                }
+            }
+        }
+        return defaultChatClient;
+    }
+
+    /**
+     * 检查是否为默认Agent ID
+     *
+     * @param agentId Agent ID
+     * @return 如果是默认Agent ID返回true
+     */
+    public boolean isDefaultAgent(String agentId) {
+        return agentId == null || agentId.isEmpty() || DEFAULT_AGENT_ID.equals(agentId);
     }
 
     /**
