@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor;
 
-import com.xiaoo.kaleido.ai.domain.model.aggregate.ConversationAggregate;
+import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.ConversationPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

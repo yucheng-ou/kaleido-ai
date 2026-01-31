@@ -3,14 +3,12 @@ package com.xiaoo.kaleido.ai.application.query.impl;
 import com.xiaoo.kaleido.api.ai.response.ConversationInfoResponse;
 import com.xiaoo.kaleido.ai.application.convertor.ConversationConvertor;
 import com.xiaoo.kaleido.ai.application.query.ConversationQueryService;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IConversationRepository;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.ConversationAggregate;
+import com.xiaoo.kaleido.ai.domain.chat.adapter.repository.IConversationRepository;
+import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

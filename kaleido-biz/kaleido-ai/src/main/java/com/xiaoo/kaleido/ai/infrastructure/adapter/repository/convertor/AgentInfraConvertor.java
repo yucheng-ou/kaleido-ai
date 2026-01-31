@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor;
 
-import com.xiaoo.kaleido.ai.domain.model.aggregate.AgentAggregate;
+import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IWorkflowRepository;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.WorkflowAggregate;
+import com.xiaoo.kaleido.ai.domain.workflow.repository.IWorkflowRepository;
+import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor.WorkflowInfraConvertor;
 import com.xiaoo.kaleido.ai.infrastructure.dao.WorkflowDao;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**

@@ -1,9 +1,8 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor;
 
-import com.xiaoo.kaleido.ai.domain.model.aggregate.WorkflowAggregate;
+import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**

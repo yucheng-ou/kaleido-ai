@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.ai.application.command;
 
-import com.xiaoo.kaleido.ai.domain.model.aggregate.WorkflowExecutionAggregate;
-import com.xiaoo.kaleido.ai.domain.service.IWorkflowExecutionService;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IWorkflowExecutionRepository;
+import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowExecutionAggregate;
+import com.xiaoo.kaleido.ai.domain.workflow.service.IWorkflowExecutionService;
+import com.xiaoo.kaleido.ai.domain.workflow.repository.IWorkflowExecutionRepository;
 import com.xiaoo.kaleido.api.ai.command.CreateWorkflowExecutionCommand;
 import com.xiaoo.kaleido.api.ai.command.SucceedWorkflowExecutionCommand;
 import com.xiaoo.kaleido.api.ai.command.FailWorkflowExecutionCommand;

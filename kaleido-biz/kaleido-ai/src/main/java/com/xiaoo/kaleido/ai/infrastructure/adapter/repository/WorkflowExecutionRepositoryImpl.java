@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository;
 
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IWorkflowExecutionRepository;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.WorkflowExecutionAggregate;
+import com.xiaoo.kaleido.ai.domain.workflow.repository.IWorkflowExecutionRepository;
+import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowExecutionAggregate;
 import com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor.WorkflowExecutionInfraConvertor;
 import com.xiaoo.kaleido.ai.infrastructure.dao.WorkflowExecutionDao;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO;
@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 工作流执行仓储实现（基础设施层）

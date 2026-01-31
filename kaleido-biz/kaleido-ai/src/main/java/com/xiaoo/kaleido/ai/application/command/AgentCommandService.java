@@ -1,11 +1,11 @@
 package com.xiaoo.kaleido.ai.application.command;
 
-import com.xiaoo.kaleido.ai.application.registry.AgentRegistry;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.AgentAggregate;
-import com.xiaoo.kaleido.ai.domain.model.entity.AgentTool;
-import com.xiaoo.kaleido.ai.domain.model.valobj.AgentStatus;
-import com.xiaoo.kaleido.ai.domain.service.IAgentDomainService;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IAgentRepository;
+import com.xiaoo.kaleido.ai.domain.agent.armory.AgentFactory;
+import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
+import com.xiaoo.kaleido.ai.domain.agent.model.entity.AgentTool;
+import com.xiaoo.kaleido.ai.domain.agent.model.vo.AgentStatus;
+import com.xiaoo.kaleido.ai.domain.agent.service.IAgentDomainService;
+import com.xiaoo.kaleido.ai.domain.agent.adapter.repository.IAgentRepository;
 import com.xiaoo.kaleido.api.ai.command.CreateAgentCommand;
 import com.xiaoo.kaleido.api.ai.command.UpdateAgentCommand;
 import com.xiaoo.kaleido.api.ai.command.AddAgentToolCommand;
@@ -29,7 +29,7 @@ public class AgentCommandService {
 
     private final IAgentDomainService agentDomainService;
     private final IAgentRepository agentRepository;
-    private final AgentRegistry agentRegistry;
+    private final AgentFactory agentFactory;
 
     /**
      * 创建Agent
@@ -54,7 +54,7 @@ public class AgentCommandService {
 
         // 3.如果Agent状态为NORMAL，则注册到注册中心
         if (agent.getStatus() == AgentStatus.NORMAL) {
-            agentRegistry.registerAgent(agent.getId());
+            agentFactory.registerAgent(agent.getId());
         }
 
         // 4.记录日志
@@ -108,7 +108,7 @@ public class AgentCommandService {
         agentRepository.update(agent);
 
         // 3.注册Agent到注册中心
-        agentRegistry.registerAgent(agentId);
+        agentFactory.registerAgent(agentId);
 
         // 4.记录日志
         log.info("Agent启用成功，Agent ID: {}", agentId);
@@ -127,7 +127,7 @@ public class AgentCommandService {
         agentRepository.update(agent);
 
         // 3.从注册中心注销Agent
-        agentRegistry.unregisterAgent(agentId);
+        agentFactory.unregisterAgent(agentId);
 
         // 4.记录日志
         log.info("Agent禁用成功，Agent ID: {}", agentId);
@@ -171,7 +171,7 @@ public class AgentCommandService {
 
         // 3.刷新Agent配置（因为工具配置发生了变化）
         if (agent.getStatus() == AgentStatus.NORMAL) {
-            agentRegistry.refreshAgent(agentId);
+            agentFactory.refreshAgent(agentId);
         }
 
         // 4.记录日志
@@ -189,7 +189,7 @@ public class AgentCommandService {
         if (oldStatus == newStatus) {
             // 状态未变化，如果状态为NORMAL则刷新配置
             if (newStatus == AgentStatus.NORMAL) {
-                agentRegistry.refreshAgent(agentId);
+                agentFactory.refreshAgent(agentId);
             }
             return;
         }
@@ -197,10 +197,10 @@ public class AgentCommandService {
         // 状态发生变化
         if (newStatus == AgentStatus.NORMAL) {
             // 从其他状态变为NORMAL，注册Agent
-            agentRegistry.registerAgent(agentId);
+            agentFactory.registerAgent(agentId);
         } else if (oldStatus == AgentStatus.NORMAL) {
             // 从NORMAL变为其他状态，注销Agent
-            agentRegistry.unregisterAgent(agentId);
+            agentFactory.unregisterAgent(agentId);
         }
     }
 }

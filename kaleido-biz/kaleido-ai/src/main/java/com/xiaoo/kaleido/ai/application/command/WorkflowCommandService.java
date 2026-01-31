@@ -1,13 +1,12 @@
 package com.xiaoo.kaleido.ai.application.command;
 
-import com.xiaoo.kaleido.ai.domain.model.aggregate.WorkflowAggregate;
-import com.xiaoo.kaleido.ai.domain.service.IWorkflowManagementService;
-import com.xiaoo.kaleido.ai.domain.adapter.repository.IWorkflowRepository;
+import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
+import com.xiaoo.kaleido.ai.domain.workflow.service.IWorkflowManagementService;
+import com.xiaoo.kaleido.ai.domain.workflow.repository.IWorkflowRepository;
 import com.xiaoo.kaleido.api.ai.command.CreateWorkflowCommand;
 import com.xiaoo.kaleido.api.ai.command.UpdateWorkflowCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openxmlformats.schemas.drawingml.x2006.chart.CTRotY;
 import org.springframework.stereotype.Service;
 
 /**

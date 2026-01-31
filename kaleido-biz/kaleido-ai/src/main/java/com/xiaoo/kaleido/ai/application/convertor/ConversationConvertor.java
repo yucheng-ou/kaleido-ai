@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.ai.application.convertor;
 
 import com.xiaoo.kaleido.api.ai.response.ConversationInfoResponse;
-import com.xiaoo.kaleido.ai.domain.model.aggregate.ConversationAggregate;
+import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

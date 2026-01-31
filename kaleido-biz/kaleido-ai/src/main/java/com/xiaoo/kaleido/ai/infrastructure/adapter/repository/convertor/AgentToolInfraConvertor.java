@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.infrastructure.adapter.repository.convertor;
 
-import com.xiaoo.kaleido.ai.domain.model.entity.AgentTool;
+import com.xiaoo.kaleido.ai.domain.agent.model.entity.AgentTool;
 import com.xiaoo.kaleido.ai.infrastructure.dao.po.AgentToolPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
