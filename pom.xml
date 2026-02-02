@@ -72,6 +72,7 @@
         <minio.version>8.6.0</minio.version>
         <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
         <shardingsphere.version>5.5.2</shardingsphere.version>
+        <antlr4.version>4.10.1</antlr4.version>
 
     </properties>
 
@@ -411,6 +412,12 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>shardingsphere-jdbc</artifactId>
                 <version>${shardingsphere.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${antlr4.version}</version>
             </dependency>
 
 <!--            <dependency>-->

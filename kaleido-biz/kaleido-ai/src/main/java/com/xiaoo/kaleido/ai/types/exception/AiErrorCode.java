@@ -255,7 +255,27 @@ public enum AiErrorCode implements ErrorCode {
     /**
      * 外部服务错误：调用外部服务时发生错误
      */
-    EXTERNAL_SERVICE_ERROR("EXTERNAL_SERVICE_ERROR", "外部服务调用失败");
+    EXTERNAL_SERVICE_ERROR("EXTERNAL_SERVICE_ERROR", "外部服务调用失败"),
+
+    /**
+     * 向量存储保存失败：保存文档到向量存储时发生错误
+     */
+    VECTOR_STORE_SAVE_FAIL("VECTOR_STORE_SAVE_FAIL", "向量存储保存失败"),
+
+    /**
+     * 向量存储搜索失败：在向量存储中搜索文档时发生错误
+     */
+    VECTOR_STORE_SEARCH_FAIL("VECTOR_STORE_SEARCH_FAIL", "向量存储搜索失败"),
+
+    /**
+     * 向量存储删除失败：从向量存储中删除文档时发生错误
+     */
+    VECTOR_STORE_DELETE_FAIL("VECTOR_STORE_DELETE_FAIL", "向量存储删除失败"),
+
+    /**
+     * 向量存储查询失败：查询向量存储时发生错误
+     */
+    VECTOR_STORE_QUERY_FAIL("VECTOR_STORE_QUERY_FAIL", "向量存储查询失败");
 
     /**
      * 错误码

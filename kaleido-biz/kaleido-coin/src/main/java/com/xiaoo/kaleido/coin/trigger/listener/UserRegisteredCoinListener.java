@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.coin.trigger.listener;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.xiaoo.kaleido.api.coin.command.InitAccountCommand;
@@ -39,9 +40,9 @@ public class UserRegisteredCoinListener {
             JSONObject data = jsonObject.getJSONObject("data");
             
             String userId = data.getString("userId");
-            String inviterUserId = data.getString("inviterUserId");
+            String inviterUserId = data.getString("inviterId");
             
-            if (userId == null || userId.trim().isEmpty()) {
+            if (StrUtil.isEmpty(userId)) {
                 log.error("用户注册事件消息格式错误，缺少userId字段: {}", message);
                 return;
             }
@@ -50,7 +51,7 @@ public class UserRegisteredCoinListener {
             initUserCoinAccount(userId);
 
             // 2. 如果有邀请人，处理邀请奖励
-            if (inviterUserId != null && !inviterUserId.trim().isEmpty()) {
+            if (StrUtil.isNotBlank(inviterUserId)) {
                 processInviteReward(inviterUserId, userId);
             }
 

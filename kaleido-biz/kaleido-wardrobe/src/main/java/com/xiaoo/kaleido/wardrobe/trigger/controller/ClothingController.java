@@ -10,6 +10,7 @@ import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.satoken.util.StpUserUtil;
 import com.xiaoo.kaleido.wardrobe.application.command.ClothingCommandService;
 import com.xiaoo.kaleido.wardrobe.application.query.IClothingQueryService;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +44,10 @@ public class ClothingController {
      */
     @PostMapping
     @SentinelResource(
-        value = "createClothing",
-        blockHandler = "createClothingBlockHandler",
-        fallback = "createClothingFallback",
-        exceptionsToIgnore = {IllegalArgumentException.class}
+            value = "createClothing",
+            blockHandler = "createClothingBlockHandler",
+            fallback = "createClothingFallback",
+            exceptionsToIgnore = {IllegalArgumentException.class, WardrobeException.class}
     )
     public Result<String> createClothing(@Valid @RequestBody CreateClothingWithImagesCommand command) {
         String userId = StpUserUtil.getLoginId();
@@ -149,7 +150,7 @@ public class ClothingController {
      * createClothing 接口的限流/降级处理函数
      *
      * @param command 创建服装命令
-     * @param ex Sentinel 阻塞异常
+     * @param ex      Sentinel 阻塞异常
      * @return 限流/降级响应
      */
     public Result<String> createClothingBlockHandler(@Valid @RequestBody CreateClothingWithImagesCommand command, BlockException ex) {
@@ -160,7 +161,7 @@ public class ClothingController {
     /**
      * createClothing 接口的熔断处理函数
      *
-     * @param command 创建服装命令
+     * @param command   创建服装命令
      * @param throwable 业务异常
      * @return 熔断响应
      */

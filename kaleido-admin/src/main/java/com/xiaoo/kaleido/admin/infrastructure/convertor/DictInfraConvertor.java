@@ -23,30 +23,10 @@ public interface DictInfraConvertor {
     /**
      * DictAggregate 转换为 DictPO
      */
-    @Mapping(target = "id", source = "id", qualifiedByName = "stringToLong")
-    @Mapping(target = "deleted", constant = "0")
     DictPO toPO(DictAggregate aggregate);
     
     /**
      * DictPO 转换为 DictAggregate
      */
-    @Mapping(target = "id", source = "id", qualifiedByName = "longToString")
     DictAggregate toEntity(DictPO po);
-    
-    @Named("stringToLong")
-    default Long stringToLong(String id) {
-        if (id == null) {
-            return null;
-        }
-        try {
-            return Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-    
-    @Named("longToString")
-    default String longToString(Long id) {
-        return id != null ? id.toString() : null;
-    }
 }

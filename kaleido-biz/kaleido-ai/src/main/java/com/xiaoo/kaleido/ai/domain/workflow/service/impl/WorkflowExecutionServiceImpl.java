@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.ai.domain.workflow.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.ai.domain.workflow.armory.WorkflowFactory;
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowExecutionAggregate;
 import com.xiaoo.kaleido.ai.domain.workflow.service.IWorkflowExecutionService;
@@ -32,6 +33,7 @@ public class WorkflowExecutionServiceImpl implements IWorkflowExecutionService {
 
     private final IWorkflowExecutionRepository workflowExecutionRepository;
     private final IWorkflowManagementService workflowManagementService;
+    private final WorkflowFactory workflowFactory;
 
     @Override
     public WorkflowExecutionAggregate createWorkflowExecution(String executionId, String workflowId, String inputData) {
@@ -138,5 +140,80 @@ public class WorkflowExecutionServiceImpl implements IWorkflowExecutionService {
 
         // 查询数据库
         return workflowExecutionRepository.findByStatus(status);
+    }
+
+    /**
+     * 执行工作流
+     *
+     * @param workflowId 工作流ID
+     * @param inputData 输入数据
+     * @return 执行结果
+     */
+    public String executeWorkflow(String workflowId, String inputData) {
+        // 参数校验
+        if (StrUtil.isBlank(workflowId)) {
+            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
+        }
+
+        // 校验工作流是否存在且启用
+        WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
+        if (!workflow.isEnabled()) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "工作流已禁用，无法执行: " + workflowId);
+        }
+
+        // 注册工作流（如果尚未注册）
+        if (!workflowFactory.isWorkflowRegistered(workflowId)) {
+            workflowFactory.registerWorkflow(workflow);
+        }
+
+        // 执行工作流
+        String result = workflowFactory.executeWorkflow(workflowId, inputData);
+
+        log.info("工作流执行完成，工作流ID: {}, 结果长度: {}", workflowId, result != null ? result.length() : 0);
+        return result;
+    }
+
+    /**
+     * 注册工作流到工厂
+     *
+     * @param workflowId 工作流ID
+     */
+    public void registerWorkflow(String workflowId) {
+        if (StrUtil.isBlank(workflowId)) {
+            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
+        }
+
+        WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
+        workflowFactory.registerWorkflow(workflow);
+
+        log.info("工作流注册到工厂成功，工作流ID: {}, 名称: {}", workflowId, workflow.getName());
+    }
+
+    /**
+     * 注销工作流从工厂
+     *
+     * @param workflowId 工作流ID
+     */
+    public void unregisterWorkflow(String workflowId) {
+        if (StrUtil.isBlank(workflowId)) {
+            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
+        }
+
+        workflowFactory.unregisterWorkflow(workflowId);
+        log.info("工作流从工厂注销成功，工作流ID: {}", workflowId);
+    }
+
+    /**
+     * 检查工作流是否已注册到工厂
+     *
+     * @param workflowId 工作流ID
+     * @return 如果已注册返回true，否则返回false
+     */
+    public boolean isWorkflowRegistered(String workflowId) {
+        if (StrUtil.isBlank(workflowId)) {
+            return false;
+        }
+
+        return workflowFactory.isWorkflowRegistered(workflowId);
     }
 }
