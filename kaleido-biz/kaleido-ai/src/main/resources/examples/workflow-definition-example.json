@@ -1,0 +1,37 @@
+{
+  "version": "1.0.0",
+  "name": "文本处理工作流示例",
+  "description": "这是一个示例工作流，展示如何将多个Agent串联起来处理文本",
+  "steps": [
+    {
+      "id": "step1",
+      "name": "文本分析",
+      "agentId": "text-analyzer-agent",
+      "input": {
+        "type": "STATIC",
+        "value": "请分析以下文本的主题和情感："
+      },
+      "order": 1
+    },
+    {
+      "id": "step2",
+      "name": "文本总结",
+      "agentId": "text-summarizer-agent",
+      "input": {
+        "type": "PREVIOUS_OUTPUT",
+        "stepId": "step1"
+      },
+      "order": 2
+    },
+    {
+      "id": "step3",
+      "name": "格式转换",
+      "agentId": "text-formatter-agent",
+      "input": {
+        "type": "PREVIOUS_OUTPUT",
+        "stepId": "step2"
+      },
+      "order": 3
+    }
+  ]
+}
