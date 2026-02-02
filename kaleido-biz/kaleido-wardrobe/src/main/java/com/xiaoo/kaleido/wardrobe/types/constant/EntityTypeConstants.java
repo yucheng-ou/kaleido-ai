@@ -1,4 +1,4 @@
-package com.xiaoo.kaleido.wardrobe.types;
+package com.xiaoo.kaleido.wardrobe.types.constant;
 
 /**
  * 实体类型常量类

@@ -96,6 +96,11 @@
             <artifactId>kaleido-seata</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-mq</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

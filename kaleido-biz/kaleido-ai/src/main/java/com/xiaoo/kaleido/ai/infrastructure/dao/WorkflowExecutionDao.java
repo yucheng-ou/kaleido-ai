@@ -16,7 +16,6 @@ import java.util.List;
  * @author ouyucheng
  * @date 2026/1/30
  */
-@Mapper
 public interface WorkflowExecutionDao extends BaseMapper<WorkflowExecutionPO> {
 
     /**

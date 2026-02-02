@@ -5,7 +5,6 @@ import com.xiaoo.kaleido.api.coin.command.ProcessLocationCreationCommand;
 import com.xiaoo.kaleido.api.tag.IRpcTagService;
 import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
 import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
-import com.xiaoo.kaleido.api.wardrobe.command.AddClothingToLocationCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateLocationWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
 import com.xiaoo.kaleido.base.result.Result;
@@ -15,8 +14,7 @@ import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRe
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.dto.LocationImageInfoDTO;
-import com.xiaoo.kaleido.wardrobe.infrastructure.adapter.file.ImageProcessingService;
-import com.xiaoo.kaleido.wardrobe.types.EntityTypeConstants;
+import com.xiaoo.kaleido.wardrobe.types.constant.EntityTypeConstants;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;

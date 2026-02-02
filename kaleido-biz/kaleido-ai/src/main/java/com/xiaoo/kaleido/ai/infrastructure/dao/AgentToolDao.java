@@ -9,13 +9,10 @@ import java.util.List;
 
 /**
  * Agent工具数据访问接口
- * <p>
- * 负责Agent工具表的CRUD操作
  *
  * @author ouyucheng
  * @date 2026/1/30
  */
-@Mapper
 public interface AgentToolDao extends BaseMapper<AgentToolPO> {
 
     /**

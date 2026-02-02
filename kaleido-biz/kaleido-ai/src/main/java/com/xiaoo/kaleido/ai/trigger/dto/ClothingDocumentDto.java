@@ -33,19 +33,19 @@ public class ClothingDocumentDto implements Serializable {
     private String name;
     
     /**
-     * 服装类型编码
+     * 服装类型名称
      */
-    private String typeCode;
+    private String typeName;
     
     /**
-     * 颜色编码
+     * 颜色名称
      */
-    private String colorCode;
+    private String colorName;
     
     /**
-     * 季节编码
+     * 季节名称
      */
-    private String seasonCode;
+    private String seasonName;
     
     /**
      * 品牌ID
@@ -76,11 +76,6 @@ public class ClothingDocumentDto implements Serializable {
      * 描述
      */
     private String description;
-    
-    /**
-     * 当前位置ID
-     */
-    private String currentLocationId;
     
     /**
      * 当前位置名称
