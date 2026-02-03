@@ -64,9 +64,7 @@ public class WorkflowRepositoryImpl implements IWorkflowRepository {
             }
 
             // 2.转换为WorkflowAggregate
-            WorkflowAggregate workflowAggregate = WorkflowInfraConvertor.INSTANCE.toAggregate(workflowPO);
-
-            return workflowAggregate;
+            return WorkflowInfraConvertor.INSTANCE.toAggregate(workflowPO);
         } catch (Exception e) {
             log.error("查询工作流失败，工作流ID: {}, 原因: {}", workflowId, e.getMessage(), e);
             throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
@@ -83,9 +81,7 @@ public class WorkflowRepositoryImpl implements IWorkflowRepository {
             }
 
             // 2.转换为WorkflowAggregate
-            WorkflowAggregate workflowAggregate = WorkflowInfraConvertor.INSTANCE.toAggregate(workflowPO);
-
-            return workflowAggregate;
+            return WorkflowInfraConvertor.INSTANCE.toAggregate(workflowPO);
         } catch (Exception e) {
             log.error("查询工作流失败，工作流编码: {}, 原因: {}", code, e.getMessage(), e);
             throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
@@ -116,22 +112,6 @@ public class WorkflowRepositoryImpl implements IWorkflowRepository {
             return workflowDao.existsByCode(code);
         } catch (Exception e) {
             log.error("检查工作流编码唯一性失败，工作流编码: {}, 原因: {}", code, e.getMessage(), e);
-            throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
-        }
-    }
-
-    @Override
-    public List<WorkflowAggregate> findAllEnabled() {
-        try {
-            // 1.查询所有启用的工作流基本信息
-            List<WorkflowPO> workflowPOs = workflowDao.findAllEnabled();
-
-            // 2.转换为WorkflowAggregate列表
-            return workflowPOs.stream()
-                    .map(WorkflowInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询所有启用的工作流失败，原因: {}", e.getMessage(), e);
             throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
         }
     }

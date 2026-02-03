@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.xiaoo.kaleido.ai.domain.clothing.service.impl.ClothingVectorService;
 import com.xiaoo.kaleido.api.wardrobe.event.ClothingEventMessage;
+import com.xiaoo.kaleido.api.wardrobe.enums.ClothingEventTypeEnums;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -42,15 +43,20 @@ public class ClothingEventListener {
             }
             
             // 根据事件类型调用不同的处理逻辑
-            String eventType = clothingEventMessage.getEventType();
+            ClothingEventTypeEnums eventType = clothingEventMessage.getEventType();
+            if (eventType == null) {
+                log.warn("服装事件类型为空: {}", message);
+                return;
+            }
+            
             switch (eventType) {
-                case "CREATE":
+                case CREATE:
                     clothingVectorService.handleCreateEvent(clothingEventMessage);
                     break;
-                case "UPDATE":
+                case UPDATE:
                     clothingVectorService.handleUpdateEvent(clothingEventMessage);
                     break;
-                case "DELETE":
+                case DELETE:
                     clothingVectorService.handleDeleteEvent(clothingEventMessage);
                     break;
                 default:
@@ -80,21 +86,9 @@ public class ClothingEventListener {
                 throw new IllegalArgumentException("事件消息缺少data字段");
             }
             
-            // 构建ClothingEventMessage
-            return ClothingEventMessage.builder()
-                    .eventType(dataJson.getString("eventType"))
-                    .userId(dataJson.getString("userId"))
-                    .clothingId(dataJson.getString("clothingId"))
-                    .name(dataJson.getString("name"))
-                    .typeName(dataJson.getString("typeName"))
-                    .colorName(dataJson.getString("colorName"))
-                    .seasonName(dataJson.getString("seasonName"))
-                    .brandName(dataJson.getString("brandName"))
-                    .size(dataJson.getString("size"))
-                    .purchaseDate(dataJson.getDate("purchaseDate"))
-                    .price(dataJson.getBigDecimal("price"))
-                    .description(dataJson.getString("description"))
-                    .build();
+            // 使用fastjson自动反序列化整个data对象为ClothingEventMessage
+            // fastjson可以自动将字符串转换为枚举
+            return JSON.parseObject(dataJson.toJSONString(), ClothingEventMessage.class);
         } catch (Exception e) {
             log.error("解析服装事件消息失败: {}", message, e);
             throw new IllegalArgumentException("服装事件消息格式错误", e);

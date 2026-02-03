@@ -104,13 +104,6 @@ public interface IWorkflowManagementService {
     boolean isWorkflowCodeUnique(String code);
 
     /**
-     * 获取所有启用的工作流
-     *
-     * @return 启用的工作流聚合根列表
-     */
-    List<WorkflowAggregate> findAllEnabledWorkflows();
-
-    /**
      * 验证工作流定义格式
      * <p>
      * 业务规则验证，可以查询数据库进行参数校验

@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.ai.trigger.controller;
 
-import com.xiaoo.kaleido.api.ai.command.CreateConversationCommand;
 import com.xiaoo.kaleido.api.ai.command.UpdateConversationTitleCommand;
 import com.xiaoo.kaleido.api.ai.response.ConversationInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
@@ -35,15 +34,12 @@ public class ConversationController {
     /**
      * 创建会话
      *
-     * @param command 创建会话命令
-     * @return 会话ID
+     * @return 会话信息响应（包含会话ID和标题）
      */
     @PostMapping
-    public Result<String> createConversation(@Valid @RequestBody CreateConversationCommand command) {
+    public Result<ConversationInfoResponse> createConversation() {
         String userId = StpUserUtil.getLoginId();
-        String conversationId = conversationCommandService.createConversation(userId, command);
-        log.info("用户创建会话成功，用户ID: {}, 会话ID: {}", userId, conversationId);
-        return Result.success(conversationId);
+        return Result.success(conversationCommandService.createConversation(userId));
     }
 
     /**
@@ -59,8 +55,7 @@ public class ConversationController {
             @PathVariable String conversationId,
             @Valid @RequestBody UpdateConversationTitleCommand command) {
         String userId = StpUserUtil.getLoginId();
-        conversationCommandService.updateConversationTitle(conversationId, command);
-        log.info("用户更新会话标题成功，用户ID: {}, 会话ID: {}, 新标题: {}", userId, conversationId, command.getTitle());
+        conversationCommandService.updateConversationTitle(conversationId, command, userId);
         return Result.success();
     }
 
@@ -76,7 +71,6 @@ public class ConversationController {
             @PathVariable String conversationId) {
         String userId = StpUserUtil.getLoginId();
         ConversationInfoResponse conversation = conversationQueryService.findById(conversationId);
-        log.info("用户查询会话详情成功，用户ID: {}, 会话ID: {}", userId, conversationId);
         return Result.success(conversation);
     }
 
@@ -89,7 +83,6 @@ public class ConversationController {
     public Result<List<ConversationInfoResponse>> listConversations() {
         String userId = StpUserUtil.getLoginId();
         List<ConversationInfoResponse> conversations = conversationQueryService.findByUserId(userId);
-        log.info("用户查询会话列表成功，用户ID: {}, 会话数量: {}", userId, conversations.size());
         return Result.success(conversations);
     }
 
@@ -105,20 +98,6 @@ public class ConversationController {
             @PathVariable String conversationId) {
         String userId = StpUserUtil.getLoginId();
         conversationCommandService.deleteConversation(conversationId, userId);
-        log.info("用户删除会话成功，用户ID: {}, 会话ID: {}", userId, conversationId);
         return Result.success();
-    }
-
-    /**
-     * 查询用户活跃会话列表
-     *
-     * @return 活跃会话信息响应列表
-     */
-    @GetMapping("/active")
-    public Result<List<ConversationInfoResponse>> listActiveConversations() {
-        String userId = StpUserUtil.getLoginId();
-        List<ConversationInfoResponse> conversations = conversationQueryService.findActiveConversationsByUserId(userId);
-        log.info("用户查询活跃会话列表成功，用户ID: {}, 活跃会话数量: {}", userId, conversations.size());
-        return Result.success(conversations);
     }
 }

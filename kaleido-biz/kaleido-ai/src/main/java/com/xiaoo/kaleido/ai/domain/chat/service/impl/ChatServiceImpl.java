@@ -1,12 +1,19 @@
 package com.xiaoo.kaleido.ai.domain.chat.service.impl;
 
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xiaoo.kaleido.ai.domain.agent.armory.AgentFactory;
+import com.xiaoo.kaleido.ai.domain.agent.armory.config.VectorStoreConfig;
+import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
+import com.xiaoo.kaleido.ai.domain.agent.model.entity.AgentTool;
 import com.xiaoo.kaleido.ai.domain.chat.service.IChatService;
+import com.xiaoo.kaleido.api.ai.enums.ToolType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -28,29 +35,54 @@ public class ChatServiceImpl implements IChatService {
     private final AgentFactory agentFactory;
 
     /**
-     * 基于Agent的聊天
+     * 基于Agent的聊天（带过滤表达式）
      * <p>
-     * 使用指定的Agent进行聊天
+     * 使用指定的Agent进行聊天，支持动态过滤表达式
      *
      * @param agentId        Agent ID
      * @param message        用户消息
      * @param conversationId 会话ID（可选）
      * @return 聊天响应流
      */
-    public Flux<String> chatWithAgent(String agentId, String message, String conversationId) {
+    public Flux<String> chatWithAgent(String agentId, String message, String conversationId, String userId) {
         log.info("开始基于Agent的聊天，Agent ID: {}, 会话ID: {}, 消息长度: {}",
                 agentId, conversationId, message.length());
 
         // 获取ChatClient
         ChatClient chatClient = agentFactory.getChatClient(agentId);
+        if (chatClient == null) {
+            log.error("获取ChatClient失败，Agent ID: {}", agentId);
+            return Flux.empty();
+        }
+
+        // 获取Agent配置
+        AgentAggregate agentConfig = agentFactory.getAgentConfig(agentId);
+        
+        // 提取向量存储配置
+        VectorStoreConfig vectorConfig = extractVectorStoreConfig(agentConfig);
 
         // 生成或使用提供的会话ID
         String memoryId = conversationId != null && !conversationId.isEmpty()
                 ? conversationId
                 : UUID.randomUUID().toString();
-        // 执行聊天
-        return chatClient.prompt()
+
+        // 开始构建ChatClient prompt
+        var promptSpec = chatClient.prompt()
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, memoryId))
+                .advisors(advisorSpec -> advisorSpec.param(
+                        QuestionAnswerAdvisor.FILTER_EXPRESSION,
+                        String.format("userId == '%s'", userId)));
+
+        // 如果有向量存储配置，添加相关参数
+        if (vectorConfig != null) {
+            promptSpec = promptSpec
+                    .advisors(advisorSpec -> advisorSpec.param("topK", vectorConfig.getTopK()))
+                    .advisors(advisorSpec -> advisorSpec.param("similarityThreshold",
+                            vectorConfig.getSimilarityThreshold().toString()));
+        }
+
+        // 执行聊天
+        return promptSpec
                 .user(message)
                 .stream()
                 .content();
@@ -89,5 +121,25 @@ public class ChatServiceImpl implements IChatService {
                 .user(message)
                 .stream()
                 .content();
+    }
+
+    /**
+     * 从Agent配置中提取向量存储配置
+     *
+     * @param agentConfig Agent配置
+     * @return 向量存储配置，如果未找到则返回null
+     */
+    private VectorStoreConfig extractVectorStoreConfig(AgentAggregate agentConfig) {
+        if (agentConfig == null || agentConfig.getTools() == null) {
+            return null;
+        }
+
+        for (AgentTool tool : agentConfig.getTools()) {
+            // 使用字符串比较工具类型，避免导入ToolType枚举
+            if (ToolType.VECTOR_STORE.equals(tool.getToolType())) {
+                return JSONUtil.toBean(tool.getToolConfig(), VectorStoreConfig.class);
+            }
+        }
+        return null;
     }
 }

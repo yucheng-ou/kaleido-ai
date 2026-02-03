@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.ai.domain.agent.armory;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.ai.domain.agent.model.aggregate.AgentAggregate;
 import com.xiaoo.kaleido.ai.domain.agent.model.vo.AgentStatus;
 import com.xiaoo.kaleido.ai.domain.agent.adapter.repository.IAgentRepository;
@@ -145,7 +146,7 @@ public class AgentFactory {
      */
     public ChatClient getChatClient(String agentId) {
         // 如果agentId为null、空或默认Agent ID，返回默认ChatClient
-        if (agentId == null || agentId.isEmpty() || DEFAULT_AGENT_ID.equals(agentId)) {
+        if (StrUtil.isBlank(agentId)) {
             return getDefaultChatClient();
         }
 
@@ -225,28 +226,13 @@ public class AgentFactory {
     }
 
     /**
-     * 清理无效的Agent缓存
-     * 定时任务，每小时执行一次
+     * 获取Agent配置
+     *
+     * @param agentId Agent ID
+     * @return Agent配置，如果不存在则返回null
      */
-    @Scheduled(fixedRate = 3600000) // 每小时执行一次
-    public void cleanupInvalidAgents() {
-        log.debug("开始清理无效Agent缓存...");
-        long initialSize = chatClientCache.estimatedSize();
-
-        // 获取所有缓存的key并检查有效性
-        chatClientCache.asMap().keySet().forEach(agentId -> {
-            AgentAggregate agent = loadAgent(agentId);
-            if (agent == null || agent.getStatus() != AgentStatus.NORMAL) {
-                log.debug("清理无效Agent缓存，Agent ID: {}", agentId);
-                chatClientCache.invalidate(agentId);
-                agentConfigCache.invalidate(agentId);
-            }
-        });
-
-        long cleanedCount = initialSize - chatClientCache.estimatedSize();
-        if (cleanedCount > 0) {
-            log.info("Agent缓存清理完成，清理数量: {}", cleanedCount);
-        }
+    public AgentAggregate getAgentConfig(String agentId) {
+        return agentConfigCache.getIfPresent(agentId);
     }
 
     /**

@@ -13,20 +13,21 @@ import reactor.core.publisher.Flux;
 public interface IChatService {
 
     /**
-     * 基于Agent的聊天
+     * 基于Agent的聊天（带过滤表达式）
      * <p>
-     * 使用指定的Agent进行聊天
+     * 使用指定的Agent进行聊天，支持动态过滤表达式
      *
      * @param agentId        Agent ID
      * @param message        用户消息
      * @param conversationId 会话ID（可选）
+     * @param userId         用户id
      * @return 聊天响应流
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     Flux<String> chatWithAgent(
             String agentId,
             String message,
-            String conversationId);
+            String conversationId,
+            String userId);
 
     /**
      * 基于默认ChatClient的聊天（带用户ID过滤）
@@ -37,7 +38,6 @@ public interface IChatService {
      * @param conversationId 会话ID（可选）
      * @param userId         用户ID（用于向量存储过滤）
      * @return 聊天响应流
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     Flux<String> chatWithDefault(
             String message,

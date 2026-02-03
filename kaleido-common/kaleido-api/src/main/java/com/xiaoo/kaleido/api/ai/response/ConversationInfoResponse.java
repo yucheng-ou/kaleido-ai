@@ -4,6 +4,7 @@ import com.xiaoo.kaleido.base.response.BaseResp;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 会话信息响应
@@ -34,22 +35,23 @@ public class ConversationInfoResponse extends BaseResp {
     private String title;
 
     /**
-     * 会话状态
+     * 消息列表
      */
-    private String status;
+    private List<Message> messages;
 
-    /**
-     * 最后消息时间
-     */
-    private LocalDateTime lastMessageTime;
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Message {
+        /**
+         * 消息角色：USER, ASSISTANT, SYSTEM
+         */
+        private String role;
 
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
+        /**
+         * 消息内容
+         */
+        private String content;
+    }
 }

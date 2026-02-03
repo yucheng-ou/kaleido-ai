@@ -7,6 +7,8 @@ import com.xiaoo.kaleido.ai.domain.chat.adapter.repository.IConversationReposito
 import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.memory.repository.mongo.MongoChatMemoryRepository;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,59 +28,43 @@ public class ConversationQueryServiceImpl implements ConversationQueryService {
 
     private final IConversationRepository conversationRepository;
     private final ConversationConvertor conversationConvertor;
+    private final MongoChatMemoryRepository mongoChatMemoryRepository;
 
     @Override
     public ConversationInfoResponse findById(String conversationId) {
-        // 1.参数校验
-        Objects.requireNonNull(conversationId, "conversationId不能为空");
         
-        // 2.查询会话
+        // 1.查询会话
         ConversationAggregate conversation = conversationRepository.findById(conversationId);
-        
+        if (conversation == null) {
+            return null;
+        }
+
+        // 2.查询消息
+        List<org.springframework.ai.chat.messages.Message> aiMessages = mongoChatMemoryRepository.findByConversationId(conversationId);
+
         // 3.转换为响应对象
-        return conversation != null ? conversationConvertor.toResponse(conversation) : null;
+        ConversationInfoResponse response = conversationConvertor.toResponse(conversation);
+
+        // 4.转换消息并设置到响应中
+        List<ConversationInfoResponse.Message> messages = aiMessages.stream()
+                .map(msg -> ConversationInfoResponse.Message.builder()
+                        .role(msg.getMessageType().name())
+                        .content(msg.getText())
+                        .build())
+                .collect(Collectors.toList());
+        
+        response.setMessages(messages);
+
+        return response;
     }
 
     @Override
     public List<ConversationInfoResponse> findByUserId(String userId) {
-        // 1.参数校验
-        Objects.requireNonNull(userId, "userId不能为空");
         
-        // 2.查询会话列表
+        // 1.查询会话列表
         List<ConversationAggregate> conversations = conversationRepository.findByUserId(userId);
         
-        // 3.转换为响应对象列表
-        return conversations.stream()
-                .map(conversationConvertor::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ConversationInfoResponse> findActiveConversationsByUserId(String userId) {
-        // 1.参数校验
-        Objects.requireNonNull(userId, "userId不能为空");
-        
-        // 2.查询活跃会话列表
-        List<ConversationAggregate> conversations = conversationRepository.findActiveConversationsByUserId(userId);
-        
-        // 3.转换为响应对象列表
-        return conversations.stream()
-                .map(conversationConvertor::toResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ConversationInfoResponse> findIdleConversationsByUserId(String userId, int maxIdleDays) {
-        // 1.参数校验
-        Objects.requireNonNull(userId, "userId不能为空");
-        if (maxIdleDays < 0) {
-            throw new IllegalArgumentException("maxIdleDays不能小于0");
-        }
-        
-        // 2.查询闲置会话列表
-        List<ConversationAggregate> conversations = conversationRepository.findIdleConversationsByUserId(userId, maxIdleDays);
-        
-        // 3.转换为响应对象列表
+        // 2.转换为响应对象列表
         return conversations.stream()
                 .map(conversationConvertor::toResponse)
                 .collect(Collectors.toList());

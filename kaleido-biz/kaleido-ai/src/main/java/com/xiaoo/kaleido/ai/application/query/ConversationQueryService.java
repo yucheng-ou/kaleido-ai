@@ -33,26 +33,4 @@ public interface ConversationQueryService {
      * @return 会话信息响应列表，如果不存在则返回空列表
      */
     List<ConversationInfoResponse> findByUserId(String userId);
-
-    /**
-     * 根据用户ID查询活跃会话列表
-     * <p>
-     * 查询指定用户的活跃会话（24小时内有消息的会话）
-     *
-     * @param userId 用户ID，不能为空
-     * @return 活跃会话信息响应列表，如果不存在则返回空列表
-     */
-    List<ConversationInfoResponse> findActiveConversationsByUserId(String userId);
-
-    /**
-     * 根据用户ID查询闲置会话列表
-     * <p>
-     * 查询指定用户的闲置会话（超过指定天数没有消息的会话）
-     *
-     * @param userId      用户ID，不能为空
-     * @param maxIdleDays 最大闲置天数，不能小于0
-     * @return 闲置会话信息响应列表，如果不存在则返回空列表
-     */
-    List<ConversationInfoResponse> findIdleConversationsByUserId(String userId, int maxIdleDays);
-
 }

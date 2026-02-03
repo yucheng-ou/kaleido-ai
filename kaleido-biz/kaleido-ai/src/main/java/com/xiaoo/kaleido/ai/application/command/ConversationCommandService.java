@@ -1,10 +1,11 @@
 package com.xiaoo.kaleido.ai.application.command;
 
+import com.xiaoo.kaleido.ai.application.convertor.ConversationConvertor;
 import com.xiaoo.kaleido.ai.domain.chat.model.aggregate.ConversationAggregate;
 import com.xiaoo.kaleido.ai.domain.chat.service.IConversationDomainService;
 import com.xiaoo.kaleido.ai.domain.chat.adapter.repository.IConversationRepository;
-import com.xiaoo.kaleido.api.ai.command.CreateConversationCommand;
 import com.xiaoo.kaleido.api.ai.command.UpdateConversationTitleCommand;
+import com.xiaoo.kaleido.api.ai.response.ConversationInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,79 +26,62 @@ public class ConversationCommandService {
 
     private final IConversationDomainService chatDomainService;
     private final IConversationRepository conversationRepository;
+    private final ConversationConvertor conversationConvertor;
 
     /**
      * 创建会话
      *
-     * @param command 创建会话命令
-     * @return 会话ID
+     * @param userId 用户ID
+     * @return 会话信息响应
      */
-    public String createConversation(String userId, CreateConversationCommand command) {
-        // 1.调用领域服务创建会话
-        ConversationAggregate conversation = chatDomainService.createConversation(
-                command.getConversationId(),
-                userId,
-                command.getTitle()
-        );
+    public ConversationInfoResponse createConversation(String userId) {
+        // 1.调用领域服务创建会话（传空值，让聚合根生成ID和设置默认标题）
+        ConversationAggregate conversation = chatDomainService.createConversation(userId);
 
         // 2.保存会话
         conversationRepository.save(conversation);
 
         // 3.记录日志
-        log.info("会话创建成功，会话ID: {}, 用户ID: {}", command.getConversationId(), userId);
-        
-        return conversation.getId();
+        log.info("会话创建成功，会话ID: {}, 用户ID: {}", conversation.getConversationId(), userId);
+
+        // 4.转换为响应对象
+        return conversationConvertor.toResponse(conversation);
     }
 
     /**
      * 更新会话标题
      *
      * @param conversationId 会话ID
-     * @param command 更新会话标题命令
+     * @param command        更新会话标题命令
+     * @param userId         用户ID
      */
-    public void updateConversationTitle(String conversationId, UpdateConversationTitleCommand command) {
+    public void updateConversationTitle(String conversationId, UpdateConversationTitleCommand command, String userId) {
         // 1.调用领域服务更新会话标题
         ConversationAggregate conversation = chatDomainService.updateConversationTitle(
                 conversationId,
-                command.getTitle()
+                command.getTitle(),
+                userId
         );
 
         // 2.保存会话
         conversationRepository.update(conversation);
 
         // 3.记录日志
-        log.info("会话标题更新成功，会话ID: {}, 新标题: {}", conversationId, command.getTitle());
-    }
-
-    /**
-     * 更新会话最后消息时间
-     *
-     * @param conversationId 会话ID
-     */
-    public void updateConversationLastMessageTime(String conversationId) {
-        // 1.调用领域服务更新会话最后消息时间
-        ConversationAggregate conversation = chatDomainService.updateConversationLastMessageTime(conversationId);
-
-        // 2.保存会话
-        conversationRepository.update(conversation);
-
-        // 3.记录日志
-        log.info("会话最后消息时间更新成功，会话ID: {}", conversationId);
+        log.info("会话标题更新成功，会话ID: {}, 新标题: {}, 用户ID: {}", conversationId, command.getTitle(), userId);
     }
 
     /**
      * 删除会话
      *
      * @param conversationId 会话ID
-     * @param userId 用户ID
+     * @param userId         用户ID
      */
     public void deleteConversation(String conversationId, String userId) {
         // 1.调用领域服务删除会话
         chatDomainService.deleteConversation(conversationId, userId);
 
-        // 2.保存会话（领域服务已经标记为删除，这里需要更新）
-        ConversationAggregate conversation = conversationRepository.findByIdOrThrow(conversationId);
-        conversationRepository.update(conversation);
+        // 2.删除会话
+        conversationRepository.delete(conversationId);
 
         // 3.记录日志
         log.info("会话删除成功，会话ID: {}, 用户ID: {}", conversationId, userId);

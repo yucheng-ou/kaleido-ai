@@ -15,6 +15,7 @@ import java.util.List;
  * @author ouyucheng
  * @date 2026/1/30
  */
+@Mapper
 public interface WorkflowDao extends BaseMapper<WorkflowPO> {
 
     /**
@@ -40,11 +41,4 @@ public interface WorkflowDao extends BaseMapper<WorkflowPO> {
      * @return 是否存在，true表示已存在（不唯一），false表示不存在（唯一）
      */
     boolean existsByCode(@Param("code") String code);
-
-    /**
-     * 查找所有启用的工作流
-     *
-     * @return 工作流持久化对象列表
-     */
-    List<WorkflowPO> findAllEnabled();
 }

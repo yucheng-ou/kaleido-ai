@@ -148,8 +148,9 @@ public class RpcAiServiceImpl implements IRpcAiService {
 
     @Override
     public Result<List<WorkflowInfoResponse>> listWorkflows(@NotBlank String userId) {
-        List<WorkflowInfoResponse> workflows = workflowQueryService.findAllEnabled();
-        log.info("RPC查询工作流列表成功，管理员ID: {}, 工作流数量: {}", userId, workflows.size());
-        return Result.success(workflows);
+//        List<WorkflowInfoResponse> workflows = workflowQueryService.findAllEnabled();
+//        log.info("RPC查询工作流列表成功，管理员ID: {}, 工作流数量: {}", userId, workflows.size());
+//        return Result.success(workflows);
+        return null;
     }
 }

@@ -1,5 +1,5 @@
 package com.xiaoo.kaleido.api.wardrobe.response;
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import lombok.*;
 
 /**
@@ -52,5 +52,5 @@ public class LocationImageResponse {
     /**
      * 图片类型
      */
-    private ImageType imageType;
+    private ImageTypeEnums imageTypeEnums;
 }

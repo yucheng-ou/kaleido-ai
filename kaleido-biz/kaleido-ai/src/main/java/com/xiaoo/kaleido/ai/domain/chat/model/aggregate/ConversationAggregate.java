@@ -50,44 +50,22 @@ public class ConversationAggregate extends BaseEntity {
      * <p>
      * 用于创建新会话时构建聚合根
      *
-     * @param conversationId 会话ID（业务唯一），不能为空
      * @param userId         用户ID，不能为空
-     * @param title          会话标题，可为空
      * @return 会话聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
-    public static ConversationAggregate create(
-            String conversationId,
-            String userId,
-            String title) {
+    public static ConversationAggregate create(String userId) {
         
-        if (StrUtil.isBlank(conversationId)) {
-            throw AiException.of(AiErrorCode.CONVERSATION_ID_NOT_NULL, "会话ID不能为空");
-        }
         if (StrUtil.isBlank(userId)) {
             throw AiException.of(AiErrorCode.USER_ID_NOT_NULL, "用户ID不能为空");
         }
 
         return ConversationAggregate.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
-                .conversationId(conversationId.trim())
+                .conversationId(SnowflakeUtil.newSnowflakeId())
                 .userId(userId.trim())
-                .title(title != null ? title.trim() : null)
-                .lastMessageTime(new Date())
+                .title("新会话")
+                .lastMessageTime(null)
                 .build();
-    }
-
-    /**
-     * 更新会话信息
-     * <p>
-     * 更新会话的标题和最后消息时间
-     *
-     * @param title 新会话标题，可为空
-     * @throws IllegalStateException 如果会话状态不允许修改
-     */
-    public void updateInfo(String title) {
-        this.title = title != null ? title.trim() : null;
-        this.lastMessageTime = new Date();
     }
 
     /**
@@ -96,7 +74,6 @@ public class ConversationAggregate extends BaseEntity {
      * 更新会话标题
      *
      * @param title 新会话标题，不能为空
-     * @throws IllegalArgumentException 如果标题为空
      */
     public void updateTitle(String title) {
         if (StrUtil.isBlank(title)) {
@@ -112,16 +89,6 @@ public class ConversationAggregate extends BaseEntity {
      */
     public void updateLastMessageTime() {
         this.lastMessageTime = new Date();
-    }
-
-    /**
-     * 检查会话是否属于指定用户
-     *
-     * @param userId 用户ID
-     * @return 如果会话属于该用户返回true，否则返回false
-     */
-    public boolean belongsToUser(String userId) {
-        return this.userId.equals(userId);
     }
 
     /**
@@ -142,37 +109,5 @@ public class ConversationAggregate extends BaseEntity {
     public void markAsDeleted() {
         // 这里可以添加删除标记逻辑，如果需要的话
         // 目前只是简单的方法实现
-    }
-
-    /**
-     * 获取会话活跃状态
-     * <p>
-     * 根据最后消息时间判断会话是否活跃（24小时内）
-     *
-     * @return 如果最后消息时间在24小时内返回true，否则返回false
-     */
-    public boolean isActive() {
-        if (this.lastMessageTime == null) {
-            return false;
-        }
-        
-        long twentyFourHours = 24 * 60 * 60 * 1000L;
-        long timeDiff = System.currentTimeMillis() - this.lastMessageTime.getTime();
-        return timeDiff <= twentyFourHours;
-    }
-
-    /**
-     * 获取会话闲置天数
-     *
-     * @return 会话闲置天数（从最后消息时间到现在）
-     */
-    public long getIdleDays() {
-        if (this.lastMessageTime == null) {
-            return 0;
-        }
-        
-        long oneDay = 24 * 60 * 60 * 1000L;
-        long timeDiff = System.currentTimeMillis() - this.lastMessageTime.getTime();
-        return timeDiff / oneDay;
     }
 }

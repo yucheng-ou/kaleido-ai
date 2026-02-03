@@ -17,64 +17,27 @@ public interface IConversationDomainService {
     /**
      * 创建新会话
      *
-     * @param conversationId 会话ID（业务唯一），不能为空
      * @param userId         用户ID，不能为空
-     * @param title          会话标题，可为空
      * @return 会话聚合根
      * @throws IllegalArgumentException 当参数无效时抛出
      */
-    ConversationAggregate createConversation(
-            String conversationId,
-            String userId,
-            String title);
-
-    /**
-     * 根据会话ID查找会话
-     *
-     * @param conversationId 会话ID（业务唯一），不能为空
-     * @return 会话聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当会话不存在时抛出
-     */
-    ConversationAggregate findConversationByIdOrThrow(String conversationId);
-
-    /**
-     * 根据用户ID查找会话列表
-     *
-     * @param userId 用户ID，不能为空
-     * @return 用户的所有会话聚合根列表
-     * @throws IllegalArgumentException 当参数无效时抛出
-     */
-    List<ConversationAggregate> findConversationsByUserId(String userId);
+    ConversationAggregate createConversation(String userId);
 
     /**
      * 更新会话标题
      *
      * @param conversationId 会话ID（业务唯一），不能为空
      * @param title          新会话标题，不能为空
+     * @param userId         用户ID，不能为空
      * @return 更新后的会话聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当会话不存在时抛出
      */
-    ConversationAggregate updateConversationTitle(String conversationId, String title);
-
-    /**
-     * 更新会话最后消息时间
-     *
-     * @param conversationId 会话ID（业务唯一），不能为空
-     * @return 更新后的会话聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当会话不存在时抛出
-     */
-    ConversationAggregate updateConversationLastMessageTime(String conversationId);
+    ConversationAggregate updateConversationTitle(String conversationId, String title, String userId);
 
     /**
      * 删除会话
      *
      * @param conversationId 会话ID（业务唯一），不能为空
      * @param userId         用户ID，不能为空
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当会话不存在或不属于该用户时抛出
      */
     void deleteConversation(String conversationId, String userId);
 
