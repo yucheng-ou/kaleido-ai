@@ -99,4 +99,12 @@ public interface ILocationDomainService {
      * @return 位置聚合根列表
      */
     List<StorageLocationAggregate> findByUserId(String userId);
+
+    /**
+     * 查询位置名称
+     *
+     * @param locationId 位置ID
+     * @return 位置名称，如果位置不存在或locationId为空则返回null
+     */
+    String getLocationName(String locationId);
 }

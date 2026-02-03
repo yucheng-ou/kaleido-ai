@@ -1,11 +1,11 @@
 package com.xiaoo.kaleido.wardrobe.application.convertor;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import com.xiaoo.kaleido.api.wardrobe.response.LocationImageResponse;
 import com.xiaoo.kaleido.api.wardrobe.response.LocationInfoResponse;
 import com.xiaoo.kaleido.wardrobe.application.query.impl.LocationQueryServiceImpl;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.entity.LocationImage;
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -96,7 +96,7 @@ public interface LocationConvertor {
         private Integer width;
         private Integer height;
         private Long fileSize;
-        private ImageType imageType;
+        private ImageTypeEnums imageTypeEnums;
 
         // Getters and Setters
         public String getImageId() {
@@ -155,12 +155,12 @@ public interface LocationConvertor {
             this.fileSize = fileSize;
         }
 
-        public ImageType getImageType() {
-            return imageType;
+        public ImageTypeEnums getImageType() {
+            return imageTypeEnums;
         }
 
-        public void setImageType(ImageType imageType) {
-            this.imageType = imageType;
+        public void setImageType(ImageTypeEnums imageTypeEnums) {
+            this.imageTypeEnums = imageTypeEnums;
         }
     }
 }

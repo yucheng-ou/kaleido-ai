@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto;
 
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import lombok.*;
 
 /**
@@ -41,7 +41,7 @@ public class OutfitImageInfoDTO {
     /**
      * 文件类型
      */
-    private ImageType imageType;
+    private ImageTypeEnums imageTypeEnums;
     
     /**
      * 图片宽度

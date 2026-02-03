@@ -56,4 +56,12 @@ public interface IBrandDomainService {
      * @return 如果品牌名称唯一返回true，否则返回false
      */
     boolean isBrandNameUnique(String name);
+
+    /**
+     * 查询品牌名称
+     *
+     * @param brandId 品牌ID
+     * @return 品牌名称，如果品牌不存在或brandId为空则返回null
+     */
+    String getBrandName(String brandId);
 }

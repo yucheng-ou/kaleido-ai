@@ -1,17 +1,24 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.tag.IRpcTagService;
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateClothingWithImagesCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.ClothingImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateClothingCommand;
+import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.file.IClothingFileService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IClothingRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.ClothingAggregate;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IBrandDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IClothingDomainService;
+import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.event.IClothingEventPublisher;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
-import com.xiaoo.kaleido.wardrobe.types.constant.ClothingEventTypeEnums;
+import com.xiaoo.kaleido.api.wardrobe.enums.ClothingEventTypeEnums;
 import com.xiaoo.kaleido.wardrobe.types.constant.EntityTypeConstants;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -33,9 +40,11 @@ import java.util.List;
 public class ClothingCommandService {
 
     private final IClothingDomainService clothingDomainService;
+    private final IBrandDomainService brandDomainService;
     private final IClothingRepository clothingRepository;
     private final IClothingFileService clothingFileService;
-    private final CommandServiceHelper commandServiceHelper;
+    private final IClothingEventPublisher clothingEventPublisher;
+    private final LocationCommandService locationCommandService;
     private final TransactionTemplate transactionTemplate;
 
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
@@ -70,20 +79,20 @@ public class ClothingCommandService {
                 domainImageInfos
         );
 
-        // 4.保存服装
-        clothingRepository.save(clothing);
-
-        // 5.和6.在事务中执行位置记录创建和品牌查询
+        // 开启编程式事务
         String brandName = transactionTemplate.execute(status -> {
+            // 4.保存服装
+            clothingRepository.save(clothing);
+
             // 5.如果提供了位置ID，创建位置记录
-            commandServiceHelper.createLocationRecord(clothing.getId(), command.getCurrentLocationId(), userId);
+            locationCommandService.createLocationRecord(clothing.getId(), command.getCurrentLocationId(), userId);
             
             // 6.查询品牌名称
-            return commandServiceHelper.getBrandName(command.getBrandId());
+            return brandDomainService.getBrandName(command.getBrandId());
         });
         
         // 7.发布服装创建事件
-        commandServiceHelper.publishClothingEvent(
+        clothingEventPublisher.publishClothingEvent(
                 ClothingEventTypeEnums.CREATE,
                 userId,
                 clothing.getId(),
@@ -95,7 +104,8 @@ public class ClothingCommandService {
                 command.getSize(),
                 command.getPurchaseDate(),
                 command.getPrice(),
-                command.getDescription()
+                command.getDescription(),
+                command.getCurrentLocationId()
         );
 
         // 8.记录日志
@@ -144,13 +154,16 @@ public class ClothingCommandService {
         clothingRepository.update(clothing);
 
         // 6.处理位置变更
-        commandServiceHelper.handleLocationChange(command.getClothingId(), oldLocationId, newLocationId, userId);
+        locationCommandService.handleLocationChange(command.getClothingId(), oldLocationId, newLocationId, userId);
 
         // 7.查询品牌名称
-        String brandName = commandServiceHelper.getBrandName(command.getBrandId());
+        String brandName = brandDomainService.getBrandName(command.getBrandId());
         
-        // 8.发布服装更新事件
-        commandServiceHelper.publishClothingEvent(
+        // 8.确定用于事件的位置ID：如果提供了新的位置ID则使用新的，否则使用旧的
+        String locationIdForEvent = newLocationId != null ? newLocationId : oldLocationId;
+        
+        // 9.发布服装更新事件
+        clothingEventPublisher.publishClothingEvent(
                 ClothingEventTypeEnums.UPDATE,
                 userId,
                 command.getClothingId(),
@@ -162,10 +175,11 @@ public class ClothingCommandService {
                 command.getSize(),
                 command.getPurchaseDate(),
                 command.getPrice(),
-                command.getDescription()
+                command.getDescription(),
+                locationIdForEvent
         );
 
-        // 9.记录日志
+        // 10.记录日志
         log.info("服装更新成功，服装ID: {}, 用户ID: {}, 新名称: {}",
                 command.getClothingId(), userId, command.getName());
     }
@@ -184,7 +198,7 @@ public class ClothingCommandService {
         clothingRepository.delete(clothingId);
 
         // 3.发布服装删除事件
-        commandServiceHelper.publishSimpleClothingEvent(ClothingEventTypeEnums.DELETE, userId, clothingId);
+        clothingEventPublisher.publishSimpleClothingEvent(ClothingEventTypeEnums.DELETE, userId, clothingId);
 
         // 4.记录日志
         log.info("服装删除成功，服装ID: {}, 用户ID: {}", clothingId, userId);
@@ -200,10 +214,23 @@ public class ClothingCommandService {
     public void associateTagToClothing(String userId, String clothingId, String tagId) {
         // 1. 验证服装是否存在且属于当前用户
         ClothingAggregate clothing = clothingDomainService.findByIdOrThrow(clothingId);
-        commandServiceHelper.validateClothingOwnership(clothing, userId);
+        validateClothingOwnership(clothing, userId);
         
-        // 2. 关联标签到实体
-        commandServiceHelper.associateTagToEntity(userId, clothingId, tagId, EntityTypeConstants.CLOTHING);
+        // 2. 构建标签关联命令
+        AssociateEntityCommand command = AssociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(clothingId)
+                .entityTypeCode(EntityTypeConstants.CLOTHING)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.associateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_ASSOCIATION_FAILED, "标签关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("服装标签关联成功，用户ID: {}, 服装ID: {}, 标签ID: {}", userId, clothingId, tagId);
     }
 
     /**
@@ -216,10 +243,34 @@ public class ClothingCommandService {
     public void dissociateTagFromClothing(String userId, String clothingId, String tagId) {
         // 1. 验证服装是否存在且属于当前用户
         ClothingAggregate clothing = clothingDomainService.findByIdOrThrow(clothingId);
-        commandServiceHelper.validateClothingOwnership(clothing, userId);
+        validateClothingOwnership(clothing, userId);
         
-        // 2. 从实体取消关联标签
-        commandServiceHelper.dissociateTagFromEntity(userId, clothingId, tagId);
+        // 2. 构建标签取消关联命令
+        DissociateEntityCommand command = DissociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(clothingId)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.dissociateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_DISSOCIATION_FAILED, "标签取消关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("服装标签取消关联成功，用户ID: {}, 服装ID: {}, 标签ID: {}", userId, clothingId, tagId);
+    }
+
+    /**
+     * 验证服装所有权
+     *
+     * @param clothing 服装聚合根
+     * @param userId   用户ID
+     */
+    private void validateClothingOwnership(ClothingAggregate clothing, String userId) {
+        if (!clothing.getUserId().equals(userId)) {
+            throw WardrobeException.of(WardrobeErrorCode.CLOTHING_OWNER_MISMATCH, "只有服装所有者可以操作");
+        }
     }
 
 }

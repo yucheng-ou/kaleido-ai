@@ -1,10 +1,10 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.repository.convertor;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.entity.LocationImage;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationPO;
 import com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.LocationImagePO;
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -74,14 +74,14 @@ public interface LocationInfraConvertor {
     /**
      * 将ImageType转换为String（MIME类型）
      *
-     * @param imageType 图片类型
+     * @param imageTypeEnums 图片类型
      * @return MIME类型字符串
      */
-    default String imageTypeToString(ImageType imageType) {
-        if (imageType == null) {
+    default String imageTypeToString(ImageTypeEnums imageTypeEnums) {
+        if (imageTypeEnums == null) {
             return null;
         }
-        return imageType.getMimeType();
+        return imageTypeEnums.getMimeType();
     }
 
     /**
@@ -90,10 +90,10 @@ public interface LocationInfraConvertor {
      * @param mimeType MIME类型字符串
      * @return 图片类型
      */
-    default ImageType stringToImageType(String mimeType) {
+    default ImageTypeEnums stringToImageType(String mimeType) {
         if (mimeType == null || mimeType.trim().isEmpty()) {
             return null;
         }
-        return ImageType.fromMimeType(mimeType);
+        return ImageTypeEnums.fromMimeType(mimeType);
     }
 }

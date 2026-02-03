@@ -1,8 +1,8 @@
 package com.xiaoo.kaleido.wardrobe.domain.location.model.entity;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -50,7 +50,7 @@ public class LocationImage extends BaseEntity {
     /**
      * 图片类型
      */
-    private ImageType imageType;
+    private ImageTypeEnums imageType;
 
     /**
      * 图片宽度
@@ -84,7 +84,7 @@ public class LocationImage extends BaseEntity {
             Integer imageOrder,
             Boolean isPrimary,
             Long imageSize,
-            ImageType imageType,
+            ImageTypeEnums imageType,
             Integer width,
             Integer height) {
         return LocationImage.builder()

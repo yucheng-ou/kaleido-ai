@@ -171,6 +171,20 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
         return locationRepository.findByUserId(userId);
     }
 
+    @Override
+    public String getLocationName(String locationId) {
+        if (StrUtil.isBlank(locationId)) {
+            return null;
+        }
+        try {
+            StorageLocationAggregate location = locationRepository.findById(locationId);
+            return location != null ? location.getName() : null;
+        } catch (Exception e) {
+            log.warn("查询位置名称失败，locationId: {}", locationId, e);
+            return null;
+        }
+    }
+
     /**
      * 验证创建位置的参数
      *
@@ -219,7 +233,7 @@ public class LocationDomainServiceImpl implements ILocationDomainService {
                         dto.getImageOrder(),
                         dto.getIsPrimary(),
                         dto.getImageSize(),
-                        dto.getImageType(),
+                        dto.getImageTypeEnums(),
                         dto.getWidth(),
                         dto.getHeight()
                 ))

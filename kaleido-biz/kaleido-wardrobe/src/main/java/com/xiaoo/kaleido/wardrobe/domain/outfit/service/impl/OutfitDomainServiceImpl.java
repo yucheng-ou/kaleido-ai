@@ -68,7 +68,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
                         img.getImageOrder(),
                         img.getIsPrimary(),
                         img.getImageSize(),
-                        img.getImageType(),
+                        img.getImageTypeEnums(),
                         img.getWidth(),
                         img.getHeight(),
                         img.getDescription()
@@ -165,7 +165,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
                         img.getImageOrder(),
                         img.getIsPrimary(),
                         img.getImageSize(),
-                        img.getImageType(),
+                        img.getImageTypeEnums(),
                         img.getWidth(),
                         img.getHeight(),
                         img.getDescription()

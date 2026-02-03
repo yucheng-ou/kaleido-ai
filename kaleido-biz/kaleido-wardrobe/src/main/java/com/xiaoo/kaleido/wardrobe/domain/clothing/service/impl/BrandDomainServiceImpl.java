@@ -81,4 +81,15 @@ public class BrandDomainServiceImpl implements IBrandDomainService {
         // 2.检查品牌名称是否已存在
         return !brandRepository.existsByName(name.trim());
     }
+
+    @Override
+    public String getBrandName(String brandId) {
+        if (StrUtil.isNotBlank(brandId)) {
+            BrandAggregate brand = brandRepository.findById(brandId);
+            if (brand != null) {
+                return brand.getName();
+            }
+        }
+        return null;
+    }
 }

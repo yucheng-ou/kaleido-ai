@@ -1,5 +1,9 @@
 package com.xiaoo.kaleido.wardrobe.infrastructure.adapter.repository;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
+import com.alicp.jetcache.anno.CacheRefresh;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.Cached;
 import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -61,6 +66,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheInvalidate(name = ":wardrobe:location:", key = "#locationAggregate.id")
     public void update(StorageLocationAggregate locationAggregate) {
         try {
             // 1.转换StorageLocationAggregate为LocationPO
@@ -88,6 +94,7 @@ public class LocationRepositoryImpl implements ILocationRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @CacheInvalidate(name = ":wardrobe:location:", key = "#locationAggregate.id")
     public void delete(String locationId) {
         try {
             // 1.删除关联图片
@@ -104,6 +111,8 @@ public class LocationRepositoryImpl implements ILocationRepository {
     }
 
     @Override
+    @Cached(name = ":wardrobe:location:", key = "#locationId", expire = 60, cacheType = CacheType.REMOTE, timeUnit = TimeUnit.MINUTES, cacheNullValue = true)
+    @CacheRefresh(refresh = 50, timeUnit = TimeUnit.MINUTES)
     public StorageLocationAggregate findById(String locationId) {
         try {
             // 1.查询位置基本信息
