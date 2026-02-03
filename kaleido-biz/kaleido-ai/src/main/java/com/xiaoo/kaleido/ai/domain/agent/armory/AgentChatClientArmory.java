@@ -88,7 +88,7 @@ public class AgentChatClientArmory {
      */
     public ChatClient createDefaultChatClient() {
         log.info("开始创建默认ChatClient");
-        
+
         // 1. 构建ChatModel（与ChatController中相同）
         ChatModel chatModel = OpenAiChatModel.builder()
                 .openAiApi(openAiApi)
@@ -96,19 +96,17 @@ public class AgentChatClientArmory {
                         .model("deepseek-v3")
                         .build())
                 .build();
-        
+
         // 2. 构建ChatClient.Builder
         ChatClient.Builder builder = ChatClient.builder(chatModel);
-        
+
         // 3. 添加默认Advisors（与ChatController中相同）
         // 3.1 记忆工具
         builder.defaultAdvisors(MessageChatMemoryAdvisor.builder(myChatMemory).build());
-        
+
         // 3.2 向量存储工具
-        builder.defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore)
-                .searchRequest(SearchRequest.builder().build())
-                .build());
-        
+        builder.defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore).build());
+
         // 4. 添加MCP工具回调（如果可用）
         if (!mcpSyncClients.isEmpty()) {
             SyncMcpToolCallbackProvider callbackProvider = SyncMcpToolCallbackProvider.builder()
@@ -116,10 +114,10 @@ public class AgentChatClientArmory {
                     .build();
             builder.defaultToolCallbacks(callbackProvider);
         }
-        
+
         ChatClient defaultChatClient = builder.build();
         log.info("默认ChatClient创建成功");
-        
+
         return defaultChatClient;
     }
 
@@ -157,7 +155,7 @@ public class AgentChatClientArmory {
                         configureMemoryTool(builder, tool);
                         break;
                     case VECTOR_STORE:
-                        configureVectorStoreTool(builder, tool);
+                        configureVectorStoreTool(builder);
                         break;
                     case MCP:
                         McpSyncClient mcpClient = configureMcpTool(tool);
@@ -197,7 +195,6 @@ public class AgentChatClientArmory {
 
             MessageChatMemoryAdvisor advisor = MessageChatMemoryAdvisor.builder(chatMemory).build();
 
-
             builder.defaultAdvisors(advisor);
             log.debug("记忆工具配置成功，工具编码: {}, 最大消息数: {}", tool.getToolCode(), config.getMaxMessages());
         } catch (Exception e) {
@@ -210,32 +207,11 @@ public class AgentChatClientArmory {
 
     /**
      * 配置向量存储工具
+     * 向量检索工具不从tool中读取 每一次条田的时候在设置
      */
-    private void configureVectorStoreTool(ChatClient.Builder builder, AgentTool tool) {
-        try {
-            VectorStoreConfig config = objectMapper.readValue(tool.getToolConfig(), VectorStoreConfig.class);
-            if (config.getEnabled() != null && !config.getEnabled()) {
-                log.debug("向量存储工具已禁用，工具编码: {}", tool.getToolCode());
-                return;
-            }
-
-            SearchRequest searchRequest = SearchRequest.builder()
-                    .topK(Integer.parseInt(config.getTopK() != null ? config.getTopK() : "4"))
-                    .filterExpression(config.getFilterExpression())
-                    .similarityThreshold(config.getSimilarityThreshold() != null ? config.getSimilarityThreshold() : 0.7)
-                    .build();
-
-            QuestionAnswerAdvisor advisor = QuestionAnswerAdvisor.builder(vectorStore)
-                    .searchRequest(searchRequest)
-                    .build();
-            builder.defaultAdvisors(advisor);
-            log.debug("向量存储工具配置成功，工具编码: {}, topK: {}", tool.getToolCode(), config.getTopK());
-        } catch (Exception e) {
-            // 使用默认配置
-            QuestionAnswerAdvisor advisor = QuestionAnswerAdvisor.builder(vectorStore).build();
-            builder.defaultAdvisors(advisor);
-            log.debug("使用默认向量存储工具配置，工具编码: {}", tool.getToolCode());
-        }
+    private void configureVectorStoreTool(ChatClient.Builder builder) {
+        QuestionAnswerAdvisor advisor = QuestionAnswerAdvisor.builder(vectorStore).build();
+        builder.defaultAdvisors(advisor);
     }
 
     /**

@@ -4,7 +4,7 @@
 
     <!-- 基础列映射 -->
     <sql id="Base_Column_List">
-        id, code, name, description, definition, status, created_by
+        id, code, name, description, definition, status
     </sql>
 
     <!-- 根据ID查询工作流 -->

@@ -91,14 +91,4 @@ public interface IWorkflowRepository {
      */
     boolean existsByCode(String code);
 
-    /**
-     * 查找所有启用的工作流
-     * <p>
-     * 查询所有状态为NORMAL的工作流
-     *
-     * @return 工作流聚合根列表
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当查询失败时抛出
-     */
-    List<WorkflowAggregate> findAllEnabled();
-
 }

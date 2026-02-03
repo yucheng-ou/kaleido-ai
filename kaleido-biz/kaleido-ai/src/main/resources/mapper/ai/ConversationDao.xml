@@ -4,7 +4,7 @@
 
     <!-- 基础列映射 -->
     <sql id="Base_Column_List">
-        id,conversation_id, user_id, title, last_message_time
+        id,conversation_id, user_id, title
     </sql>
 
     <!-- 根据ID查询会话 -->
@@ -21,7 +21,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_ai_conversation
-        WHERE conversation_id = #{conversationId}
+        WHERE id = #{conversationId}
         AND deleted = 0
     </select>
 
@@ -32,35 +32,7 @@
         FROM t_ai_conversation
         WHERE user_id = #{userId}
         AND deleted = 0
-        ORDER BY last_message_time DESC
+        ORDER BY updated_at DESC
     </select>
-
-    <!-- 根据用户ID查询活跃会话列表（24小时内有消息） -->
-    <select id="findActiveConversationsByUserId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.ConversationPO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_ai_conversation
-        WHERE user_id = #{userId}
-        AND last_message_time >= #{activeTimeThreshold}
-        AND deleted = 0
-        ORDER BY last_message_time DESC
-    </select>
-
-    <!-- 根据用户ID查询闲置会话列表（超过指定天数没有消息） -->
-    <select id="findIdleConversationsByUserId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.ConversationPO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_ai_conversation
-        WHERE user_id = #{userId}
-        <![CDATA[AND last_message_time < #{idleTimeThreshold}]]>
-        AND deleted = 0
-        ORDER BY last_message_time DESC
-    </select>
-
-    <!-- 根据会话ID（业务唯一）删除会话 -->
-    <delete id="deleteByConversationId">
-        DELETE FROM t_ai_conversation
-        WHERE conversation_id = #{conversationId}
-    </delete>
 
 </mapper>

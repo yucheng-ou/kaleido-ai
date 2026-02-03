@@ -38,10 +38,4 @@ public class ConversationPO extends BasePO {
      */
     @TableField("title")
     private String title;
-
-    /**
-     * 最后消息时间
-     */
-    @TableField("last_message_time")
-    private Date lastMessageTime;
 }

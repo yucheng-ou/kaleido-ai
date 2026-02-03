@@ -129,11 +129,6 @@ public class WorkflowManagementServiceImpl implements IWorkflowManagementService
         return !workflowRepository.existsByCode(code);
     }
 
-    @Override
-    public List<WorkflowAggregate> findAllEnabledWorkflows() {
-        // 直接查询数据库
-        return workflowRepository.findAllEnabled();
-    }
 
     @Override
     public boolean validateWorkflowDefinition(String definition) {

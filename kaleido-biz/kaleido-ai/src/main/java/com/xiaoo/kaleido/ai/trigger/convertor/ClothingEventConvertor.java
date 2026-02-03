@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.trigger.convertor;
 
-import com.xiaoo.kaleido.ai.trigger.dto.ClothingDocumentDto;
+import com.xiaoo.kaleido.ai.domain.clothing.model.ClothingVector;
 import com.xiaoo.kaleido.api.wardrobe.event.ClothingEventMessage;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * 服装事件转换器
- * 负责将 ClothingEventMessage 转换为 ClothingDocumentDto
+ * 负责将 ClothingEventMessage 转换为 ClothingVector
  *
  * @author ouyucheng
  * @date 2026/2/2
@@ -18,37 +18,32 @@ import java.util.Date;
 public class ClothingEventConvertor {
 
     /**
-     * 将 IClothingEventMessage 转换为 ClothingDocumentDto
+     * 将 ClothingEventMessage 转换为 ClothingVector
      *
-     * @param clothingEventMessage 服装事件消息接口
-     * @return 服装文档DTO
+     * @param clothingEventMessage 服装事件消息
+     * @return 服装向量领域模型
      */
-    public ClothingDocumentDto toDto(ClothingEventMessage clothingEventMessage) {
+    public ClothingVector toDomain(ClothingEventMessage clothingEventMessage) {
         if (clothingEventMessage == null) {
             return null;
         }
         
-        ClothingDocumentDto dto = new ClothingDocumentDto();
-        dto.setClothingId(clothingEventMessage.getClothingId());
-        dto.setUserId(clothingEventMessage.getUserId());
-        dto.setName(clothingEventMessage.getName());
-        dto.setTypeName(clothingEventMessage.getTypeName());
-        dto.setColorName(clothingEventMessage.getColorName());
-        dto.setSeasonName(clothingEventMessage.getSeasonName());
-        dto.setBrandName(clothingEventMessage.getBrandName());
-        dto.setSize(clothingEventMessage.getSize());
-        dto.setPurchaseDate(dateToLocalDateTime(clothingEventMessage.getPurchaseDate()));
-        dto.setPrice(clothingEventMessage.getPrice());
-        dto.setDescription(clothingEventMessage.getDescription());
-        
-        // 设置默认值
-        dto.setBrandId(null); // 品牌ID不再需要
-        dto.setCurrentLocationName(null); // 位置名称需要从其他服务获取
-        dto.setWearCount(0); // 新创建的衣服穿着次数为0
-        dto.setLastWornDate(null); // 新创建的衣服没有最后穿着日期
-        dto.setImages(null); // 图片列表需要从其他服务获取
-        
-        return dto;
+        return ClothingVector.builder()
+                .clothingId(clothingEventMessage.getClothingId())
+                .userId(clothingEventMessage.getUserId())
+                .name(clothingEventMessage.getName())
+                .typeName(clothingEventMessage.getTypeName())
+                .colorName(clothingEventMessage.getColorName())
+                .seasonName(clothingEventMessage.getSeasonName())
+                .brandName(clothingEventMessage.getBrandName())
+                .size(clothingEventMessage.getSize())
+                .purchaseDate(dateToLocalDateTime(clothingEventMessage.getPurchaseDate()))
+                .price(clothingEventMessage.getPrice())
+                .description(clothingEventMessage.getDescription())
+                .currentLocationName(clothingEventMessage.getCurrentLocationName())
+                .wearCount(0) // 新创建的衣服穿着次数为0
+                .images(null) // 图片列表需要从其他服务获取
+                .build();
     }
 
     /**

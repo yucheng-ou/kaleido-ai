@@ -65,28 +65,6 @@ public interface IConversationRepository {
      */
     List<ConversationAggregate> findByUserId(String userId);
 
-    /**
-     * 根据用户ID查找活跃会话列表
-     * <p>
-     * 查询指定用户的活跃会话（24小时内有消息的会话）
-     *
-     * @param userId 用户ID，不能为空
-     * @return 活跃会话聚合根列表
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当参数无效或查询失败时抛出
-     */
-    List<ConversationAggregate> findActiveConversationsByUserId(String userId);
-
-    /**
-     * 根据用户ID查找闲置会话列表
-     * <p>
-     * 查询指定用户的闲置会话（超过指定天数没有消息的会话）
-     *
-     * @param userId      用户ID，不能为空
-     * @param maxIdleDays 最大闲置天数，不能小于0
-     * @return 闲置会话聚合根列表
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当参数无效或查询失败时抛出
-     */
-    List<ConversationAggregate> findIdleConversationsByUserId(String userId, int maxIdleDays);
 
     /**
      * 检查会话ID是否存在
@@ -95,8 +73,15 @@ public interface IConversationRepository {
      *
      * @param conversationId 会话ID，不能为空
      * @return 如果存在返回true，否则返回false
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当查询失败时抛出
      */
     boolean existsById(String conversationId);
+
+    /**
+     * 删除会话
+     * <p>
+     * 根据会话ID删除会话
+     *
+     */
+    void delete(String conversationId);
 
 }

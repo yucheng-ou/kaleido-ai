@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.user.infrastructure.adapter.repository;
 
+import com.alicp.jetcache.anno.CacheInvalidate;
 import com.xiaoo.kaleido.api.user.query.UserPageQueryReq;
 import com.xiaoo.kaleido.user.domain.adapter.repository.UserRepository;
 import com.xiaoo.kaleido.user.domain.model.aggregate.UserAggregate;

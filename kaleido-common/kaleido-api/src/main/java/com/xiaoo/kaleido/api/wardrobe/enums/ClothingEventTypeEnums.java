@@ -1,9 +1,7 @@
-package com.xiaoo.kaleido.wardrobe.types.constant;
+package com.xiaoo.kaleido.api.wardrobe.enums;
 
 /**
  * 服装事件类型枚举
- * 
- * 定义服装相关的事件类型，用于区分不同操作
  * 
  * @author ouyucheng
  * @date 2026/1/31

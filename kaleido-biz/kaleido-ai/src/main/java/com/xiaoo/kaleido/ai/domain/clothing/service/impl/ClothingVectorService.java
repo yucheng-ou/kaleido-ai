@@ -1,10 +1,8 @@
 package com.xiaoo.kaleido.ai.domain.clothing.service.impl;
 
 import com.xiaoo.kaleido.ai.domain.clothing.adapter.repository.IClothingVectorRepository;
-import com.xiaoo.kaleido.ai.domain.clothing.convertor.ClothingVectorConvertor;
 import com.xiaoo.kaleido.ai.domain.clothing.model.ClothingVector;
 import com.xiaoo.kaleido.ai.trigger.convertor.ClothingEventConvertor;
-import com.xiaoo.kaleido.ai.trigger.dto.ClothingDocumentDto;
 import com.xiaoo.kaleido.api.wardrobe.event.ClothingEventMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,6 @@ public class ClothingVectorService {
 
     private final IClothingVectorRepository clothingVectorRepository;
     private final ClothingEventConvertor clothingEventConvertor;
-    private final ClothingVectorConvertor clothingVectorConvertor;
 
     /**
      * 处理服装创建事件
@@ -47,13 +44,11 @@ public class ClothingVectorService {
                 return;
             }
             
-            // 2. 转换事件消息为DTO
-            ClothingDocumentDto dto = clothingEventConvertor.toDto(clothingEventMessage);
+            // 2. 转换事件消息为领域模型
+            ClothingVector clothingVector = clothingEventConvertor.toDomain(clothingEventMessage);
             
-            // 3. 转换为领域模型并保存到向量存储
-            List<ClothingVector> clothingVectors =
-                    clothingVectorConvertor.toDomainList(List.of(dto));
-            clothingVectorRepository.save(clothingVectors);
+            // 3. 保存到向量存储
+            clothingVectorRepository.save(List.of(clothingVector));
             
             log.info("服装创建事件处理完成，成功保存到向量存储，服装ID: {}", clothingEventMessage.getClothingId());
         } catch (Exception e) {
@@ -78,13 +73,11 @@ public class ClothingVectorService {
             clothingVectorRepository.deleteByClothingId(clothingEventMessage.getClothingId());
             log.info("已删除旧的服装向量，服装ID: {}", clothingEventMessage.getClothingId());
             
-            // 2. 转换事件消息为DTO
-            ClothingDocumentDto dto = clothingEventConvertor.toDto(clothingEventMessage);
+            // 2. 转换事件消息为领域模型
+            ClothingVector clothingVector = clothingEventConvertor.toDomain(clothingEventMessage);
             
-            // 3. 转换为领域模型并保存到向量存储
-            List<ClothingVector> clothingVectors =
-                    clothingVectorConvertor.toDomainList(List.of(dto));
-            clothingVectorRepository.save(clothingVectors);
+            // 3. 保存到向量存储
+            clothingVectorRepository.save(List.of(clothingVector));
             
             log.info("服装更新事件处理完成，成功更新向量存储，服装ID: {}", clothingEventMessage.getClothingId());
         } catch (Exception e) {

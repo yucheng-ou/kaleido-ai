@@ -33,23 +33,4 @@ public interface WorkflowQueryService {
      * @return 工作流信息响应，如果工作流不存在则返回null
      */
     WorkflowInfoResponse findByCode(String code);
-
-    /**
-     * 查询所有启用的工作流
-     * <p>
-     * 查询所有状态为NORMAL的工作流
-     *
-     * @return 工作流信息响应列表，如果不存在则返回空列表
-     */
-    List<WorkflowInfoResponse> findAllEnabled();
-
-    /**
-     * 根据ID列表查询工作流信息列表
-     * <p>
-     * 根据工作流ID列表查询对应的工作流信息列表
-     *
-     * @param workflowIds 工作流ID列表，不能为空
-     * @return 工作流信息响应列表，如果不存在则返回空列表
-     */
-    List<WorkflowInfoResponse> findByIds(List<String> workflowIds);
 }

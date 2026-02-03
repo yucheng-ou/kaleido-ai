@@ -123,6 +123,10 @@ public class ClothingVector {
             content.append("，品牌为").append(brandName);
         }
         
+        if (currentLocationName != null && !currentLocationName.isEmpty()) {
+            content.append("，当前位置在").append(currentLocationName);
+        }
+        
         if (description != null && !description.isEmpty()) {
             content.append("。描述：").append(description);
         }

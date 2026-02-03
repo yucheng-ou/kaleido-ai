@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.api.wardrobe.event;
 
+import com.xiaoo.kaleido.api.wardrobe.enums.ClothingEventTypeEnums;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,14 +25,7 @@ public class ClothingEventMessage {
      * 事件类型
      * 取值：CREATE, UPDATE, DELETE
      */
-    private String eventType;
-    
-    /**
-     * 事件时间戳
-     * 默认为当前时间
-     */
-    @Builder.Default
-    private Date eventTimestamp = new Date();
+    private ClothingEventTypeEnums eventType;
     
     /**
      * 用户ID
@@ -90,4 +84,9 @@ public class ClothingEventMessage {
      * 描述
      */
     private String description;
+    
+    /**
+     * 当前位置名称
+     */
+    private String currentLocationName;
 }

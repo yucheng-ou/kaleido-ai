@@ -40,10 +40,7 @@ public class ConversationRepositoryImpl implements IConversationRepository {
         // 2.保存会话基本信息
         conversationDao.insert(conversationPO);
 
-        log.info("会话保存成功，会话ID: {}, 用户ID: {}, 标题: {}",
-                conversationAggregate.getConversationId(),
-                conversationAggregate.getUserId(),
-                conversationAggregate.getTitle());
+        log.info("会话保存成功，会话ID: {}, 用户ID: {}, 标题: {}", conversationAggregate.getConversationId(), conversationAggregate.getUserId(), conversationAggregate.getTitle());
     }
 
     @Override
@@ -54,10 +51,7 @@ public class ConversationRepositoryImpl implements IConversationRepository {
         // 2.更新会话基本信息
         conversationDao.updateById(conversationPO);
 
-        log.info("会话更新成功，会话ID: {}, 用户ID: {}, 标题: {}",
-                conversationAggregate.getConversationId(),
-                conversationAggregate.getUserId(),
-                conversationAggregate.getTitle());
+        log.info("会话更新成功，会话ID: {}, 用户ID: {}, 标题: {}", conversationAggregate.getConversationId(), conversationAggregate.getUserId(), conversationAggregate.getTitle());
     }
 
     @Override
@@ -93,56 +87,9 @@ public class ConversationRepositoryImpl implements IConversationRepository {
             List<ConversationPO> conversationPOs = conversationDao.findByUserId(userId);
 
             // 2.转换为ConversationAggregate列表
-            return conversationPOs.stream()
-                    .map(ConversationInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
+            return conversationPOs.stream().map(ConversationInfraConvertor.INSTANCE::toAggregate).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("查询用户会话失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw AiException.of(AiErrorCode.CONVERSATION_QUERY_FAIL);
-        }
-    }
-
-    @Override
-    public List<ConversationAggregate> findActiveConversationsByUserId(String userId) {
-        try {
-            // 1.计算24小时前的时间阈值
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR_OF_DAY, -24);
-            Date activeTimeThreshold = calendar.getTime();
-
-            // 2.查询活跃会话
-            List<ConversationPO> conversationPOs = conversationDao.findActiveConversationsByUserId(
-                    userId, activeTimeThreshold);
-
-            // 3.转换为ConversationAggregate列表
-            return conversationPOs.stream()
-                    .map(ConversationInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询用户活跃会话失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
-            throw AiException.of(AiErrorCode.CONVERSATION_QUERY_FAIL);
-        }
-    }
-
-    @Override
-    public List<ConversationAggregate> findIdleConversationsByUserId(String userId, int maxIdleDays) {
-        try {
-            // 1.计算指定天数前的时间阈值
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_YEAR, -maxIdleDays);
-            Date idleTimeThreshold = calendar.getTime();
-
-            // 2.查询闲置会话
-            List<ConversationPO> conversationPOs = conversationDao.findIdleConversationsByUserId(
-                    userId, idleTimeThreshold);
-
-            // 3.转换为ConversationAggregate列表
-            return conversationPOs.stream()
-                    .map(ConversationInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询用户闲置会话失败，用户ID: {}, 最大闲置天数: {}, 原因: {}",
-                    userId, maxIdleDays, e.getMessage(), e);
             throw AiException.of(AiErrorCode.CONVERSATION_QUERY_FAIL);
         }
     }
@@ -152,12 +99,17 @@ public class ConversationRepositoryImpl implements IConversationRepository {
         try {
             // 1.查询会话基本信息
             ConversationPO conversationPO = conversationDao.findByConversationId(conversationId);
-            
+
             // 2.返回是否存在
             return conversationPO != null;
         } catch (Exception e) {
             log.error("检查会话是否存在失败，会话ID: {}, 原因: {}", conversationId, e.getMessage(), e);
             throw AiException.of(AiErrorCode.CONVERSATION_QUERY_FAIL);
         }
+    }
+
+    @Override
+    public void delete(String conversationId) {
+        conversationDao.deleteById(conversationId);
     }
 }

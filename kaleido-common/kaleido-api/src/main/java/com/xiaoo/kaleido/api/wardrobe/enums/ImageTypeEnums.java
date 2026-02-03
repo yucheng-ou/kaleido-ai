@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @date 2026/1/17
  */
 @Getter
-public enum ImageType {
+public enum ImageTypeEnums {
     /**
      * JPEG图片格式
      */
@@ -65,18 +65,18 @@ public enum ImageType {
     /**
      * MIME类型到枚举的映射
      */
-    private static final Map<String, ImageType> MIME_TYPE_MAP = Arrays.stream(values())
-            .collect(Collectors.toMap(ImageType::getMimeType, Function.identity()));
+    private static final Map<String, ImageTypeEnums> MIME_TYPE_MAP = Arrays.stream(values())
+            .collect(Collectors.toMap(ImageTypeEnums::getMimeType, Function.identity()));
 
     /**
      * 扩展名到枚举的映射
      */
-    private static final Map<String, ImageType> EXTENSION_MAP = Arrays.stream(values())
+    private static final Map<String, ImageTypeEnums> EXTENSION_MAP = Arrays.stream(values())
             .flatMap(type -> Arrays.stream(type.getExtensions())
                     .map(ext -> Map.entry(ext.toLowerCase(), type)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-    ImageType(String mimeType, String... extensions) {
+    ImageTypeEnums(String mimeType, String... extensions) {
         this.mimeType = mimeType;
         this.extensions = extensions;
     }
@@ -87,7 +87,7 @@ public enum ImageType {
      * @param mimeType MIME类型字符串
      * @return 对应的图片类型，如果未找到则返回UNKNOWN
      */
-    public static ImageType fromMimeType(String mimeType) {
+    public static ImageTypeEnums fromMimeType(String mimeType) {
         if (mimeType == null || mimeType.trim().isEmpty()) {
             return UNKNOWN;
         }
@@ -100,7 +100,7 @@ public enum ImageType {
      * @param extension 文件扩展名（不带点）
      * @return 对应的图片类型，如果未找到则返回UNKNOWN
      */
-    public static ImageType fromExtension(String extension) {
+    public static ImageTypeEnums fromExtension(String extension) {
         if (extension == null || extension.trim().isEmpty()) {
             return UNKNOWN;
         }
@@ -118,7 +118,7 @@ public enum ImageType {
      * @param fileName 文件名
      * @return 对应的图片类型，如果未找到则返回UNKNOWN
      */
-    public static ImageType fromFileName(String fileName) {
+    public static ImageTypeEnums fromFileName(String fileName) {
         if (fileName == null || fileName.trim().isEmpty()) {
             return UNKNOWN;
         }

@@ -150,11 +150,6 @@ public class WorkflowExecutionServiceImpl implements IWorkflowExecutionService {
      * @return 执行结果
      */
     public String executeWorkflow(String workflowId, String inputData) {
-        // 参数校验
-        if (StrUtil.isBlank(workflowId)) {
-            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
-        }
-
         // 校验工作流是否存在且启用
         WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
         if (!workflow.isEnabled()) {
