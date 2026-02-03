@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.location.service.dto;
 
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import lombok.*;
 
 /**
@@ -39,7 +39,7 @@ public class LocationImageInfoDTO {
     /**
      * 图片类型
      */
-    private ImageType imageType;
+    private ImageTypeEnums imageTypeEnums;
 
     /**
      * 图片宽度

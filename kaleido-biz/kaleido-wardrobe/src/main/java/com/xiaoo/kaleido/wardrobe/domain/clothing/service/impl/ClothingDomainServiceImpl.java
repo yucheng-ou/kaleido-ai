@@ -76,7 +76,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
                         img.getImageOrder(), 
                         img.getIsPrimary(),
                         img.getImageSize(),
-                        img.getImageType() != null ? img.getImageType().name() : null,
+                        img.getImageTypeEnums() != null ? img.getImageTypeEnums().name() : null,
                         img.getWidth(),
                         img.getHeight()
                 ))
@@ -182,7 +182,7 @@ public class ClothingDomainServiceImpl implements IClothingDomainService {
                         img.getImageOrder(), 
                         img.getIsPrimary(),
                         img.getImageSize(),
-                        img.getImageType() != null ? img.getImageType().name() : null,
+                        img.getImageTypeEnums() != null ? img.getImageTypeEnums().name() : null,
                         img.getWidth(),
                         img.getHeight()
                 ))

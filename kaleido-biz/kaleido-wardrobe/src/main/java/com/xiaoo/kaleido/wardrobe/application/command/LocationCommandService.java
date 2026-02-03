@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import cn.hutool.core.util.StrUtil;
 import com.xiaoo.kaleido.api.coin.IRpcCoinService;
 import com.xiaoo.kaleido.api.coin.command.ProcessLocationCreationCommand;
 import com.xiaoo.kaleido.api.tag.IRpcTagService;
@@ -10,9 +11,12 @@ import com.xiaoo.kaleido.api.wardrobe.command.UpdateLocationCommand;
 import com.xiaoo.kaleido.base.result.Result;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.file.ILocationFileService;
+import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRecordRepository;
 import com.xiaoo.kaleido.wardrobe.domain.location.adapter.repository.ILocationRepository;
+import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.LocationRecordAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.model.aggregate.StorageLocationAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationDomainService;
+import com.xiaoo.kaleido.wardrobe.domain.location.service.ILocationRecordDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.location.service.dto.LocationImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.types.constant.EntityTypeConstants;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
@@ -39,6 +43,8 @@ public class LocationCommandService {
     private final ILocationDomainService locationDomainService;
     private final ILocationRepository locationRepository;
     private final ILocationFileService locationFileService;
+    private final ILocationRecordDomainService locationRecordDomainService;
+    private final ILocationRecordRepository locationRecordRepository;
 
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcTagService rpcTagService;
@@ -285,5 +291,81 @@ public class LocationCommandService {
             throw WardrobeException.of(WardrobeErrorCode.COIN_SERVICE_UNAVAILABLE, 
                     "金币服务不可用: " + e.getMessage());
         }
+    }
+
+    /**
+     * 创建位置记录
+     *
+     * @param clothingId     服装ID
+     * @param locationId     位置ID
+     * @param userId         用户ID
+     * @return 创建的位置记录
+     */
+    public LocationRecordAggregate createLocationRecord(String clothingId, String locationId, String userId) {
+        if (StrUtil.isNotBlank(locationId)) {
+            LocationRecordAggregate locationRecord = locationRecordDomainService.createLocationRecord(
+                    clothingId,
+                    locationId,
+                    userId
+            );
+            locationRecordRepository.save(locationRecord);
+
+            log.info("服装位置记录创建成功，服装ID: {}, 位置ID: {}, 位置记录ID: {}",
+                    clothingId, locationId, locationRecord.getId());
+            return locationRecord;
+        }
+        return null;
+    }
+
+    /**
+     * 处理位置变更
+     *
+     * @param clothingId     服装ID
+     * @param oldLocationId  旧位置ID
+     * @param newLocationId  新位置ID
+     * @param userId         用户ID
+     * @return 是否创建了新的位置记录
+     */
+    public boolean handleLocationChange(String clothingId, String oldLocationId, String newLocationId, String userId) {
+        boolean locationChanged = checkLocationChanged(oldLocationId, newLocationId);
+        if (locationChanged && StrUtil.isNotBlank(newLocationId)) {
+            // 将旧位置记录标记为非当前
+            locationRecordRepository.markAllAsNotCurrentByClothingId(clothingId);
+
+            // 创建新的位置记录
+            createLocationRecord(clothingId, newLocationId, userId);
+
+            log.info("服装位置变更记录创建成功，服装ID: {}, 旧位置ID: {}, 新位置ID: {}",
+                    clothingId, oldLocationId, newLocationId);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 检查位置是否发生变化
+     *
+     * @param oldLocationId 旧位置ID
+     * @param newLocationId 新位置ID
+     * @return 如果位置发生变化返回true，否则返回false
+     */
+    private boolean checkLocationChanged(String oldLocationId, String newLocationId) {
+        // 如果旧位置ID和新位置ID都为null，表示没有变化
+        if (oldLocationId == null && newLocationId == null) {
+            return false;
+        }
+
+        // 如果旧位置ID为null，新位置ID不为null，表示从无位置变为有位置
+        if (oldLocationId == null) {
+            return true;
+        }
+
+        // 如果旧位置ID不为null，新位置ID为null，表示从有位置变为无位置
+        if (newLocationId == null) {
+            return true;
+        }
+
+        // 如果都不为null，比较是否相等
+        return !oldLocationId.equals(newLocationId);
     }
 }

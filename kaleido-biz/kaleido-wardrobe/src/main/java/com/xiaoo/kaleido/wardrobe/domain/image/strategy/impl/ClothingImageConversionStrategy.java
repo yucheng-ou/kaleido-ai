@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.image.strategy.impl;
 
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import com.xiaoo.kaleido.file.model.ImageInfo;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.dto.ClothingImageInfoDTO;
 import com.xiaoo.kaleido.wardrobe.domain.image.enums.DomainType;
@@ -27,7 +27,7 @@ public class ClothingImageConversionStrategy implements ImageConversionStrategy<
                     .imageSize(minioInfo.getFileSize())
                     .width(minioInfo.getWidth())
                     .height(minioInfo.getHeight())
-                    .imageType(ImageType.fromMimeType(minioInfo.getMimeType()))
+                    .imageTypeEnums(ImageTypeEnums.fromMimeType(minioInfo.getMimeType()))
                     .build();
         } else {
             return ClothingImageInfoDTO.builder()

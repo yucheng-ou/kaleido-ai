@@ -45,31 +45,4 @@
         WHERE outfit_id = #{outfitId}
     </delete>
 
-    <select id="findPrimaryByOutfitId" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_wardrobe_outfit_image
-        WHERE outfit_id = #{outfitId} AND is_primary = true AND deleted = 0
-        LIMIT 1
-    </select>
-
-    <select id="findByOutfitIdAndImageId" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_wardrobe_outfit_image
-        WHERE outfit_id = #{outfitId} AND id = #{imageId} AND deleted = 0
-    </select>
-
-    <select id="existsByOutfitId" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM t_wardrobe_outfit_image
-        WHERE outfit_id = #{outfitId} AND deleted = 0
-    </select>
-
-    <select id="existsPrimaryByOutfitId" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM t_wardrobe_outfit_image
-        WHERE outfit_id = #{outfitId} AND is_primary = true AND deleted = 0
-    </select>
-
 </mapper>

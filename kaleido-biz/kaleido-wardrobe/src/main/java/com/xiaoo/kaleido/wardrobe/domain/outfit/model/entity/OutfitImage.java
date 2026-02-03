@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.wardrobe.domain.outfit.model.entity;
 
-import com.xiaoo.kaleido.api.wardrobe.enums.ImageType;
+import com.xiaoo.kaleido.api.wardrobe.enums.ImageTypeEnums;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import lombok.*;
@@ -50,7 +50,7 @@ public class OutfitImage extends BaseEntity {
     /**
      * 文件类型
      */
-    private ImageType imageType;
+    private ImageTypeEnums imageType;
 
     /**
      * 图片宽度
@@ -90,7 +90,7 @@ public class OutfitImage extends BaseEntity {
             Integer imageOrder,
             Boolean isPrimary,
             Long imageSize,
-            ImageType imageType,
+            ImageTypeEnums imageType,
             Integer width,
             Integer height,
             String description) {

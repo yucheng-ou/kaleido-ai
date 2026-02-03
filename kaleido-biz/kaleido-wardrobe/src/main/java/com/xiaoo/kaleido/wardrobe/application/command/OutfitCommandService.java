@@ -2,6 +2,9 @@ package com.xiaoo.kaleido.wardrobe.application.command;
 
 import com.xiaoo.kaleido.api.coin.IRpcCoinService;
 import com.xiaoo.kaleido.api.coin.command.ProcessOutfitCreationCommand;
+import com.xiaoo.kaleido.api.tag.IRpcTagService;
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.RecordOutfitWearCommand;
@@ -13,6 +16,7 @@ import com.xiaoo.kaleido.wardrobe.domain.outfit.adapter.repository.IOutfitReposi
 import com.xiaoo.kaleido.wardrobe.domain.outfit.model.aggregate.OutfitAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.IOutfitDomainService;
 import com.xiaoo.kaleido.wardrobe.domain.outfit.service.dto.OutfitImageInfoDTO;
+import com.xiaoo.kaleido.wardrobe.types.constant.EntityTypeConstants;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
 import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +48,9 @@ public class OutfitCommandService {
 
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcCoinService rpcCoinService;
+
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcTagService rpcTagService;
 
     /**
      * 创建穿搭（包含服装和图片）
@@ -179,5 +186,60 @@ public class OutfitCommandService {
             throw WardrobeException.of(WardrobeErrorCode.COIN_SERVICE_UNAVAILABLE, 
                     "金币服务不可用: " + e.getMessage());
         }
+    }
+
+    /**
+     * 为穿搭添加标签
+     *
+     * @param userId   用户ID
+     * @param outfitId 穿搭ID
+     * @param tagId    标签ID
+     */
+    public void associateTagToOutfit(String userId, String outfitId, String tagId) {
+        // 1. 验证穿搭是否存在且属于当前用户
+        OutfitAggregate outfit = outfitDomainService.findByIdAndUserIdOrThrow(outfitId, userId);
+        
+        // 2. 构建标签关联命令
+        AssociateEntityCommand command = AssociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(outfitId)
+                .entityTypeCode(EntityTypeConstants.OUTFIT)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.associateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_ASSOCIATION_FAILED, "标签关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("穿搭标签关联成功，用户ID: {}, 穿搭ID: {}, 标签ID: {}", userId, outfitId, tagId);
+    }
+
+    /**
+     * 从穿搭移除标签
+     *
+     * @param userId   用户ID
+     * @param outfitId 穿搭ID
+     * @param tagId    标签ID
+     */
+    public void dissociateTagFromOutfit(String userId, String outfitId, String tagId) {
+        // 1. 验证穿搭是否存在且属于当前用户
+        OutfitAggregate outfit = outfitDomainService.findByIdAndUserIdOrThrow(outfitId, userId);
+        
+        // 2. 构建标签取消关联命令
+        DissociateEntityCommand command = DissociateEntityCommand.builder()
+                .tagId(tagId)
+                .entityId(outfitId)
+                .build();
+        
+        // 3. 调用标签RPC服务
+        Result<Void> result = rpcTagService.dissociateTags(userId, command);
+        if (!Boolean.TRUE.equals(result.getSuccess())) {
+            throw WardrobeException.of(WardrobeErrorCode.TAG_DISSOCIATION_FAILED, "标签取消关联失败: " + result.getMsg());
+        }
+        
+        // 4. 记录日志
+        log.info("穿搭标签取消关联成功，用户ID: {}, 穿搭ID: {}, 标签ID: {}", userId, outfitId, tagId);
     }
 }

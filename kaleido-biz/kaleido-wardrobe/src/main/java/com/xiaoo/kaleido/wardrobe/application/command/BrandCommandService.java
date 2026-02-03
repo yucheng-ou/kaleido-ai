@@ -1,12 +1,21 @@
 package com.xiaoo.kaleido.wardrobe.application.command;
 
+import com.xiaoo.kaleido.api.tag.IRpcTagService;
+import com.xiaoo.kaleido.api.tag.command.AssociateEntityCommand;
+import com.xiaoo.kaleido.api.tag.command.DissociateEntityCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.CreateBrandCommand;
 import com.xiaoo.kaleido.api.wardrobe.command.UpdateBrandCommand;
+import com.xiaoo.kaleido.base.result.Result;
+import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.adapter.repository.IBrandRepository;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.model.aggregate.BrandAggregate;
 import com.xiaoo.kaleido.wardrobe.domain.clothing.service.IBrandDomainService;
+import com.xiaoo.kaleido.wardrobe.types.constant.EntityTypeConstants;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeErrorCode;
+import com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +31,9 @@ public class BrandCommandService {
 
     private final IBrandDomainService brandDomainService;
     private final IBrandRepository brandRepository;
+
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcTagService rpcTagService;
 
     /**
      * 创建品牌
