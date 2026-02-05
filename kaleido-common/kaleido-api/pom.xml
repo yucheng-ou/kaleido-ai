@@ -4,14 +4,14 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-api</artifactId>
     <name>kaleido-api</name>
     <description>kaleido-api</description>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

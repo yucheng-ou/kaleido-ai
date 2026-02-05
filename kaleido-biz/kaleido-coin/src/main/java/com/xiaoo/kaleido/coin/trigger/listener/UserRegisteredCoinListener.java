@@ -59,7 +59,7 @@ public class UserRegisteredCoinListener {
                     topic, userId, inviterUserId);
         } catch (Exception e) {
             log.error("监听用户注册事件，消费失败 topic: {} message: {}", topic, message, e);
-            throw e; // 抛出异常让RabbitMQ进行重试
+            throw e;
         }
     }
 
@@ -75,7 +75,7 @@ public class UserRegisteredCoinListener {
             log.info("用户金币账户初始化成功，userId: {}", userId);
         } catch (Exception e) {
             log.error("用户金币账户初始化失败，userId: {}", userId, e);
-            throw e; // 抛出异常进行重试
+            throw e;
         }
     }
 
@@ -92,7 +92,7 @@ public class UserRegisteredCoinListener {
             log.info("邀请奖励处理成功，inviterUserId: {}, newUserId: {}", inviterUserId, newUserId);
         } catch (Exception e) {
             log.error("邀请奖励处理失败，inviterUserId: {}, newUserId: {}", inviterUserId, newUserId, e);
-            throw e; // 抛出异常进行重试
+            throw e;
         }
     }
 }

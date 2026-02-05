@@ -13,7 +13,7 @@
 
     <groupId>com.xiaoo</groupId>
     <artifactId>kaleido</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>Kaleido</name>
     <description>Kaleido</description>
@@ -47,7 +47,7 @@
         <mysql-connector.version>8.4.0</mysql-connector.version>
         <druid.version>1.2.24</druid.version>
 
-        <kaleido.version>0.0.1-SNAPSHOT</kaleido.version>
+        <kaleido.version>1.0.0</kaleido.version>
 
         <lombok.version>1.18.36</lombok.version>
         <weixin-java-miniapp.version>4.6.0</weixin-java-miniapp.version>

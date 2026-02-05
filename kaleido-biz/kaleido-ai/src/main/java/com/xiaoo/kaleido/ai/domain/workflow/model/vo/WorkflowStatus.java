@@ -1,5 +1,8 @@
 package com.xiaoo.kaleido.ai.domain.workflow.model.vo;
 
+import com.xiaoo.kaleido.ai.types.exception.AiException;
+import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
+
 /**
  * 工作流状态值对象
  * <p>
@@ -51,7 +54,6 @@ public enum WorkflowStatus {
      *
      * @param code 状态编码
      * @return 工作流状态
-     * @throws IllegalArgumentException 当编码无效时抛出
      */
     public static WorkflowStatus fromCode(String code) {
         for (WorkflowStatus status : values()) {
@@ -59,7 +61,7 @@ public enum WorkflowStatus {
                 return status;
             }
         }
-        throw new IllegalArgumentException("无效的工作流状态编码: " + code);
+        throw AiException.of(AiErrorCode.VALIDATION_ERROR, "无效的工作流状态编码: " + code);
     }
 
     /**

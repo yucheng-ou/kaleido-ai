@@ -91,4 +91,14 @@ public interface IWorkflowRepository {
      */
     boolean existsByCode(String code);
 
+    /**
+     * 查询所有未被删除的工作流
+     * <p>
+     * 查询所有未被删除的工作流列表
+     *
+     * @return 工作流聚合根列表
+     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当查询失败时抛出
+     */
+    List<WorkflowAggregate> findAllNotDeleted();
+
 }

@@ -92,4 +92,18 @@ public class WorkflowExecutionQueryServiceImpl implements WorkflowExecutionQuery
                 .map(workflowExecutionConvertor::toResponse)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<WorkflowExecutionInfoResponse> findByUserId(String userId) {
+        // 1.参数校验
+        Objects.requireNonNull(userId, "userId不能为空");
+        
+        // 2.查询工作流执行列表
+        List<WorkflowExecutionAggregate> executions = workflowExecutionRepository.findByUserId(userId);
+        
+        // 3.转换为响应对象列表
+        return executions.stream()
+                .map(workflowExecutionConvertor::toResponse)
+                .collect(Collectors.toList());
+    }
 }

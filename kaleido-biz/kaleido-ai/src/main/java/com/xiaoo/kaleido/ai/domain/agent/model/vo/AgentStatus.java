@@ -1,6 +1,8 @@
 package com.xiaoo.kaleido.ai.domain.agent.model.vo;
 
 import cn.hutool.core.util.StrUtil;
+import com.xiaoo.kaleido.ai.types.exception.AiException;
+import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
 
 /**
  * Agent状态值对象
@@ -53,11 +55,10 @@ public enum AgentStatus {
      *
      * @param code 状态编码
      * @return Agent状态
-     * @throws IllegalArgumentException 当编码无效时抛出
      */
     public static AgentStatus fromCode(String code) {
         if (StrUtil.isBlank(code)) {
-            throw new IllegalArgumentException("Agent状态编码不能为空");
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "Agent状态编码不能为空");
         }
         
         for (AgentStatus status : values()) {
@@ -65,7 +66,7 @@ public enum AgentStatus {
                 return status;
             }
         }
-        throw new IllegalArgumentException("无效的Agent状态编码: " + code);
+        throw AiException.of(AiErrorCode.VALIDATION_ERROR, "无效的Agent状态编码: " + code);
     }
 
     /**

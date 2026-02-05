@@ -1,6 +1,7 @@
 spring:
   application:
     name: kaleido-notice
+    version: @kaleido.version@
   profiles:
     active: dev
   config:

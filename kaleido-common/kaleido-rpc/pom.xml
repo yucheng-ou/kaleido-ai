@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../../kaleido-common</relativePath>
     </parent>
 
     <artifactId>kaleido-rpc</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>kaleido-rpc</name>
     <description>kaleido-rpc</description>
 

@@ -34,6 +34,7 @@ public class FileCommandService implements IFileCommandService {
      * @param file 上传的文件
      * @return 文件上传响应
      */
+    @Override
     public FileUploadResponse uploadFile(MultipartFile file) {
         try {
             log.info("开始上传文件，原始文件名: {}, 文件大小: {} bytes",

@@ -25,6 +25,7 @@ public class DictCommandService implements IDictCommandService {
     private final IDictRepository dictRepository;
     private final IDictDomainService dictDomainService;
 
+    @Override
     public String createDict(AddDictCommand command) {
         // 1. 调用领域服务创建字典
         DictAggregate dictAggregate = dictDomainService.createDict(
@@ -44,6 +45,7 @@ public class DictCommandService implements IDictCommandService {
         return dictAggregate.getId();
     }
 
+    @Override
     public void updateDict(String typeCode, String dictCode, UpdateDictCommand command) {
         // 1. 调用领域服务更新字典
         DictAggregate dictAggregate = dictDomainService.updateDict(
@@ -60,7 +62,8 @@ public class DictCommandService implements IDictCommandService {
 
         log.info("字典更新成功，类型编码: {}, 字典编码: {}", typeCode, dictCode);
     }
-
+    
+    @Override
     public void deleteDict(String typeCode, String dictCode) {
         // 1. 删除字典
         dictRepository.deleteByTypeCodeAndDictCode(typeCode, dictCode);

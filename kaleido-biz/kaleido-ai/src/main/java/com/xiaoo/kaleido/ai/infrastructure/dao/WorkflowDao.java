@@ -41,4 +41,11 @@ public interface WorkflowDao extends BaseMapper<WorkflowPO> {
      * @return 是否存在，true表示已存在（不唯一），false表示不存在（唯一）
      */
     boolean existsByCode(@Param("code") String code);
+
+    /**
+     * 查询所有未被删除的工作流
+     *
+     * @return 工作流持久化对象列表
+     */
+    List<WorkflowPO> findAllNotDeleted();
 }

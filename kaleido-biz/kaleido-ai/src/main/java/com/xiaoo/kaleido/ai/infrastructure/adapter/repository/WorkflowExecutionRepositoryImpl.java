@@ -37,8 +37,8 @@ public class WorkflowExecutionRepositoryImpl implements IWorkflowExecutionReposi
         // 2.保存工作流执行基本信息
         workflowExecutionDao.insert(executionPO);
 
-        log.info("工作流执行保存成功，执行ID: {}, 工作流ID: {}, 状态: {}",
-                executionAggregate.getExecutionId(), executionAggregate.getWorkflowId(), executionAggregate.getStatus());
+        log.info("工作流执行保存成功，执行记录ID: {}, 工作流ID: {}, 状态: {}",
+                executionAggregate.getId(), executionAggregate.getWorkflowId(), executionAggregate.getStatus());
     }
 
     @Override
@@ -49,32 +49,30 @@ public class WorkflowExecutionRepositoryImpl implements IWorkflowExecutionReposi
         // 2.更新工作流执行基本信息
         workflowExecutionDao.updateById(executionPO);
 
-        log.info("工作流执行更新成功，执行ID: {}, 工作流ID: {}, 状态: {}",
-                executionAggregate.getExecutionId(), executionAggregate.getWorkflowId(), executionAggregate.getStatus());
+        log.info("工作流执行更新成功，执行记录ID: {}, 工作流ID: {}, 状态: {}",
+                executionAggregate.getId(), executionAggregate.getWorkflowId(), executionAggregate.getStatus());
     }
 
     @Override
-    public WorkflowExecutionAggregate findById(String executionId) {
+    public WorkflowExecutionAggregate findById(String id) {
         try {
             // 1.查询工作流执行基本信息
-            WorkflowExecutionPO executionPO = workflowExecutionDao.findByExecutionId(executionId);
+            WorkflowExecutionPO executionPO = workflowExecutionDao.selectById(id);
             if (executionPO == null) {
                 return null;
             }
 
             // 2.转换为WorkflowExecutionAggregate
-            WorkflowExecutionAggregate executionAggregate = WorkflowExecutionInfraConvertor.INSTANCE.toAggregate(executionPO);
-
-            return executionAggregate;
+            return WorkflowExecutionInfraConvertor.INSTANCE.toAggregate(executionPO);
         } catch (Exception e) {
-            log.error("查询工作流执行失败，执行ID: {}, 原因: {}", executionId, e.getMessage(), e);
+            log.error("查询工作流执行失败，执行记录ID: {}, 原因: {}", id, e.getMessage(), e);
             throw AiException.of(AiErrorCode.WORKFLOW_EXECUTION_QUERY_FAIL);
         }
     }
 
     @Override
-    public WorkflowExecutionAggregate findByIdOrThrow(String executionId) {
-        WorkflowExecutionAggregate execution = findById(executionId);
+    public WorkflowExecutionAggregate findByIdOrThrow(String id) {
+        WorkflowExecutionAggregate execution = findById(id);
         if (execution == null) {
             throw AiException.of(BizErrorCode.DATA_NOT_EXIST);
         }
@@ -109,6 +107,18 @@ public class WorkflowExecutionRepositoryImpl implements IWorkflowExecutionReposi
         }
     }
 
+    @Override
+    public List<WorkflowExecutionAggregate> findByUserId(String userId) {
+        try {
+            // 1.查询工作流执行基本信息列表
+            List<WorkflowExecutionPO> executionPOs = workflowExecutionDao.findByUserId(userId);
 
+            // 2.转换为WorkflowExecutionAggregate列表
+            return WorkflowExecutionInfraConvertor.INSTANCE.toAggregateList(executionPOs);
+        } catch (Exception e) {
+            log.error("根据用户ID查询工作流执行记录失败，用户ID: {}, 原因: {}", userId, e.getMessage(), e);
+            throw AiException.of(AiErrorCode.WORKFLOW_EXECUTION_QUERY_FAIL);
+        }
+    }
 
 }

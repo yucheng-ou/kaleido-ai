@@ -169,6 +169,7 @@ public class AdminRepositoryImpl implements IAdminRepository {
     }
 
     @Transactional(rollbackFor = Exception.class)
+    @Override
     @CacheInvalidate(name = ":admin:", key = "#admin.id")
     public void assignRoles(AdminAggregate admin) {
         if (CollectionUtils.isEmpty(admin.getRoleIds())) {

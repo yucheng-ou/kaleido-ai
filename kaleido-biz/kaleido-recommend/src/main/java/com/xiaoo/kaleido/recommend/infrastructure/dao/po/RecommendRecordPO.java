@@ -37,4 +37,16 @@ public class RecommendRecordPO extends BasePO {
      */
     @TableField("outfit_id")
     private String outfitId;
+
+    /**
+     * 工作流执行记录ID
+     */
+    @TableField("execution_id")
+    private String executionId;
+
+    /**
+     * 推荐记录状态
+     */
+    @TableField("status")
+    private String status;
 }

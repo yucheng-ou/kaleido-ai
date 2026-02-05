@@ -153,6 +153,7 @@ public class RoleRepositoryImpl implements IRoleRepository {
         return roleDao.existsByCode(code);
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveRolePermissions(String roleId, List<String> permissionIds) {
         // 1. 检查权限ID列表是否为空

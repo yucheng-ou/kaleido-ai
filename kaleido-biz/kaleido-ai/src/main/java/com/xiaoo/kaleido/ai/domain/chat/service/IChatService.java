@@ -30,6 +30,21 @@ public interface IChatService {
             String userId);
 
     /**
+     * 基于工作流节点的聊天
+     * <p>
+     * 使用指定的Agent进行聊天，支持动态过滤表达式
+     *
+     * @param agentId        Agent ID
+     * @param message        用户消息
+     * @param userId         用户id
+     * @return 聊天响应内容
+     */
+    String chatWithWorkflowNode(
+            String agentId,
+            String message,
+            String userId);
+
+    /**
      * 基于默认ChatClient的聊天（带用户ID过滤）
      * <p>
      * 使用默认ChatClient进行聊天，支持用户ID过滤

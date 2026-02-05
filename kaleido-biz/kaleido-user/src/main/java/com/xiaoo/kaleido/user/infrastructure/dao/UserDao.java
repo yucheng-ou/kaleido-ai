@@ -24,7 +24,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param id 用户ID，不能为空
      * @return 用户持久化对象，如果用户不存在则返回null
-     * @throws IllegalArgumentException 当用户ID为空时抛出
      */
     UserPO findById(@Param("id") String id);
 
@@ -35,7 +34,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param telephone 手机号，必须符合手机号格式规范
      * @return 用户持久化对象，如果用户不存在则返回null
-     * @throws IllegalArgumentException 当手机号格式不正确时抛出
      */
     UserPO findByTelephone(@Param("telephone") String telephone);
 
@@ -46,7 +44,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param inviteCode 邀请码，不能为空
      * @return 用户持久化对象，如果用户不存在则返回null
-     * @throws IllegalArgumentException 当邀请码为空时抛出
      */
     UserPO findByInviteCode(@Param("inviteCode") String inviteCode);
 
@@ -57,7 +54,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param id 用户ID，不能为空
      * @return 是否存在，true表示存在且未删除，false表示不存在或已删除
-     * @throws IllegalArgumentException 当用户ID为空时抛出
      */
     boolean existsById(@Param("id") String id);
 
@@ -68,7 +64,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param telephone 手机号，必须符合手机号格式规范
      * @return 是否存在，true表示存在且未删除，false表示不存在或已删除
-     * @throws IllegalArgumentException 当手机号格式不正确时抛出
      */
     boolean existsByTelephone(@Param("telephone") String telephone);
 
@@ -79,7 +74,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param inviteCode 邀请码，不能为空
      * @return 是否存在，true表示存在且未删除，false表示不存在或已删除
-     * @throws IllegalArgumentException 当邀请码为空时抛出
      */
     boolean existsByInviteCode(@Param("inviteCode") String inviteCode);
 
@@ -90,7 +84,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param nickName 昵称，不能为空
      * @return 是否存在，true表示存在且未删除，false表示不存在或已删除
-     * @throws IllegalArgumentException 当昵称为空时抛出
      */
     boolean existsByNickName(@Param("nickName") String nickName);
 
@@ -101,7 +94,6 @@ public interface UserDao extends BaseMapper<UserPO> {
      *
      * @param req 查询条件，包含分页参数和过滤条件
      * @return 用户列表，如果无结果则返回空列表
-     * @throws IllegalArgumentException 当查询条件无效时抛出
      */
     List<UserPO> selectByCondition(@Param("req") UserPageQueryReq req);
 

@@ -6,13 +6,13 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-biz</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>kaleido-coin</artifactId>
     <name>kaleido-coin</name>
     <description>金币服务</description>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

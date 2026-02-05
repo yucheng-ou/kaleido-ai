@@ -2,33 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaoo.kaleido.recommend.infrastructure.dao.RecommendRecordDao">
 
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, user_id, prompt, outfit_id, execution_id, status
+    </sql>
+
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.recommend.infrastructure.dao.po.RecommendRecordPO">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="prompt" property="prompt" />
         <result column="outfit_id" property="outfitId" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="deleted" property="deleted" />
-        <result column="lock_version" property="lockVersion" />
+        <result column="execution_id" property="executionId" />
+        <result column="status" property="status" />
     </resultMap>
 
     <select id="findByUserId" resultMap="BaseResultMap">
-        SELECT * FROM t_recommend_record 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_recommend_record 
         WHERE user_id = #{userId} 
           AND deleted = 0
         ORDER BY created_at DESC
     </select>
 
     <select id="findByOutfitId" resultMap="BaseResultMap">
-        SELECT * FROM t_recommend_record 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_recommend_record 
         WHERE outfit_id = #{outfitId} 
           AND deleted = 0
         LIMIT 1
     </select>
 
     <select id="findByUserIdAndHasOutfit" resultMap="BaseResultMap">
-        SELECT * FROM t_recommend_record 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_recommend_record 
         WHERE user_id = #{userId} 
           AND deleted = 0
           <if test="hasOutfit == true">
@@ -40,8 +49,32 @@
         ORDER BY created_at DESC
     </select>
 
-    <select id="selectById" resultMap="BaseResultMap">
-        SELECT * FROM t_recommend_record WHERE id = #{id} AND deleted = 0
+    <select id="findByExecutionId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_recommend_record 
+        WHERE execution_id = #{executionId} 
+          AND deleted = 0
+        LIMIT 1
     </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_recommend_record WHERE id = #{id} AND deleted = 0
+    </select>
+
+    <update id="updateByIdAndUserId">
+        UPDATE t_recommend_record 
+        SET 
+            prompt = #{po.prompt},
+            outfit_id = #{po.outfitId},
+            execution_id = #{po.executionId},
+            status = #{po.status},
+            updated_at = #{po.updatedAt}
+        WHERE id = #{po.id} 
+          AND user_id = #{po.userId}
+          AND deleted = 0
+    </update>
 
 </mapper>

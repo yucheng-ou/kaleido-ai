@@ -2,7 +2,10 @@ package com.xiaoo.kaleido.recommend.infrastructure.adapter.repository.convertor;
 
 import com.xiaoo.kaleido.recommend.domain.recommend.model.aggregate.RecommendRecordAggregate;
 import com.xiaoo.kaleido.recommend.infrastructure.dao.po.RecommendRecordPO;
+import com.xiaoo.kaleido.recommend.types.enums.RecommendRecordStatusEnum;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -24,6 +27,7 @@ public interface RecommendRecordInfraConvertor {
      * @param aggregate 推荐记录聚合根
      * @return 推荐记录持久化对象
      */
+    @Mapping(target = "status", source = "status", qualifiedByName = "enumToString")
     RecommendRecordPO toPO(RecommendRecordAggregate aggregate);
 
     /**
@@ -32,5 +36,16 @@ public interface RecommendRecordInfraConvertor {
      * @param po 推荐记录持久化对象
      * @return 推荐记录聚合根
      */
+    @Mapping(target = "status", source = "status", qualifiedByName = "stringToEnum")
     RecommendRecordAggregate toAggregate(RecommendRecordPO po);
+
+    @Named("enumToString")
+    default String enumToString(RecommendRecordStatusEnum status) {
+        return status != null ? status.name() : null;
+    }
+
+    @Named("stringToEnum")
+    default RecommendRecordStatusEnum stringToEnum(String status) {
+        return status != null ? RecommendRecordStatusEnum.valueOf(status) : null;
+    }
 }

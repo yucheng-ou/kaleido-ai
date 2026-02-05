@@ -1,6 +1,7 @@
 spring:
   application:
     name: kaleido-recommend
+    version: @kaleido.version@
   profiles:
     active: dev
   config:
@@ -12,3 +13,4 @@ spring:
       - nacos:kaleido-cache.yml
       - nacos:kaleido-sentinel.yml
       - nacos:kaleido-seata.yml
+      - nacos:kaleido-mq.yml

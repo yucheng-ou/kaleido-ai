@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaoo.kaleido.tag.infrastructure.dao.TagDao">
 
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, user_id, name, type_code, color, description, usage_count
+    </sql>
+
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.tag.infrastructure.dao.po.TagPO">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
@@ -10,17 +15,18 @@
         <result column="color" property="color" />
         <result column="description" property="description" />
         <result column="usage_count" property="usageCount" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="lock_version" property="lockVersion" />
     </resultMap>
 
     <select id="findById" resultMap="BaseResultMap">
-        SELECT * FROM t_tag WHERE id = #{id} AND deleted = 0
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag WHERE id = #{id} AND deleted = 0
     </select>
 
     <select id="findByUserIdAndTypeCode" resultMap="BaseResultMap">
-        SELECT * FROM t_tag 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag 
         WHERE user_id = #{userId} 
           AND type_code = #{typeCode} 
           AND deleted = 0
@@ -36,7 +42,9 @@
     </select>
 
     <select id="findByIds" resultMap="BaseResultMap">
-        SELECT * FROM t_tag 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag 
         WHERE id IN 
         <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
             #{tagId}
@@ -45,14 +53,18 @@
     </select>
 
     <select id="findByIdAndUserId" resultMap="BaseResultMap">
-        SELECT * FROM t_tag 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag 
         WHERE id = #{tagId} 
           AND user_id = #{userId} 
           AND deleted = 0
     </select>
 
     <select id="findByIdsAndUserId" resultMap="BaseResultMap">
-        SELECT * FROM t_tag 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag 
         WHERE id IN 
         <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
             #{tagId}
@@ -62,7 +74,9 @@
     </select>
 
     <select id="selectByCondition" resultMap="BaseResultMap">
-        SELECT * FROM t_tag 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tag 
         WHERE deleted = 0
         <if test="queryReq.userId != null and queryReq.userId != ''">
             AND user_id = #{queryReq.userId}

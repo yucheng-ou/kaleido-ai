@@ -2,10 +2,10 @@
     <!-- 引用 Spring Boot 的 logback 基础配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
-    <!-- 应用名称 -->
-    <property scope="context" name="appName" value="auth"/>
+    <!-- 应用名称 - 从Spring配置中获取 -->
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="kaleido-ai"/>
     <!-- 自定义日志输出路径，以及日志名称前缀 -->
-    <property name="LOG_FILE" value="./logs/${appName}.%d{yyyy-MM-dd}"/>
+    <property name="LOG_FILE" value="kaleido-biz/kaleido-ai/logs/${appName}.%d{yyyy-MM-dd}"/>
     <!-- 每行日志输出的格式 -->
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
 
@@ -47,4 +47,3 @@
     </springProfile>
 
 </configuration>
-

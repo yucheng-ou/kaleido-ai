@@ -23,7 +23,6 @@ public interface ITagRepository {
      * 注意：只保存标签的基本信息，不处理关联关系
      *
      * @param tagAggregate 标签聚合根，不能为空
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当保存失败时抛出
      */
     void save(TagAggregate tagAggregate);
 
@@ -33,7 +32,6 @@ public interface ITagRepository {
      * 更新标签聚合根信息到数据库，包括标签基本信息和关联关系
      *
      * @param tagAggregate 标签聚合根，不能为空
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当更新失败或标签不存在时抛出
      */
     void update(TagAggregate tagAggregate);
 
@@ -45,7 +43,6 @@ public interface ITagRepository {
      *
      * @param tagId 标签ID，不能为空
      * @return 标签聚合根（如果存在），Optional.empty()表示标签不存在
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当查询失败时抛出
      */
     Optional<TagAggregate> findById(String tagId);
 
@@ -58,7 +55,6 @@ public interface ITagRepository {
      * @param tagId 标签ID，不能为空
      * @param userId 用户ID，不能为空
      * @return 标签聚合根（如果存在且属于该用户），Optional.empty()表示标签不存在或不属于该用户
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当查询失败时抛出
      */
     Optional<TagAggregate> findByIdAndUserId(String tagId, String userId);
 
@@ -70,7 +66,6 @@ public interface ITagRepository {
      *
      * @param tagId 标签ID，不能为空
      * @return 标签聚合根
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当标签不存在时抛出
      */
     TagAggregate findByIdOrThrow(String tagId);
 
@@ -84,7 +79,6 @@ public interface ITagRepository {
      * @param name     标签名称，不能为空
      * @param typeCode 标签类型编码，不能为空
      * @return 是否存在，true表示已存在（不唯一），false表示不存在（唯一）
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当参数无效或查询失败时抛出
      */
     boolean existsByUserIdAndNameAndTypeCode(String userId, String name, String typeCode);
 
@@ -96,7 +90,6 @@ public interface ITagRepository {
      * @param userId   用户ID，不能为空
      * @param typeCode 标签类型编码，不能为空
      * @return 标签聚合根列表
-     * @throws com.xiaoo.kaleido.tag.types.exception.TagException 当参数无效或查询失败时抛出
      */
     List<TagAggregate> findByUserIdAndTypeCode(String userId, String typeCode);
 

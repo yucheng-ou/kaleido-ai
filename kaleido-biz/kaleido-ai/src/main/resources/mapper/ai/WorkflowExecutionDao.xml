@@ -4,7 +4,7 @@
 
     <!-- 基础列映射 -->
     <sql id="Base_Column_List">
-        id, execution_id, workflow_id, status, input_data, output_data,
+        id, user_id, workflow_id, status, input_data, output_data,
         error_message, started_at, completed_at
     </sql>
 
@@ -13,7 +13,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM t_ai_workflow_execution
-        WHERE execution_id = #{executionId}
+        WHERE execution_id = #{id}
         AND deleted = 0
     </select>
 
@@ -57,5 +57,15 @@
         AND deleted = 0
         <![CDATA[AND started_at < DATE_SUB(#{currentTime}, INTERVAL #{timeoutMillis} MILLISECOND)]]>
     </delete>
+
+    <!-- 根据用户ID查询工作流执行记录 -->
+    <select id="findByUserId" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowExecutionPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow_execution
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY started_at DESC
+    </select>
 
 </mapper>

@@ -3,6 +3,8 @@ package com.xiaoo.kaleido.ai.trigger.listener;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.xiaoo.kaleido.ai.domain.clothing.service.impl.ClothingVectorService;
+import com.xiaoo.kaleido.ai.types.exception.AiException;
+import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
 import com.xiaoo.kaleido.api.wardrobe.event.ClothingEventMessage;
 import com.xiaoo.kaleido.api.wardrobe.enums.ClothingEventTypeEnums;
 import lombok.RequiredArgsConstructor;
@@ -83,7 +85,7 @@ public class ClothingEventListener {
             // 解析事件数据
             JSONObject dataJson = jsonObject.getJSONObject("data");
             if (dataJson == null) {
-                throw new IllegalArgumentException("事件消息缺少data字段");
+                throw AiException.of(AiErrorCode.VALIDATION_ERROR, "事件消息缺少data字段");
             }
             
             // 使用fastjson自动反序列化整个data对象为ClothingEventMessage
@@ -91,7 +93,7 @@ public class ClothingEventListener {
             return JSON.parseObject(dataJson.toJSONString(), ClothingEventMessage.class);
         } catch (Exception e) {
             log.error("解析服装事件消息失败: {}", message, e);
-            throw new IllegalArgumentException("服装事件消息格式错误", e);
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "服装事件消息格式错误");
         }
     }
 }

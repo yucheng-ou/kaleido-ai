@@ -3,6 +3,8 @@ package com.xiaoo.kaleido.user.domain.model.entity;
 import com.xiaoo.kaleido.base.model.entity.BaseEntity;
 import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
+import com.xiaoo.kaleido.user.types.exception.UserException;
+import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -57,10 +59,19 @@ public class UserOperateStream extends BaseEntity {
      * @param operateType   操作类型，不能为空
      * @param operateDetail 操作详情，不能为空
      * @return 用户操作流水实体
-     * @throws IllegalArgumentException 当参数为空时抛出
      */
     public static UserOperateStream create(String userId, UserOperateType operateType,
                                            String operateDetail) {
+        if (userId == null || userId.isEmpty()) {
+            throw UserException.of(UserErrorCode.USER_ID_EMPTY);
+        }
+        if (operateType == null) {
+            throw UserException.of(UserErrorCode.REQUEST_PARAM_NULL, "操作类型不能为空");
+        }
+        if (operateDetail == null || operateDetail.isEmpty()) {
+            throw UserException.of(UserErrorCode.REQUEST_PARAM_NULL, "操作详情不能为空");
+        }
+        
         return UserOperateStream.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
                 .userId(userId)

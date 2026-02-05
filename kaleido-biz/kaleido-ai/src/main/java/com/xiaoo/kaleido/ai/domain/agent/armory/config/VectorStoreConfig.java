@@ -15,9 +15,9 @@ public class VectorStoreConfig {
 
     /**
      * 返回的最相似文档数量
-     * 默认值：4
+     * 默认值：100
      */
-    private String topK = "4";
+    private Integer topK = 100;
 
     /**
      * 过滤表达式
@@ -27,9 +27,9 @@ public class VectorStoreConfig {
 
     /**
      * 相似度阈值
-     * 默认值：0.7
+     * 默认值：0
      */
-    private Double similarityThreshold = 0.7;
+    private Double similarityThreshold = 0.0;
 
     /**
      * 是否启用向量存储

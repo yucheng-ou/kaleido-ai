@@ -28,6 +28,7 @@ public class AdminCommandService implements IAdminCommandService {
     private final EventPublisher eventPublisher;
     private final AuthChangeEvent authChangeEvent;
 
+    @Override
     public String createAdmin(RegisterAdminCommand command) {
         // 1. 调用领域服务创建管理员
         AdminAggregate adminAggregate = adminDomainService.createAdmin(command.getMobile());
@@ -39,6 +40,7 @@ public class AdminCommandService implements IAdminCommandService {
         return adminAggregate.getId();
     }
 
+    @Override
     public void updateAdmin(String adminId, UpdateAdminCommand command) {
         // 1. 调用领域服务更新管理员信息
         AdminAggregate adminAggregate = adminDomainService.updateAdmin(adminId, command.getRealName(), command.getMobile());
@@ -49,6 +51,7 @@ public class AdminCommandService implements IAdminCommandService {
         log.info("管理员信息更新成功，管理员ID: {}", adminId);
     }
 
+    @Override
     public void enableAdmin(String adminId) {
         // 1. 调用领域服务启用管理员
         AdminAggregate adminAggregate = adminDomainService.enableAdmin(adminId);
@@ -59,6 +62,7 @@ public class AdminCommandService implements IAdminCommandService {
         log.info("管理员启用成功，管理员ID: {}", adminId);
     }
 
+    @Override
     public void freezeAdmin(String adminId) {
         // 1. 调用领域服务冻结管理员
         AdminAggregate adminAggregate = adminDomainService.freezeAdmin(adminId);
@@ -69,6 +73,7 @@ public class AdminCommandService implements IAdminCommandService {
         log.info("管理员冻结成功，管理员ID: {}", adminId);
     }
 
+    @Override
     public void assignRoles(String adminId, AssignRolesToAdminCommand command) {
         // 1. 调用领域服务分配角色
         AdminAggregate adminAggregate = adminDomainService.assignRoles(adminId, command.getRoleIds());
@@ -85,6 +90,7 @@ public class AdminCommandService implements IAdminCommandService {
         log.info("角色分配成功，管理员ID: {}, 角色数量: {}", adminId, command.getRoleIds().size());
     }
 
+    @Override
     public void login(String adminId) {
         // 1. 调用领域服务处理登录逻辑
         AdminAggregate admin = adminDomainService.login(adminId);

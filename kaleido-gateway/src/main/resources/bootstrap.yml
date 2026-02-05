@@ -1,6 +1,7 @@
 spring:
   application:
     name: kaleido-gateway  # 应用名称，用于服务注册和配置中心
+    version: @kaleido.version@
   profiles:
     active: dev  # 激活的配置文件环境
   config:

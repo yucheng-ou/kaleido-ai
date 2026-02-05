@@ -87,6 +87,11 @@ public enum RecommendErrorCode implements ErrorCode {
     RECOMMEND_RECORD_NO_OUTFIT("RECOMMEND_RECORD_NO_OUTFIT", "推荐记录无关联穿搭"),
 
     /**
+     * 推荐记录已是终态：推荐记录状态已是终态（已完成或已失败），无法进行状态更新
+     */
+    RECOMMEND_RECORD_FINAL_STATUS("RECOMMEND_RECORD_FINAL_STATUS", "推荐记录已是终态"),
+
+    /**
      * 提示词过长：用户输入的提示词超过最大长度限制
      */
     PROMPT_TOO_LONG("RECOMMEND_PROMPT_TOO_LONG", "提示词过长"),

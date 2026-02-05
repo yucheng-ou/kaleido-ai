@@ -27,13 +27,21 @@ public interface IRecommendRecordRepository {
     RecommendRecordAggregate save(RecommendRecordAggregate recommendRecordAggregate);
 
     /**
+     * 更新推荐记录聚合根
+     * <p>
+     * 更新已存在的推荐记录聚合根
+     *
+     * @param recommendRecordAggregate 推荐记录聚合根，不能为空
+     */
+    void update(RecommendRecordAggregate recommendRecordAggregate);
+
+    /**
      * 根据ID查找推荐记录聚合根
      * <p>
      * 查找指定ID的推荐记录聚合根
      *
      * @param id 推荐记录ID，不能为空
      * @return 推荐记录聚合根
-     * @throws com.xiaoo.kaleido.recommend.types.exception.RecommendException 当推荐记录不存在时抛出
      */
     RecommendRecordAggregate findById(String id);
 
@@ -74,4 +82,14 @@ public interface IRecommendRecordRepository {
      * @return 推荐记录聚合根列表
      */
     List<RecommendRecordAggregate> findByUserIdAndHasOutfit(String userId, boolean hasOutfit);
+
+    /**
+     * 根据执行记录ID查找推荐记录聚合根
+     * <p>
+     * 用于通过工作流执行记录ID查找对应的推荐记录
+     *
+     * @param executionId 执行记录ID，不能为空
+     * @return 推荐记录聚合根（如果存在），否则返回null
+     */
+    RecommendRecordAggregate findByExecutionId(String executionId);
 }

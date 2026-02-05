@@ -1,5 +1,9 @@
 package com.xiaoo.kaleido.ai.domain.workflow.model.vo;
 
+import lombok.Getter;
+import com.xiaoo.kaleido.ai.types.exception.AiException;
+import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
+
 /**
  * 执行状态值对象
  * <p>
@@ -8,6 +12,7 @@ package com.xiaoo.kaleido.ai.domain.workflow.model.vo;
  * @author ouyucheng
  * @date 2026/1/30
  */
+@Getter
 public enum ExecutionStatus {
 
     /**
@@ -25,7 +30,17 @@ public enum ExecutionStatus {
      */
     FAILED("FAILED", "失败");
 
+    /**
+     * -- GETTER --
+     *  获取状态编码
+     *
+     */
     private final String code;
+    /**
+     * -- GETTER --
+     *  获取状态描述
+     *
+     */
     private final String description;
 
     ExecutionStatus(String code, String description) {
@@ -34,29 +49,10 @@ public enum ExecutionStatus {
     }
 
     /**
-     * 获取状态编码
-     *
-     * @return 状态编码
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * 获取状态描述
-     *
-     * @return 状态描述
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
      * 根据编码获取状态
      *
      * @param code 状态编码
      * @return 执行状态
-     * @throws IllegalArgumentException 当编码无效时抛出
      */
     public static ExecutionStatus fromCode(String code) {
         for (ExecutionStatus status : values()) {
@@ -64,7 +60,7 @@ public enum ExecutionStatus {
                 return status;
             }
         }
-        throw new IllegalArgumentException("无效的执行状态编码: " + code);
+        throw AiException.of(AiErrorCode.VALIDATION_ERROR, "无效的执行状态编码: " + code);
     }
 
     /**

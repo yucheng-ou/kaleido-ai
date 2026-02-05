@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.ClothingImageDao">
 
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, clothing_id, path, image_order, is_primary, 
+        image_size, image_type, width, height
+    </sql>
+
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.ClothingImagePO">
         <id column="id" property="id" />
         <result column="clothing_id" property="clothingId" />
@@ -12,20 +18,21 @@
         <result column="image_type" property="imageType" />
         <result column="width" property="width" />
         <result column="height" property="height" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="lock_version" property="lockVersion" />
     </resultMap>
 
     <select id="findByClothingId" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_clothing_image 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_clothing_image 
         WHERE clothing_id = #{clothingId} 
           AND deleted = 0
         ORDER BY image_order ASC, created_at ASC
     </select>
 
     <select id="findByClothingIds" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_clothing_image 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_clothing_image 
         WHERE clothing_id IN 
         <foreach collection="clothingIds" item="clothingId" open="(" separator="," close=")">
             #{clothingId}

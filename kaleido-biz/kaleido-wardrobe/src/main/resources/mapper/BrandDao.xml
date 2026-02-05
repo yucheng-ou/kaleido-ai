@@ -2,22 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiaoo.kaleido.wardrobe.infrastructure.dao.BrandDao">
 
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, name, logo_path, description
+    </sql>
+
     <resultMap id="BaseResultMap" type="com.xiaoo.kaleido.wardrobe.infrastructure.dao.po.BrandPO">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="logo_path" property="logoPath" />
         <result column="description" property="description" />
-        <result column="created_at" property="createdAt" />
-        <result column="updated_at" property="updatedAt" />
-        <result column="lock_version" property="lockVersion" />
     </resultMap>
 
     <select id="findById" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
     </select>
 
     <select id="findAll" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_brand 
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_brand 
         WHERE deleted = 0
         ORDER BY created_at DESC
     </select>
@@ -29,7 +35,9 @@
     </select>
 
     <select id="selectById" resultMap="BaseResultMap">
-        SELECT * FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_wardrobe_brand WHERE id = #{id} AND deleted = 0
     </select>
 
 </mapper>

@@ -23,4 +23,23 @@ public class AuthException extends BizException {
         super(errorCode);
     }
 
+    public AuthException(String errorCode, String errorMessage) {
+        super(errorCode, errorMessage);
+    }
+
+    /**
+     * 静态工厂方法：创建认证异常
+     *
+     * @param errorCode 错误码字符串
+     * @param message   错误信息
+     * @return 认证异常实例
+     */
+    public static AuthException of(String errorCode, String message) {
+        return new AuthException(errorCode, message);
+    }
+
+    public static AuthException of(ErrorCode errorCode) {
+        return new AuthException(errorCode);
+    }
+
 }

@@ -155,7 +155,6 @@ public class AgentChatClientArmory {
                         configureMemoryTool(builder, tool);
                         break;
                     case VECTOR_STORE:
-                        configureVectorStoreTool(builder);
                         break;
                     case MCP:
                         McpSyncClient mcpClient = configureMcpTool(tool);
@@ -207,7 +206,7 @@ public class AgentChatClientArmory {
 
     /**
      * 配置向量存储工具
-     * 向量检索工具不从tool中读取 每一次条田的时候在设置
+     * 向量检索工具不从tool中读取 每一次对话的时候在设置
      */
     private void configureVectorStoreTool(ChatClient.Builder builder) {
         QuestionAnswerAdvisor advisor = QuestionAnswerAdvisor.builder(vectorStore).build();
