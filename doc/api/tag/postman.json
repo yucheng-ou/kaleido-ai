@@ -1,0 +1,183 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "2bf45023-41b5-465f-bc73-407b3e2089b3",
+    "name": "kaleido-tag API 文档"
+  },
+  "item": [
+    {
+      "name": "标签API控制器",
+      "item": [
+        {
+          "name": "创建标签",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"color\": \"fre7s2\",\n  \"description\": \"1o2evm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/tag",
+              "path": [
+                "tag"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建标签"
+        },
+        {
+          "name": "更新标签",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"color\": \"b9zng4\",\n  \"description\": \"pzksq4\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/tag/:tagId",
+              "path": [
+                "tag",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "  标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "更新标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新标签"
+        },
+        {
+          "name": "根据ID查询标签",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/tag/:tagId",
+              "path": [
+                "tag",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询标签"
+        },
+        {
+          "name": "查询标签列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/tag/list?typeCode=12303",
+              "path": [
+                "tag",
+                "list"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "typeCode",
+                  "value": "12303",
+                  "description": "标签类型编码，不能为空"
+                }
+              ],
+              "variable": []
+            },
+            "description": "查询标签列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询标签列表"
+        }
+      ]
+    }
+  ]
+}

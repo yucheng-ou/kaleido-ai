@@ -1,0 +1,28 @@
+dubbo:
+  # 服务提供者配置
+  provider:
+    # 启用自定义异常过滤器，禁用默认的exception过滤器
+    filter: dubboExceptionFilter,-exception
+    timeout: 3000
+  # 服务消费者配置
+  consumer:
+    timeout: 3000
+    check: false
+  # 协议配置
+  protocol:
+    name: dubbo
+    port: -1
+  # 注册中心配置
+  registry:
+    username: nacos
+    password: nacos
+    address: nacos://127.0.0.1:8849
+    parameters:
+      namespace: aa3a3ee8-fb98-43e5-b3da-11b368d88c21
+      group: dubbo
+  # 应用配置
+  application:
+    name: ${spring.application.name}
+    qos-enable: true
+    qos-accept-foreign-ip: false
+    serialize-check-status: WARN

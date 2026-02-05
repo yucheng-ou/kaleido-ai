@@ -1,0 +1,1323 @@
+= kaleido-ai API 文档
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Version |  Update Time  | Status | Author |  Description
+|v2026-02-02 20:03:41|2026-02-02 20:03:41|auto|@ouyucheng|Created by smart-doc
+|====================
+
+
+=== Agent API控制器
+&lt;p&gt;
+整合了Agent查询和聊天功能，遵循一个控制器对应一个领域的原则
+==== 查询Agent详情
+*URL:* `http://localhost:8082/ai/agent/{agentId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/agent/{agentId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "6lru1w",
+  "success": true,
+  "data": {
+    "agentId": "85",
+    "code": "59798",
+    "name": "miquel.conn",
+    "description": "9h3d79",
+    "systemPrompt": "3g8iuw",
+    "modelName": "miquel.conn",
+    "temperature": 990,
+    "maxTokens": 939,
+    "status": "4ovp1l",
+    "tools": [
+      {
+        "toolCode": "59798",
+        "toolName": "miquel.conn",
+        "toolType": "rzhyoq",
+        "toolConfig": "19h6um"
+      }
+    ]
+  }
+}
+----
+
+==== 根据编码查询Agent
+*URL:* `http://localhost:8082/ai/agent/by-code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|Agent编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/agent/by-code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "ia1jsg",
+  "success": true,
+  "data": {
+    "agentId": "85",
+    "code": "59798",
+    "name": "miquel.conn",
+    "description": "afypu4",
+    "systemPrompt": "reuue6",
+    "modelName": "miquel.conn",
+    "temperature": 966,
+    "maxTokens": 972,
+    "status": "t2rdeb",
+    "tools": [
+      {
+        "toolCode": "59798",
+        "toolName": "miquel.conn",
+        "toolType": "ly9l14",
+        "toolConfig": "n6siwd"
+      }
+    ]
+  }
+}
+----
+
+==== 查询Agent列表
+*URL:* `http://localhost:8082/ai/agent`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/agent
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "beokrv",
+  "success": true,
+  "data": [
+    {
+      "agentId": "85",
+      "code": "59798",
+      "name": "miquel.conn",
+      "description": "svq8iv",
+      "systemPrompt": "usfy8i",
+      "modelName": "miquel.conn",
+      "temperature": 969,
+      "maxTokens": 714,
+      "status": "zfhfmn",
+      "tools": [
+        {
+          "toolCode": "59798",
+          "toolName": "miquel.conn",
+          "toolType": "wpw6gd",
+          "toolConfig": "4me9bo"
+        }
+      ]
+    }
+  ]
+}
+----
+
+==== 与Agent进行聊天
+*URL:* `http://localhost:8082/ai/agent/{agentId}/chat`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|       Agent ID|-
+|====================
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|message|string|true|       用户消息|-
+|conversationId|string|false|会话ID（可选）|-
+|====================
+
+
+*Request-example:*
+----
+curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/ai/agent/{agentId}/chat
+----
+
+*Response-example:*
+----
+[
+  "tmyooe",
+  "4gu8v7"
+]
+----
+
+==== 默认聊天（不使用特定Agent）
+*URL:* `http://localhost:8082/ai/agent/chat`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|message|string|true|       用户消息|-
+|conversationId|string|false|会话ID（可选）|-
+|====================
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/agent/chat?message=success&conversationId=85
+----
+
+*Response-example:*
+----
+[
+  "cjra49",
+  "4k1q11"
+]
+----
+
+=== 会话API控制器
+==== 创建会话
+*URL:* `http://localhost:8082/ai/conversation`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|conversationId|string|true|会话ID（业务唯一）
+Validate[max: 100; ]|-
+|title|string|false|会话标题
+Validate[max: 200; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation --data '{
+  "conversationId": "85",
+  "title": "yyk332"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "80z3hy",
+  "success": true,
+  "data": "vthzlk"
+}
+----
+
+==== 更新会话标题
+*URL:* `http://localhost:8082/ai/conversation/{conversationId}/title`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|conversationId|string|true|会话ID|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|title|string|true|会话标题
+Validate[max: 200; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation/{conversationId}/title --data '{
+  "title": "ge4nny"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "tejgdh",
+  "success": true
+}
+----
+
+==== 查询会话详情
+*URL:* `http://localhost:8082/ai/conversation/{conversationId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|conversationId|string|true|会话ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation/{conversationId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─conversationId|string|会话ID|-
+|└─userId|string|用户ID|-
+|└─title|string|会话标题|-
+|└─status|string|会话状态|-
+|└─lastMessageTime|string|最后消息时间|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "ik35od",
+  "success": true,
+  "data": {
+    "conversationId": "85",
+    "userId": "85",
+    "title": "egjzus",
+    "status": "9h7yxp",
+    "lastMessageTime": "2026-02-02 20:04:06",
+    "createTime": "2026-02-02 20:04:06",
+    "updateTime": "2026-02-02 20:04:06"
+  }
+}
+----
+
+==== 查询用户会话列表
+*URL:* `http://localhost:8082/ai/conversation`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─conversationId|string|会话ID|-
+|└─userId|string|用户ID|-
+|└─title|string|会话标题|-
+|└─status|string|会话状态|-
+|└─lastMessageTime|string|最后消息时间|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "vd3ba0",
+  "success": true,
+  "data": [
+    {
+      "conversationId": "85",
+      "userId": "85",
+      "title": "6yo88q",
+      "status": "l8avvk",
+      "lastMessageTime": "2026-02-02 20:04:06",
+      "createTime": "2026-02-02 20:04:06",
+      "updateTime": "2026-02-02 20:04:06"
+    }
+  ]
+}
+----
+
+==== 删除会话
+*URL:* `http://localhost:8082/ai/conversation/{conversationId}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|conversationId|string|true|会话ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation/{conversationId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "mv8pcy",
+  "success": true
+}
+----
+
+==== 查询用户活跃会话列表
+*URL:* `http://localhost:8082/ai/conversation/active`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/conversation/active
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─conversationId|string|会话ID|-
+|└─userId|string|用户ID|-
+|└─title|string|会话标题|-
+|└─status|string|会话状态|-
+|└─lastMessageTime|string|最后消息时间|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "ej9rb8",
+  "success": true,
+  "data": [
+    {
+      "conversationId": "85",
+      "userId": "85",
+      "title": "1nqb61",
+      "status": "my2jja",
+      "lastMessageTime": "2026-02-02 20:04:06",
+      "createTime": "2026-02-02 20:04:06",
+      "updateTime": "2026-02-02 20:04:06"
+    }
+  ]
+}
+----
+
+=== 工作流API控制器
+&lt;p&gt;
+整合了工作流查询、执行和管理功能，遵循一个控制器对应一个领域的原则
+==== 查询工作流详情
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "jm3vln",
+  "success": true,
+  "data": {
+    "workflowId": "85",
+    "code": "59798",
+    "name": "miquel.conn",
+    "description": "20nugh",
+    "definition": "pwh5nq",
+    "status": "jnmg2i",
+    "createTime": "2026-02-02 20:04:06",
+    "updateTime": "2026-02-02 20:04:06"
+  }
+}
+----
+
+==== 根据编码查询工作流
+*URL:* `http://localhost:8082/ai/workflow/by-code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|工作流编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/by-code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "id63wo",
+  "success": true,
+  "data": {
+    "workflowId": "85",
+    "code": "59798",
+    "name": "miquel.conn",
+    "description": "q12x3e",
+    "definition": "pusrnm",
+    "status": "60a0j8",
+    "createTime": "2026-02-02 20:04:06",
+    "updateTime": "2026-02-02 20:04:06"
+  }
+}
+----
+
+==== 查询启用的工作流列表
+*URL:* `http://localhost:8082/ai/workflow`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "dhbcl9",
+  "success": true,
+  "data": [
+    {
+      "workflowId": "85",
+      "code": "59798",
+      "name": "miquel.conn",
+      "description": "coq35n",
+      "definition": "zbp0s8",
+      "status": "alp4wi",
+      "createTime": "2026-02-02 20:04:06",
+      "updateTime": "2026-02-02 20:04:06"
+    }
+  ]
+}
+----
+
+==== 执行工作流
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}/execute`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|inputData|string|false|输入数据|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}/execute --data 'hg4ncg'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "duwsvf",
+  "success": true,
+  "data": "b52k9k"
+}
+----
+
+==== 注册工作流到工厂
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}/register`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}/register
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "rl0xzh",
+  "success": true
+}
+----
+
+==== 注销工作流从工厂
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}/unregister`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}/unregister
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "1zqedk",
+  "success": true
+}
+----
+
+==== 检查工作流是否已注册到工厂
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}/registered`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}/registered
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|boolean|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "yzt02q",
+  "success": true,
+  "data": true
+}
+----
+
+==== 测试工作流执行（简单测试）
+*URL:* `http://localhost:8082/ai/workflow/{workflowId}/test`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/ai/workflow/{workflowId}/test
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "59798",
+  "msg": "3lr5uy",
+  "success": true,
+  "data": "rm7asf"
+}
+----
+
+

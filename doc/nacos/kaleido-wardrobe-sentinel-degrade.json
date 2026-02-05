@@ -1,0 +1,82 @@
+[
+  {
+    "_comment": "创建服装接口降级规则 - 资源名: createClothing",
+    "_description": "基于响应时间的降级策略，当接口响应时间超过3000ms且慢调用比例超过50%时触发降级",
+    "_business_impact": "防止服装创建服务响应过慢影响用户体验",
+    "_rule_type": "响应时间降级 (grade: 0)",
+    "_parameters_explanation": {
+      "grade": "0表示基于响应时间的降级策略",
+      "count": "3000表示响应时间阈值(毫秒)",
+      "timeWindow": "10表示降级持续时间(秒)",
+      "minRequestAmount": "10表示触发降级的最小请求数",
+      "statIntervalMs": "1000表示统计时长(毫秒)",
+      "slowRatioThreshold": "0.5表示慢调用比例阈值"
+    },
+    "resource": "createClothing",
+    "grade": 0,
+    "count": 3000,
+    "timeWindow": 10,
+    "minRequestAmount": 10,
+    "statIntervalMs": 1000,
+    "slowRatioThreshold": 0.5
+  },
+  {
+    "_comment": "创建服装接口异常比例降级规则 - 资源名: createClothing",
+    "_description": "基于异常比例的降级策略，当接口异常比例超过30%时触发降级",
+    "_business_impact": "防止服装创建服务异常影响系统稳定性",
+    "_rule_type": "异常比例降级 (grade: 1)",
+    "_parameters_explanation": {
+      "grade": "1表示基于异常比例的降级策略",
+      "count": "0.3表示异常比例阈值(30%)",
+      "timeWindow": "10表示降级持续时间(秒)",
+      "minRequestAmount": "10表示触发降级的最小请求数",
+      "statIntervalMs": "1000表示统计时长(毫秒)"
+    },
+    "resource": "createClothing",
+    "grade": 1,
+    "count": 0.3,
+    "timeWindow": 10,
+    "minRequestAmount": 10,
+    "statIntervalMs": 1000
+  },
+  {
+    "_comment": "更新服装接口降级规则 - 资源名: updateClothing",
+    "_description": "基于异常比例的降级策略，当接口异常比例超过20%时触发降级",
+    "_business_impact": "防止服装更新服务异常影响用户体验",
+    "_rule_type": "异常比例降级 (grade: 1)",
+    "_parameters_explanation": {
+      "grade": "1表示基于异常比例的降级策略",
+      "count": "0.2表示异常比例阈值(20%)",
+      "timeWindow": "10表示降级持续时间(秒)",
+      "minRequestAmount": "5表示触发降级的最小请求数",
+      "statIntervalMs": "1000表示统计时长(毫秒)"
+    },
+    "resource": "updateClothing",
+    "grade": 1,
+    "count": 0.2,
+    "timeWindow": 10,
+    "minRequestAmount": 5,
+    "statIntervalMs": 1000
+  },
+  {
+    "_comment": "查询服装列表接口降级规则 - 资源名: listClothing",
+    "_description": "基于响应时间的降级策略，当接口响应时间超过2000ms且慢调用比例超过30%时触发降级",
+    "_business_impact": "防止查询服务响应过慢影响用户体验",
+    "_rule_type": "响应时间降级 (grade: 0)",
+    "_parameters_explanation": {
+      "grade": "0表示基于响应时间的降级策略",
+      "count": "2000表示响应时间阈值(毫秒)",
+      "timeWindow": "10表示降级持续时间(秒)",
+      "minRequestAmount": "5表示触发降级的最小请求数",
+      "statIntervalMs": "1000表示统计时长(毫秒)",
+      "slowRatioThreshold": "0.3表示慢调用比例阈值"
+    },
+    "resource": "listClothing",
+    "grade": 0,
+    "count": 2000,
+    "timeWindow": 10,
+    "minRequestAmount": 5,
+    "statIntervalMs": 1000,
+    "slowRatioThreshold": 0.3
+  }
+]

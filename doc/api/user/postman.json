@@ -1,0 +1,200 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "92cb9912-1ee3-491b-9485-2768ec666849",
+    "name": "kaleido-user API 文档"
+  },
+  "item": [
+    {
+      "name": "用户API",
+      "item": [
+        {
+          "name": "查询用户自身信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/user",
+              "path": [
+                "user"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户自身信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户自身信息"
+        },
+        {
+          "name": "修改用户昵称",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"152\",\n  \"nickName\": \"timothy.hermiston\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/user/change-nickname",
+              "path": [
+                "user",
+                "change-nickname"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "修改用户昵称",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "修改用户昵称"
+        },
+        {
+          "name": "更新用户头像",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/user/avatar",
+              "path": [
+                "user",
+                "avatar"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "avatarUrl",
+                  "value": "www.bernice-stoltenberg.info",
+                  "description": "头像URL，不能为空"
+                }
+              ],
+              "variable": []
+            },
+            "description": "更新用户头像",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新用户头像"
+        },
+        {
+          "name": "分页查询用户列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/user/page?pageNum=243&pageSize=10&nickName=timothy.hermiston&telephone=630-404-6643&status=33&gender=MALE",
+              "path": [
+                "user",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "pageNum",
+                  "value": "820",
+                  "description": "页码"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10",
+                  "description": "分页大小"
+                },
+                {
+                  "key": "nickName",
+                  "value": "timothy.hermiston",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "telephone",
+                  "value": "630-404-6643",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "status",
+                  "value": "975",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "gender",
+                  "value": "MALE",
+                  "description": "No comments found.<br/>[Enum values:<br/>MALE()<br/>FEMALE()<br/>]"
+                }
+              ],
+              "variable": []
+            },
+            "description": "分页查询用户列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询用户列表"
+        }
+      ]
+    }
+  ]
+}

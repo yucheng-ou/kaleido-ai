@@ -1,0 +1,8 @@
+server:
+  port: 9014
+  servlet:
+    context-path: /kaleido-notice
+
+dubbo:
+  application:
+    qos-port: 22224  # 添加此行，指定新的 QOS 端口

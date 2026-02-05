@@ -1,0 +1,224 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b3a223a5-76b3-4a19-be6b-b163d8505acd",
+    "name": "kaleido-auth API 文档"
+  },
+  "item": [
+    {
+      "name": "管理员认证API",
+      "item": [
+        {
+          "name": "注册管理员",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/public/admin/register",
+              "path": [
+                "public",
+                "admin",
+                "register"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "注册管理员",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "注册管理员"
+        },
+        {
+          "name": "管理员登录",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/public/admin/login",
+              "path": [
+                "public",
+                "admin",
+                "login"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "管理员登录",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "管理员登录"
+        }
+      ]
+    },
+    {
+      "name": "短信验证码API",
+      "item": [
+        {
+          "name": "发送短信验证码",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"targetType\": \"USER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/public/sms/verify-code",
+              "path": [
+                "public",
+                "sms",
+                "verify-code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "发送短信验证码",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "发送短信验证码"
+        }
+      ]
+    },
+    {
+      "name": "普通用户认证API",
+      "item": [
+        {
+          "name": "用户注册",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telephone\": \"630-404-6643\",\n  \"verificationCode\": \"12303\",\n  \"inviterCode\": \"12303\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/public/user/register",
+              "path": [
+                "public",
+                "user",
+                "register"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "用户注册",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "用户注册"
+        },
+        {
+          "name": "用户登录",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/public/user/login",
+              "path": [
+                "public",
+                "user",
+                "login"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "用户登录",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "用户登录"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1032 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "4baab96a-4e4f-483f-b747-dd437f83e469",
+    "name": "kaleido-wardrobe API 文档"
+  },
+  "item": [
+    {
+      "name": "品牌API控制器（普通用户使用）\r\n只提供读操作接口，写操作由管理员在Admin模块处理",
+      "item": [
+        {
+          "name": "查询所有品牌列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/brand",
+              "path": [
+                "wardrobe",
+                "brand"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询所有品牌列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询所有品牌列表"
+        },
+        {
+          "name": "根据ID查询品牌详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/brand/:brandId",
+              "path": [
+                "wardrobe",
+                "brand",
+                ":brandId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "brandId",
+                  "value": "152",
+                  "description": "品牌ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询品牌详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询品牌详情"
+        }
+      ]
+    },
+    {
+      "name": "服装API控制器",
+      "item": [
+        {
+          "name": "创建服装（包含图片）",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"colorCode\": \"12303\",\n  \"seasonCode\": \"12303\",\n  \"brandId\": \"152\",\n  \"size\": \"5quq2w\",\n  \"purchaseDate\": \"2026-02-05\",\n  \"price\": 212,\n  \"description\": \"bj580m\",\n  \"currentLocationId\": \"152\",\n  \"images\": [\n    {\n      \"path\": \"7lh7k5\",\n      \"imageOrder\": 637,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing",
+              "path": [
+                "wardrobe",
+                "clothing"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建服装（包含图片）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建服装（包含图片）"
+        },
+        {
+          "name": "更新服装信息（包含图片）",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clothingId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"colorCode\": \"12303\",\n  \"seasonCode\": \"12303\",\n  \"brandId\": \"152\",\n  \"size\": \"9jxn4x\",\n  \"purchaseDate\": \"2026-02-05\",\n  \"price\": 684,\n  \"description\": \"i9jxg2\",\n  \"currentLocationId\": \"152\",\n  \"images\": [\n    {\n      \"path\": \"zchr1i\",\n      \"imageOrder\": 839,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/:clothingId",
+              "path": [
+                "wardrobe",
+                "clothing",
+                ":clothingId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "更新服装信息（包含图片）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新服装信息（包含图片）"
+        },
+        {
+          "name": "删除服装",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/:clothingId",
+              "path": [
+                "wardrobe",
+                "clothing",
+                ":clothingId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clothingId",
+                  "value": "152",
+                  "description": "服装ID，不能为空"
+                }
+              ]
+            },
+            "description": "删除服装",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除服装"
+        },
+        {
+          "name": "查询用户服装列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/list",
+              "path": [
+                "wardrobe",
+                "clothing",
+                "list"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户服装列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户服装列表"
+        },
+        {
+          "name": "根据ID查询服装详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/:clothingId",
+              "path": [
+                "wardrobe",
+                "clothing",
+                ":clothingId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clothingId",
+                  "value": "152",
+                  "description": "服装ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询服装详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询服装详情"
+        },
+        {
+          "name": "为服装添加标签",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/:clothingId/tags/:tagId",
+              "path": [
+                "wardrobe",
+                "clothing",
+                ":clothingId",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clothingId",
+                  "value": "152",
+                  "description": "服装ID，不能为空"
+                },
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "     标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "为服装添加标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "为服装添加标签"
+        },
+        {
+          "name": "从服装移除标签",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/clothing/:clothingId/tags/:tagId",
+              "path": [
+                "wardrobe",
+                "clothing",
+                ":clothingId",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clothingId",
+                  "value": "152",
+                  "description": "服装ID，不能为空"
+                },
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "     标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "从服装移除标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "从服装移除标签"
+        }
+      ]
+    },
+    {
+      "name": "位置API控制器",
+      "item": [
+        {
+          "name": "创建位置",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"5r83cp\",\n  \"address\": \"38931 Abdul Vista， Donnettefort， MD 22711\",\n  \"images\": [\n    {\n      \"path\": \"jftk0z\",\n      \"imageOrder\": 888,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location",
+              "path": [
+                "wardrobe",
+                "location"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建位置",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建位置"
+        },
+        {
+          "name": "更新位置信息",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locationId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"na5r0c\",\n  \"address\": \"38931 Abdul Vista， Donnettefort， MD 22711\",\n  \"images\": [\n    {\n      \"path\": \"5em5t1\",\n      \"imageOrder\": 219,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location/:locationId",
+              "path": [
+                "wardrobe",
+                "location",
+                ":locationId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "locationId",
+                  "value": "152",
+                  "description": "位置ID，不能为空"
+                }
+              ]
+            },
+            "description": "更新位置信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新位置信息"
+        },
+        {
+          "name": "删除位置（逻辑删除）",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location/:locationId",
+              "path": [
+                "wardrobe",
+                "location",
+                ":locationId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "locationId",
+                  "value": "152",
+                  "description": "位置ID，不能为空"
+                }
+              ]
+            },
+            "description": "删除位置（逻辑删除）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除位置（逻辑删除）"
+        },
+        {
+          "name": "查询当前登录用户的位置列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location",
+              "path": [
+                "wardrobe",
+                "location"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询当前登录用户的位置列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询当前登录用户的位置列表"
+        },
+        {
+          "name": "根据ID查询位置详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location/:locationId",
+              "path": [
+                "wardrobe",
+                "location",
+                ":locationId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "locationId",
+                  "value": "152",
+                  "description": "位置ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询位置详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询位置详情"
+        },
+        {
+          "name": "为位置添加标签",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location/:locationId/tags/:tagId",
+              "path": [
+                "wardrobe",
+                "location",
+                ":locationId",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "locationId",
+                  "value": "152",
+                  "description": "位置ID，不能为空"
+                },
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "     标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "为位置添加标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "为位置添加标签"
+        },
+        {
+          "name": "从位置移除标签",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/location/:locationId/tags/:tagId",
+              "path": [
+                "wardrobe",
+                "location",
+                ":locationId",
+                "tags",
+                ":tagId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "locationId",
+                  "value": "152",
+                  "description": "位置ID，不能为空"
+                },
+                {
+                  "key": "tagId",
+                  "value": "152",
+                  "description": "     标签ID，不能为空"
+                }
+              ]
+            },
+            "description": "从位置移除标签",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "从位置移除标签"
+        }
+      ]
+    },
+    {
+      "name": "穿搭API控制器",
+      "item": [
+        {
+          "name": "创建穿搭（包含服装和图片）",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"lod8w0\",\n  \"clothingIds\": [\n    \"dbo1bp\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"mbiuiv\",\n      \"imageOrder\": 318,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits",
+              "path": [
+                "wardrobe",
+                "outfits"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建穿搭（包含服装和图片）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建穿搭（包含服装和图片）"
+        },
+        {
+          "name": "更新穿搭信息（包含服装和图片）",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"outfitId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"wwhkyg\",\n  \"clothingIds\": [\n    \"otnvyy\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"vcheo5\",\n      \"imageOrder\": 63,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/:outfitId",
+              "path": [
+                "wardrobe",
+                "outfits",
+                ":outfitId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "outfitId",
+                  "value": "152",
+                  "description": "穿搭ID，不能为空"
+                }
+              ]
+            },
+            "description": "更新穿搭信息（包含服装和图片）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新穿搭信息（包含服装和图片）"
+        },
+        {
+          "name": "删除穿搭",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/:outfitId?userId=152",
+              "path": [
+                "wardrobe",
+                "outfits",
+                ":outfitId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "152",
+                  "description": "  用户ID，不能为空"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "outfitId",
+                  "value": "152",
+                  "description": "穿搭ID，不能为空"
+                }
+              ]
+            },
+            "description": "删除穿搭",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除穿搭"
+        },
+        {
+          "name": "记录穿搭穿着",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"outfitId\": \"152\",\n  \"wearDate\": \"2026-02-05\",\n  \"notes\": \"1t69q3\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/:outfitId/wear",
+              "path": [
+                "wardrobe",
+                "outfits",
+                ":outfitId",
+                "wear"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "outfitId",
+                  "value": "152",
+                  "description": "穿搭ID，不能为空"
+                }
+              ]
+            },
+            "description": "记录穿搭穿着",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "记录穿搭穿着"
+        },
+        {
+          "name": "查询用户穿搭列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/list",
+              "path": [
+                "wardrobe",
+                "outfits",
+                "list"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户穿搭列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户穿搭列表"
+        },
+        {
+          "name": "根据ID查询穿搭详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/:outfitId",
+              "path": [
+                "wardrobe",
+                "outfits",
+                ":outfitId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "outfitId",
+                  "value": "152",
+                  "description": "穿搭ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询穿搭详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询穿搭详情"
+        },
+        {
+          "name": "查询穿搭穿着记录",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/wardrobe/outfits/:outfitId/records",
+              "path": [
+                "wardrobe",
+                "outfits",
+                ":outfitId",
+                "records"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "outfitId",
+                  "value": "152",
+                  "description": "穿搭ID，不能为空"
+                }
+              ]
+            },
+            "description": "查询穿搭穿着记录",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询穿搭穿着记录"
+        }
+      ]
+    }
+  ]
+}

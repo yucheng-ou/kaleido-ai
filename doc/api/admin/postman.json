@@ -1,0 +1,2843 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "88563e66-dc06-43db-8477-f05b6c754573",
+    "name": "kaleido-admin API 文档"
+  },
+  "item": [
+    {
+      "name": "管理员API",
+      "item": [
+        {
+          "name": "更新管理员信息(用于修改用户自身信息 不需要鉴权)",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"realName\": \"salvador.grady\",\n  \"mobile\": \"678.678.3886\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin",
+              "path": [
+                "admin"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "更新管理员信息(用于修改用户自身信息 不需要鉴权)",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新管理员信息(用于修改用户自身信息 不需要鉴权)"
+        },
+        {
+          "name": "解冻管理员",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId/enable",
+              "path": [
+                "admin",
+                ":adminId",
+                "enable"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID"
+                }
+              ]
+            },
+            "description": "解冻管理员",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "解冻管理员"
+        },
+        {
+          "name": "冻结管理员",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId/freeze",
+              "path": [
+                "admin",
+                ":adminId",
+                "freeze"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID"
+                }
+              ]
+            },
+            "description": "冻结管理员",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "冻结管理员"
+        },
+        {
+          "name": "分配角色给管理员",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roleIds\": [\n    \"fk8dkg\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId/roles",
+              "path": [
+                "admin",
+                ":adminId",
+                "roles"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID（从路径参数获取）"
+                }
+              ]
+            },
+            "description": "分配角色给管理员",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分配角色给管理员"
+        },
+        {
+          "name": "根据ID查询管理员信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId",
+              "path": [
+                "admin",
+                ":adminId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID"
+                }
+              ]
+            },
+            "description": "根据ID查询管理员信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询管理员信息"
+        },
+        {
+          "name": "查询管理员自身信息 不需要鉴权",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin",
+              "path": [
+                "admin"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询管理员自身信息 不需要鉴权",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询管理员自身信息 不需要鉴权"
+        },
+        {
+          "name": "分页查询管理员",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/page?pageNum=297&pageSize=10&realName=salvador.grady&mobile=678.678.3886&status=olb6xw&roleId=152&startTime=2026-02-05 20:08:58&endTime=2026-02-05 20:08:58",
+              "path": [
+                "admin",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "pageNum",
+                  "value": "219",
+                  "description": "页码"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10",
+                  "description": "分页大小"
+                },
+                {
+                  "key": "realName",
+                  "value": "salvador.grady",
+                  "description": "真实姓名"
+                },
+                {
+                  "key": "mobile",
+                  "value": "678.678.3886",
+                  "description": "手机号"
+                },
+                {
+                  "key": "status",
+                  "value": "136nir",
+                  "description": "管理员状态"
+                },
+                {
+                  "key": "roleId",
+                  "value": "152",
+                  "description": "角色ID"
+                },
+                {
+                  "key": "startTime",
+                  "value": "2026-02-05 20:08:58",
+                  "description": "开始时间（创建时间）"
+                },
+                {
+                  "key": "endTime",
+                  "value": "2026-02-05 20:08:58",
+                  "description": "结束时间（创建时间）"
+                }
+              ],
+              "variable": []
+            },
+            "description": "分页查询管理员",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询管理员"
+        },
+        {
+          "name": "获取管理员的所有权限",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId/permissions",
+              "path": [
+                "admin",
+                ":adminId",
+                "permissions"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID"
+                }
+              ]
+            },
+            "description": "获取管理员的所有权限",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "获取管理员的所有权限"
+        },
+        {
+          "name": "获取管理员的目录和菜单树（过滤按钮）",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/:adminId/directory-menus",
+              "path": [
+                "admin",
+                ":adminId",
+                "directory-menus"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "adminId",
+                  "value": "152",
+                  "description": "管理员ID"
+                }
+              ]
+            },
+            "description": "获取管理员的目录和菜单树（过滤按钮）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "获取管理员的目录和菜单树（过滤按钮）"
+        }
+      ]
+    },
+    {
+      "name": "AI管理API",
+      "item": [
+        {
+          "name": "创建Agent",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"12303\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"1m8be7\",\n  \"systemPrompt\": \"afox7l\",\n  \"modelName\": \"salvador.grady\",\n  \"temperature\": 998,\n  \"maxTokens\": 419\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent",
+              "path": [
+                "admin",
+                "ai",
+                "agent"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建Agent"
+        },
+        {
+          "name": "更新Agent",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"boio5t\",\n  \"systemPrompt\": \"1b3ljm\",\n  \"modelName\": \"salvador.grady\",\n  \"temperature\": 391,\n  \"maxTokens\": 735\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "更新Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新Agent"
+        },
+        {
+          "name": "启用Agent",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId/enable",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId",
+                "enable"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "启用Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "启用Agent"
+        },
+        {
+          "name": "禁用Agent",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId/disable",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId",
+                "disable"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "禁用Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "禁用Agent"
+        },
+        {
+          "name": "添加工具到Agent",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"toolCode\": \"12303\",\n  \"toolName\": \"salvador.grady\",\n  \"toolType\": \"MEMORY\",\n  \"toolConfig\": \"d3mft2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId/tools",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId",
+                "tools"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "添加工具到Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "添加工具到Agent"
+        },
+        {
+          "name": "从Agent移除工具",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId/tools/:toolCode",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId",
+                "tools",
+                ":toolCode"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": " Agent ID"
+                },
+                {
+                  "key": "toolCode",
+                  "value": "12303",
+                  "description": "工具编码"
+                }
+              ]
+            },
+            "description": "从Agent移除工具",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "从Agent移除工具"
+        },
+        {
+          "name": "查询Agent详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/:agentId",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                ":agentId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "查询Agent详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询Agent详情"
+        },
+        {
+          "name": "根据编码查询Agent",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent/by-code/:code",
+              "path": [
+                "admin",
+                "ai",
+                "agent",
+                "by-code",
+                ":code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "Agent编码"
+                }
+              ]
+            },
+            "description": "根据编码查询Agent",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据编码查询Agent"
+        },
+        {
+          "name": "查询Agent列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/agent",
+              "path": [
+                "admin",
+                "ai",
+                "agent"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询Agent列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询Agent列表"
+        },
+        {
+          "name": "创建工作流",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"12303\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"yiz3sj\",\n  \"definition\": \"z7ovhq\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow",
+              "path": [
+                "admin",
+                "ai",
+                "workflow"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建工作流"
+        },
+        {
+          "name": "更新工作流",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"e93z5c\",\n  \"definition\": \"euplqj\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow/:workflowId",
+              "path": [
+                "admin",
+                "ai",
+                "workflow",
+                ":workflowId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "workflowId",
+                  "value": "152",
+                  "description": "工作流ID"
+                }
+              ]
+            },
+            "description": "更新工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新工作流"
+        },
+        {
+          "name": "启用工作流",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow/:workflowId/enable",
+              "path": [
+                "admin",
+                "ai",
+                "workflow",
+                ":workflowId",
+                "enable"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "workflowId",
+                  "value": "152",
+                  "description": "工作流ID"
+                }
+              ]
+            },
+            "description": "启用工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "启用工作流"
+        },
+        {
+          "name": "禁用工作流",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow/:workflowId/disable",
+              "path": [
+                "admin",
+                "ai",
+                "workflow",
+                ":workflowId",
+                "disable"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "workflowId",
+                  "value": "152",
+                  "description": "工作流ID"
+                }
+              ]
+            },
+            "description": "禁用工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "禁用工作流"
+        },
+        {
+          "name": "查询工作流详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow/:workflowId",
+              "path": [
+                "admin",
+                "ai",
+                "workflow",
+                ":workflowId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "workflowId",
+                  "value": "152",
+                  "description": "工作流ID"
+                }
+              ]
+            },
+            "description": "查询工作流详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询工作流详情"
+        },
+        {
+          "name": "根据编码查询工作流",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow/by-code/:code",
+              "path": [
+                "admin",
+                "ai",
+                "workflow",
+                "by-code",
+                ":code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "工作流编码"
+                }
+              ]
+            },
+            "description": "根据编码查询工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据编码查询工作流"
+        },
+        {
+          "name": "查询工作流列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/ai/workflow",
+              "path": [
+                "admin",
+                "ai",
+                "workflow"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询工作流列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询工作流列表"
+        }
+      ]
+    },
+    {
+      "name": "品牌管理API（管理后台）",
+      "item": [
+        {
+          "name": "创建品牌",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"logoPath\": \"w4dsxs\",\n  \"description\": \"b4rvep\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/wardrobe/brand",
+              "path": [
+                "admin",
+                "wardrobe",
+                "brand"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建品牌",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建品牌"
+        },
+        {
+          "name": "更新品牌信息",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"logoPath\": \"q6hufv\",\n  \"description\": \"31o3m7\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/wardrobe/brand/:brandId",
+              "path": [
+                "admin",
+                "wardrobe",
+                "brand",
+                ":brandId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "brandId",
+                  "value": "152",
+                  "description": "品牌ID，不能为空"
+                }
+              ]
+            },
+            "description": "更新品牌信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新品牌信息"
+        },
+        {
+          "name": "删除品牌（逻辑删除）",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/wardrobe/brand/:brandId",
+              "path": [
+                "admin",
+                "wardrobe",
+                "brand",
+                ":brandId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "brandId",
+                  "value": "152",
+                  "description": "品牌ID，不能为空"
+                }
+              ]
+            },
+            "description": "删除品牌（逻辑删除）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除品牌（逻辑删除）"
+        },
+        {
+          "name": "查询所有品牌列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/wardrobe/brand",
+              "path": [
+                "admin",
+                "wardrobe",
+                "brand"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询所有品牌列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询所有品牌列表"
+        },
+        {
+          "name": "根据ID查询品牌详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/wardrobe/brand/:brandId",
+              "path": [
+                "admin",
+                "wardrobe",
+                "brand",
+                ":brandId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "brandId",
+                  "value": "152",
+                  "description": "品牌ID，不能为空"
+                }
+              ]
+            },
+            "description": "根据ID查询品牌详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询品牌详情"
+        }
+      ]
+    },
+    {
+      "name": "字典控制器",
+      "item": [
+        {
+          "name": "创建字典",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeCode\": \"12303\",\n  \"typeName\": \"salvador.grady\",\n  \"dictCode\": \"12303\",\n  \"dictName\": \"salvador.grady\",\n  \"dictValue\": \"lhuzma\",\n  \"sort\": 39\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/dict",
+              "path": [
+                "dict"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建字典",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建字典"
+        },
+        {
+          "name": "更新字典",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"typeName\": \"salvador.grady\",\n  \"dictName\": \"salvador.grady\",\n  \"dictValue\": \"a10zah\",\n  \"sort\": 941\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/dict/:typeCode/:dictCode",
+              "path": [
+                "dict",
+                ":typeCode",
+                ":dictCode"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "typeCode",
+                  "value": "12303",
+                  "description": "字典类型编码"
+                },
+                {
+                  "key": "dictCode",
+                  "value": "12303",
+                  "description": "字典编码"
+                }
+              ]
+            },
+            "description": "更新字典",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新字典"
+        },
+        {
+          "name": "删除字典",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/dict/:typeCode/:dictCode",
+              "path": [
+                "dict",
+                ":typeCode",
+                ":dictCode"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "typeCode",
+                  "value": "12303",
+                  "description": "字典类型编码"
+                },
+                {
+                  "key": "dictCode",
+                  "value": "12303",
+                  "description": "字典编码"
+                }
+              ]
+            },
+            "description": "删除字典",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除字典"
+        },
+        {
+          "name": "分页查询字典列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/dict/page?pageNum=535&pageSize=10&typeCode=12303&typeName=salvador.grady&dictCode=12303&dictName=salvador.grady&dictValue=j1frkr",
+              "path": [
+                "dict",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "pageNum",
+                  "value": "560",
+                  "description": "页码"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10",
+                  "description": "分页大小"
+                },
+                {
+                  "key": "typeCode",
+                  "value": "12303",
+                  "description": "字典类型编码"
+                },
+                {
+                  "key": "typeName",
+                  "value": "salvador.grady",
+                  "description": "字典类型名称（模糊查询）"
+                },
+                {
+                  "key": "dictCode",
+                  "value": "12303",
+                  "description": "字典编码"
+                },
+                {
+                  "key": "dictName",
+                  "value": "salvador.grady",
+                  "description": "字典名称（模糊查询）"
+                },
+                {
+                  "key": "dictValue",
+                  "value": "2edhn1",
+                  "description": "字典值（模糊查询）"
+                }
+              ],
+              "variable": []
+            },
+            "description": "分页查询字典列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询字典列表"
+        }
+      ]
+    },
+    {
+      "name": "文件控制器",
+      "item": [
+        {
+          "name": "上传文件\r\n接收前端上传的文件，保存到MinIO",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "上传的文件",
+                  "value": "",
+                  "hasItems": false
+                }
+              ]
+            },
+            "url": {
+              "raw": "::base_url/public/file/upload",
+              "path": [
+                "public",
+                "file",
+                "upload"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "上传文件\r\n接收前端上传的文件，保存到MinIO",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "上传文件\r\n接收前端上传的文件，保存到MinIO"
+        }
+      ]
+    },
+    {
+      "name": "通知管理API（管理后台）",
+      "item": [
+        {
+          "name": "添加通知模板",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"code\": \"12303\",\n  \"content\": \"82gb0k\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/template",
+              "path": [
+                "admin",
+                "notice",
+                "template"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "添加通知模板",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "添加通知模板"
+        },
+        {
+          "name": "根据模板编码获取模板详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/template/:code",
+              "path": [
+                "admin",
+                "notice",
+                "template",
+                ":code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "模板编码"
+                }
+              ]
+            },
+            "description": "根据模板编码获取模板详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据模板编码获取模板详情"
+        },
+        {
+          "name": "根据ID获取通知详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/:id",
+              "path": [
+                "admin",
+                "notice",
+                ":id"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "152",
+                  "description": "通知ID"
+                }
+              ]
+            },
+            "description": "根据ID获取通知详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID获取通知详情"
+        },
+        {
+          "name": "根据目标地址获取通知列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/target/:target",
+              "path": [
+                "admin",
+                "notice",
+                "target",
+                ":target"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "target",
+                  "value": "2an540",
+                  "description": "目标地址"
+                }
+              ]
+            },
+            "description": "根据目标地址获取通知列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据目标地址获取通知列表"
+        },
+        {
+          "name": "分页查询通知列表",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pageNum\": 297,\n  \"pageSize\": 10,\n  \"target\": \"8zmnoq\",\n  \"noticeType\": \"fooodq\",\n  \"status\": \"ppw2xd\",\n  \"businessType\": \"11mrga\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/page",
+              "path": [
+                "admin",
+                "notice",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "分页查询通知列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询通知列表"
+        },
+        {
+          "name": "分页查询通知模板列表",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pageNum\": 721,\n  \"pageSize\": 10,\n  \"name\": \"salvador.grady\",\n  \"code\": \"12303\",\n  \"noticeType\": \"98byfm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/notice/template/page",
+              "path": [
+                "admin",
+                "notice",
+                "template",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "分页查询通知模板列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询通知模板列表"
+        }
+      ]
+    },
+    {
+      "name": "权限控制器",
+      "item": [
+        {
+          "name": "创建权限",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"12303\",\n  \"name\": \"salvador.grady\",\n  \"type\": \"DIRECTORY\",\n  \"parentId\": \"152\",\n  \"sort\": 96,\n  \"icon\": \"3ckijc\",\n  \"path\": \"gbnwb5\",\n  \"component\": \"bzgr28\",\n  \"isHidden\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission",
+              "path": [
+                "permission"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建权限",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建权限"
+        },
+        {
+          "name": "更新权限信息",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"type\": \"DIRECTORY\",\n  \"parentId\": \"152\",\n  \"sort\": 601,\n  \"icon\": \"98pveg\",\n  \"path\": \"tsb6t5\",\n  \"component\": \"z9h1tl\",\n  \"isHidden\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/:permissionId",
+              "path": [
+                "permission",
+                ":permissionId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "permissionId",
+                  "value": "152",
+                  "description": "权限ID（从路径参数获取）"
+                }
+              ]
+            },
+            "description": "更新权限信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新权限信息"
+        },
+        {
+          "name": "更新权限编码",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/:permissionId/code",
+              "path": [
+                "permission",
+                ":permissionId",
+                "code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "新的权限编码"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "permissionId",
+                  "value": "152",
+                  "description": "权限ID"
+                }
+              ]
+            },
+            "description": "更新权限编码",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新权限编码"
+        },
+        {
+          "name": "删除权限",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/:permissionId",
+              "path": [
+                "permission",
+                ":permissionId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "permissionId",
+                  "value": "152",
+                  "description": "权限ID"
+                }
+              ]
+            },
+            "description": "删除权限",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除权限"
+        },
+        {
+          "name": "根据ID查询权限信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/:permissionId",
+              "path": [
+                "permission",
+                ":permissionId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "permissionId",
+                  "value": "152",
+                  "description": "权限ID"
+                }
+              ]
+            },
+            "description": "根据ID查询权限信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询权限信息"
+        },
+        {
+          "name": "根据编码查询权限信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/code/:code",
+              "path": [
+                "permission",
+                "code",
+                ":code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "权限编码"
+                }
+              ]
+            },
+            "description": "根据编码查询权限信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据编码查询权限信息"
+        },
+        {
+          "name": "根据父权限ID查询子权限列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/parent/:parentId",
+              "path": [
+                "permission",
+                "parent",
+                ":parentId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "parentId",
+                  "value": "152",
+                  "description": "父权限ID"
+                }
+              ]
+            },
+            "description": "根据父权限ID查询子权限列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据父权限ID查询子权限列表"
+        },
+        {
+          "name": "获取权限树",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/permission/tree",
+              "path": [
+                "permission",
+                "tree"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "获取权限树",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "获取权限树"
+        }
+      ]
+    },
+    {
+      "name": "角色控制器",
+      "item": [
+        {
+          "name": "创建角色",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"12303\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"t751ln\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role",
+              "path": [
+                "role"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建角色",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建角色"
+        },
+        {
+          "name": "更新角色信息",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"wb3h9y\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/:roleId",
+              "path": [
+                "role",
+                ":roleId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "152",
+                  "description": "角色ID（从路径参数获取）"
+                }
+              ]
+            },
+            "description": "更新角色信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新角色信息"
+        },
+        {
+          "name": "删除角色",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/:roleId",
+              "path": [
+                "role",
+                ":roleId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "152",
+                  "description": "角色ID"
+                }
+              ]
+            },
+            "description": "删除角色",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除角色"
+        },
+        {
+          "name": "分配权限给角色",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissionIds\": [\n    \"xphitm\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/:roleId/permissions",
+              "path": [
+                "role",
+                ":roleId",
+                "permissions"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "152",
+                  "description": "角色ID（从路径参数获取）"
+                }
+              ]
+            },
+            "description": "分配权限给角色",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分配权限给角色"
+        },
+        {
+          "name": "根据ID查询角色信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/:roleId",
+              "path": [
+                "role",
+                ":roleId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "roleId",
+                  "value": "152",
+                  "description": "角色ID"
+                }
+              ]
+            },
+            "description": "根据ID查询角色信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据ID查询角色信息"
+        },
+        {
+          "name": "根据编码查询角色信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/code/:code",
+              "path": [
+                "role",
+                "code",
+                ":code"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "code",
+                  "value": "12303",
+                  "description": "角色编码"
+                }
+              ]
+            },
+            "description": "根据编码查询角色信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据编码查询角色信息"
+        },
+        {
+          "name": "获取角色列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/role/list",
+              "path": [
+                "role",
+                "list"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "获取角色列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "获取角色列表"
+        }
+      ]
+    },
+    {
+      "name": "用户管理API（管理后台）",
+      "item": [
+        {
+          "name": "根据用户ID查询用户信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/:userId",
+              "path": [
+                "admin",
+                "user",
+                ":userId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "152",
+                  "description": "用户ID"
+                }
+              ]
+            },
+            "description": "根据用户ID查询用户信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据用户ID查询用户信息"
+        },
+        {
+          "name": "根据手机号查询用户信息",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/by-telephone/:telephone",
+              "path": [
+                "admin",
+                "user",
+                "by-telephone",
+                ":telephone"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "telephone",
+                  "value": "630-404-6643",
+                  "description": "手机号"
+                }
+              ]
+            },
+            "description": "根据手机号查询用户信息",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "根据手机号查询用户信息"
+        },
+        {
+          "name": "冻结用户",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/:userId/freeze",
+              "path": [
+                "admin",
+                "user",
+                ":userId",
+                "freeze"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "152",
+                  "description": "用户ID，不能为空"
+                }
+              ]
+            },
+            "description": "冻结用户",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "冻结用户"
+        },
+        {
+          "name": "解冻用户",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/:userId/unfreeze",
+              "path": [
+                "admin",
+                "user",
+                ":userId",
+                "unfreeze"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "152",
+                  "description": "用户ID，不能为空"
+                }
+              ]
+            },
+            "description": "解冻用户",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "解冻用户"
+        },
+        {
+          "name": "删除用户（软删除）",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/:userId",
+              "path": [
+                "admin",
+                "user",
+                ":userId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "152",
+                  "description": "用户ID，不能为空"
+                }
+              ]
+            },
+            "description": "删除用户（软删除）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除用户（软删除）"
+        },
+        {
+          "name": "分页查询用户列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/admin/user/page?pageNum=662&pageSize=10&nickName=timothy.hermiston&telephone=630-404-6643&status=740&gender=MALE",
+              "path": [
+                "admin",
+                "user",
+                "page"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [
+                {
+                  "key": "pageNum",
+                  "value": "804",
+                  "description": "页码"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10",
+                  "description": "分页大小"
+                },
+                {
+                  "key": "nickName",
+                  "value": "timothy.hermiston",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "telephone",
+                  "value": "630-404-6643",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "status",
+                  "value": "842",
+                  "description": "No comments found."
+                },
+                {
+                  "key": "gender",
+                  "value": "MALE",
+                  "description": "No comments found.<br/>[Enum values:<br/>MALE()<br/>FEMALE()<br/>]"
+                }
+              ],
+              "variable": []
+            },
+            "description": "分页查询用户列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "分页查询用户列表"
+        }
+      ]
+    }
+  ]
+}
