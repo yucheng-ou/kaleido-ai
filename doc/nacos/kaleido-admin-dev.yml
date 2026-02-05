@@ -1,0 +1,8 @@
+server:
+  port: 9013
+  servlet:
+    context-path: /kaleido-admin
+
+dubbo:
+  application:
+    qos-port: 22223  # 添加此行，指定新的 QOS 端口

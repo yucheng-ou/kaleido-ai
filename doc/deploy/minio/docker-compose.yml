@@ -1,0 +1,13 @@
+version: '2'
+services:
+  minio:
+    image: 'quay.io/minio/minio:RELEASE.2024-04-18T19-09-19Z'
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin123
+    ports:
+      - "9000:9000"  # API端口
+      - "9090:9090"  # 控制台端口
+    command: server /data --console-address ":9090"
+    volumes:
+      - /data/ouyucheng/minio/data:/data

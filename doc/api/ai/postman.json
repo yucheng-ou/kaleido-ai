@@ -1,0 +1,477 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "14fde6de-a448-40ef-8da9-6598bfa8663c",
+    "name": "kaleido-ai API 文档"
+  },
+  "item": [
+    {
+      "name": "Agent API控制器",
+      "item": [
+        {
+          "name": "查询Agent列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/agent",
+              "path": [
+                "ai",
+                "agent"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询Agent列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询Agent列表"
+        },
+        {
+          "name": "与Agent进行聊天",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"152\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/agent/:agentId/chat",
+              "path": [
+                "ai",
+                "agent",
+                ":agentId",
+                "chat"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "agentId",
+                  "value": "152",
+                  "description": "Agent ID"
+                }
+              ]
+            },
+            "description": "与Agent进行聊天",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "与Agent进行聊天"
+        },
+        {
+          "name": "默认聊天（不使用特定Agent）",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"152\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/agent/chat",
+              "path": [
+                "ai",
+                "agent",
+                "chat"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "默认聊天（不使用特定Agent）",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "默认聊天（不使用特定Agent）"
+        }
+      ]
+    },
+    {
+      "name": "会话API控制器",
+      "item": [
+        {
+          "name": "创建会话",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "::base_url/ai/conversation",
+              "path": [
+                "ai",
+                "conversation"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建会话",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建会话"
+        },
+        {
+          "name": "更新会话标题",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"um09q0\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/conversation/:conversationId/title",
+              "path": [
+                "ai",
+                "conversation",
+                ":conversationId",
+                "title"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "152",
+                  "description": "会话ID"
+                }
+              ]
+            },
+            "description": "更新会话标题",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "更新会话标题"
+        },
+        {
+          "name": "查询会话详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/conversation/:conversationId",
+              "path": [
+                "ai",
+                "conversation",
+                ":conversationId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "152",
+                  "description": "会话ID"
+                }
+              ]
+            },
+            "description": "查询会话详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询会话详情"
+        },
+        {
+          "name": "查询用户会话列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/conversation",
+              "path": [
+                "ai",
+                "conversation"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户会话列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户会话列表"
+        },
+        {
+          "name": "删除会话",
+          "request": {
+            "method": "DELETE",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/conversation/:conversationId",
+              "path": [
+                "ai",
+                "conversation",
+                ":conversationId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "152",
+                  "description": "会话ID"
+                }
+              ]
+            },
+            "description": "删除会话",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "删除会话"
+        }
+      ]
+    },
+    {
+      "name": "工作流API控制器",
+      "item": [
+        {
+          "name": "查询工作流详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/workflow/:workflowId",
+              "path": [
+                "ai",
+                "workflow",
+                ":workflowId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "workflowId",
+                  "value": "152",
+                  "description": "工作流ID"
+                }
+              ]
+            },
+            "description": "查询工作流详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询工作流详情"
+        },
+        {
+          "name": "执行工作流",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflowId\": \"152\",\n  \"inputData\": \"keunlf\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/workflow/execute",
+              "path": [
+                "ai",
+                "workflow",
+                "execute"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "执行工作流",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "执行工作流"
+        },
+        {
+          "name": "查询用户的工作流执行记录",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/ai/workflow/executions/my",
+              "path": [
+                "ai",
+                "workflow",
+                "executions",
+                "my"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户的工作流执行记录",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户的工作流执行记录"
+        }
+      ]
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 
     <artifactId>kaleido-common</artifactId>
     <name>kaleido-common</name>
-    <version>${kaleido.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <modules>

@@ -1,0 +1,29 @@
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8073
+        port: 8719
+      eager: true
+      # Sentinel数据源配置 - 从Nacos动态加载规则
+      datasource:
+        # 流控规则数据源
+        flow:
+          nacos:
+            server-addr: ${NACOS_HOST}:${NACOS_PORT}
+            dataId: ${spring.application.name}-sentinel-flow.json
+            namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
+            groupId: DEFAULT_GROUP
+            rule-type: flow
+            # 数据格式：JSON
+            data-type: json
+        # 降级规则数据源
+        degrade:
+          nacos:
+            server-addr: ${NACOS_HOST}:${NACOS_PORT}
+            dataId: ${spring.application.name}-sentinel-degrade.json
+            namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
+            groupId: DEFAULT_GROUP
+            rule-type: degrade
+            # 数据格式：JSON
+            data-type: json

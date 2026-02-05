@@ -1,0 +1,14 @@
+[
+  {
+    "resource": "createRecommendRecord",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 100,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false,
+    "warmUpPeriodSec": 10,
+    "maxQueueingTimeMs": 500,
+    "refResource": null
+  }
+]

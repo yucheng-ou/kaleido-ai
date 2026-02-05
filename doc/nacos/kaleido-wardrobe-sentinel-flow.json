@@ -1,0 +1,32 @@
+[
+  {
+    "resource": "createClothing",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 20,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false,
+    "warmUpPeriodSec": 10,
+    "maxQueueingTimeMs": 500,
+    "refResource": null
+  },
+  {
+    "resource": "updateClothing",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 30,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false
+  },
+  {
+    "resource": "listClothing",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 50,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false
+  }
+]

@@ -1,0 +1,11 @@
+# 服务器配置
+server:
+  # 服务端口：金币服务运行在9018端口
+  port: 9019
+  servlet:
+    # 上下文路径：所有API的前缀路径
+    context-path: /kaleido-recommend
+
+dubbo:
+  application:
+    qos-port: 22229  # 添加此行，指定新的 QOS 端口

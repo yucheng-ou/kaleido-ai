@@ -1,0 +1,131 @@
+{
+  "info": {
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "1573b9f5-ba1d-4c0d-a398-1d64d2757f1d",
+    "name": "kaleido-recommend API 文档"
+  },
+  "item": [
+    {
+      "name": "推荐API",
+      "item": [
+        {
+          "name": "创建推荐记录",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"z0dyw1\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/recommend",
+              "path": [
+                "recommend"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "创建推荐记录",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "创建推荐记录"
+        },
+        {
+          "name": "查询单个推荐记录详情",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/recommend/:recommendRecordId",
+              "path": [
+                "recommend",
+                ":recommendRecordId"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "recommendRecordId",
+                  "value": "152",
+                  "description": "推荐记录ID"
+                }
+              ]
+            },
+            "description": "查询单个推荐记录详情",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询单个推荐记录详情"
+        },
+        {
+          "name": "查询用户的推荐记录列表",
+          "request": {
+            "method": "GET",
+            "body": {
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "::base_url/recommend",
+              "path": [
+                "recommend"
+              ],
+              "host": [
+                "{{base_url}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "description": "查询用户的推荐记录列表",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true,
+                "name": "Authorization",
+                "description": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。"
+              }
+            ]
+          },
+          "description": "查询用户的推荐记录列表"
+        }
+      ]
+    }
+  ]
+}

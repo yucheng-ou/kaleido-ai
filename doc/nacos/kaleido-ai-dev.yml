@@ -1,0 +1,61 @@
+# 服务器配置
+server:
+  # 服务端口：ai服务运行在9020端口
+  port: 9020
+  servlet:
+    # 上下文路径：所有API的前缀路径
+    context-path: /kaleido-ai
+
+dubbo:
+  application:
+    qos-port: 22230  # 添加此行，指定新的 QOS 端口
+
+  ai:
+    openai:
+      base-url: ${AI_BASE_URL}
+      api-key: ${AI_API_KEY}
+      chat:
+        options:
+          model: deepseek-v3
+        completions-path: /v1/chat/completions
+
+    chat:
+      memory:
+        repository:
+          mongo:
+            create-indices: false
+    mcp:
+      client:
+        sse:
+          connections:
+            local-mcp-server:
+              url: http://localhost:9021
+              sse-endpoint: /sse
+        type: sync
+        annotation-scanner:
+          enabled: true
+
+    vectorstore:
+      milvus:
+        client:
+          host: ${MILVUS_HOST}
+          port: ${MILVUS_HOST}
+          username: ${MILVUS_USERNAME}
+          password: ${MILVUS_PASSWORD}
+        database-name: kaleido
+        collection-name: kaleido_collection
+        initialize-schema: true
+        embedding-dimension: 1536
+        indexType: IVF_FLAT
+        metricType: COSINE
+
+
+
+  data:
+    mongodb:
+      host: ${MONGODB_HOST}
+      port: ${MONGODB_PORT}
+      username: ${MONGODB_USERNAME}
+      password: ${MONGODB_PASSWORD}
+      database: chat_memory_db
+      authentication-database: admin

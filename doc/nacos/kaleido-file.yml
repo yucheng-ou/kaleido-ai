@@ -1,0 +1,6 @@
+minio:
+  endpoint: ${minio_endpoint}           # MinIO服务地址
+  fileHost: ${minio_fileHost}           # 文件地址host
+  bucketName: test-bucket               # 存储桶bucket名称
+  accessKey: ${minio_accessKey}         # 用户名
+  secretKey: ${minio_secretKey}         # 密码

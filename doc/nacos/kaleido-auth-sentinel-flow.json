@@ -1,0 +1,28 @@
+[
+  {
+    "resource": "sendSmsCode",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false,
+    "clusterConfig": {
+      "flowId": null,
+      "thresholdType": 0,
+      "fallbackToLocalWhenFail": true
+    },
+    "warmUpPeriodSec": 10,
+    "maxQueueingTimeMs": 500,
+    "refResource": null
+  },
+  {
+    "resource": "login",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 10,
+    "strategy": 0,
+    "controlBehavior": 0,
+    "clusterMode": false
+  }
+]

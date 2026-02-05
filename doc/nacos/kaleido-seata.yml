@@ -1,0 +1,17 @@
+seata:
+  registry:
+    type: nacos
+    nacos:
+      server-addr: ${NACOS_HOST}:${NACOS_PORT}
+      username: nacos
+      password: nacos
+      group: DEFAULT_GROUP
+      application: seata-server
+      namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
+  # 事务组，根据这个获取TC服务的集群名称
+  tx-service-group: default
+  service:
+    vgroup-mapping:
+      #和tx-service-group对应
+      default: default
+  data-source-proxy-mode: XA
