@@ -11,9 +11,14 @@ import com.xiaoo.kaleido.api.ai.enums.ToolType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.milvus.MilvusVectorStore;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -33,6 +38,7 @@ import java.util.UUID;
 public class ChatServiceImpl implements IChatService {
 
     private final AgentFactory agentFactory;
+    private final MilvusVectorStore vectorStore;
 
     /**
      * 基于Agent的聊天（带过滤表达式）
@@ -44,6 +50,7 @@ public class ChatServiceImpl implements IChatService {
      * @param conversationId 会话ID（可选）
      * @return 聊天响应流
      */
+    @Override
     public Flux<String> chatWithAgent(String agentId, String message, String conversationId, String userId) {
         log.info("开始基于Agent的聊天，Agent ID: {}, 会话ID: {}, 消息长度: {}",
                 agentId, conversationId, message.length());
@@ -57,35 +64,92 @@ public class ChatServiceImpl implements IChatService {
 
         // 获取Agent配置
         AgentAggregate agentConfig = agentFactory.getAgentConfig(agentId);
-        
+
         // 提取向量存储配置
         VectorStoreConfig vectorConfig = extractVectorStoreConfig(agentConfig);
 
-        // 生成或使用提供的会话ID
-        String memoryId = conversationId != null && !conversationId.isEmpty()
-                ? conversationId
-                : UUID.randomUUID().toString();
-
-        // 开始构建ChatClient prompt
-        var promptSpec = chatClient.prompt()
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, memoryId))
-                .advisors(advisorSpec -> advisorSpec.param(
-                        QuestionAnswerAdvisor.FILTER_EXPRESSION,
-                        String.format("userId == '%s'", userId)));
 
         // 如果有向量存储配置，添加相关参数
         if (vectorConfig != null) {
-            promptSpec = promptSpec
-                    .advisors(advisorSpec -> advisorSpec.param("topK", vectorConfig.getTopK()))
-                    .advisors(advisorSpec -> advisorSpec.param("similarityThreshold",
-                            vectorConfig.getSimilarityThreshold().toString()));
+            Advisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
+                    .documentRetriever(VectorStoreDocumentRetriever.builder()
+                            .similarityThreshold(vectorConfig.getSimilarityThreshold())
+                            .topK(vectorConfig.getTopK())
+                            .vectorStore(vectorStore)
+                            .build())
+                    .queryAugmenter(ContextualQueryAugmenter.builder()
+                            .allowEmptyContext(true)
+                            .build())
+                    .build();
+
+            return chatClient.prompt()
+                    .advisors(retrievalAugmentationAdvisor)
+                    .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
+                    .advisors(advisorSpec -> advisorSpec.param(
+                            QuestionAnswerAdvisor.FILTER_EXPRESSION,
+                            String.format("userId == '%s'", userId)))
+                    .user(message)
+                    .stream()
+                    .content();
+        } else {
+            return chatClient.prompt()
+                    .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
+                    .advisors(advisorSpec -> advisorSpec.param(
+                            QuestionAnswerAdvisor.FILTER_EXPRESSION,
+                            String.format("userId == '%s'", userId)))
+                    .user(message)
+                    .stream()
+                    .content();
+        }
+    }
+
+    @Override
+    public String chatWithWorkflowNode(String agentId, String message, String userId) {
+        log.info("开始执行工作流节点，Agent ID: {}, 消息长度: {}",
+                agentId, message.length());
+
+        // 获取ChatClient
+        ChatClient chatClient = agentFactory.getChatClient(agentId);
+        if (chatClient == null) {
+            log.error("执行工作流节点获取ChatClient失败，Agent ID: {}", agentId);
+            return null;
         }
 
-        // 执行聊天
-        return promptSpec
-                .user(message)
-                .stream()
-                .content();
+        // 获取Agent配置
+        AgentAggregate agentConfig = agentFactory.getAgentConfig(agentId);
+
+        // 提取向量存储配置
+        VectorStoreConfig vectorConfig = extractVectorStoreConfig(agentConfig);
+        // 如果有向量存储配置，添加相关参数
+        if (vectorConfig != null) {
+            Advisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
+                    .documentRetriever(VectorStoreDocumentRetriever.builder()
+                            .similarityThreshold(vectorConfig.getSimilarityThreshold())
+                            .topK(vectorConfig.getTopK())
+                            .vectorStore(vectorStore)
+                            .build())
+                    .queryAugmenter(ContextualQueryAugmenter.builder()
+                            .allowEmptyContext(true)
+                            .build())
+                    .build();
+
+            return chatClient.prompt()
+                    .advisors(retrievalAugmentationAdvisor)
+                    .advisors(advisorSpec -> advisorSpec.param(
+                            QuestionAnswerAdvisor.FILTER_EXPRESSION,
+                            String.format("userId == '%s'", userId)))
+                    .user(message)
+                    .call()
+                    .content();
+        } else {
+            return chatClient.prompt()
+                    .advisors(advisorSpec -> advisorSpec.param(
+                            QuestionAnswerAdvisor.FILTER_EXPRESSION,
+                            String.format("userId == '%s'", userId)))
+                    .user(message)
+                    .call()
+                    .content();
+        }
     }
 
     /**
@@ -98,6 +162,7 @@ public class ChatServiceImpl implements IChatService {
      * @param userId         用户ID（用于向量存储过滤）
      * @return 聊天响应流
      */
+    @Override
     public Flux<String> chatWithDefault(String message, String conversationId, String userId) {
         log.info("开始基于默认ChatClient的聊天（带用户过滤），用户ID: {}, 会话ID: {}, 消息长度: {}",
                 userId, conversationId, message.length());
@@ -105,16 +170,9 @@ public class ChatServiceImpl implements IChatService {
         // 获取默认ChatClient
         ChatClient chatClient = agentFactory.getDefaultChatClient();
 
-        // 生成或使用提供的会话ID
-        String memoryId = conversationId != null && !conversationId.isEmpty()
-                ? conversationId
-                : UUID.randomUUID().toString();
-
-        log.info("使用会话ID: {}, 用户ID: {}", memoryId, userId);
-
         // 执行聊天，添加用户ID过滤
         return chatClient.prompt()
-                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, memoryId))
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .advisors(advisorSpec -> advisorSpec.param(
                         QuestionAnswerAdvisor.FILTER_EXPRESSION,
                         String.format("userId == '%s'", userId)))

@@ -6,14 +6,14 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-mq</artifactId>
     <name>kaleido-mq</name>
     <description>kaleido-mq</description>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

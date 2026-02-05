@@ -27,14 +27,14 @@ import java.util.Date;
 public class WorkflowExecutionAggregate extends BaseEntity {
 
     /**
-     * 执行ID（业务唯一）
-     */
-    private String executionId;
-
-    /**
      * 工作流ID
      */
     private String workflowId;
+
+    /**
+     * 用户ID
+     */
+    private String userId;
 
     /**
      * 执行状态
@@ -71,28 +71,28 @@ public class WorkflowExecutionAggregate extends BaseEntity {
      * <p>
      * 用于创建工作流执行记录时构建聚合根
      *
-     * @param executionId 执行ID（业务唯一），不能为空
      * @param workflowId  工作流ID，不能为空
      * @param inputData   输入数据，可为空
+     * @param userId      用户ID，不能为空
      * @return 工作流执行聚合根
      * @throws IllegalArgumentException 当参数无效时抛出
      */
     public static WorkflowExecutionAggregate create(
-            String executionId,
             String workflowId,
-            String inputData) {
+            String inputData,
+            String userId) {
         
-        if (StrUtil.isBlank(executionId)) {
-            throw AiException.of(AiErrorCode.EXECUTION_ID_NOT_NULL, "执行ID不能为空");
-        }
         if (StrUtil.isBlank(workflowId)) {
             throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
+        }
+        if (StrUtil.isBlank(userId)) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "用户ID不能为空");
         }
 
         return WorkflowExecutionAggregate.builder()
                 .id(SnowflakeUtil.newSnowflakeId())
-                .executionId(executionId.trim())
                 .workflowId(workflowId.trim())
+                .userId(userId.trim())
                 .status(ExecutionStatus.RUNNING)
                 .inputData(inputData)
                 .startedAt(new Date())

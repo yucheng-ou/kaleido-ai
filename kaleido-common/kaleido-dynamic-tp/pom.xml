@@ -6,13 +6,13 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>kaleido-dynamic-tp</artifactId>
     <name>kaleido-dynamic-tp</name>
     <description>动态线程池组件</description>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

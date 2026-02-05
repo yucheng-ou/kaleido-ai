@@ -62,7 +62,6 @@ public interface IClothingRepository {
      *
      * @param userId 用户ID，不能为空
      * @return 服装聚合根列表
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效或查询失败时抛出
      */
     List<ClothingAggregate> findByUserId(String userId);
 

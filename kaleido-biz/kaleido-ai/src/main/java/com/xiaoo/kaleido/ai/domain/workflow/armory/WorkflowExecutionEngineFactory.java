@@ -1,6 +1,6 @@
 package com.xiaoo.kaleido.ai.domain.workflow.armory;
 
-import com.xiaoo.kaleido.ai.domain.agent.armory.AgentFactory;
+import com.xiaoo.kaleido.ai.domain.chat.service.IChatService;
 import com.xiaoo.kaleido.ai.domain.workflow.model.entity.WorkflowDefinition;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,28 +20,14 @@ public class WorkflowExecutionEngineFactory {
     /**
      * 创建工作流执行引擎
      *
-     * @param definition 工作流定义
-     * @param agentFactory Agent工厂
+     * @param definition  工作流定义
+     * @param chatService 聊天服务
      * @return 工作流执行引擎
      */
-    public WorkflowExecutionEngine createEngine(WorkflowDefinition definition, AgentFactory agentFactory) {
-        log.info("创建工作流执行引擎，工作流名称: {}, 步骤数: {}", 
+    public WorkflowExecutionEngine createEngine(WorkflowDefinition definition, IChatService chatService) {
+        log.info("创建工作流执行引擎，工作流名称: {}, 步骤数: {}",
                 definition.getName(), definition.getStepCount());
-        
-        WorkflowExecutionEngine engine = new WorkflowExecutionEngine(definition, agentFactory);
-        
-        log.debug("工作流执行引擎创建成功，工作流名称: {}", definition.getName());
-        return engine;
-    }
 
-    /**
-     * 创建工作流执行引擎（简化版本）
-     *
-     * @param definition 工作流定义
-     * @param agentFactory Agent工厂
-     * @return 工作流执行引擎
-     */
-    public WorkflowExecutionEngine createSimpleEngine(WorkflowDefinition definition, AgentFactory agentFactory) {
-        return createEngine(definition, agentFactory);
+        return new WorkflowExecutionEngine(definition, chatService);
     }
 }

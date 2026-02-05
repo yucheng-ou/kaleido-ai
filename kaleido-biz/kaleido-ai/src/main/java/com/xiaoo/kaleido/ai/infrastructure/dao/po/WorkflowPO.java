@@ -49,9 +49,4 @@ public class WorkflowPO extends BasePO {
     @TableField("status")
     private String status;
 
-    /**
-     * 创建人
-     */
-    @TableField("created_by")
-    private String createdBy;
 }

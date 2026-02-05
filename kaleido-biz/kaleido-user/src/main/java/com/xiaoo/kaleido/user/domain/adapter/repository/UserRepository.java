@@ -21,7 +21,6 @@ public interface UserRepository {
      * 保存用户聚合根到数据库，如果是新用户则插入，如果是已存在用户则更新
      *
      * @param userAggregate 用户聚合根，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当保存失败时抛出
      */
     void save(UserAggregate userAggregate);
 
@@ -30,7 +29,6 @@ public interface UserRepository {
      * 更新用户聚合根信息到数据库
      *
      * @param userAggregate 用户聚合根，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当更新失败或用户不存在时抛出
      */
     void update(UserAggregate userAggregate);
 

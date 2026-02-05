@@ -289,12 +289,7 @@ public class OutfitDomainServiceImpl implements IOutfitDomainService {
             throw WardrobeException.of(WardrobeErrorCode.MULTIPLE_PRIMARY_IMAGES);
         }
 
-        // 4. 业务规则校验：名称唯一性（根据参数决定是否检查）
-        if (checkNameUniqueness && isOutfitNameUnique(userId, name)) {
-            throw WardrobeException.of(WardrobeErrorCode.OUTFIT_NAME_EXISTS);
-        }
-
-        // 5. 业务规则校验：验证服装ID列表中的所有服装属于同一用户
+        // 4. 业务规则校验：验证服装ID列表中的所有服装属于同一用户
         validateClothingsBelongToUser(userId, clothingIds);
     }
 

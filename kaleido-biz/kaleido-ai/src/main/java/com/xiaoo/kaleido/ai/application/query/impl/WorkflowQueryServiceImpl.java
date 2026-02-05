@@ -46,4 +46,15 @@ public class WorkflowQueryServiceImpl implements WorkflowQueryService {
         // 2.转换为响应对象
         return workflow != null ? workflowConvertor.toResponse(workflow) : null;
     }
+
+    @Override
+    public List<WorkflowInfoResponse> findAll() {
+        // 1.查询所有未被删除的工作流列表
+        List<WorkflowAggregate> workflowAggregates = workflowRepository.findAllNotDeleted();
+
+        // 2.转换为响应对象
+        return workflowAggregates.stream()
+                .map(workflowConvertor::toResponse)
+                .collect(Collectors.toList());
+    }
 }

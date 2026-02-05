@@ -27,7 +27,6 @@ public interface IAgentDomainService {
      * @param temperature  温度参数，可为空
      * @param maxTokens    最大token数，可为空
      * @return Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     AgentAggregate createAgent(
             String code,
@@ -43,8 +42,6 @@ public interface IAgentDomainService {
      *
      * @param agentId Agent ID，不能为空
      * @return Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在时抛出
      */
     AgentAggregate findByIdOrThrow(String agentId);
 
@@ -53,8 +50,6 @@ public interface IAgentDomainService {
      *
      * @param code Agent编码，不能为空
      * @return Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在时抛出
      */
     AgentAggregate findByCodeOrThrow(String code);
 
@@ -69,8 +64,6 @@ public interface IAgentDomainService {
      * @param temperature  新温度参数，可为空
      * @param maxTokens    新最大token数，可为空
      * @return 更新后的Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在时抛出
      */
     AgentAggregate updateAgent(
             String agentId,
@@ -86,8 +79,6 @@ public interface IAgentDomainService {
      *
      * @param agentId Agent ID，不能为空
      * @return 启用后的Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在时抛出
      */
     AgentAggregate enableAgent(String agentId);
 
@@ -96,8 +87,6 @@ public interface IAgentDomainService {
      *
      * @param agentId Agent ID，不能为空
      * @return 禁用后的Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在时抛出
      */
     AgentAggregate disableAgent(String agentId);
 
@@ -110,8 +99,6 @@ public interface IAgentDomainService {
      * @param toolType   工具类型，不能为空
      * @param toolConfig 工具配置，可为空
      * @return 创建的AgentTool对象
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在或工具已存在时抛出
      */
     AgentTool addTool(
             String agentId,
@@ -126,8 +113,6 @@ public interface IAgentDomainService {
      * @param agentId  Agent ID，不能为空
      * @param toolCode 工具编码，不能为空
      * @return 更新后的Agent聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当Agent不存在或工具不存在时抛出
      */
     AgentAggregate removeTool(String agentId, String toolCode);
 
@@ -136,7 +121,6 @@ public interface IAgentDomainService {
      *
      * @param code Agent编码，不能为空
      * @return 如果Agent编码唯一返回true，否则返回false
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     boolean isAgentCodeUnique(String code);
 

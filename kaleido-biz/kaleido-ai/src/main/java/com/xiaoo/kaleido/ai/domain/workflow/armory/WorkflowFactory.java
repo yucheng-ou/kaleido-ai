@@ -2,12 +2,12 @@ package com.xiaoo.kaleido.ai.domain.workflow.armory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiaoo.kaleido.ai.domain.agent.armory.AgentFactory;
+import com.xiaoo.kaleido.ai.domain.chat.service.IChatService;
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
 import com.xiaoo.kaleido.ai.domain.workflow.model.entity.WorkflowDefinition;
 import com.xiaoo.kaleido.ai.types.exception.AiException;
 import com.xiaoo.kaleido.ai.types.exception.AiErrorCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -41,14 +41,14 @@ public class WorkflowFactory {
      */
     private final Map<String, WorkflowExecutionEngine> workflowEngineCache = new ConcurrentHashMap<>();
 
-    private final AgentFactory agentFactory;
+    private final IChatService chatService;
     private final WorkflowExecutionEngineFactory workflowExecutionEngineFactory;
 
     /**
      * 构造函数
      */
-    public WorkflowFactory(AgentFactory agentFactory, WorkflowExecutionEngineFactory workflowExecutionEngineFactory) {
-        this.agentFactory = agentFactory;
+    public WorkflowFactory(IChatService chatService, WorkflowExecutionEngineFactory workflowExecutionEngineFactory) {
+        this.chatService = chatService;
         this.workflowExecutionEngineFactory = workflowExecutionEngineFactory;
     }
 
@@ -68,7 +68,6 @@ public class WorkflowFactory {
     public void registerWorkflow(WorkflowAggregate workflow) {
         String workflowId = workflow.getId();
         if (isWorkflowRegistered(workflowId)) {
-            log.debug("工作流已注册，跳过注册，工作流ID: {}", workflowId);
             return;
         }
 
@@ -83,7 +82,7 @@ public class WorkflowFactory {
             }
 
             // 创建工作流执行引擎
-            WorkflowExecutionEngine engine = workflowExecutionEngineFactory.createEngine(definition, agentFactory);
+            WorkflowExecutionEngine engine = workflowExecutionEngineFactory.createEngine(definition, chatService);
 
             // 缓存工作流定义和执行引擎
             workflowDefinitionCache.put(workflowId, definition);
@@ -109,8 +108,6 @@ public class WorkflowFactory {
 
         if (wasPresent) {
             log.info("工作流注销成功，工作流ID: {}", workflowId);
-        } else {
-            log.debug("工作流未注册，无需注销，工作流ID: {}", workflowId);
         }
     }
 
@@ -121,13 +118,7 @@ public class WorkflowFactory {
      * @return 工作流执行引擎，如果不存在返回null
      */
     public WorkflowExecutionEngine getWorkflowEngine(String workflowId) {
-        WorkflowExecutionEngine engine = workflowEngineCache.get(workflowId);
-        if (engine != null) {
-            return engine;
-        }
-
-        log.debug("工作流执行引擎未找到，工作流ID: {}", workflowId);
-        return null;
+        return workflowEngineCache.get(workflowId);
     }
 
     /**
@@ -147,7 +138,7 @@ public class WorkflowFactory {
      * @param inputData 输入数据
      * @return 执行结果
      */
-    public String executeWorkflow(String workflowId, String inputData) {
+    public String executeWorkflow(String workflowId, String inputData,String userId) {
         WorkflowExecutionEngine engine = getWorkflowEngine(workflowId);
         if (engine == null) {
             throw AiException.of(AiErrorCode.VALIDATION_ERROR, "工作流执行引擎未找到，工作流ID: " + workflowId);
@@ -157,7 +148,7 @@ public class WorkflowFactory {
             log.info("开始执行工作流，工作流ID: {}, 输入数据长度: {}", workflowId, 
                     inputData != null ? inputData.length() : 0);
             
-            String result = engine.execute(inputData);
+            String result = engine.execute(inputData,userId);
             
             log.info("工作流执行成功，工作流ID: {}, 输出数据长度: {}", workflowId, 
                     result != null ? result.length() : 0);
@@ -170,20 +161,6 @@ public class WorkflowFactory {
     }
 
     /**
-     * 刷新工作流
-     *
-     * @param workflowId 工作流ID
-     */
-    public void refreshWorkflow(String workflowId) {
-        log.debug("开始刷新工作流，工作流ID: {}", workflowId);
-        unregisterWorkflow(workflowId);
-        
-        // 注意：这里需要从数据库重新加载工作流并注册
-        // 由于依赖外部服务，这里只做注销操作，重新注册由外部调用
-        log.debug("工作流刷新完成，工作流ID: {}", workflowId);
-    }
-
-    /**
      * 检查工作流是否已注册
      *
      * @param workflowId 工作流ID
@@ -191,15 +168,6 @@ public class WorkflowFactory {
      */
     public boolean isWorkflowRegistered(String workflowId) {
         return workflowDefinitionCache.containsKey(workflowId);
-    }
-
-    /**
-     * 获取已注册工作流数量
-     *
-     * @return 已注册工作流数量
-     */
-    public int getRegisteredWorkflowCount() {
-        return workflowDefinitionCache.size();
     }
 
     /**

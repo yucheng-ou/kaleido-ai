@@ -125,7 +125,6 @@ public class CoinAccountAggregate extends BaseEntity {
      * @param bizId 业务ID，可为空
      * @param remark 备注，可为空
      * @return 创建的流水记录
-     * @throws CoinException 当余额不足时抛出
      */
     public CoinStream withdraw(Long amount, CoinBizTypeEnum bizType, String bizId, String remark) {
         // 检查余额是否足够

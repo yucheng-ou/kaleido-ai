@@ -25,32 +25,43 @@ public interface WorkflowExecutionQueryService {
     WorkflowExecutionInfoResponse findById(String executionId);
 
     /**
-     * 根据工作流ID查询执行记录列表
+     * 根据工作流ID查询工作流执行信息列表
      * <p>
-     * 查询指定工作流的所有执行记录
+     * 根据工作流ID查询该工作流的所有执行记录
      *
      * @param workflowId 工作流ID，不能为空
-     * @return 工作流执行信息响应列表，如果不存在则返回空列表
+     * @return 工作流执行信息响应列表
      */
     List<WorkflowExecutionInfoResponse> findByWorkflowId(String workflowId);
 
     /**
-     * 根据状态查询工作流执行记录
+     * 根据状态查询工作流执行信息列表
      * <p>
-     * 查询指定状态的所有执行记录
+     * 根据执行状态查询工作流执行记录
      *
      * @param status 执行状态，不能为空
-     * @return 工作流执行信息响应列表，如果不存在则返回空列表
+     * @return 工作流执行信息响应列表
      */
     List<WorkflowExecutionInfoResponse> findByStatus(String status);
 
     /**
      * 根据ID列表查询工作流执行信息列表
      * <p>
-     * 根据执行ID列表查询对应的工作流执行信息列表
+     * 根据执行ID列表批量查询工作流执行记录
      *
      * @param executionIds 执行ID列表，不能为空
-     * @return 工作流执行信息响应列表，如果不存在则返回空列表
+     * @return 工作流执行信息响应列表
      */
     List<WorkflowExecutionInfoResponse> findByIds(List<String> executionIds);
+
+    /**
+     * 根据用户ID查询工作流执行信息列表
+     * <p>
+     * 根据用户ID查询该用户的所有工作流执行记录
+     *
+     * @param userId 用户ID，不能为空
+     * @return 工作流执行信息响应列表
+     */
+    List<WorkflowExecutionInfoResponse> findByUserId(String userId);
+
 }

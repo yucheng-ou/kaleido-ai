@@ -161,4 +161,16 @@ public interface IRpcAiService {
      * @return 工作流信息响应列表
      */
     Result<List<WorkflowInfoResponse>> listWorkflows(@NotBlank String userId);
+
+    /**
+     * 执行服装推荐工作流
+     * <p>
+     * 为服装推荐服务提供的专用接口，使用固定的工作流ID为2
+     * 开始异步执行工作流，返回执行记录ID
+     *
+     * @param userId 用户ID
+     * @param prompt 用户输入的推荐需求提示词
+     * @return 工作流执行记录ID
+     */
+    Result<String> executeOutfitRecommendWorkflow(@NotBlank String userId, @NotBlank String prompt);
 }

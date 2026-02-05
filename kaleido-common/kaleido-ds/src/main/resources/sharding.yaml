@@ -3,9 +3,9 @@ dataSources:
   ds_0: # 逻辑数据源名称
     dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.4.131.17:3307/kaleido_0?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: ${MYSQL_URL_DB0}
     username: root
-    password: xhorse123
+    password: ${MYSQL_PASSWORD}
     # Druid 特有配置
     initialSize: 5
     minIdle: 5
@@ -15,9 +15,9 @@ dataSources:
   ds_1:
     dataSourceClassName: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.4.131.17:3307/kaleido_1?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    url: ${MYSQL_URL_DB1}
     username: root
-    password: xhorse123
+    password: ${MYSQL_PASSWORD}
     # Druid 特有配置
     initialSize: 5
     minIdle: 5

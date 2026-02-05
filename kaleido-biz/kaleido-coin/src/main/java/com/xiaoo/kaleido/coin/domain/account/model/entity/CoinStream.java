@@ -99,7 +99,6 @@ public class CoinStream extends BaseEntity {
      * @param bizId        业务ID，可为空
      * @param remark       备注，可为空
      * @return 收入流水实体
-     * @throws CoinException 当参数无效时抛出
      */
     public static CoinStream createIncome(
             String accountId,
@@ -149,7 +148,6 @@ public class CoinStream extends BaseEntity {
      * @param bizId        业务ID，可为空
      * @param remark       备注，可为空
      * @return 支出流水实体
-     * @throws CoinException 当参数无效时抛出
      */
     public static CoinStream createExpense(
             String accountId,

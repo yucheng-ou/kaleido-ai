@@ -95,7 +95,6 @@ public class ClothingVector {
      * 生成向量存储的描述性文本内容
      * <p>
      * 根据服装属性生成用于向量存储的描述性文本
-     * 这是核心领域逻辑
      *
      * @return 描述性文本内容
      */
@@ -126,11 +125,11 @@ public class ClothingVector {
         if (currentLocationName != null && !currentLocationName.isEmpty()) {
             content.append("，当前位置在").append(currentLocationName);
         }
-        
+
         if (description != null && !description.isEmpty()) {
             content.append("。描述：").append(description);
         }
-        
+        content.append(" id:").append(clothingId).append("。");
         return content.toString();
     }
 }

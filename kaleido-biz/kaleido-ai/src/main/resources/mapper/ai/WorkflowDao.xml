@@ -43,4 +43,13 @@
         ORDER BY created_at DESC
     </select>
 
+    <!-- 查询所有未被删除的工作流 -->
+    <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.ai.infrastructure.dao.po.WorkflowPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_ai_workflow
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
 </mapper>

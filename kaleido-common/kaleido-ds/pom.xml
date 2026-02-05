@@ -4,13 +4,13 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-common</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>kaleido-ds</artifactId>
     <name>kaleido-ds</name>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>kaleido-ds</description>
 
 

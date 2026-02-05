@@ -16,6 +16,7 @@ import java.util.List;
  * @author ouyucheng
  * @date 2026/1/30
  */
+@Mapper
 public interface WorkflowExecutionDao extends BaseMapper<WorkflowExecutionPO> {
 
     /**
@@ -59,4 +60,12 @@ public interface WorkflowExecutionDao extends BaseMapper<WorkflowExecutionPO> {
      * @return 删除的执行记录数量
      */
     int deleteTimeoutExecutions(@Param("timeoutMillis") long timeoutMillis, @Param("currentTime") Date currentTime);
+
+    /**
+     * 根据用户ID查询工作流执行记录
+     *
+     * @param userId 用户ID
+     * @return 工作流执行持久化对象列表
+     */
+    List<WorkflowExecutionPO> findByUserId(@Param("userId") String userId);
 }

@@ -22,10 +22,10 @@ import java.util.Date;
 public class WorkflowExecutionPO extends BasePO {
 
     /**
-     * 执行ID（业务唯一）
+     * 用户id
      */
-    @TableField("execution_id")
-    private String executionId;
+    @TableField("user_id")
+    private String userId;
 
     /**
      * 工作流ID
@@ -68,10 +68,4 @@ public class WorkflowExecutionPO extends BasePO {
      */
     @TableField("completed_at")
     private Date completedAt;
-
-    /**
-     * 创建人
-     */
-    @TableField("created_by")
-    private String createdBy;
 }

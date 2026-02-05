@@ -6,6 +6,7 @@ import com.xiaoo.kaleido.api.ai.command.UpdateAgentCommand;
 import com.xiaoo.kaleido.api.ai.command.AddAgentToolCommand;
 import com.xiaoo.kaleido.api.ai.command.CreateWorkflowCommand;
 import com.xiaoo.kaleido.api.ai.command.UpdateWorkflowCommand;
+import com.xiaoo.kaleido.api.ai.command.ExecuteWorkflowCommand;
 import com.xiaoo.kaleido.api.ai.response.AgentInfoResponse;
 import com.xiaoo.kaleido.api.ai.response.WorkflowInfoResponse;
 import com.xiaoo.kaleido.base.result.Result;
@@ -13,6 +14,7 @@ import com.xiaoo.kaleido.ai.application.command.AgentCommandService;
 import com.xiaoo.kaleido.ai.application.command.WorkflowCommandService;
 import com.xiaoo.kaleido.ai.application.query.AgentQueryService;
 import com.xiaoo.kaleido.ai.application.query.WorkflowQueryService;
+import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ import java.util.List;
 @Service
 @Validated
 @RequiredArgsConstructor
-@DubboService(version = "1.0.0")
+@DubboService(version = RpcConstants.DUBBO_VERSION)
 public class RpcAiServiceImpl implements IRpcAiService {
 
     private final AgentCommandService agentCommandService;
@@ -148,9 +150,20 @@ public class RpcAiServiceImpl implements IRpcAiService {
 
     @Override
     public Result<List<WorkflowInfoResponse>> listWorkflows(@NotBlank String userId) {
-//        List<WorkflowInfoResponse> workflows = workflowQueryService.findAllEnabled();
-//        log.info("RPC查询工作流列表成功，管理员ID: {}, 工作流数量: {}", userId, workflows.size());
-//        return Result.success(workflows);
-        return null;
+        List<WorkflowInfoResponse> workflows = workflowQueryService.findAll();
+        log.info("RPC查询工作流列表成功，管理员ID: {}, 工作流数量: {}", userId, workflows.size());
+        return Result.success(workflows);
+    }
+
+    @Override
+    public Result<String> executeOutfitRecommendWorkflow(@NotBlank String userId, @NotBlank String prompt) {
+            // 1. 调用专用的服装推荐工作流执行方法
+            String executionId = workflowCommandService.executeOutfitRecommendWorkflow(prompt, userId);
+
+            // 2. 记录日志
+            log.info("RPC执行服装推荐工作流成功，用户ID: {}, 执行记录ID: {}", userId, executionId);
+            
+            // 3. 返回执行记录ID
+            return Result.success(executionId);
     }
 }

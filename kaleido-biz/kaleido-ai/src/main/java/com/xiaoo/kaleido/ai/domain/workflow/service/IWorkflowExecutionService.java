@@ -1,6 +1,7 @@
 package com.xiaoo.kaleido.ai.domain.workflow.service;
 
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowExecutionAggregate;
+import com.xiaoo.kaleido.api.ai.command.ExecuteWorkflowCommand;
 
 import java.util.List;
 
@@ -20,66 +21,56 @@ public interface IWorkflowExecutionService {
      * <p>
      * 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
      *
-     * @param executionId 执行ID（业务唯一），不能为空
      * @param workflowId  工作流ID，不能为空
      * @param inputData   输入数据，可为空
+     * @param userId      用户ID，不能为空
      * @return 工作流执行聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowExecutionAggregate createWorkflowExecution(
-            String executionId,
             String workflowId,
-            String inputData);
+            String inputData,
+            String userId);
 
     /**
-     * 根据执行ID查找工作流执行记录
+     * 根据ID查找工作流执行记录
      *
-     * @param executionId 执行ID（业务唯一），不能为空
+     * @param id 执行记录ID，不能为空
      * @return 工作流执行聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当执行记录不存在时抛出
      */
-    WorkflowExecutionAggregate findWorkflowExecutionByIdOrThrow(String executionId);
+    WorkflowExecutionAggregate findWorkflowExecutionByIdOrThrow(String id);
 
     /**
      * 更新工作流执行状态为成功
      * <p>
      * 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
      *
-     * @param executionId 执行ID（业务唯一），不能为空
-     * @param outputData  输出数据，可为空
+     * @param id         执行记录ID，不能为空
+     * @param outputData 输出数据，可为空
      * @return 更新后的工作流执行聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当执行记录不存在时抛出
      */
-    WorkflowExecutionAggregate succeedWorkflowExecution(String executionId, String outputData);
+    WorkflowExecutionAggregate succeedWorkflowExecution(String id, String outputData);
 
     /**
      * 更新工作流执行状态为失败
      * <p>
      * 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
      *
-     * @param executionId  执行ID（业务唯一），不能为空
+     * @param id           执行记录ID，不能为空
      * @param errorMessage 错误信息，不能为空
      * @return 更新后的工作流执行聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当执行记录不存在时抛出
      */
-    WorkflowExecutionAggregate failWorkflowExecution(String executionId, String errorMessage);
+    WorkflowExecutionAggregate failWorkflowExecution(String id, String errorMessage);
 
     /**
      * 更新工作流执行进度
      * <p>
      * 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
      *
-     * @param executionId 执行ID（业务唯一），不能为空
-     * @param outputData  输出数据，可为空
+     * @param id         执行记录ID，不能为空
+     * @param outputData 输出数据，可为空
      * @return 更新后的工作流执行聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当执行记录不存在时抛出
      */
-    WorkflowExecutionAggregate updateWorkflowExecutionProgress(String executionId, String outputData);
+    WorkflowExecutionAggregate updateWorkflowExecutionProgress(String id, String outputData);
 
     /**
      * 根据工作流ID查找执行记录
@@ -88,7 +79,6 @@ public interface IWorkflowExecutionService {
      *
      * @param workflowId 工作流ID，不能为空
      * @return 工作流执行聚合根列表
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     List<WorkflowExecutionAggregate> findWorkflowExecutionsByWorkflowId(String workflowId);
 
@@ -99,7 +89,6 @@ public interface IWorkflowExecutionService {
      *
      * @param status 执行状态，不能为空
      * @return 工作流执行聚合根列表
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     List<WorkflowExecutionAggregate> findWorkflowExecutionsByStatus(String status);
 

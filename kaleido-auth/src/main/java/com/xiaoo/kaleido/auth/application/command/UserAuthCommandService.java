@@ -108,7 +108,7 @@ public class UserAuthCommandService {
 
         if (!Boolean.TRUE.equals(result.getSuccess()) || !Boolean.TRUE.equals(result.getData())) {
             log.error("短信验证码验证失败，手机号: {}, 验证码: {}", mobile, code);
-            throw new AuthException(AuthErrorCode.AUTH_CAPTCHA_ERROR);
+            throw AuthException.of(AuthErrorCode.AUTH_CAPTCHA_ERROR);
         }
     }
 }

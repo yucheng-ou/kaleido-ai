@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.xiaoo</groupId>
         <artifactId>kaleido-biz</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <kaleido-user-version>0.0.1-SNAPSHOT</kaleido-user-version>
+        <kaleido-user-version>1.0.0</kaleido-user-version>
     </properties>
 
 

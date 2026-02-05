@@ -1,7 +1,6 @@
 package com.xiaoo.kaleido.ai.domain.workflow.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.xiaoo.kaleido.ai.domain.workflow.armory.WorkflowFactory;
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowAggregate;
 import com.xiaoo.kaleido.ai.domain.workflow.model.aggregate.WorkflowExecutionAggregate;
 import com.xiaoo.kaleido.ai.domain.workflow.service.IWorkflowExecutionService;
@@ -17,11 +16,6 @@ import java.util.List;
 
 /**
  * 工作流执行服务实现类
- * <p>
- * 实现工作流执行的核心业务逻辑，遵循DDD原则：
- * 1. service层包含参数校验与聚合根的修改
- * 2. 可以查询数据库进行参数校验
- * 3. 不能直接调用仓储层写入或更新数据库（通过聚合根的方法修改状态）
  *
  * @author ouyucheng
  * @date 2026/1/30
@@ -33,182 +27,89 @@ public class WorkflowExecutionServiceImpl implements IWorkflowExecutionService {
 
     private final IWorkflowExecutionRepository workflowExecutionRepository;
     private final IWorkflowManagementService workflowManagementService;
-    private final WorkflowFactory workflowFactory;
 
     @Override
-    public WorkflowExecutionAggregate createWorkflowExecution(String executionId, String workflowId, String inputData) {
-        // 注意：controller层与rpc层已经有注解的参数校验了，service层只需要校验没有被校验过的部分
-        // 这里校验业务规则，比如工作流是否存在且启用
+    public WorkflowExecutionAggregate createWorkflowExecution(String workflowId, String inputData, String userId) {
         WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
         
         if (!workflow.isEnabled()) {
             throw AiException.of(AiErrorCode.VALIDATION_ERROR, "工作流已禁用，无法执行: " + workflowId);
         }
 
-        // 创建执行聚合根（聚合根本身包含最核心的业务逻辑，不包含参数校验）
-        WorkflowExecutionAggregate execution = WorkflowExecutionAggregate.create(executionId, workflowId, inputData);
+        WorkflowExecutionAggregate execution = WorkflowExecutionAggregate.create(workflowId, inputData, userId);
 
-        log.info("创建工作流执行记录成功，执行ID: {}, 工作流ID: {}", executionId, workflowId);
+        log.info("创建工作流执行记录成功，工作流ID: {}, 用户ID: {}", workflowId, userId);
         return execution;
     }
 
     @Override
-    public WorkflowExecutionAggregate findWorkflowExecutionByIdOrThrow(String executionId) {
-        // 参数校验
-        if (StrUtil.isBlank(executionId)) {
-            throw AiException.of(AiErrorCode.EXECUTION_ID_NOT_NULL, "执行ID不能为空");
+    public WorkflowExecutionAggregate findWorkflowExecutionByIdOrThrow(String id) {
+        if (StrUtil.isBlank(id)) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "执行记录ID不能为空");
         }
 
-        // 查询数据库
-        return workflowExecutionRepository.findByIdOrThrow(executionId);
+        return workflowExecutionRepository.findByIdOrThrow(id);
     }
 
     @Override
-    public WorkflowExecutionAggregate succeedWorkflowExecution(String executionId, String outputData) {
-        // 参数校验
-        if (StrUtil.isBlank(executionId)) {
-            throw AiException.of(AiErrorCode.EXECUTION_ID_NOT_NULL, "执行ID不能为空");
+    public WorkflowExecutionAggregate succeedWorkflowExecution(String id, String outputData) {
+        if (StrUtil.isBlank(id)) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "执行记录ID不能为空");
         }
 
-        // 查找执行记录
-        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(executionId);
-
-        // 更新执行状态为成功（聚合根本身包含最核心的业务逻辑）
+        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(id);
         execution.succeed(outputData);
 
-        log.info("工作流执行成功，执行ID: {}", executionId);
+        log.info("工作流执行成功，执行记录ID: {}", id);
         return execution;
     }
 
     @Override
-    public WorkflowExecutionAggregate failWorkflowExecution(String executionId, String errorMessage) {
-        // 参数校验
-        if (StrUtil.isBlank(executionId)) {
-            throw AiException.of(AiErrorCode.EXECUTION_ID_NOT_NULL, "执行ID不能为空");
+    public WorkflowExecutionAggregate failWorkflowExecution(String id, String errorMessage) {
+        if (StrUtil.isBlank(id)) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "执行记录ID不能为空");
         }
         if (StrUtil.isBlank(errorMessage)) {
             throw AiException.of(AiErrorCode.VALIDATION_ERROR, "错误信息不能为空");
         }
 
-        // 查找执行记录
-        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(executionId);
-
-        // 更新执行状态为失败（聚合根本身包含最核心的业务逻辑）
+        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(id);
         execution.fail(errorMessage);
 
-        log.info("工作流执行失败，执行ID: {}, 错误信息: {}", executionId, errorMessage);
+        log.info("工作流执行失败，执行记录ID: {}, 错误信息: {}", id, errorMessage);
         return execution;
     }
 
     @Override
-    public WorkflowExecutionAggregate updateWorkflowExecutionProgress(String executionId, String outputData) {
-        // 参数校验
-        if (StrUtil.isBlank(executionId)) {
-            throw AiException.of(AiErrorCode.EXECUTION_ID_NOT_NULL, "执行ID不能为空");
+    public WorkflowExecutionAggregate updateWorkflowExecutionProgress(String id, String outputData) {
+        if (StrUtil.isBlank(id)) {
+            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "执行记录ID不能为空");
         }
 
-        // 查找执行记录
-        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(executionId);
-
-        // 更新执行进度（聚合根本身包含最核心的业务逻辑）
+        WorkflowExecutionAggregate execution = workflowExecutionRepository.findByIdOrThrow(id);
         execution.updateProgress(outputData);
 
-        log.info("更新工作流执行进度，执行ID: {}", executionId);
+        log.info("更新工作流执行进度，执行记录ID: {}", id);
         return execution;
     }
 
     @Override
     public List<WorkflowExecutionAggregate> findWorkflowExecutionsByWorkflowId(String workflowId) {
-        // 参数校验
         if (StrUtil.isBlank(workflowId)) {
             throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
         }
 
-        // 查询数据库进行参数校验，确保工作流存在
         workflowManagementService.findWorkflowByIdOrThrow(workflowId);
 
-        // 查询执行记录
         return workflowExecutionRepository.findByWorkflowId(workflowId);
     }
 
     @Override
     public List<WorkflowExecutionAggregate> findWorkflowExecutionsByStatus(String status) {
-        // 参数校验
         if (StrUtil.isBlank(status)) {
             throw AiException.of(AiErrorCode.VALIDATION_ERROR, "执行状态不能为空");
         }
 
-        // 查询数据库
         return workflowExecutionRepository.findByStatus(status);
-    }
-
-    /**
-     * 执行工作流
-     *
-     * @param workflowId 工作流ID
-     * @param inputData 输入数据
-     * @return 执行结果
-     */
-    public String executeWorkflow(String workflowId, String inputData) {
-        // 校验工作流是否存在且启用
-        WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
-        if (!workflow.isEnabled()) {
-            throw AiException.of(AiErrorCode.VALIDATION_ERROR, "工作流已禁用，无法执行: " + workflowId);
-        }
-
-        // 注册工作流（如果尚未注册）
-        if (!workflowFactory.isWorkflowRegistered(workflowId)) {
-            workflowFactory.registerWorkflow(workflow);
-        }
-
-        // 执行工作流
-        String result = workflowFactory.executeWorkflow(workflowId, inputData);
-
-        log.info("工作流执行完成，工作流ID: {}, 结果长度: {}", workflowId, result != null ? result.length() : 0);
-        return result;
-    }
-
-    /**
-     * 注册工作流到工厂
-     *
-     * @param workflowId 工作流ID
-     */
-    public void registerWorkflow(String workflowId) {
-        if (StrUtil.isBlank(workflowId)) {
-            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
-        }
-
-        WorkflowAggregate workflow = workflowManagementService.findWorkflowByIdOrThrow(workflowId);
-        workflowFactory.registerWorkflow(workflow);
-
-        log.info("工作流注册到工厂成功，工作流ID: {}, 名称: {}", workflowId, workflow.getName());
-    }
-
-    /**
-     * 注销工作流从工厂
-     *
-     * @param workflowId 工作流ID
-     */
-    public void unregisterWorkflow(String workflowId) {
-        if (StrUtil.isBlank(workflowId)) {
-            throw AiException.of(AiErrorCode.WORKFLOW_ID_NOT_NULL, "工作流ID不能为空");
-        }
-
-        workflowFactory.unregisterWorkflow(workflowId);
-        log.info("工作流从工厂注销成功，工作流ID: {}", workflowId);
-    }
-
-    /**
-     * 检查工作流是否已注册到工厂
-     *
-     * @param workflowId 工作流ID
-     * @return 如果已注册返回true，否则返回false
-     */
-    public boolean isWorkflowRegistered(String workflowId) {
-        if (StrUtil.isBlank(workflowId)) {
-            return false;
-        }
-
-        return workflowFactory.isWorkflowRegistered(workflowId);
     }
 }

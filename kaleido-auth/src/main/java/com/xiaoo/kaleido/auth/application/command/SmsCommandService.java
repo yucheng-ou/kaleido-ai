@@ -44,7 +44,7 @@ public class SmsCommandService {
 
         if (!Boolean.TRUE.equals(result.getSuccess())) {
             log.error("发送短信验证码失败，手机号: {}, 错误: {}", command.getMobile(), result.getMsg());
-            throw new AuthException(AuthErrorCode.NOTICE_SERVICE_UNAVAILABLE);
+            throw AuthException.of(AuthErrorCode.NOTICE_SERVICE_UNAVAILABLE);
         }
 
         // 构建响应

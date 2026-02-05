@@ -1,5 +1,6 @@
 package com.xiaoo.kaleido.ai.domain.workflow.model.entity;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,11 +36,6 @@ public class WorkflowStep {
     private String agentId;
 
     /**
-     * 步骤输入配置
-     */
-    private StepInput input;
-
-    /**
      * 步骤执行顺序（从1开始）
      */
     private Integer order;
@@ -50,42 +46,9 @@ public class WorkflowStep {
      * @return 如果步骤配置有效返回true，否则返回false
      */
     public boolean isValid() {
-        if (id == null || id.trim().isEmpty()) {
+        if (StrUtil.isBlank(id)) {
             return false;
         }
-        if (agentId == null || agentId.trim().isEmpty()) {
-            return false;
-        }
-        if (input == null) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 获取步骤输入类型
-     *
-     * @return 步骤输入类型
-     */
-    public StepInput.InputType getInputType() {
-        return input != null ? input.getType() : null;
-    }
-
-    /**
-     * 检查是否为静态输入
-     *
-     * @return 如果输入类型为STATIC返回true，否则返回false
-     */
-    public boolean isStaticInput() {
-        return StepInput.InputType.STATIC.equals(getInputType());
-    }
-
-    /**
-     * 检查是否为上一个步骤的输出
-     *
-     * @return 如果输入类型为PREVIOUS_OUTPUT返回true，否则返回false
-     */
-    public boolean isPreviousOutputInput() {
-        return StepInput.InputType.PREVIOUS_OUTPUT.equals(getInputType());
+        return !StrUtil.isBlank(agentId);
     }
 }

@@ -30,6 +30,8 @@ public class UserCommandService implements IUserCommandService {
      *
      * @param userId 用户ID
      */
+
+    @Override
     public void freezeUser(String userId) {
         Result<Void> result = rpcUserService.freezeUser(userId);
         if (!Boolean.TRUE.equals(result.getSuccess())) {
@@ -44,6 +46,7 @@ public class UserCommandService implements IUserCommandService {
      *
      * @param userId 用户ID
      */
+    @Override
     public void unfreezeUser(String userId) {
         Result<Void> result = rpcUserService.unfreezeUser(userId);
         if (!Boolean.TRUE.equals(result.getSuccess())) {
@@ -58,6 +61,7 @@ public class UserCommandService implements IUserCommandService {
      *
      * @param userId 用户ID
      */
+    @Override
     public void deleteUser(String userId) {
         Result<Void> result = rpcUserService.deleteUser(userId);
         if (!Boolean.TRUE.equals(result.getSuccess())) {

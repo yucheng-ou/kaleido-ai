@@ -1,6 +1,7 @@
 spring:
   application:
     name: kaleido-coin
+    version: @kaleido.version@
   profiles:
     active: dev
   config:

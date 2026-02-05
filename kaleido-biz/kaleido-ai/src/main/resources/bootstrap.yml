@@ -1,6 +1,7 @@
 spring:
   application:
     name: kaleido-ai
+    version: @kaleido.version@
   profiles:
     active: dev
   config:

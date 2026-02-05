@@ -25,7 +25,6 @@ public interface IWorkflowManagementService {
      * @param description 工作流描述，可为空
      * @param definition  工作流DSL定义，不能为空
      * @return 工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     WorkflowAggregate createWorkflow(
             String code,
@@ -38,8 +37,6 @@ public interface IWorkflowManagementService {
      *
      * @param workflowId 工作流ID，不能为空
      * @return 工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowAggregate findWorkflowByIdOrThrow(String workflowId);
 
@@ -48,8 +45,6 @@ public interface IWorkflowManagementService {
      *
      * @param code 工作流编码，不能为空
      * @return 工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowAggregate findWorkflowByCodeOrThrow(String code);
 
@@ -63,8 +58,6 @@ public interface IWorkflowManagementService {
      * @param description 新工作流描述，可为空
      * @param definition  新工作流定义，不能为空
      * @return 更新后的工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowAggregate updateWorkflow(
             String workflowId,
@@ -77,8 +70,6 @@ public interface IWorkflowManagementService {
      *
      * @param workflowId 工作流ID，不能为空
      * @return 启用后的工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowAggregate enableWorkflow(String workflowId);
 
@@ -87,8 +78,6 @@ public interface IWorkflowManagementService {
      *
      * @param workflowId 工作流ID，不能为空
      * @return 禁用后的工作流聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
-     * @throws com.xiaoo.kaleido.ai.types.exception.AiException 当工作流不存在时抛出
      */
     WorkflowAggregate disableWorkflow(String workflowId);
 
@@ -99,7 +88,6 @@ public interface IWorkflowManagementService {
      *
      * @param code 工作流编码，不能为空
      * @return 如果工作流编码唯一返回true，否则返回false
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     boolean isWorkflowCodeUnique(String code);
 
@@ -110,7 +98,6 @@ public interface IWorkflowManagementService {
      *
      * @param definition 工作流定义，不能为空
      * @return 如果工作流定义格式有效返回true，否则返回false
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     boolean validateWorkflowDefinition(String definition);
 

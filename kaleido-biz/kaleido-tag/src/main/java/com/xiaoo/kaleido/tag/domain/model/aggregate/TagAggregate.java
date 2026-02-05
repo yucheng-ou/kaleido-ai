@@ -81,7 +81,6 @@ public class TagAggregate extends BaseEntity {
      * @param color       标签颜色，可为空
      * @param description 标签描述，可为空
      * @return 标签聚合根
-     * @throws IllegalArgumentException 当参数无效时抛出
      */
     public static TagAggregate create(
             String userId,
@@ -108,7 +107,6 @@ public class TagAggregate extends BaseEntity {
      * @param name        新标签名称，不能为空
      * @param color       新标签颜色，可为空
      * @param description 新标签描述，可为空
-     * @throws IllegalStateException 如果标签状态不允许修改
      */
     public void updateInfo(String name, String color, String description) {
         this.name = name;
@@ -123,8 +121,6 @@ public class TagAggregate extends BaseEntity {
      *
      * @param entityId 实体ID，不能为空
      * @param userId   用户ID，不能为空
-     * @throws IllegalStateException    如果标签状态不允许关联
-     * @throws IllegalArgumentException 如果参数无效或实体已关联
      */
     public void associateEntity(String entityId, String userId) {
         // 创建关联关系

@@ -101,15 +101,13 @@ public class OutfitController {
     }
 
     /**
-     * 根据用户ID查询穿搭列表
+     * 查询用户穿搭列表
      *
-     * @param userId 用户ID，不能为空
      * @return 穿搭信息响应列表
      */
     @GetMapping("/list")
-    public Result<List<OutfitInfoResponse>> listOutfits(
-            @NotBlank(message = "用户ID不能为空")
-            @RequestParam String userId) {
+    public Result<List<OutfitInfoResponse>> listOutfits() {
+        String userId = StpUserUtil.getLoginId();
         List<OutfitInfoResponse> outfitList = outfitQueryService.findByUserId(userId);
         return Result.success(outfitList);
     }

@@ -138,6 +138,7 @@ public class NoticeRepositoryImpl implements INoticeRepository {
      * @param req 查询条件
      * @return 通知列表
      */
+    @Override
     public List<NoticeAggregate> pageQuery(NoticePageQueryReq req) {
         // 1.执行分页查询（PageHelper已在Service层启动）
         List<NoticePO> poList = noticeDao.selectByCondition(req);

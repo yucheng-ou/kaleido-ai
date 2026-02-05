@@ -35,7 +35,6 @@ public class UserCommandService {
      *
      * @param command 创建用户命令，包含手机号和邀请码等信息
      * @return 用户ID，新创建用户的唯一标识
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当手机号已存在或邀请码无效时抛出
      */
     public String createUser(RegisterUserCommand command) {
         // 1.调用领域服务创建用户聚合根
@@ -68,7 +67,6 @@ public class UserCommandService {
      *
      * @param userId 用户ID，不能为空
      * @param nickName 新昵称，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许修改时抛出
      */
     public void changeNickName(String userId, String nickName) {
         // 1.调用领域服务修改昵称
@@ -86,7 +84,6 @@ public class UserCommandService {
      * 处理用户冻结请求，将用户状态设置为冻结并记录操作流水
      *
      * @param userId 用户ID，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许冻结时抛出
      */
     public void freezeUser(String userId) {
         // 1.调用领域服务冻结用户
@@ -104,7 +101,6 @@ public class UserCommandService {
      * 处理用户解冻请求，将用户状态恢复为活跃并记录操作流水
      *
      * @param userId 用户ID，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许解冻时抛出
      */
     public void unfreezeUser(String userId) {
         // 1.调用领域服务解冻用户
@@ -122,7 +118,6 @@ public class UserCommandService {
      * 处理用户删除请求，将用户状态设置为删除（软删除）并记录操作流水
      *
      * @param userId 用户ID，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许删除时抛出
      */
     public void deleteUser(String userId) {
         // 1.调用领域服务删除用户
@@ -141,7 +136,6 @@ public class UserCommandService {
      *
      * @param userId    用户ID，不能为空
      * @param avatarUrl 头像URL，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许修改时抛出
      */
     public void updateAvatar(String userId, String avatarUrl) {
         // 1.调用领域服务更新头像
@@ -159,7 +153,6 @@ public class UserCommandService {
      * 处理用户登录请求，更新最后登录时间并记录登录操作流水
      *
      * @param userId 用户ID，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或状态不允许登录时抛出
      */
     @Transactional
     public void login(String userId) {
@@ -178,7 +171,6 @@ public class UserCommandService {
      * 处理用户登出请求，记录登出操作流水
      *
      * @param userId 用户ID，不能为空
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在时抛出
      */
     public void logout(String userId) {
         // 1.调用领域服务登出

@@ -6,7 +6,7 @@
   "packageFilters": "com.xiaoo.kaleido.api.*",
   "projectName": "Kaleido RPC接口文档",
   "description": "Kaleido微服务Dubbo RPC接口文档，包含用户、通知、管理后台等服务的接口定义",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "1.0.0",
   "framework": "dubbo",
   "skipTransientField": true,
   "requestExample": true,

@@ -37,7 +37,6 @@ public class RecommendQueryServiceImpl implements IRecommendQueryService {
      * @param recommendRecordId 推荐记录ID
      * @param userId 用户ID（用于权限验证）
      * @return 推荐记录DTO
-     * @throws RecommendException 当推荐记录不存在或用户无权限时抛出
      */
     @Override
     public RecommendRecordResponse findRecommendRecordById(String recommendRecordId, String userId) {

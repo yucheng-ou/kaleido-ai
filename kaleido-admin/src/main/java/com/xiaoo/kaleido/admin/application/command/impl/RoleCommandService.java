@@ -24,6 +24,7 @@ public class RoleCommandService implements IRoleCommandService {
     private final IRoleRepository roleRepository;
     private final IRoleDomainService roleDomainService;
 
+    @Override
     public String createRole(AddRoleCommand command) {
         // 1. 调用领域服务创建角色
         RoleAggregate roleAggregate = roleDomainService.createRole(
@@ -40,6 +41,7 @@ public class RoleCommandService implements IRoleCommandService {
         return roleAggregate.getId();
     }
 
+    @Override
     public void updateRole(String roleId, UpdateRoleCommand command) {
         // 1. 调用领域服务更新角色信息
         RoleAggregate roleAggregate = roleDomainService.updateRole(
@@ -54,6 +56,7 @@ public class RoleCommandService implements IRoleCommandService {
         log.info("角色信息更新成功，角色ID: {}", roleId);
     }
 
+    @Override
     public void deleteRole(String roleId) {
         // 1. 调用仓储层删除角色
         roleRepository.deleteById(roleId);
@@ -61,6 +64,7 @@ public class RoleCommandService implements IRoleCommandService {
         log.info("角色删除成功，角色ID: {}", roleId);
     }
 
+    @Override
     public void assignPermissions(String roleId, AssignPermissionsToRoleCommand command) {
         // 1. 调用领域服务分配权限
         RoleAggregate roleAggregate = roleDomainService.assignPermissions(

@@ -115,4 +115,20 @@ public class WorkflowRepositoryImpl implements IWorkflowRepository {
             throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
         }
     }
+
+    @Override
+    public List<WorkflowAggregate> findAllNotDeleted() {
+        try {
+            // 1.查询所有未被删除的工作流基本信息
+            List<WorkflowPO> workflowPOs = workflowDao.findAllNotDeleted();
+
+            // 2.转换为WorkflowAggregate列表
+            return workflowPOs.stream()
+                    .map(WorkflowInfraConvertor.INSTANCE::toAggregate)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("查询所有未被删除的工作流失败，原因: {}", e.getMessage(), e);
+            throw AiException.of(AiErrorCode.WORKFLOW_QUERY_FAIL);
+        }
+    }
 }

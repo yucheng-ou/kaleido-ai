@@ -28,7 +28,6 @@ public interface IOutfitDomainService {
      * @param clothingIds 服装ID列表，不能为空且至少包含1件服装
      * @param images      图片信息列表，不能为空
      * @return 穿搭聚合根，包含完整的穿搭信息、服装列表和图片
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     OutfitAggregate createOutfitWithClothingsAndImages(
             String userId,
@@ -45,7 +44,6 @@ public interface IOutfitDomainService {
      *
      * @param outfitId 穿搭ID字符串，不能为空
      * @return 穿搭聚合根，包含完整的穿搭信息
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在时抛出
      */
     OutfitAggregate findByIdOrThrow(String outfitId);
 
@@ -58,7 +56,6 @@ public interface IOutfitDomainService {
      * @param outfitId 穿搭ID字符串，不能为空
      * @param userId 用户ID字符串，不能为空
      * @return 穿搭聚合根，包含完整的穿搭信息
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当穿搭不存在或用户不匹配时抛出
      */
     OutfitAggregate findByIdAndUserIdOrThrow(String outfitId, String userId);
 
@@ -75,7 +72,6 @@ public interface IOutfitDomainService {
      * @param clothingIds 新服装ID列表，不能为空且至少包含1件服装
      * @param images      新图片信息列表，不能为空
      * @return 更新后的穿搭聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     OutfitAggregate updateOutfit(
             String outfitId,
@@ -95,7 +91,6 @@ public interface IOutfitDomainService {
      * @param userId   用户ID，不能为空（已在controller层校验）
      * @param notes    备注，可为空
      * @return 更新后的穿搭聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     OutfitAggregate recordOutfitWear(String outfitId, String userId, String notes);
 
@@ -107,7 +102,6 @@ public interface IOutfitDomainService {
      * @param outfitId 穿搭ID，不能为空
      * @param userId   用户ID，不能为空（已在controller层校验）
      * @return 删除后的穿搭聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     OutfitAggregate deleteOutfit(String outfitId, String userId);
 
@@ -116,7 +110,6 @@ public interface IOutfitDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 穿搭聚合根列表（包含基本信息，按需加载服装、图片和穿着记录）
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效时抛出
      */
     List<OutfitAggregate> findOutfitsByUserId(String userId);
 }

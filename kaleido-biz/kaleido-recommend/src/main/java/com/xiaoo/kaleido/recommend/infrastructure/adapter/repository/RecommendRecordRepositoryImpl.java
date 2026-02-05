@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,6 +131,48 @@ public class RecommendRecordRepositoryImpl implements IRecommendRecordRepository
             log.error("查询用户推荐记录列表（按是否有关联穿搭）失败，用户ID: {}, hasOutfit: {}, 原因: {}",
                     userId, hasOutfit, e.getMessage(), e);
             throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "用户推荐记录列表查询失败");
+        }
+    }
+
+    @Override
+    public RecommendRecordAggregate findByExecutionId(String executionId) {
+        try {
+            // 1.查询推荐记录基本信息
+            RecommendRecordPO recommendRecordPO = recommendRecordDao.findByExecutionId(executionId);
+            if (recommendRecordPO == null) {
+                return null;
+            }
+
+            // 2.转换为RecommendRecordAggregate
+            return RecommendRecordInfraConvertor.INSTANCE.toAggregate(recommendRecordPO);
+        } catch (Exception e) {
+            log.error("根据执行记录ID查询推荐记录失败，执行记录ID: {}, 原因: {}", executionId, e.getMessage(), e);
+            throw RecommendException.of(RecommendErrorCode.QUERY_FAIL, "根据执行记录ID查询推荐记录失败");
+        }
+    }
+
+    @Override
+    public void update(RecommendRecordAggregate recommendRecordAggregate) {
+        try {
+            // 1.转换RecommendRecordAggregate为RecommendRecordPO
+            RecommendRecordPO recommendRecordPO = RecommendRecordInfraConvertor.INSTANCE.toPO(recommendRecordAggregate);
+
+
+            // 2.更新推荐记录
+            int updatedRows = recommendRecordDao.updateByIdAndUserId(recommendRecordPO);
+            
+            if (updatedRows == 0) {
+                log.error("推荐记录更新失败，未找到匹配的记录，记录ID: {}, 用户ID: {}", 
+                        recommendRecordAggregate.getId(), recommendRecordAggregate.getUserId());
+                throw RecommendException.of(RecommendErrorCode.OPERATE_FAILED, "推荐记录更新失败，记录不存在或已被删除");
+            }
+
+            log.info("推荐记录更新成功，记录ID: {}, 用户ID: {}, 状态: {}, 穿搭ID: {}",
+                    recommendRecordAggregate.getId(), recommendRecordAggregate.getUserId(),
+                    recommendRecordAggregate.getStatus(), recommendRecordAggregate.getOutfitId());
+        } catch (Exception e) {
+            log.error("推荐记录更新失败，记录ID: {}, 原因: {}", recommendRecordAggregate.getId(), e.getMessage(), e);
+            throw RecommendException.of(RecommendErrorCode.OPERATE_FAILED, "推荐记录更新失败");
         }
     }
 }

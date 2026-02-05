@@ -33,4 +33,13 @@ public interface WorkflowQueryService {
      * @return 工作流信息响应，如果工作流不存在则返回null
      */
     WorkflowInfoResponse findByCode(String code);
+
+    /**
+     * 查询所有未被删除的工作流
+     * <p>
+     * 查询所有未被删除的工作流列表
+     *
+     * @return 工作流信息响应列表，如果不存在则返回空列表
+     */
+    List<WorkflowInfoResponse> findAll();
 }

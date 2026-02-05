@@ -47,7 +47,7 @@ public class ClothingDocumentRepositoryImpl implements IClothingVectorRepository
             log.info("成功保存 {} 件衣服信息到Milvus", aiDocuments.size());
         } catch (Exception e) {
             log.error("保存服装文档到向量存储失败，原因: {}", e.getMessage(), e);
-//            throw AiException.of(AiErrorCode.VECTOR_STORE_SAVE_FAIL);
+            throw AiException.of(AiErrorCode.VECTOR_STORE_SAVE_FAIL);
         }
     }
 
@@ -87,7 +87,7 @@ public class ClothingDocumentRepositoryImpl implements IClothingVectorRepository
             // 先搜索获取所有匹配的文档ID
             SearchRequest searchRequest = SearchRequest.builder()
                     .query("")
-                    .topK(1) // 最多只有一个
+                    .topK(1)
                     .filterExpression("clothingId == '" + clothingId + "'")
                     .build();
             

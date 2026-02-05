@@ -34,7 +34,6 @@ public interface IClothingDomainService {
      * @param currentLocationId  当前位置ID，可为空
      * @param images             图片信息列表，不能为空
      * @return 服装聚合根，包含完整的服装信息和图片
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     ClothingAggregate createClothingWithImages(
             String userId,
@@ -56,7 +55,6 @@ public interface IClothingDomainService {
      *
      * @param clothingId 服装ID字符串，不能为空
      * @return 服装聚合根，包含完整的服装信息和图片列表
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当服装不存在时抛出
      */
     ClothingAggregate findByIdOrThrow(String clothingId);
 
@@ -67,7 +65,6 @@ public interface IClothingDomainService {
      * @param clothingId 服装ID字符串，不能为空
      * @param userId 用户ID字符串，不能为空
      * @return 服装聚合根，包含完整的服装信息和图片列表
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当服装不存在或用户不匹配时抛出
      */
     ClothingAggregate findByIdAndUserIdOrThrow(String clothingId, String userId);
 
@@ -89,7 +86,6 @@ public interface IClothingDomainService {
      * @param currentLocationId  新当前位置ID，可为空
      * @param images             新图片信息列表，不能为空
      * @return 更新后的服装聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     ClothingAggregate updateClothing(
             String clothingId,
@@ -112,7 +108,6 @@ public interface IClothingDomainService {
      * @param clothingId  服装ID，不能为空
      * @param locationId  新位置ID，不能为空（已在controller层校验）
      * @return 更新后的服装聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     ClothingAggregate changeClothingLocation(String clothingId, String locationId);
 
@@ -124,7 +119,6 @@ public interface IClothingDomainService {
      * @param clothingId 服装ID，不能为空
      * @param userId     用户ID，不能为空（已在controller层校验）
      * @return 删除后的服装聚合根
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当业务规则校验失败时抛出
      */
     ClothingAggregate deleteClothing(String clothingId, String userId);
 
@@ -133,7 +127,6 @@ public interface IClothingDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 服装聚合根列表（包含基本信息，按需加载图片）
-     * @throws com.xiaoo.kaleido.wardrobe.types.exception.WardrobeException 当参数无效时抛出
      */
     List<ClothingAggregate> findByUserId(String userId);
 }

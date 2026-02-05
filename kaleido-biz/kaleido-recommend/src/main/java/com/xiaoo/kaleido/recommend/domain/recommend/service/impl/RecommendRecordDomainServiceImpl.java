@@ -56,6 +56,31 @@ public class RecommendRecordDomainServiceImpl implements IRecommendRecordDomainS
     }
 
     @Override
+    public RecommendRecordAggregate createRecommendRecordWithExecution(String userId, String prompt, String executionId) {
+        // 1.参数校验
+        validateUserId(userId);
+        validatePrompt(prompt);
+        if (cn.hutool.core.util.StrUtil.isBlank(executionId)) {
+            throw RecommendException.of(RecommendErrorCode.PARAM_NOT_NULL, "执行记录ID不能为空");
+        }
+
+        // 2.业务规则校验：提示词长度限制
+        if (prompt.length() > MAX_PROMPT_LENGTH) {
+            throw RecommendException.of(RecommendErrorCode.PROMPT_TOO_LONG,
+                    String.format("提示词长度不能超过%d个字符", MAX_PROMPT_LENGTH));
+        }
+
+        // 3.创建推荐记录聚合根（带执行记录ID）
+        RecommendRecordAggregate recommendRecord = RecommendRecordAggregate.createWithExecution(userId, prompt, executionId);
+
+        // 4.记录日志
+        log.info("推荐记录创建成功（带执行记录），记录ID: {}, 用户ID: {}, 执行记录ID: {}, 提示词长度: {}",
+                recommendRecord.getId(), userId, executionId, prompt.length());
+
+        return recommendRecord;
+    }
+
+    @Override
     public RecommendRecordAggregate findByIdOrThrow(String recommendRecordId) {
         // 1.参数校验
         if (StrUtil.isBlank(recommendRecordId)) {
@@ -103,6 +128,60 @@ public class RecommendRecordDomainServiceImpl implements IRecommendRecordDomainS
 
         // 2.根据穿搭ID查找推荐记录
         return recommendRecordRepository.findByOutfitId(outfitId);
+    }
+
+    @Override
+    public RecommendRecordAggregate completeRecommendRecord(String recommendRecordId, String outfitId) {
+        // 1.参数校验
+        if (StrUtil.isBlank(recommendRecordId)) {
+            throw RecommendException.of(RecommendErrorCode.PARAM_NOT_NULL, "推荐记录ID不能为空");
+        }
+        if (StrUtil.isBlank(outfitId)) {
+            throw RecommendException.of(RecommendErrorCode.PARAM_NOT_NULL, "穿搭ID不能为空");
+        }
+
+        // 2.查找推荐记录
+        RecommendRecordAggregate recommendRecord = findByIdOrThrow(recommendRecordId);
+
+        // 3.业务规则校验：检查推荐记录状态
+        if (recommendRecord.isFinalStatus()) {
+            throw RecommendException.of(RecommendErrorCode.RECOMMEND_RECORD_FINAL_STATUS,
+                    "推荐记录已是终态，无法更新为已完成");
+        }
+
+        // 4.更新推荐记录状态和穿搭ID
+        recommendRecord.updateStatus(com.xiaoo.kaleido.recommend.types.enums.RecommendRecordStatusEnum.COMPLETED);
+        recommendRecord.updateOutfitId(outfitId);
+
+        // 5.记录日志
+        log.info("推荐记录标记为已完成，推荐记录ID: {}, 穿搭ID: {}", recommendRecordId, outfitId);
+
+        return recommendRecord;
+    }
+
+    @Override
+    public RecommendRecordAggregate failRecommendRecord(String recommendRecordId, String errorMessage) {
+        // 1.参数校验
+        if (StrUtil.isBlank(recommendRecordId)) {
+            throw RecommendException.of(RecommendErrorCode.PARAM_NOT_NULL, "推荐记录ID不能为空");
+        }
+
+        // 2.查找推荐记录
+        RecommendRecordAggregate recommendRecord = findByIdOrThrow(recommendRecordId);
+
+        // 3.业务规则校验：检查推荐记录状态
+        if (recommendRecord.isFinalStatus()) {
+            throw RecommendException.of(RecommendErrorCode.RECOMMEND_RECORD_FINAL_STATUS,
+                    "推荐记录已是终态，无法更新为失败");
+        }
+
+        // 4.更新推荐记录状态为失败
+        recommendRecord.updateStatus(com.xiaoo.kaleido.recommend.types.enums.RecommendRecordStatusEnum.FAILED);
+
+        // 5.记录日志
+        log.info("推荐记录标记为失败，推荐记录ID: {}, 错误信息: {}", recommendRecordId, errorMessage);
+
+        return recommendRecord;
     }
 
     /**

@@ -26,7 +26,7 @@ public class PermissionCommandService implements IPermissionCommandService {
     private final IPermissionRepository permissionRepository;
     private final IPermissionDomainService permissionDomainService;
 
-    @Transactional
+    @Override
     public String createPermission(AddPermissionCommand command) {
         // 1. 调用领域服务创建权限
         PermissionAggregate permissionAggregate = permissionDomainService.createPermission(
@@ -44,11 +44,12 @@ public class PermissionCommandService implements IPermissionCommandService {
         // 2. 保存权限
         permissionRepository.save(permissionAggregate);
 
-        log.info("权限创建成功，权限ID: {}, 权限编码: {}", 
+        log.info("权限创建成功，权限ID: {}, 权限编码: {}",
                 permissionAggregate.getId(), command.getCode());
         return permissionAggregate.getId();
     }
 
+    @Override
     public void updatePermission(String permissionId, UpdatePermissionCommand command) {
         // 1. 调用领域服务更新权限信息
         PermissionAggregate permissionAggregate = permissionDomainService.updatePermission(
@@ -69,6 +70,7 @@ public class PermissionCommandService implements IPermissionCommandService {
         log.info("权限信息更新成功，权限ID: {}", permissionId);
     }
 
+    @Override
     public void updatePermissionCode(String permissionId, String code) {
         // 1. 调用领域服务更新权限编码
         PermissionAggregate permissionAggregate = permissionDomainService.updatePermissionCode(permissionId, code);
@@ -79,7 +81,7 @@ public class PermissionCommandService implements IPermissionCommandService {
         log.info("权限编码更新成功，权限ID: {}, 新编码: {}", permissionId, code);
     }
 
-    @Transactional
+    @Override
     public void deletePermission(String permissionId) {
         // 1. 调用领域服务获取要删除的权限（验证权限是否存在且无子权限）
         PermissionAggregate permissionAggregate = permissionDomainService.deletePermission(permissionId);
@@ -89,11 +91,12 @@ public class PermissionCommandService implements IPermissionCommandService {
 
         log.info("权限删除成功，权限ID: {}", permissionId);
     }
-
+    @Override
     public boolean isCodeAvailable(String code) {
         return permissionDomainService.isCodeAvailable(code);
     }
 
+    @Override
     public boolean isValidPermission(String permissionId) {
         return permissionDomainService.isValidPermission(permissionId);
     }

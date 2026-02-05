@@ -3,6 +3,8 @@ package com.xiaoo.kaleido.user.domain.model.aggregate;
 import com.xiaoo.kaleido.user.domain.model.entity.User;
 import com.xiaoo.kaleido.user.domain.model.entity.UserOperateStream;
 import com.xiaoo.kaleido.user.domain.constant.UserOperateType;
+import com.xiaoo.kaleido.user.types.exception.UserException;
+import com.xiaoo.kaleido.user.types.exception.UserErrorCode;
 import lombok.Builder;
 import lombok.Data;
 
@@ -44,11 +46,10 @@ public class UserAggregate implements Serializable {
      *
      * @param user 用户实体，不能为空
      * @return 用户聚合根
-     * @throws IllegalArgumentException 当用户实体为空时抛出
      */
     public static UserAggregate create(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("用户实体不能为空");
+            throw UserException.of(UserErrorCode.REQUEST_PARAM_NULL);
         }
         return UserAggregate.builder()
                 .user(user)
@@ -64,7 +65,6 @@ public class UserAggregate implements Serializable {
      * @param inviteCode 邀请码，不能为空
      * @param inviterId  邀请人ID，可为空表示无邀请人
      * @return 用户聚合根
-     * @throws IllegalArgumentException 当参数不符合要求时抛出
      */
     public static UserAggregate create(String telephone, String nickName, String inviteCode, String inviterId) {
         // 1.创建用户实体
@@ -133,7 +133,6 @@ public class UserAggregate implements Serializable {
      * 更新头像
      *
      * @param avatarUrl 头像URL
-     * @throws IllegalStateException 如果用户状态不允许修改
      */
     public void updateAvatar(String avatarUrl) {
         user.updateAvatar(avatarUrl);

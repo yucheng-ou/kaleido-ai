@@ -42,4 +42,21 @@ public interface RecommendRecordDao extends BaseMapper<RecommendRecordPO> {
      * @return 推荐记录列表
      */
     List<RecommendRecordPO> findByUserIdAndHasOutfit(@Param("userId") String userId, @Param("hasOutfit") boolean hasOutfit);
+
+    /**
+     * 根据执行记录ID查询推荐记录
+     *
+     * @param executionId 执行记录ID
+     * @return 推荐记录持久化对象
+     */
+    RecommendRecordPO findByExecutionId(@Param("executionId") String executionId);
+
+    /**
+     * 根据ID和用户ID更新推荐记录
+     * 使用自定义SQL避免分片键更新问题
+     *
+     * @param recommendRecordPO 推荐记录持久化对象
+     * @return 更新影响的行数
+     */
+    int updateByIdAndUserId(@Param("po") RecommendRecordPO recommendRecordPO);
 }

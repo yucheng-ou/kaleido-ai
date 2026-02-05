@@ -1,19 +1,13 @@
 package com.xiaoo.kaleido.recommend.application.command;
 
-import cn.hutool.core.util.RandomUtil;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.xiaoo.kaleido.api.admin.user.command.SendSmsCodeCommand;
-import com.xiaoo.kaleido.api.admin.user.response.SmsCodeResponse;
+import com.xiaoo.kaleido.api.ai.IRpcAiService;
 import com.xiaoo.kaleido.api.coin.IRpcCoinService;
 import com.xiaoo.kaleido.api.coin.enums.CoinBizTypeEnum;
 import com.xiaoo.kaleido.api.wardrobe.IRpcOutfitService;
-import com.xiaoo.kaleido.api.wardrobe.command.CreateOutfitWithClothingsCommand;
-import com.xiaoo.kaleido.api.wardrobe.command.OutfitImageInfoCommand;
-import com.xiaoo.kaleido.base.exception.BizErrorCode;
 import com.xiaoo.kaleido.base.exception.BizException;
 import com.xiaoo.kaleido.base.result.Result;
-import com.xiaoo.kaleido.distribute.util.SnowflakeUtil;
 import com.xiaoo.kaleido.limiter.annotation.RateLimit;
 import com.xiaoo.kaleido.lock.annotation.DistributedLock;
 import com.xiaoo.kaleido.recommend.config.RecommendConfig;
@@ -25,14 +19,8 @@ import com.xiaoo.kaleido.recommend.types.exception.RecommendException;
 import com.xiaoo.kaleido.rpc.constant.RpcConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 推荐命令服务
@@ -58,10 +46,20 @@ public class RecommendCommandService {
     @DubboReference(version = RpcConstants.DUBBO_VERSION)
     private IRpcOutfitService rpcOutfitService;
 
+    @DubboReference(version = RpcConstants.DUBBO_VERSION)
+    private IRpcAiService rpcAiService;
+
     /**
      * 创建推荐记录
      * <p>
      * 用户输入提示词，创建推荐记录
+     * 流程：
+     * 1. 校验金币是否足够
+     * 2. 调用AI RPC服务执行工作流，获取执行记录ID
+     * 3. 创建推荐记录（状态为处理中，关联执行记录ID）
+     * 4. 扣减金币
+     * 5. 返回推荐记录ID
+     * 注意：穿搭将在AI工作流执行完成后通过事件异步保存
      *
      * @param userId 用户ID
      * @param prompt 用户输入的推荐需求提示词
@@ -79,7 +77,6 @@ public class RecommendCommandService {
     public String createRecommendRecord(String userId, String prompt) {
         log.info("开始创建推荐记录，用户ID: {}, 提示词: {}", userId, prompt);
 
-
         // 1.校验金币是否足够
         Result<Boolean> booleanResult = rpcCoinService.checkBalance(userId, CoinBizTypeEnum.OUTFIT_RECOMMEND);
         if (!booleanResult.getSuccess()) {
@@ -87,36 +84,30 @@ public class RecommendCommandService {
         }
         if (!booleanResult.getData()) {
             throw RecommendException.of(RecommendErrorCode.COIN_INSUFFICIENT);
-
         }
 
-        // 2.生成穿搭信息（使用测试数据，因为AI服务还没有）
-        CreateOutfitWithClothingsCommand command = CreateOutfitWithClothingsCommand.builder()
-                .name("测试穿搭" + RandomUtil.randomString(4))
-                .description("测试穿搭")
-                .clothingIds(List.of("2016037684459589632", "2016037709516361728"))
-                .images(List.of(OutfitImageInfoCommand.builder().path("20260121/69f6a835-0630-4293-b62a-ef4d1660716e.png").build()))
-                .build();
-
-        //3.保存穿搭
-        Result<String> outfitRes = rpcOutfitService.createOutfitWithClothingsAndImages(userId, command);
-        if (!outfitRes.getSuccess()) {
-            throw RecommendException.of(outfitRes.getCode(), outfitRes.getMsg());
+        // 2.调用AI RPC服务执行工作流
+        Result<String> executionResult = rpcAiService.executeOutfitRecommendWorkflow(userId, prompt);
+        if (!executionResult.getSuccess()) {
+            log.error("调用AI服务执行工作流失败，用户ID: {}, 提示词: {}, 错误: {}", 
+                    userId, prompt, executionResult.getMsg());
+            throw RecommendException.of(RecommendErrorCode.AI_SERVICE_UNAVAILABLE, executionResult.getMsg());
         }
-        String outfitId = outfitRes.getData();
+        String executionId = executionResult.getData();
 
-        // 4.调用领域服务创建推荐记录
-        RecommendRecordAggregate recommendRecord = recommendRecordDomainService.createRecommendRecord(userId, prompt, outfitId);
+        // 3.调用领域服务创建推荐记录（带执行记录ID）
+        RecommendRecordAggregate recommendRecord = recommendRecordDomainService.createRecommendRecordWithExecution(
+                userId, prompt, executionId);
 
-        // 5.保存推荐记录
+        // 4.保存推荐记录
         recommendRecordRepository.save(recommendRecord);
 
-        // 6.扣减金币
+        // 5.扣减金币
         deductCoins(userId, recommendRecord.getId());
 
-        // 7.记录日志（穿搭保存部分暂时跳过，因为AI服务还没有）
-        log.info("推荐记录创建成功，记录ID: {}, 用户ID: {}, 穿搭ID: {}",
-                recommendRecord.getId(), userId, outfitId);
+        // 6.记录日志
+        log.info("推荐记录创建成功，记录ID: {}, 用户ID: {}, 执行记录ID: {}, 状态: 处理中",
+                recommendRecord.getId(), userId, executionId);
 
         return recommendRecord.getId();
     }

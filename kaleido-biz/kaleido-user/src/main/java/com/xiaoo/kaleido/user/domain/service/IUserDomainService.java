@@ -21,7 +21,6 @@ public interface IUserDomainService {
      * @param telephone  手机号，必须符合手机号格式规范
      * @param inviteCode 邀请人邀请码，可为空表示无邀请人
      * @return 用户聚合根，包含完整的用户信息
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当手机号已存在或邀请码无效时抛出
      */
     UserAggregate createUser(String telephone, String inviteCode);
 
@@ -32,7 +31,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 用户聚合根，包含完整的用户信息
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在时抛出
      */
     UserAggregate findByIdOrThrow(String userId);
 
@@ -44,7 +42,6 @@ public interface IUserDomainService {
      * @param userId   用户ID，不能为空
      * @param nickName 新昵称，长度限制为2-20个字符
      * @return 更新后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或昵称格式无效时抛出
      */
     UserAggregate changeNickName(String userId, String nickName);
 
@@ -55,7 +52,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 冻结后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或已是冻结状态时抛出
      */
     UserAggregate freezeUser(String userId);
 
@@ -66,7 +62,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 解冻后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或不是冻结状态时抛出
      */
     UserAggregate unfreezeUser(String userId);
 
@@ -77,7 +72,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 删除后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或已是删除状态时抛出
      */
     UserAggregate deleteUser(String userId);
 
@@ -89,7 +83,6 @@ public interface IUserDomainService {
      * @param userId    用户ID，不能为空
      * @param avatarUrl 头像URL，必须是有效的URL格式
      * @return 更新后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或URL格式无效时抛出
      */
     UserAggregate updateAvatar(String userId, String avatarUrl);
 
@@ -100,7 +93,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 更新后的用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在或用户状态异常时抛出
      */
     UserAggregate login(String userId);
 
@@ -111,7 +103,6 @@ public interface IUserDomainService {
      *
      * @param userId 用户ID，不能为空
      * @return 用户聚合根
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当用户不存在时抛出
      */
     UserAggregate logout(String userId);
 
@@ -121,7 +112,6 @@ public interface IUserDomainService {
      * 为用户生成唯一的邀请码，用于邀请新用户注册
      *
      * @return 邀请码值对象，包含邀请码字符串和生成时间
-     * @throws com.xiaoo.kaleido.user.types.exception.UserException 当生成邀请码失败时抛出
      */
     InvitationCode generateInvitationCode();
 
