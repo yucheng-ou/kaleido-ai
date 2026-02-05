@@ -148,8 +148,6 @@ kaleido-server/
    git clone https://github.com/your-org/kaleido-server.git
    cd kaleido-server
    ```
-   
-
 2. **部署环境**
 
     部署文件参考 doc/deploy
