@@ -10,9 +10,7 @@
 
     <artifactId>kaleido-ds</artifactId>
     <name>kaleido-ds</name>
-    <version>1.0.0</version>
     <description>kaleido-ds</description>
-
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

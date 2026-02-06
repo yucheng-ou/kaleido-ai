@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>kaleido-web</artifactId>
-    <version>1.0.0</version>
     <name>kaleido-web</name>
     <description>kaleido-web</description>
 

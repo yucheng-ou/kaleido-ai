@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>kaleido-base</artifactId>
-    <version>1.0.0</version>
     <name>kaleido-base</name>
     <description>kaleido-base</description>
 
