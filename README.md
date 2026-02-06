@@ -127,8 +127,7 @@ kaleido-server/
 
 ## 业务功能
 
-<img src="C:\workspace\kaleido-server\images\业务功能.jpg" />
-
+![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg)
 ## 快速开始
 
 ### 环境要求
