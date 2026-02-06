@@ -8,11 +8,16 @@
 
 ## 项目介绍
 
-Kaleido AI智能衣柜是一个基于微服务架构的AI智能衣柜管理系统。项目旨在通过AI技术帮助用户更好地管理个人衣物、创建个性化穿搭方案，并提供智能推荐服务。系统结合了现代微服务架构、LLM(大语言模型)、向量检索、MCP等技术，为用户提供全方位的衣物管理解决方案。
+Kaleido AI智能衣柜是基于微服务架构的AI衣物管理系统，为用户提供衣物管理、个性化穿搭方案和智能推荐服务。
 
-项目采用**DDD(领域驱动设计)+ CQRS + 整洁架构** 进行开发，严格遵循依赖倒置原则，通过清晰的四层架构（接口适配层、应用层、领域层、基础设施层）实现领域核心最小外部依赖。
+采用**DDD + CQRS + 整洁架构**，遵循依赖倒置原则，通过分层架构（接口层、应用层、领域层、基础设施层）确保领域核心独立性。
 
-基于当前主流技术栈：JDK21、SpringBoot 3.5.6、SpringCloud 2025及SpringAI 1.1.2，集成Spring Cloud Alibaba微服务组件、MyBatis-Plus、MySQ、MongoDB、Milvus、Redis、MinIO对象存储、ShardingSphere分库分表等技术。配合完整微服务生态：Nacos服务注册与配置中心、Sentinel流量控制、Seata分布式事务、Dubbo RPC框架、XXL-Job分布式任务调度、RabbitMQ消息中间件，以及Sa-Token权限认证、Dynamic-Tp动态线程池、JetCache多级缓存等组件，确保系统的高性能、高可用性和可扩展性。
+技术栈基于主流微服务架构：
+- **框架**：JDK21、SpringBoot 3.5.6、SpringCloud 2025、SpringAI 1.1.2
+- **存储**：MySQL、MongoDB、Milvus、Redis、MinIO、ShardingSphere
+- **微服务**：Spring Cloud Alibaba、Nacos、Sentinel、Seata、Dubbo
+- **中间件**：RabbitMQ、XXL-Job
+- **组件**：Sa-Token、MyBatis-Plus、JetCache、Dynamic-Tp
 
 系统采用模块化微服务架构，包含：
 
