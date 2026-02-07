@@ -1,6 +1,6 @@
 <div align="center">
 
-**Kaleido AI智能衣柜** - 基于微服务架构的AI智能衣柜管理系统
+**Kaleido AI智能衣柜** - 基于微服务架构的AI智能衣橱
 
 </div>
 
