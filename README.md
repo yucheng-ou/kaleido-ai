@@ -2,7 +2,7 @@
 
 # 🎨 Kaleido AI 智能衣柜
 
-> 基于微服务架构的AI衣物管理系统，让每一次穿搭都更懂你
+> 基于微服务架构的AI智能衣柜，让每一次穿搭都更懂你
 
 [![JDK](https://img.shields.io/badge/JDK-21-blue)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen)](https://spring.io/projects/spring-boot)
