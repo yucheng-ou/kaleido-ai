@@ -1,54 +1,81 @@
 <div align="center">
 
-**Kaleido AI智能衣柜** - 基于微服务架构的AI智能衣柜管理系统
+# 🎨 Kaleido AI 智能衣柜
+
+> 基于微服务架构的AI衣物管理系统，让每一次穿搭都更懂你
+
+[![JDK](https://img.shields.io/badge/JDK-21-blue)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen)](https://spring.io/projects/spring-boot)
+[![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.0.0-green)](https://spring.io/projects/spring-cloud)
+[![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-orange)](https://spring.io/projects/spring-ai)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Stars](https://img.shields.io/badge/Stars-3-red)
+[![中文文档](https://img.shields.io/badge/文档-中文-blueviolet)](README.md)
+
+[✨ 特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档) • [🤝 贡献](#-贡献指南)
 
 </div>
 
 ---
 
-## 项目介绍
+## 📌 项目简介
 
-Kaleido AI智能衣柜是基于微服务架构的AI衣物管理系统，为用户提供衣物管理、个性化穿搭方案和智能推荐服务。
+Kaleido AI智能衣柜是一个**生产级微服务架构**的AI衣物管理系统，采用 **DDD领域驱动设计 + CQRS + 整洁架构**，为用户提供：
 
-采用**DDD + CQRS + 整洁架构**，遵循依赖倒置原则，通过分层架构（接口层、应用层、领域层、基础设施层）确保领域核心独立性。
+- 📸 **衣物数字化管理**：一键录入、智能分类、标签化管理
+- 🤖 **AI智能推荐**：基于天气、场合、个人偏好的个性化穿搭方案
+- 🔍 **相似度检索**：通过向量搜索找到最相似的衣物
+- 💬 **穿搭顾问**：AI对话式穿搭建议，让选择更轻松
 
-技术栈基于主流微服务架构：
-- **框架**：JDK21、SpringBoot 3.5.6、SpringCloud 2025、SpringAI 1.1.2
-- **存储**：MySQL、MongoDB、Milvus、Redis、MinIO、ShardingSphere
-- **微服务**：Spring Cloud Alibaba、Nacos、Sentinel、Seata、Dubbo
-- **中间件**：RabbitMQ、XXL-Job
-- **组件**：Sa-Token、MyBatis-Plus、JetCache、Dynamic-Tp
+> 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
 
-系统采用模块化微服务架构，包含：
+---
 
-1. __公共模块__：提供缓存、分布式锁、消息队列、限流降级等基础能力
-2. __核心业务服务__：用户服务、衣柜服务、AI服务、推荐服务、标签服务、金币服务、MCP服务
-3. __支撑服务__：API网关、统一认证中心、通知服务、管理后台
+## ✨ 核心特性
 
-各服务独立部署、领域驱动，形成清晰的技术架构和业务边界，支持快速迭代和业务扩展。
+### 🎯 技术亮点
 
-## 业务功能
+| 特性 | 说明 |
+|------|------|
+| **DDD + CQRS** | 领域驱动设计，读写分离，领域模型独立 |
+| **整洁架构** | 四层架构（接口层、应用层、领域层、基础设施层），依赖倒置 |
+| **Spring AI集成** | 无缝对接LLM、向量数据库、RAG能力 |
+| **微服务架构** | 11个业务服务 + 23个通用模块，独立部署、弹性扩展 |
 
-![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg)
+### 🛠️ 技术栈
 
-## 架构设计
+#### 核心框架
+- **Java 21**（LTS版本，虚拟线程支持）
+- **Spring Boot 3.5.6** + **Spring Cloud 2025.0.0**
+- **Spring AI 1.1.2**（AI集成框架）
+- **Spring Cloud Alibaba 2025.0.0.0**
 
-### 系统架构
+#### 微服务生态
+- **Nacos 2.3**：服务注册 + 配置中心
+- **Sentinel 1.8.7**：流量控制 + 降级熔断
+- **Dubbo 3.3.0**：高性能RPC框架
+- **Seata 1.8.0**：分布式事务（AT模式）
+- **XXL-Job 3.3.2**：分布式任务调度
 
-![输入图片说明](images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg)
+#### 数据存储
+| 存储 | 版本 | 用途 |
+|------|------|------|
+| **MySQL** | 8.4.0 | 关系型数据，ShardingSphere分库分表 |
+| **MongoDB** | 7.0+ | 文档型数据，灵活Schema |
+| **Milvus** | 2.4+ | 向量数据库，AI特征存储和相似度搜索 |
+| **Redis** | 6+ | 缓存，JetCache多级缓存（Caffeine + Redis） |
+| **MinIO** | 8.6.0 | 对象存储，图片、文件管理 |
 
-### 业务架构
+#### 中间件
+- **RabbitMQ 3.13+**：消息队列，异步解耦
+- **Redisson 3.52.0**：Redis客户端，分布式锁
 
-![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg)
-
-### 代码分层设计
-
-![输入图片说明](images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg)
-
-![输入图片说明](images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png)
-
-## 技术栈
-
+#### 工具库
+- **Sa-Token 1.44.0**：轻量级权限认证
+- **MyBatis-Plus 3.5.9**：ORM框架
+- **MapStruct 1.6.3**：类型安全的对象映射
+- **Smart-Doc 2.7.7**：零侵入API文档生成
+- **Dynamic-TP 1.2.2-x**：动态线程池监控
 ![输入图片说明](images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
 
 | 技术 | 版本 | 说明 |
@@ -83,8 +110,30 @@ Kaleido AI智能衣柜是基于微服务架构的AI衣物管理系统，为用�
 | PageHelper | 2.1.1 | MyBatis分页插件 |
 | Dynamic-tp | 1.2.2-x | 动态线程池 |
 
+---
 
-## 项目目录
+
+## 🐱‍🐉 业务功能
+
+![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg)
+
+## 🏗️ 架构设计
+
+### 系统架构
+
+![输入图片说明](images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg)
+
+### 业务架构
+
+![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg)
+
+### 代码分层设计
+
+![输入图片说明](images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg)
+
+![输入图片说明](images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png)
+
+## 📁 项目结构
 
 ```
 kaleido-server/
@@ -129,7 +178,7 @@ kaleido-server/
 └── README.md                          # 项目说明文档
 ```
 
-## 快速开始
+## 🚀 快速开始
 
 ### 环境要求
 
@@ -216,7 +265,7 @@ kaleido-server/
    ...
    ```
 
-### 验证部署
+### 🔧 验证部署
 
 1. **访问 Nacos 控制台**
     - 地址：http://localhost:8848/nacos
@@ -232,7 +281,7 @@ kaleido-server/
    # 文档位置：doc/api/{服务名}/index.html
    ```
 
-## TODO
+## 📋 TODO
 
 1. **集成ELK可视化日志管理**
 
