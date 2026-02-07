@@ -1,0 +1,4839 @@
+= kaleido-admin API 文档
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Version |  Update Time  | Status | Author |  Description
+|v2026-02-02 20:03:17|2026-02-02 20:03:17|auto|@ouyucheng|Created by smart-doc
+|====================
+
+
+=== 管理员API
+==== 更新管理员信息(用于修改用户自身信息 不需要鉴权)
+*URL:* `http://localhost:9010/kaleido-admin/admin`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|realName|string|false|真实姓名
+Validate[max: 20; ]|-
+|mobile|string|false|手机号
+Validate[regexp: ^1[3-9]\\d{9}$; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin --data '{
+  "realName": "carmon.bosco",
+  "mobile": "361-754-0536"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "6cib82",
+  "success": true
+}
+----
+
+==== 解冻管理员
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}/enable`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}/enable
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "7gs6ml",
+  "success": true
+}
+----
+
+==== 冻结管理员
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}/freeze`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}/freeze
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "lqtypm",
+  "success": true
+}
+----
+
+==== 分配角色给管理员
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}/roles`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID（从路径参数获取）|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|roleIds|array|true|角色ID列表|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}/roles --data '{
+  "roleIds": [
+    "kpzu8x"
+  ]
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "07blj5",
+  "success": true
+}
+----
+
+==== 根据ID查询管理员信息
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─adminId|string|管理员ID|-
+|└─realName|string|真实姓名|-
+|└─mobile|string|手机号|-
+|└─status|string|管理员状态|-
+|└─lastLoginTime|string|最后登录时间|-
+|└─roleIds|array|角色ID列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "smqph2",
+  "success": true,
+  "data": {
+    "adminId": "134",
+    "realName": "carmon.bosco",
+    "mobile": "361-754-0536",
+    "status": "8vgftb",
+    "lastLoginTime": "2026-02-02 20:03:51",
+    "roleIds": [
+      "i40yi0"
+    ]
+  }
+}
+----
+
+==== 查询管理员自身信息 不需要鉴权
+*URL:* `http://localhost:9010/kaleido-admin/admin`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─adminId|string|管理员ID|-
+|└─realName|string|真实姓名|-
+|└─mobile|string|手机号|-
+|└─status|string|管理员状态|-
+|└─lastLoginTime|string|最后登录时间|-
+|└─roleIds|array|角色ID列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "14ix3z",
+  "success": true,
+  "data": {
+    "adminId": "134",
+    "realName": "carmon.bosco",
+    "mobile": "361-754-0536",
+    "status": "jhoyvl",
+    "lastLoginTime": "2026-02-02 20:03:51",
+    "roleIds": [
+      "ormn0x"
+    ]
+  }
+}
+----
+
+==== 分页查询管理员
+*URL:* `http://localhost:9010/kaleido-admin/admin/page`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|pageNum|int32|false|页码|-
+|pageSize|int32|false|分页大小|-
+|realName|string|false|真实姓名|-
+|mobile|string|false|手机号|-
+|status|string|false|管理员状态|-
+|roleId|string|false|角色ID|-
+|startTime|string|false|开始时间（创建时间）|-
+|endTime|string|false|结束时间（创建时间）|-
+|====================
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/page?pageNum=287&pageSize=10&realName=carmon.bosco&mobile=361-754-0536&status=2c3h5s&roleId=134&startTime=2026-02-02 20:03:20&endTime=2026-02-02 20:03:20
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─total|int64|No comments found.|-
+|└─list|array|No comments found.|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─adminId|string|管理员ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─realName|string|真实姓名|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─mobile|string|手机号|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|管理员状态|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastLoginTime|string|最后登录时间|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─roleIds|array|角色ID列表|-
+|└─pageNum|int32|当前页|-
+|└─pageSize|int32|每页的数量|-
+|└─size|int32|当前页的数量|-
+|└─startRow|int64|由于startRow和endRow不常用，这里说个具体的用法
+可以在页面中"显示startRow到endRow 共size条数据"
+当前页面第一个元素在数据库中的行号|-
+|└─endRow|int64|当前页面最后一个元素在数据库中的行号|-
+|└─pages|int32|总页数|-
+|└─prePage|int32|前一页|-
+|└─nextPage|int32|下一页|-
+|└─firstPage|boolean|是否为第一页|-
+|└─lastPage|boolean|是否为最后一页|-
+|└─hasPreviousPage|boolean|是否有前一页|-
+|└─hasNextPage|boolean|是否有下一页|-
+|└─navigatePages|int32|导航页码数|-
+|└─navigatepageNums|array|所有导航页号|-
+|└─navigateFirstPage|int32|导航条上的第一页|-
+|└─navigateLastPage|int32|导航条上的最后一页|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "n95vdx",
+  "success": true,
+  "data": {
+    "total": 49,
+    "list": [
+      {
+        "adminId": "134",
+        "realName": "carmon.bosco",
+        "mobile": "361-754-0536",
+        "status": "lxpr9f",
+        "lastLoginTime": "2026-02-02 20:03:51",
+        "roleIds": [
+          "wwf3ma"
+        ]
+      }
+    ],
+    "pageNum": 355,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 541,
+    "endRow": 329,
+    "pages": 365,
+    "prePage": 1,
+    "nextPage": 1,
+    "firstPage": true,
+    "lastPage": true,
+    "hasPreviousPage": true,
+    "hasNextPage": true,
+    "navigatePages": 165,
+    "navigatepageNums": [
+      214
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}
+----
+
+==== 获取管理员的所有权限
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}/permissions`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}/permissions
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "e6cxy6",
+  "success": true,
+  "data": [
+    "a659yl",
+    "46vr1k"
+  ]
+}
+----
+
+==== 获取管理员的目录和菜单树（过滤按钮）
+*URL:* `http://localhost:9010/kaleido-admin/admin/{adminId}/directory-menus`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|adminId|string|true|管理员ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/{adminId}/directory-menus
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─permissionId|string|权限ID|-
+|└─code|string|权限编码|-
+|└─name|string|权限名称|-
+|└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|└─parentId|string|父权限ID|-
+|└─sort|int32|排序|-
+|└─icon|string|图标|-
+|└─path|string|前端路由路径|-
+|└─component|string|前端组件路径|-
+|└─isHidden|boolean|是否隐藏|-
+|└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "2o26w4",
+  "success": true,
+  "data": [
+    {
+      "permissionId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "type": "DIRECTORY",
+      "parentId": "134",
+      "sort": 668,
+      "icon": "d8n2f2",
+      "path": "8vu3oz",
+      "component": "cj5c4p",
+      "isHidden": true,
+      "children": [
+        {
+          "$ref": ".."
+        }
+      ]
+    }
+  ]
+}
+----
+
+=== AI管理API
+==== 创建Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|Agent编码
+Validate[max: 50; ]|-
+|name|string|true|Agent名称
+Validate[max: 100; ]|-
+|description|string|false|Agent描述
+Validate[max: 500; ]|-
+|systemPrompt|string|true|系统提示词
+Validate[max: 5000; ]|-
+|modelName|string|false|AI模型名称
+Validate[max: 100; ]|-
+|temperature|number|false|温度参数|-
+|maxTokens|int32|false|最大token数|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent --data '{
+  "code": "26259",
+  "name": "carmon.bosco",
+  "description": "s61515",
+  "systemPrompt": "748th4",
+  "modelName": "carmon.bosco",
+  "temperature": 905,
+  "maxTokens": 152
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "ta1sax",
+  "success": true,
+  "data": "g1ujw4"
+}
+----
+
+==== 更新Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|Agent名称
+Validate[max: 100; ]|-
+|description|string|false|Agent描述
+Validate[max: 500; ]|-
+|systemPrompt|string|true|系统提示词
+Validate[max: 5000; ]|-
+|modelName|string|false|AI模型名称
+Validate[max: 100; ]|-
+|temperature|number|false|温度参数|-
+|maxTokens|int32|false|最大token数|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId} --data '{
+  "name": "carmon.bosco",
+  "description": "zaregx",
+  "systemPrompt": "m841cs",
+  "modelName": "carmon.bosco",
+  "temperature": 712,
+  "maxTokens": 703
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "9m1b4r",
+  "success": true
+}
+----
+
+==== 启用Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/enable`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/enable
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "ep0324",
+  "success": true
+}
+----
+
+==== 禁用Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/disable`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/disable
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "dv3rbb",
+  "success": true
+}
+----
+
+==== 添加工具到Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/tools`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|toolCode|string|true|工具编码
+Validate[max: 50; ]|-
+|toolName|string|true|工具名称
+Validate[max: 100; ]|-
+|toolType|enum|true|工具类型<br/>[Enum values:<br/>MEMORY("MEMORY", "记忆")<br/>VECTOR_STORE("VECTOR_STORE", "向量存储")<br/>MCP("MCP", "MCP工具")<br/>]|-
+|toolConfig|string|false|工具配置
+Validate[max: 5000; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/tools --data '{
+  "toolCode": "26259",
+  "toolName": "carmon.bosco",
+  "toolType": "MEMORY",
+  "toolConfig": "shdxng"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "73ec2o",
+  "success": true
+}
+----
+
+==== 从Agent移除工具
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/tools/{toolCode}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true| Agent ID|-
+|toolCode|string|true|工具编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}/tools/{toolCode}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "gjsh99",
+  "success": true
+}
+----
+
+==== 查询Agent详情
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|agentId|string|true|Agent ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/{agentId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "ypnt2w",
+  "success": true,
+  "data": {
+    "agentId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "wev9kg",
+    "systemPrompt": "mlf2qr",
+    "modelName": "carmon.bosco",
+    "temperature": 897,
+    "maxTokens": 164,
+    "status": "34gn34",
+    "tools": [
+      {
+        "toolCode": "26259",
+        "toolName": "carmon.bosco",
+        "toolType": "gxnzrv",
+        "toolConfig": "9pinxf"
+      }
+    ]
+  }
+}
+----
+
+==== 根据编码查询Agent
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent/by-code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|Agent编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent/by-code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "6mjbom",
+  "success": true,
+  "data": {
+    "agentId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "a8lcw1",
+    "systemPrompt": "rw7hj1",
+    "modelName": "carmon.bosco",
+    "temperature": 184,
+    "maxTokens": 917,
+    "status": "9yd8sq",
+    "tools": [
+      {
+        "toolCode": "26259",
+        "toolName": "carmon.bosco",
+        "toolType": "ujtqaq",
+        "toolConfig": "o61on4"
+      }
+    ]
+  }
+}
+----
+
+==== 查询Agent列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/agent`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/agent
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─agentId|string|Agent ID|-
+|└─code|string|Agent编码（唯一）|-
+|└─name|string|Agent名称|-
+|└─description|string|Agent描述|-
+|└─systemPrompt|string|系统提示词|-
+|└─modelName|string|AI模型名称|-
+|└─temperature|number|温度参数|-
+|└─maxTokens|int32|最大token数|-
+|└─status|string|Agent状态|-
+|└─tools|array|工具列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolCode|string|工具编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolName|string|工具名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolType|string|工具类型|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─toolConfig|string|工具配置|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "415y67",
+  "success": true,
+  "data": [
+    {
+      "agentId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "description": "l3vh70",
+      "systemPrompt": "vrux2a",
+      "modelName": "carmon.bosco",
+      "temperature": 119,
+      "maxTokens": 386,
+      "status": "qbghu3",
+      "tools": [
+        {
+          "toolCode": "26259",
+          "toolName": "carmon.bosco",
+          "toolType": "rxyrpp",
+          "toolConfig": "03tgdy"
+        }
+      ]
+    }
+  ]
+}
+----
+
+==== 创建工作流
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|工作流编码
+Validate[max: 50; ]|-
+|name|string|true|工作流名称
+Validate[max: 100; ]|-
+|description|string|false|工作流描述
+Validate[max: 500; ]|-
+|definition|string|true|工作流DSL定义
+Validate[max: 5000; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow --data '{
+  "code": "26259",
+  "name": "carmon.bosco",
+  "description": "mx6z1g",
+  "definition": "ivu2be"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "6vzszo",
+  "success": true,
+  "data": "kqkbta"
+}
+----
+
+==== 更新工作流
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|工作流名称
+Validate[max: 100; ]|-
+|description|string|false|工作流描述
+Validate[max: 500; ]|-
+|definition|string|true|工作流DSL定义
+Validate[max: 5000; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId} --data '{
+  "name": "carmon.bosco",
+  "description": "jap5t6",
+  "definition": "iaogrj"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "4jtr84",
+  "success": true
+}
+----
+
+==== 启用工作流
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}/enable`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}/enable
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "sbmw4u",
+  "success": true
+}
+----
+
+==== 禁用工作流
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}/disable`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}/disable
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "czmvqp",
+  "success": true
+}
+----
+
+==== 查询工作流详情
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|workflowId|string|true|工作流ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow/{workflowId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "i482xc",
+  "success": true,
+  "data": {
+    "workflowId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "c3vog4",
+    "definition": "vcx7m8",
+    "status": "f3xfjh",
+    "createTime": "2026-02-02 20:03:51",
+    "updateTime": "2026-02-02 20:03:51"
+  }
+}
+----
+
+==== 根据编码查询工作流
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow/by-code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|工作流编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow/by-code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "slwnxs",
+  "success": true,
+  "data": {
+    "workflowId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "3hnx4u",
+    "definition": "nq7zy3",
+    "status": "z3iyl0",
+    "createTime": "2026-02-02 20:03:52",
+    "updateTime": "2026-02-02 20:03:52"
+  }
+}
+----
+
+==== 查询工作流列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/ai/workflow`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/ai/workflow
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─workflowId|string|工作流ID|-
+|└─code|string|工作流编码|-
+|└─name|string|工作流名称|-
+|└─description|string|工作流描述|-
+|└─definition|string|工作流定义|-
+|└─status|string|工作流状态|-
+|└─createTime|string|创建时间|-
+|└─updateTime|string|更新时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "hj240x",
+  "success": true,
+  "data": [
+    {
+      "workflowId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "description": "zxdkmp",
+      "definition": "g3r9he",
+      "status": "juauc5",
+      "createTime": "2026-02-02 20:03:52",
+      "updateTime": "2026-02-02 20:03:52"
+    }
+  ]
+}
+----
+
+=== 品牌管理API（管理后台）
+==== 创建品牌
+*URL:* `http://localhost:9010/kaleido-admin/admin/wardrobe/brand`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|品牌名称
+Validate[max: 100; ]|-
+|logoPath|string|false|Logo路径（在MinIO中的文件路径）
+Validate[max: 500; ]|-
+|description|string|false|品牌描述
+Validate[max: 500; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/wardrobe/brand --data '{
+  "name": "carmon.bosco",
+  "logoPath": "uwplc9",
+  "description": "w6u6vd"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "x18o5f",
+  "success": true,
+  "data": "dihgkw"
+}
+----
+
+==== 更新品牌信息
+*URL:* `http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|brandId|string|true|品牌ID，不能为空|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|logoPath|string|false|Logo路径（在MinIO中的文件路径）
+Validate[max: 500; ]|-
+|description|string|false|品牌描述
+Validate[max: 500; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId} --data '{
+  "logoPath": "8nwqk2",
+  "description": "ciesfs"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "puxjog",
+  "success": true
+}
+----
+
+==== 删除品牌（逻辑删除）
+*URL:* `http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|brandId|string|true|品牌ID，不能为空|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "3bzcl3",
+  "success": true
+}
+----
+
+==== 查询所有品牌列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/wardrobe/brand`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/wardrobe/brand
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─brandId|string|品牌ID|-
+|└─name|string|品牌名称|-
+|└─logoPath|string|Logo路径（在MinIO中的文件路径）|-
+|└─description|string|品牌描述|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "johlaf",
+  "success": true,
+  "data": [
+    {
+      "brandId": "134",
+      "name": "carmon.bosco",
+      "logoPath": "kshcrc",
+      "description": "6f2nms"
+    }
+  ]
+}
+----
+
+==== 根据ID查询品牌详情
+*URL:* `http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|brandId|string|true|品牌ID，不能为空|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/wardrobe/brand/{brandId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─brandId|string|品牌ID|-
+|└─name|string|品牌名称|-
+|└─logoPath|string|Logo路径（在MinIO中的文件路径）|-
+|└─description|string|品牌描述|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "orfrbg",
+  "success": true,
+  "data": {
+    "brandId": "134",
+    "name": "carmon.bosco",
+    "logoPath": "adt1ib",
+    "description": "sq8mcn"
+  }
+}
+----
+
+=== 字典控制器
+==== 创建字典
+*URL:* `http://localhost:9010/kaleido-admin/dict`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|typeCode|string|true|字典类型编码|-
+|typeName|string|true|字典类型名称|-
+|dictCode|string|true|字典编码|-
+|dictName|string|true|字典名称|-
+|dictValue|string|false|字典值|-
+|sort|int32|true|排序|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/dict --data '{
+  "typeCode": "26259",
+  "typeName": "carmon.bosco",
+  "dictCode": "26259",
+  "dictName": "carmon.bosco",
+  "dictValue": "67rbjp",
+  "sort": 112
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "49wgnq",
+  "success": true,
+  "data": "aub22q"
+}
+----
+
+==== 更新字典
+*URL:* `http://localhost:9010/kaleido-admin/dict/{typeCode}/{dictCode}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|typeCode|string|true|字典类型编码|-
+|dictCode|string|true|字典编码|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|typeName|string|false|字典类型名称|-
+|dictName|string|false|字典名称|-
+|dictValue|string|false|字典值|-
+|sort|int32|false|排序|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/dict/{typeCode}/{dictCode} --data '{
+  "typeName": "carmon.bosco",
+  "dictName": "carmon.bosco",
+  "dictValue": "t2zq9w",
+  "sort": 234
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "pm7egm",
+  "success": true
+}
+----
+
+==== 删除字典
+*URL:* `http://localhost:9010/kaleido-admin/dict/{typeCode}/{dictCode}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|typeCode|string|true|字典类型编码|-
+|dictCode|string|true|字典编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/dict/{typeCode}/{dictCode}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "sszify",
+  "success": true
+}
+----
+
+==== 分页查询字典列表
+*URL:* `http://localhost:9010/kaleido-admin/dict/page`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|pageNum|int32|false|页码|-
+|pageSize|int32|false|分页大小|-
+|typeCode|string|false|字典类型编码|-
+|typeName|string|false|字典类型名称（模糊查询）|-
+|dictCode|string|false|字典编码|-
+|dictName|string|false|字典名称（模糊查询）|-
+|dictValue|string|false|字典值（模糊查询）|-
+|====================
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/dict/page?pageNum=272&pageSize=10&typeCode=26259&typeName=carmon.bosco&dictCode=26259&dictName=carmon.bosco&dictValue=bxtymm
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─total|int64|No comments found.|-
+|└─list|array|No comments found.|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|字典ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─typeCode|string|字典类型编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─typeName|string|字典类型名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dictCode|string|字典编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dictName|string|字典名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─dictValue|string|字典值|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─sort|int32|排序|-
+|└─pageNum|int32|当前页|-
+|└─pageSize|int32|每页的数量|-
+|└─size|int32|当前页的数量|-
+|└─startRow|int64|由于startRow和endRow不常用，这里说个具体的用法
+可以在页面中"显示startRow到endRow 共size条数据"
+当前页面第一个元素在数据库中的行号|-
+|└─endRow|int64|当前页面最后一个元素在数据库中的行号|-
+|└─pages|int32|总页数|-
+|└─prePage|int32|前一页|-
+|└─nextPage|int32|下一页|-
+|└─firstPage|boolean|是否为第一页|-
+|└─lastPage|boolean|是否为最后一页|-
+|└─hasPreviousPage|boolean|是否有前一页|-
+|└─hasNextPage|boolean|是否有下一页|-
+|└─navigatePages|int32|导航页码数|-
+|└─navigatepageNums|array|所有导航页号|-
+|└─navigateFirstPage|int32|导航条上的第一页|-
+|└─navigateLastPage|int32|导航条上的最后一页|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "gg8ys1",
+  "success": true,
+  "data": {
+    "total": 146,
+    "list": [
+      {
+        "id": "134",
+        "typeCode": "26259",
+        "typeName": "carmon.bosco",
+        "dictCode": "26259",
+        "dictName": "carmon.bosco",
+        "dictValue": "ybot3v",
+        "sort": 475
+      }
+    ],
+    "pageNum": 758,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 841,
+    "endRow": 842,
+    "pages": 932,
+    "prePage": 1,
+    "nextPage": 1,
+    "firstPage": true,
+    "lastPage": true,
+    "hasPreviousPage": true,
+    "hasNextPage": true,
+    "navigatePages": 997,
+    "navigatepageNums": [
+      118
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}
+----
+
+=== 文件控制器
+==== 上传文件
+接收前端上传的文件，保存到MinIO
+*URL:* `http://localhost:9010/kaleido-admin/public/file/upload`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `multipart/form-data`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|file|file|true|上传的文件|-
+|====================
+
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: multipart/form-data' -H 'Authorization:Bearer ' -F 'file=' -i http://localhost:9010/kaleido-admin/public/file/upload
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─objectName|string|对象名称
+文件在MinIO中的存储路径，格式：yyyyMMdd/fileHash.extension|-
+|└─fileUrl|string|文件URL
+文件的完整访问URL|-
+|└─originalName|string|原始文件名
+用户上传时的原始文件名|-
+|└─fileSize|int64|文件大小
+文件大小，单位：字节|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "5rb03j",
+  "success": true,
+  "data": {
+    "objectName": "carmon.bosco",
+    "fileUrl": "www.jordon-miller.net",
+    "originalName": "carmon.bosco",
+    "fileSize": 780
+  }
+}
+----
+
+=== 通知管理API（管理后台）
+==== 添加通知模板
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/template`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|模板名称
+Validate[max: 50; ]|-
+|code|string|true|模板编码
+Validate[max: 50; ]|-
+|content|string|true|模板内容
+Validate[max: 500; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/template --data '{
+  "name": "carmon.bosco",
+  "code": "26259",
+  "content": "i1b5v5"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "1jf6wf",
+  "success": true,
+  "data": "9c8ph1"
+}
+----
+
+==== 根据模板编码获取模板详情
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/template/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|模板编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/template/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─id|string|模板ID|-
+|└─code|string|模板编码|-
+|└─name|string|模板名称|-
+|└─content|string|模板内容|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "lgkbvk",
+  "success": true,
+  "data": {
+    "id": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "content": "gkaty0"
+  }
+}
+----
+
+==== 根据ID获取通知详情
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/{id}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|id|string|true|通知ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/{id}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─id|string|通知ID|-
+|└─noticeType|enum|通知类型<br/>[Enum values:<br/>SMS("短信通知")<br/>EMAIL("邮件通知")<br/>WECHAT("微信通知")<br/>]|-
+|└─targetAddress|string|目标地址|-
+|└─status|enum|通知状态<br/>[Enum values:<br/>PENDING("待发送")<br/>SUCCESS("发送成功")<br/>FAILED("发送失败")<br/>]|-
+|└─businessType|enum|业务类型<br/>[Enum values:<br/>VERIFY_CODE("验证码")<br/>]|-
+|└─content|string|通知内容|-
+|└─resultMessage|string|发送结果信息|-
+|└─sentAt|string|发送时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "x7gkqs",
+  "success": true,
+  "data": {
+    "id": "134",
+    "noticeType": "SMS",
+    "targetAddress": "777 Jodie Mount， Eleonorview， SD 39794",
+    "status": "PENDING",
+    "businessType": "VERIFY_CODE",
+    "content": "qo3gnj",
+    "resultMessage": "success",
+    "sentAt": "2026-02-02 20:03:52"
+  }
+}
+----
+
+==== 根据目标地址获取通知列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/target/{target}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|target|string|true|目标地址|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/target/{target}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─id|string|通知ID|-
+|└─noticeType|enum|通知类型<br/>[Enum values:<br/>SMS("短信通知")<br/>EMAIL("邮件通知")<br/>WECHAT("微信通知")<br/>]|-
+|└─targetAddress|string|目标地址|-
+|└─status|enum|通知状态<br/>[Enum values:<br/>PENDING("待发送")<br/>SUCCESS("发送成功")<br/>FAILED("发送失败")<br/>]|-
+|└─businessType|enum|业务类型<br/>[Enum values:<br/>VERIFY_CODE("验证码")<br/>]|-
+|└─content|string|通知内容|-
+|└─resultMessage|string|发送结果信息|-
+|└─sentAt|string|发送时间|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "jxi84h",
+  "success": true,
+  "data": [
+    {
+      "id": "134",
+      "noticeType": "SMS",
+      "targetAddress": "777 Jodie Mount， Eleonorview， SD 39794",
+      "status": "PENDING",
+      "businessType": "VERIFY_CODE",
+      "content": "roumgs",
+      "resultMessage": "success",
+      "sentAt": "2026-02-02 20:03:52"
+    }
+  ]
+}
+----
+
+==== 分页查询通知列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/page`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|pageNum|int32|false|页码|-
+|pageSize|int32|false|分页大小|-
+|target|string|false|No comments found.|-
+|noticeType|string|false|No comments found.|-
+|status|string|false|No comments found.|-
+|businessType|string|false|No comments found.|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/page --data '{
+  "pageNum": 951,
+  "pageSize": 10,
+  "target": "vmeub7",
+  "noticeType": "ftb86p",
+  "status": "n5govn",
+  "businessType": "nrwoob"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─total|int64|No comments found.|-
+|└─list|array|No comments found.|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|通知ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─noticeType|enum|通知类型<br/>[Enum values:<br/>SMS("短信通知")<br/>EMAIL("邮件通知")<br/>WECHAT("微信通知")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─targetAddress|string|目标地址|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|enum|通知状态<br/>[Enum values:<br/>PENDING("待发送")<br/>SUCCESS("发送成功")<br/>FAILED("发送失败")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─businessType|enum|业务类型<br/>[Enum values:<br/>VERIFY_CODE("验证码")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─content|string|通知内容|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─resultMessage|string|发送结果信息|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─sentAt|string|发送时间|-
+|└─pageNum|int32|当前页|-
+|└─pageSize|int32|每页的数量|-
+|└─size|int32|当前页的数量|-
+|└─startRow|int64|由于startRow和endRow不常用，这里说个具体的用法
+可以在页面中"显示startRow到endRow 共size条数据"
+当前页面第一个元素在数据库中的行号|-
+|└─endRow|int64|当前页面最后一个元素在数据库中的行号|-
+|└─pages|int32|总页数|-
+|└─prePage|int32|前一页|-
+|└─nextPage|int32|下一页|-
+|└─firstPage|boolean|是否为第一页|-
+|└─lastPage|boolean|是否为最后一页|-
+|└─hasPreviousPage|boolean|是否有前一页|-
+|└─hasNextPage|boolean|是否有下一页|-
+|└─navigatePages|int32|导航页码数|-
+|└─navigatepageNums|array|所有导航页号|-
+|└─navigateFirstPage|int32|导航条上的第一页|-
+|└─navigateLastPage|int32|导航条上的最后一页|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "k3mgyd",
+  "success": true,
+  "data": {
+    "total": 560,
+    "list": [
+      {
+        "id": "134",
+        "noticeType": "SMS",
+        "targetAddress": "777 Jodie Mount， Eleonorview， SD 39794",
+        "status": "PENDING",
+        "businessType": "VERIFY_CODE",
+        "content": "fu3m3l",
+        "resultMessage": "success",
+        "sentAt": "2026-02-02 20:03:52"
+      }
+    ],
+    "pageNum": 998,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 33,
+    "endRow": 627,
+    "pages": 466,
+    "prePage": 1,
+    "nextPage": 1,
+    "firstPage": true,
+    "lastPage": true,
+    "hasPreviousPage": true,
+    "hasNextPage": true,
+    "navigatePages": 901,
+    "navigatepageNums": [
+      722
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}
+----
+
+==== 分页查询通知模板列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/notice/template/page`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|pageNum|int32|false|页码|-
+|pageSize|int32|false|分页大小|-
+|name|string|false|No comments found.|-
+|code|string|false|No comments found.|-
+|noticeType|string|false|No comments found.|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/notice/template/page --data '{
+  "pageNum": 483,
+  "pageSize": 10,
+  "name": "carmon.bosco",
+  "code": "26259",
+  "noticeType": "t6uxvc"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─total|int64|No comments found.|-
+|└─list|array|No comments found.|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─id|string|模板ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─code|string|模板编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|模板名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─content|string|模板内容|-
+|└─pageNum|int32|当前页|-
+|└─pageSize|int32|每页的数量|-
+|└─size|int32|当前页的数量|-
+|└─startRow|int64|由于startRow和endRow不常用，这里说个具体的用法
+可以在页面中"显示startRow到endRow 共size条数据"
+当前页面第一个元素在数据库中的行号|-
+|└─endRow|int64|当前页面最后一个元素在数据库中的行号|-
+|└─pages|int32|总页数|-
+|└─prePage|int32|前一页|-
+|└─nextPage|int32|下一页|-
+|└─firstPage|boolean|是否为第一页|-
+|└─lastPage|boolean|是否为最后一页|-
+|└─hasPreviousPage|boolean|是否有前一页|-
+|└─hasNextPage|boolean|是否有下一页|-
+|└─navigatePages|int32|导航页码数|-
+|└─navigatepageNums|array|所有导航页号|-
+|└─navigateFirstPage|int32|导航条上的第一页|-
+|└─navigateLastPage|int32|导航条上的最后一页|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "9fnys4",
+  "success": true,
+  "data": {
+    "total": 740,
+    "list": [
+      {
+        "id": "134",
+        "code": "26259",
+        "name": "carmon.bosco",
+        "content": "xgjpu4"
+      }
+    ],
+    "pageNum": 29,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 703,
+    "endRow": 868,
+    "pages": 82,
+    "prePage": 1,
+    "nextPage": 1,
+    "firstPage": true,
+    "lastPage": true,
+    "hasPreviousPage": true,
+    "hasNextPage": true,
+    "navigatePages": 940,
+    "navigatepageNums": [
+      574
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}
+----
+
+=== 权限控制器
+==== 创建权限
+*URL:* `http://localhost:9010/kaleido-admin/permission`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|权限编码
+Validate[max: 50; regexp: ^[a-zA-Z0-9:_-]+$; ]|-
+|name|string|true|权限名称
+Validate[max: 50; ]|-
+|type|enum|true|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|parentId|string|false|父权限ID|-
+|sort|int32|false|排序|-
+|icon|string|false|图标
+Validate[max: 100; ]|-
+|path|string|false|前端路由路径
+Validate[max: 200; ]|-
+|component|string|false|前端组件路径
+Validate[max: 200; ]|-
+|isHidden|boolean|false|是否隐藏|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission --data '{
+  "code": "26259",
+  "name": "carmon.bosco",
+  "type": "DIRECTORY",
+  "parentId": "134",
+  "sort": 352,
+  "icon": "lj8oji",
+  "path": "suap4f",
+  "component": "m4arev",
+  "isHidden": true
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "wer6bc",
+  "success": true,
+  "data": "2gifhz"
+}
+----
+
+==== 更新权限信息
+*URL:* `http://localhost:9010/kaleido-admin/permission/{permissionId}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|permissionId|string|true|权限ID（从路径参数获取）|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|权限名称
+Validate[max: 50; ]|-
+|type|enum|true|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|parentId|string|false|父权限ID|-
+|sort|int32|false|排序|-
+|icon|string|false|图标
+Validate[max: 100; ]|-
+|path|string|false|前端路由路径
+Validate[max: 200; ]|-
+|component|string|false|前端组件路径
+Validate[max: 200; ]|-
+|isHidden|boolean|false|是否隐藏|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/{permissionId} --data '{
+  "name": "carmon.bosco",
+  "type": "DIRECTORY",
+  "parentId": "134",
+  "sort": 385,
+  "icon": "5bskc7",
+  "path": "fc18a7",
+  "component": "66zijr",
+  "isHidden": true
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "h1seox",
+  "success": true
+}
+----
+
+==== 更新权限编码
+*URL:* `http://localhost:9010/kaleido-admin/permission/{permissionId}/code`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|permissionId|string|true|权限ID|-
+|====================
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|新的权限编码|-
+|====================
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/{permissionId}/code
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "fw8ms4",
+  "success": true
+}
+----
+
+==== 删除权限
+*URL:* `http://localhost:9010/kaleido-admin/permission/{permissionId}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|permissionId|string|true|权限ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/{permissionId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "0oshcu",
+  "success": true
+}
+----
+
+==== 根据ID查询权限信息
+*URL:* `http://localhost:9010/kaleido-admin/permission/{permissionId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|permissionId|string|true|权限ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/{permissionId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─permissionId|string|权限ID|-
+|└─code|string|权限编码|-
+|└─name|string|权限名称|-
+|└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|└─parentId|string|父权限ID|-
+|└─sort|int32|排序|-
+|└─icon|string|图标|-
+|└─path|string|前端路由路径|-
+|└─component|string|前端组件路径|-
+|└─isHidden|boolean|是否隐藏|-
+|└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "ga86v5",
+  "success": true,
+  "data": {
+    "permissionId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "type": "DIRECTORY",
+    "parentId": "134",
+    "sort": 275,
+    "icon": "f0cclq",
+    "path": "u6stjm",
+    "component": "yuej4f",
+    "isHidden": true,
+    "children": [
+      {
+        "$ref": ".."
+      }
+    ]
+  }
+}
+----
+
+==== 根据编码查询权限信息
+*URL:* `http://localhost:9010/kaleido-admin/permission/code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|权限编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─permissionId|string|权限ID|-
+|└─code|string|权限编码|-
+|└─name|string|权限名称|-
+|└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|└─parentId|string|父权限ID|-
+|└─sort|int32|排序|-
+|└─icon|string|图标|-
+|└─path|string|前端路由路径|-
+|└─component|string|前端组件路径|-
+|└─isHidden|boolean|是否隐藏|-
+|└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "7pnahz",
+  "success": true,
+  "data": {
+    "permissionId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "type": "DIRECTORY",
+    "parentId": "134",
+    "sort": 540,
+    "icon": "igotb1",
+    "path": "rw6nsl",
+    "component": "b30gqv",
+    "isHidden": true,
+    "children": [
+      {
+        "$ref": ".."
+      }
+    ]
+  }
+}
+----
+
+==== 根据父权限ID查询子权限列表
+*URL:* `http://localhost:9010/kaleido-admin/permission/parent/{parentId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|parentId|string|true|父权限ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/parent/{parentId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─permissionId|string|权限ID|-
+|└─code|string|权限编码|-
+|└─name|string|权限名称|-
+|└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|└─parentId|string|父权限ID|-
+|└─sort|int32|排序|-
+|└─icon|string|图标|-
+|└─path|string|前端路由路径|-
+|└─component|string|前端组件路径|-
+|└─isHidden|boolean|是否隐藏|-
+|└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "0e66ji",
+  "success": true,
+  "data": [
+    {
+      "permissionId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "type": "DIRECTORY",
+      "parentId": "134",
+      "sort": 635,
+      "icon": "a9lhsd",
+      "path": "hqe2yp",
+      "component": "fx1oxo",
+      "isHidden": true,
+      "children": [
+        {
+          "$ref": ".."
+        }
+      ]
+    }
+  ]
+}
+----
+
+==== 获取权限树
+*URL:* `http://localhost:9010/kaleido-admin/permission/tree`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/permission/tree
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─permissionId|string|权限ID|-
+|└─code|string|权限编码|-
+|└─name|string|权限名称|-
+|└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|└─parentId|string|父权限ID|-
+|└─sort|int32|排序|-
+|└─icon|string|图标|-
+|└─path|string|前端路由路径|-
+|└─component|string|前端组件路径|-
+|└─isHidden|boolean|是否隐藏|-
+|└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "2yg6q8",
+  "success": true,
+  "data": [
+    {
+      "permissionId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "type": "DIRECTORY",
+      "parentId": "134",
+      "sort": 519,
+      "icon": "1h26dp",
+      "path": "5yoahu",
+      "component": "6ix6ry",
+      "isHidden": true,
+      "children": [
+        {
+          "$ref": ".."
+        }
+      ]
+    }
+  ]
+}
+----
+
+=== 角色控制器
+==== 创建角色
+*URL:* `http://localhost:9010/kaleido-admin/role`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|角色编码
+Validate[max: 50; regexp: ^[a-zA-Z0-9:_-]+$; ]|-
+|name|string|true|角色名称
+Validate[max: 50; ]|-
+|description|string|false|角色描述
+Validate[max: 200; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role --data '{
+  "code": "26259",
+  "name": "carmon.bosco",
+  "description": "6nsk5j"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|string|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "0uhqon",
+  "success": true,
+  "data": "e75omi"
+}
+----
+
+==== 更新角色信息
+*URL:* `http://localhost:9010/kaleido-admin/role/{roleId}`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|roleId|string|true|角色ID（从路径参数获取）|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|name|string|true|角色名称
+Validate[max: 50; ]|-
+|description|string|false|角色描述
+Validate[max: 200; ]|-
+|====================
+
+*Request-example:*
+----
+curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/{roleId} --data '{
+  "name": "carmon.bosco",
+  "description": "juvwix"
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "4zjc3k",
+  "success": true
+}
+----
+
+==== 删除角色
+*URL:* `http://localhost:9010/kaleido-admin/role/{roleId}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|roleId|string|true|角色ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/{roleId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "kuxrzd",
+  "success": true
+}
+----
+
+==== 分配权限给角色
+*URL:* `http://localhost:9010/kaleido-admin/role/{roleId}/permissions`
+
+*Type:* `POST`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/json`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|roleId|string|true|角色ID（从路径参数获取）|-
+|====================
+
+
+*Body-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|permissionIds|array|true|权限ID列表|-
+|====================
+
+*Request-example:*
+----
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/{roleId}/permissions --data '{
+  "permissionIds": [
+    "0dy9yx"
+  ]
+}'
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "mqgfnv",
+  "success": true
+}
+----
+
+==== 根据ID查询角色信息
+*URL:* `http://localhost:9010/kaleido-admin/role/{roleId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|roleId|string|true|角色ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/{roleId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─roleId|string|角色ID|-
+|└─code|string|角色编码|-
+|└─name|string|角色名称|-
+|└─description|string|角色描述|-
+|└─enabled|boolean|是否启用|-
+|└─permissionIds|array|权限ID列表|-
+|└─permissions|array|权限信息列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─permissionId|string|权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─code|string|权限编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|权限名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─parentId|string|父权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─sort|int32|排序|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─icon|string|图标|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─path|string|前端路由路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─component|string|前端组件路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─isHidden|boolean|是否隐藏|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "vebg37",
+  "success": true,
+  "data": {
+    "roleId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "v4djeh",
+    "enabled": true,
+    "permissionIds": [
+      "3hqxt3"
+    ],
+    "permissions": [
+      {
+        "permissionId": "134",
+        "code": "26259",
+        "name": "carmon.bosco",
+        "type": "DIRECTORY",
+        "parentId": "134",
+        "sort": 64,
+        "icon": "nqk4cb",
+        "path": "s13v9d",
+        "component": "sngouk",
+        "isHidden": true,
+        "children": [
+          {
+            "$ref": ".."
+          }
+        ]
+      }
+    ]
+  }
+}
+----
+
+==== 根据编码查询角色信息
+*URL:* `http://localhost:9010/kaleido-admin/role/code/{code}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|code|string|true|角色编码|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/code/{code}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─roleId|string|角色ID|-
+|└─code|string|角色编码|-
+|└─name|string|角色名称|-
+|└─description|string|角色描述|-
+|└─enabled|boolean|是否启用|-
+|└─permissionIds|array|权限ID列表|-
+|└─permissions|array|权限信息列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─permissionId|string|权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─code|string|权限编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|权限名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─parentId|string|父权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─sort|int32|排序|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─icon|string|图标|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─path|string|前端路由路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─component|string|前端组件路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─isHidden|boolean|是否隐藏|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "8ai2y6",
+  "success": true,
+  "data": {
+    "roleId": "134",
+    "code": "26259",
+    "name": "carmon.bosco",
+    "description": "rye11c",
+    "enabled": true,
+    "permissionIds": [
+      "v8nhwo"
+    ],
+    "permissions": [
+      {
+        "permissionId": "134",
+        "code": "26259",
+        "name": "carmon.bosco",
+        "type": "DIRECTORY",
+        "parentId": "134",
+        "sort": 695,
+        "icon": "br8q5h",
+        "path": "5ah5gv",
+        "component": "d633tb",
+        "isHidden": true,
+        "children": [
+          {
+            "$ref": ".."
+          }
+        ]
+      }
+    ]
+  }
+}
+----
+
+==== 获取角色列表
+*URL:* `http://localhost:9010/kaleido-admin/role/list`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/role/list
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|array|响应数据
+成功时返回具体数据，失败时为null|-
+|└─roleId|string|角色ID|-
+|└─code|string|角色编码|-
+|└─name|string|角色名称|-
+|└─description|string|角色描述|-
+|└─enabled|boolean|是否启用|-
+|└─permissionIds|array|权限ID列表|-
+|└─permissions|array|权限信息列表|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─permissionId|string|权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─code|string|权限编码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─name|string|权限名称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─type|enum|权限类型<br/>[Enum values:<br/>DIRECTORY("DIRECTORY", "目录")<br/>MENU("MENU", "菜单")<br/>BUTTON("BUTTON", "按钮")<br/>]|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─parentId|string|父权限ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─sort|int32|排序|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─icon|string|图标|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─path|string|前端路由路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─component|string|前端组件路径|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─isHidden|boolean|是否隐藏|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─children|array|子权限列表|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "g7elyv",
+  "success": true,
+  "data": [
+    {
+      "roleId": "134",
+      "code": "26259",
+      "name": "carmon.bosco",
+      "description": "9bhmg5",
+      "enabled": true,
+      "permissionIds": [
+        "8z9mys"
+      ],
+      "permissions": [
+        {
+          "permissionId": "134",
+          "code": "26259",
+          "name": "carmon.bosco",
+          "type": "DIRECTORY",
+          "parentId": "134",
+          "sort": 497,
+          "icon": "73jfgm",
+          "path": "vzz88t",
+          "component": "o52hmg",
+          "isHidden": true,
+          "children": [
+            {
+              "$ref": ".."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+----
+
+=== 用户管理API（管理后台）
+==== 根据用户ID查询用户信息
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/{userId}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|userId|string|true|用户ID|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/{userId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─userId|string|用户ID|-
+|└─telephone|string|手机号|-
+|└─nickName|string|昵称|-
+|└─status|string|用户状态|-
+|└─inviteCode|string|邀请码|-
+|└─inviterId|string|邀请人ID|-
+|└─lastLoginTime|string|最后登录时间|-
+|└─avatar|string|头像URL|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "td79bk",
+  "success": true,
+  "data": {
+    "userId": "134",
+    "telephone": "1-865-870-0620",
+    "nickName": "boris.collier",
+    "status": "v3xr99",
+    "inviteCode": "26259",
+    "inviterId": "134",
+    "lastLoginTime": "2026-02-02 20:03:53",
+    "avatar": "yjuciv"
+  }
+}
+----
+
+==== 根据手机号查询用户信息
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/by-telephone/{telephone}`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|telephone|string|true|手机号|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/by-telephone/{telephone}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─userId|string|用户ID|-
+|└─telephone|string|手机号|-
+|└─nickName|string|昵称|-
+|└─status|string|用户状态|-
+|└─inviteCode|string|邀请码|-
+|└─inviterId|string|邀请人ID|-
+|└─lastLoginTime|string|最后登录时间|-
+|└─avatar|string|头像URL|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "b5b058",
+  "success": true,
+  "data": {
+    "userId": "134",
+    "telephone": "1-865-870-0620",
+    "nickName": "boris.collier",
+    "status": "huyack",
+    "inviteCode": "26259",
+    "inviterId": "134",
+    "lastLoginTime": "2026-02-02 20:03:53",
+    "avatar": "ildqx9"
+  }
+}
+----
+
+==== 冻结用户
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/{userId}/freeze`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|userId|string|true|用户ID，不能为空|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/{userId}/freeze
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "zuvgkw",
+  "success": true
+}
+----
+
+==== 解冻用户
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/{userId}/unfreeze`
+
+*Type:* `PUT`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|userId|string|true|用户ID，不能为空|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X PUT -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/{userId}/unfreeze
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "gxvsw2",
+  "success": true
+}
+----
+
+==== 删除用户（软删除）
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/{userId}`
+
+*Type:* `DELETE`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+*Path-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|userId|string|true|用户ID，不能为空|-
+|====================
+
+
+
+*Request-example:*
+----
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/{userId}
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "xcfkkb",
+  "success": true
+}
+----
+
+==== 分页查询用户列表
+*URL:* `http://localhost:9010/kaleido-admin/admin/user/page`
+
+*Type:* `GET`
+
+*Author:* ouyucheng
+
+*Content-Type:* `application/x-www-form-urlencoded;charset=UTF-8`
+
+*Request-headers:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Header | Type|Required|Description|Since
+|Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
+
+|====================
+
+
+*Query-parameters:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Parameter | Type|Required|Description|Since
+|pageNum|int32|false|页码|-
+|pageSize|int32|false|分页大小|-
+|nickName|string|false|No comments found.|-
+|telephone|string|false|No comments found.|-
+|status|int32|false|No comments found.|-
+|gender|enum|false|No comments found.<br/>[Enum values:<br/>MALE()<br/>FEMALE()<br/>]|-
+|====================
+
+
+*Request-example:*
+----
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:9010/kaleido-admin/admin/user/page?pageNum=710&pageSize=10&nickName=boris.collier&telephone=1-865-870-0620&status=896&gender=MALE
+----
+*Response-fields:*
+
+[width="100%",options="header"]
+[stripes=even]
+|====================
+|Field | Type|Description|Since
+|code|string|响应码
+200表示成功，其他表示失败|-
+|msg|string|响应消息
+成功时为'成功'，失败时为错误信息|-
+|success|boolean|是否成功
+true表示成功，false表示失败|-
+|data|object|响应数据
+成功时返回具体数据，失败时为null|-
+|└─total|int64|No comments found.|-
+|└─list|array|No comments found.|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─userId|string|用户ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─telephone|string|手机号|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─nickName|string|昵称|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─status|string|用户状态|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─inviteCode|string|邀请码|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─inviterId|string|邀请人ID|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─lastLoginTime|string|最后登录时间|-
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─avatar|string|头像URL|-
+|└─pageNum|int32|当前页|-
+|└─pageSize|int32|每页的数量|-
+|└─size|int32|当前页的数量|-
+|└─startRow|int64|由于startRow和endRow不常用，这里说个具体的用法
+可以在页面中"显示startRow到endRow 共size条数据"
+当前页面第一个元素在数据库中的行号|-
+|└─endRow|int64|当前页面最后一个元素在数据库中的行号|-
+|└─pages|int32|总页数|-
+|└─prePage|int32|前一页|-
+|└─nextPage|int32|下一页|-
+|└─firstPage|boolean|是否为第一页|-
+|└─lastPage|boolean|是否为最后一页|-
+|└─hasPreviousPage|boolean|是否有前一页|-
+|└─hasNextPage|boolean|是否有下一页|-
+|└─navigatePages|int32|导航页码数|-
+|└─navigatepageNums|array|所有导航页号|-
+|└─navigateFirstPage|int32|导航条上的第一页|-
+|└─navigateLastPage|int32|导航条上的最后一页|-
+|====================
+
+*Response-example:*
+----
+{
+  "code": "26259",
+  "msg": "gs9bmg",
+  "success": true,
+  "data": {
+    "total": 861,
+    "list": [
+      {
+        "userId": "134",
+        "telephone": "1-865-870-0620",
+        "nickName": "boris.collier",
+        "status": "xboay7",
+        "inviteCode": "26259",
+        "inviterId": "134",
+        "lastLoginTime": "2026-02-02 20:03:53",
+        "avatar": "7bkuy7"
+      }
+    ],
+    "pageNum": 892,
+    "pageSize": 10,
+    "size": 10,
+    "startRow": 355,
+    "endRow": 921,
+    "pages": 827,
+    "prePage": 1,
+    "nextPage": 1,
+    "firstPage": true,
+    "lastPage": true,
+    "hasPreviousPage": true,
+    "hasNextPage": true,
+    "navigatePages": 14,
+    "navigatepageNums": [
+      357
+    ],
+    "navigateFirstPage": 1,
+    "navigateLastPage": 1
+  }
+}
+----
+
+
