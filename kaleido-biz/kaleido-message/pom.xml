@@ -20,6 +20,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-base</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-ds</artifactId>

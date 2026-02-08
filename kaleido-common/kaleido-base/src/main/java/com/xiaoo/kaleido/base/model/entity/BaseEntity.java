@@ -42,4 +42,6 @@ public class BaseEntity implements Serializable {
      * 是否删除
      */
     private Integer deleted;
+
+    private Integer lockVersion;
 }
