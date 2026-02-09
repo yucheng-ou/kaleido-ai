@@ -9,7 +9,7 @@
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.0.0-green)](https://spring.io/projects/spring-cloud)
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-orange)](https://spring.io/projects/spring-ai)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Stars](https://img.shields.io/badge/Stars-3-red)
+![Stars](https://img.shields.io/badge/Stars-12-red)
 [![中文文档](https://img.shields.io/badge/文档-中文-blueviolet)](README.md)
 
 [✨ 特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档) • [🤝 贡献](#-贡献指南)
@@ -20,16 +20,15 @@
 
 ## 📌 项目简介
 
-Kaleido AI智能衣柜是一个**生产级微服务架构**的AI衣物管理系统，采用 **DDD领域驱动设计 + CQRS + 整洁架构**，为用户提供：
-
+Kaleido AI智能衣柜是一个**微服务架构**的AI智能衣柜系统，采用 **DDD领域驱动设计 + CQRS + 整洁架构**，为用户提供：
 - 📸 **衣物数字化管理**：一键录入、智能分类、标签化管理
 - 🤖 **AI智能推荐**：基于天气、场合、个人偏好的个性化穿搭方案
 - 🔍 **相似度检索**：通过向量搜索找到最相似的衣物
 - 💬 **穿搭顾问**：AI对话式穿搭建议，让选择更轻松
 
-> 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
-
 ![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg)
+
+> 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
 
 ---
 
@@ -45,6 +44,7 @@ Kaleido AI智能衣柜是一个**生产级微服务架构**的AI衣物管理系�
 | **微服务架构** | 11个业务服务 + 23个通用模块，独立部署、弹性扩展 |
 
 ### 🛠️ 技术栈
+![输入图片说明](images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
 
 #### 核心框架
 - **Java 21**（LTS版本，虚拟线程支持）
@@ -71,6 +71,7 @@ Kaleido AI智能衣柜是一个**生产级微服务架构**的AI衣物管理系�
 #### 中间件
 - **RabbitMQ 3.13+**：消息队列，异步解耦
 - **Redisson 3.52.0**：Redis客户端，分布式锁
+- **JetCache 2.7.8**：多级缓存框架
 
 #### 工具库
 - **Sa-Token 1.44.0**：轻量级权限认证
@@ -78,7 +79,7 @@ Kaleido AI智能衣柜是一个**生产级微服务架构**的AI衣物管理系�
 - **MapStruct 1.6.3**：类型安全的对象映射
 - **Smart-Doc 2.7.7**：零侵入API文档生成
 - **Dynamic-TP 1.2.2-x**：动态线程池监控
-![输入图片说明](images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
+
 
 | 技术 | 版本 | 说明 |
 |------|------|------|
