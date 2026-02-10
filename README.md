@@ -40,8 +40,9 @@ Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管�
    - AI对话式穿搭建议，让选择更轻松
    - 实时响应，个性化解答
 
-<img src="images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg" width="800" alt="业务功能"/>
-
+<div align="center">
+  <img src="images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg" width="800" alt="业务功能"/>
+</div>
 > 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
 
 ---
@@ -58,8 +59,9 @@ Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管�
 | **微服务架构** | 11个业务服务 + 23个通用模块，独立部署、弹性扩展 |
 
 ### 🛠️ 技术栈
-
-<img src="images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg" width="800" alt="技术栈"/>
+<div align="center">
+  <img src="images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg" width="800" alt="业务功能"/>
+</div>
 
 #### 核心框架
 - **Java 21**（LTS版本，虚拟线程支持）
@@ -139,18 +141,22 @@ Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管�
 ## 🏗️ 架构设计
 
 ### 系统架构
-
-<img src="images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg" width="900" alt="系统架构"/>
+<div align="center">
+  <img src="images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg" width="800" alt="系统架构"/>
+</div>
 
 ### 业务架构
-
-<img src="images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg" width="800" alt="业务架构"/>
+<div align="center">
+  <img src="images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg" width="800" alt="业务架构"/>
+</div>
 
 ### 代码分层设计
-
-<img src="images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg" width="800" alt="代码分层设计"/>
-
-<img src="images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" width="600" alt="目录结构"/>
+<div align="center">
+  <img src="images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg" width="800" alt="代码分层设计"/>
+</div>
+<div align="center">
+  <img src="images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" width="800" alt="目录结构"/>
+</div>
 
 ---
 
