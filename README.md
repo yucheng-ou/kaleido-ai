@@ -12,7 +12,7 @@
 ![Stars](https://img.shields.io/badge/Stars-23-red)
 [![中文文档](https://img.shields.io/badge/文档-中文-blueviolet)](README.md)
 
-[✨ 特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档)
+[✨ 核心特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档)
 
 </div>
 
@@ -20,13 +20,27 @@
 
 ## 📌 项目简介
 
-Kaleido AI智能衣柜是一个**微服务架构**的AI智能衣柜系统，采用 **DDD领域驱动设计 + CQRS + 整洁架构**，为用户提供：
-- 📸 **衣物数字化管理**：一键录入、智能分类、标签化管理
-- 🤖 **AI智能推荐**：基于天气、场合、个人偏好的个性化穿搭方案
-- 🔍 **相似度检索**：通过向量搜索找到最相似的衣物
-- 💬 **穿搭顾问**：AI对话式穿搭建议，让选择更轻松
+Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管理系统，基于 **DDD领域驱动设计 + CQRS + 整洁架构** 理念构建。
 
-![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg)
+### 核心功能
+
+- 📸 **衣物数字化管理**
+   - 一键录入、智能分类、标签化管理
+   - 支持批量导入与自动识别
+
+- 🤖 **AI智能推荐**
+   - 基于天气、场合、个人偏好的个性化穿搭方案
+   - 多维度匹配算法，提升穿搭准确度
+
+- 🔍 **相似度检索**
+   - 通过向量搜索快速找到最相似的衣物
+   - 支持以图搜图、风格匹配
+
+- 💬 **穿搭顾问**
+   - AI对话式穿搭建议，让选择更轻松
+   - 实时响应，个性化解答
+
+<img src="images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg" width="800" alt="业务功能"/>
 
 > 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
 
@@ -44,7 +58,8 @@ Kaleido AI智能衣柜是一个**微服务架构**的AI智能衣柜系统，采�
 | **微服务架构** | 11个业务服务 + 23个通用模块，独立部署、弹性扩展 |
 
 ### 🛠️ 技术栈
-![输入图片说明](images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg)
+
+<img src="images/%E6%8A%80%E6%9C%AF%E6%A0%88.jpg" width="800" alt="技术栈"/>
 
 #### 核心框架
 - **Java 21**（LTS版本，虚拟线程支持）
@@ -80,6 +95,10 @@ Kaleido AI智能衣柜是一个**微服务架构**的AI智能衣柜系统，采�
 - **Smart-Doc 2.7.7**：零侵入API文档生成
 - **Dynamic-TP 1.2.2-x**：动态线程池监控
 
+#### 完整技术清单
+
+<details>
+<summary>📋 点击展开完整技术版本清单</summary>
 
 | 技术 | 版本 | 说明 |
 |------|------|------|
@@ -113,23 +132,27 @@ Kaleido AI智能衣柜是一个**微服务架构**的AI智能衣柜系统，采�
 | PageHelper | 2.1.1 | MyBatis分页插件 |
 | Dynamic-tp | 1.2.2-x | 动态线程池 |
 
+</details>
+
 ---
 
 ## 🏗️ 架构设计
 
 ### 系统架构
 
-![输入图片说明](images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg)
+<img src="images/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84.jpg" width="900" alt="系统架构"/>
 
 ### 业务架构
 
-![输入图片说明](images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg)
+<img src="images/%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84.jpg" width="800" alt="业务架构"/>
 
 ### 代码分层设计
 
-![输入图片说明](images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg)
+<img src="images/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.jpg" width="800" alt="代码分层设计"/>
 
-![输入图片说明](images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png)
+<img src="images/%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.png" width="600" alt="目录结构"/>
+
+---
 
 ## 📁 项目结构
 
@@ -176,6 +199,8 @@ kaleido-server/
 └── README.md                          # 项目说明文档
 ```
 
+---
+
 ## 🚀 快速开始
 
 ### 环境要求
@@ -193,98 +218,154 @@ kaleido-server/
 | Milvus   | 2.4+ | 向量数据库     |
 | XXL-job  | 3.0+ | 计划任务      |
 
-### 准备工作
+### 部署步骤
 
-1. **克隆项目**
-   ```bash
-   git clone https://github.com/your-org/kaleido-server.git
-   cd kaleido-server
-   ```
-2. **部署环境**
+#### 1️⃣ 克隆项目
 
-    部署文件参考 doc/deploy
-    
-    需要启动的服务包括：
-    
-    - **Nacos**：服务注册与配置中心
-      - **Sentinel**：服务注册与配置中心
-      - **Seata**：服务注册与配置中心
-      - **MySQL**：主数据库
-      - **MongoDB**：文档数据库
-      - **Redis**：缓存数据库
-      - **RabbitMQ**：消息队列
-      - **MinIO**：对象存储
-      - **Milvus**：向量数据库
-      - **XXL-job**：向量数据库
-3. **配置环境变量**
-   修改文件 doc/deploy/init_env.bat，将环境变量替换成你自己的然后执行
+```bash
+git clone https://github.com/your-org/kaleido-server.git
+cd kaleido-server
+```
 
-4. **初始化数据库**
-   依次执行doc/sql目录中的数据库
+#### 2️⃣ 部署基础设施
 
-5. **导入nacos配置**
-   将目录doc/nacos中的配置文件导入到nacos中
+部署文件参考 `doc/deploy` 目录。
+
+需要启动的服务包括：
+
+- **Nacos**：服务注册与配置中心
+- **Sentinel**：流量控制与降级熔断
+- **Seata**：分布式事务协调
+- **MySQL**：主数据库
+- **MongoDB**：文档数据库
+- **Redis**：缓存数据库
+- **RabbitMQ**：消息队列
+- **MinIO**：对象存储
+- **Milvus**：向量数据库
+- **XXL-job**：分布式任务调度
+
+#### 3️⃣ 配置环境变量
+
+修改文件 `doc/deploy/init_env.bat`，将环境变量替换成你自己的配置，然后执行。
+
+#### 4️⃣ 初始化数据库
+
+依次执行 `doc/sql` 目录中的SQL脚本。
+
+#### 5️⃣ 导入Nacos配置
+
+将 `doc/nacos` 目录中的配置文件导入到Nacos中。
+> ⚠️ **注意**：Nacos配置文件使用了大量环境变量，请确保已经配置好环境变量。
 
 ### 构建与启动服务
 
-1. **编译项目**
-   ```bash
-   # 在项目根目录执行
-   mvn clean compile -DskipTests
-   ```
+#### 1️⃣ 编译项目
 
-2. **启动网关服务**
-   ```bash
-   cd kaleido-gateway
-   mvn spring-boot:run
-   ```
+```bash
+# 在项目根目录执行
+mvn clean compile -DskipTests
+```
 
-3. **启动认证服务**
-   ```bash
-   cd kaleido-auth
-   mvn spring-boot:run
-   ```
+#### 2️⃣ 启动核心服务
 
-4. **启动业务服务**
-   根据需要启动相应的业务服务：
-   ```bash
-   # 用户服务
-   cd kaleido-biz/kaleido-user
-   mvn spring-boot:run
-   
-   # 衣柜服务
-   cd kaleido-biz/kaleido-wardrobe
-   mvn spring-boot:run
-   
-   # AI服务
-   cd kaleido-biz/kaleido-ai
-   mvn spring-boot:run
-   
-   ...
-   ```
+```bash
+# 启动网关服务
+cd kaleido-gateway
+mvn spring-boot:run
+
+# 启动认证服务
+cd ../kaleido-auth
+mvn spring-boot:run
+```
+
+#### 3️⃣ 启动业务服务
+
+根据需要启动相应的业务服务：
+
+```bash
+# 用户服务
+cd kaleido-biz/kaleido-user
+mvn spring-boot:run
+
+# 衣柜服务
+cd ../kaleido-wardrobe
+mvn spring-boot:run
+
+# AI服务
+cd ../kaleido-ai
+mvn spring-boot:run
+
+# 推荐服务
+cd ../kaleido-recommend
+mvn spring-boot:run
+
+# 其他服务...
+```
 
 ### 🔧 验证部署
 
-1. **访问 Nacos 控制台**
-    - 地址：http://localhost:8848/nacos
-    - 默认账号：nacos，密码：nacos
-    - 确认所有服务已成功注册
+#### 1️⃣ 访问Nacos控制台
 
-2. **访问 API 文档**
-   生成并查看 API 文档：
-   ```bash
-   # 生成文档
-   mvn compile smart-doc:html
-   
-   # 文档位置：doc/api/{服务名}/index.html
-   ```
+- 地址：http://localhost:8848/nacos
+- 默认账号：nacos
+- 默认密码：nacos
+- 确认所有服务已成功注册
 
-## 📋 TODO
+#### 2️⃣ 访问API文档
 
-1. **集成ELK可视化日志管理**
+```bash
+# 生成文档
+mvn compile smart-doc:html
 
-2. **Grafana + Prometheus监控体系**
+# 文档位置：doc/api/{服务名}/index.html
+```
 
-3. **SkyWalking链路追踪**
+---
 
-4. **前端页面开发**
+## 📋 开发计划
+
+### 近期规划
+
+- [ ] 集成ELK可视化日志管理
+- [ ] 部署Grafana + Prometheus监控体系
+- [ ] 接入SkyWalking链路追踪
+- [ ] 前端页面开发
+
+### 长期规划
+
+- [ ] 多端适配（小程序、App）
+- [ ] 社区穿搭分享功能
+- [ ] 智能购物推荐
+- [ ] AR虚拟试衣
+
+---
+
+## 📖 文档
+
+- [API文档](doc/api/)
+- [部署文档](doc/deploy/)
+- [数据库设计](doc/sql/)
+
+---
+
+## 📞 联系作者
+
+<img src="images/%E5%BE%AE%E4%BF%A1%E5%90%8D%E7%89%87.png" width="400" alt="微信名片"/>
+
+> 💬 有问题欢迎提Issue或者加我微信联系，我会尽可能解决 😺
+
+---
+
+## 📄 License
+
+本项目采用 [MIT License](LICENSE) 开源协议。
+
+---
+
+<div align="center">
+
+如果这个项目对你有帮助，请给一个 ⭐️ Star 支持一下！
+
+Made with ❤️ by Kaleido Team
+
+</div>
