@@ -40,6 +40,7 @@ Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管�
 <div align="center">
   <img src="images/%E4%B8%9A%E5%8A%A1%E5%8A%9F%E8%83%BD.jpg" width="800" alt="业务功能"/>
 </div>
+
 > 💡 **核心价值**：将传统的衣柜管理升级为智能化、个性化的穿搭体验
 
 ---
