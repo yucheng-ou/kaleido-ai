@@ -75,13 +75,11 @@ Kaleido AI 智能衣柜是一个采用 **微服务架构** 的AI智能穿搭管�
 - **XXL-Job 3.3.2**：分布式任务调度
 
 #### 数据存储
-| 存储 | 版本 | 用途 |
-|------|------|------|
-| **MySQL** | 8.4.0 | 关系型数据，ShardingSphere分库分表 |
-| **MongoDB** | 7.0+ | 文档型数据，灵活Schema |
-| **Milvus** | 2.4+ | 向量数据库，AI特征存储和相似度搜索 |
-| **Redis** | 6+ | 缓存，JetCache多级缓存（Caffeine + Redis） |
-| **MinIO** | 8.6.0 | 对象存储，图片、文件管理 |
+- **MySQL 8.4.0**：关系型数据，ShardingSphere分库分表
+- **MongoDB 7.0+**：文档型数据，灵活Schema
+- **Milvus 2.4+**：向量数据库，AI特征存储和相似度搜索
+- **Redis 6+**：缓存，JetCache多级缓存（Caffeine + Redis）
+- **MinIO 8.6.0**：对象存储，图片、文件管理
 
 #### 中间件
 - **RabbitMQ 3.13+**：消息队列，异步解耦
@@ -369,7 +367,5 @@ mvn compile smart-doc:html
 <div align="center">
 
 如果这个项目对你有帮助，请给一个 ⭐️ Star 支持一下！
-
-Made with ❤️ by Kaleido Team
 
 </div>
