@@ -1,0 +1,183 @@
+version: '3.9'
+services:
+  nacos:
+    image: nacos/nacos-server:v2.2.3-slim
+    container_name: nacos
+    restart: always
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_DB_NAME=nacos_config
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=kaleido123
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      - NACOS_AUTH_IDENTITY_KEY=kaleido
+      - NACOS_AUTH_IDENTITY_VALUE=kaleido
+      - NACOS_AUTH_TOKEN=VGhpcyBpcyBhIHNlY3VyZSBiYXNlNjQga2V5IGZvciBuYWNvcyBhdXRo
+    networks:
+      - kaleido-env-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0.32
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: kaleido123
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/mysql.cnf:ro
+      - ./mysql/sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
+    networks:
+      - kaleido-env-network
+
+  # Redis
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    restart: always
+    hostname: redis
+    privileged: true
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      - kaleido-env-network
+
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb-server
+    ports:
+      - "27017:27017"
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: root
+      MONGODB_INITDB_ROOT_PASSWORD: kaleido123
+      MONGO_INITDB_DATABASE: testdb
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data:/data/db
+      - ./log:/var/log/mongodb
+    restart: always
+    networks:
+      - kaleido-env-network
+
+  rabbitmq:
+    image: rabbitmq:3.12.9
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: kaleido123
+    command: rabbitmq-server
+    volumes:
+      - ./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+    networks:
+      - kaleido-env-network
+
+  xxl-job-admin:
+    image: xuxueli/xxl-job-admin:2.4.1
+    container_name: xxl-job-admin
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "9091:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/xxl_job?serverTimezone=UTC&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=kaleido123
+      - SERVER_PORT=9090
+    networks:
+      - kaleido-env-network
+
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.54.1
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - kaleido-env-network
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: grafana
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana:/etc/grafana
+    networks:
+      - kaleido-env-network
+
+  sentinel:
+    image: bladex/sentinel-dashboard:1.8.6
+    container_name: sentinel
+    restart: always
+    ports:
+      - "8858:8858"
+    environment:
+      - JAVA_OPTS=-Dserver.port=8858 -Dsentinel.dashboard.auth.username=sentinel -Dsentinel.dashboard.auth.password=sentinel
+    networks:
+      - kaleido-env-network
+
+  seata:
+    image: seataio/seata-server:1.8.0
+    container_name: seata
+    restart: always
+    ports:
+      - "8091:8091"
+      - "7091:7091"
+    environment:
+      - SEATA_IP=seata
+      - SEATA_PORT=8091
+      - SEATA_STORE_MODE=db
+      - SEATA_STORE_DB_TYPE=mysql
+      - SEATA_STORE_DB_DB_TYPE=mysql
+      - SERVER_NODE_ID=1
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/seata?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Shanghai
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=kaleido123
+      - SEATA_CONFIG_TYPE=nacos
+      - SEATA_CONFIG_NACOS_SERVER_ADDR=nacos:8848
+      - SEATA_CONFIG_NACOS_GROUP=SEATA_GROUP
+      - SEATA_REGISTRY_TYPE=nacos
+      - SEATA_REGISTRY_NACOS_SERVER_ADDR=nacos:8848
+      - SEATA_REGISTRY_NACOS_GROUP=SEATA_GROUP
+    depends_on:
+      mysql:
+        condition: service_healthy
+      nacos:
+        condition: service_started
+    networks:
+      - kaleido-env-network
+
+networks:
+  kaleido-env-network:
+    driver: bridge
