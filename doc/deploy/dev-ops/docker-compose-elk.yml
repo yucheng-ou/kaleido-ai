@@ -1,0 +1,58 @@
+version: '3.9'
+# 执行脚本；docker-compose -f docker-compose-elk.yml up -d
+# mkdir -p {config,data,logs,plugins}
+# 控制台；GET _cat/indices - 查看 springboot-logstash- 是否存在，上报后存在，则表示接入成功
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.28
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - 'cluster.name=kaleido-cluster'
+      - 'discovery.type=single-node'
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    networks:
+      - kaleido-elk
+
+  logstash:
+    image: logstash:7.17.28
+    container_name: logstash
+    restart: always
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - '4560:4560'
+      - '50000:50000/tcp'
+      - '50000:50000/udp'
+      - '9600:9600'
+    environment:
+      LS_JAVA_OPTS: -Xms1024m -Xmx1024m
+      TZ: Asia/Shanghai
+      MONITORING_ENABLED: false
+    networks:
+      - kaleido-elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:7.17.28
+    container_name: kibana
+    restart: always
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - I18N_LOCALE=zh-CN
+    networks:
+      - kaleido-elk
+    depends_on:
+      - elasticsearch
+
+networks:
+  kaleido-elk:
+    driver: bridge
