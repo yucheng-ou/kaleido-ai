@@ -4,8 +4,7 @@
 
     <!-- 基础列映射 -->
     <sql id="Base_Column_List">
-        id, created_at, updated_at, deleted, lock_version,
-        user_id, message, topic, state
+        id,user_id, message, topic, state
     </sql>
 
     <!-- 根据ID查询消息 -->

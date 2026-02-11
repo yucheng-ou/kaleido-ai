@@ -1,6 +1,5 @@
 package com.xiaoo.kaleido.message.infrastructure.adapter.repository;
 
-import com.xiaoo.kaleido.base.exception.ErrorCode;
 import com.xiaoo.kaleido.message.domain.mq.adapter.repository.IMqMessageRepository;
 import com.xiaoo.kaleido.message.domain.mq.model.aggregate.MqMessageAggregate;
 import com.xiaoo.kaleido.message.infrastructure.adapter.repository.convertor.MqMessageInfraConvertor;
@@ -11,7 +10,6 @@ import com.xiaoo.kaleido.message.types.exception.MessageErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
