@@ -39,7 +39,7 @@ dubbo:
       milvus:
         client:
           host: ${MILVUS_HOST}
-          port: ${MILVUS_HOST}
+          port: ${MILVUS_PORT}
           username: ${MILVUS_USERNAME}
           password: ${MILVUS_PASSWORD}
         database-name: kaleido
