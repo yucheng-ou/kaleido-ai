@@ -36,17 +36,6 @@
         ORDER BY created_at DESC
     </select>
 
-    <!-- 根据用户ID和主题查询消息列表 -->
-    <select id="findByUserIdAndTopic" resultType="com.xiaoo.kaleido.message.infrastructure.dao.po.MqMessagePO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_mq_message
-        WHERE user_id = #{userId}
-        AND topic = #{topic}
-        AND deleted = 0
-        ORDER BY created_at DESC
-    </select>
-
     <!-- 根据状态查询消息列表 -->
     <select id="findByState" resultType="com.xiaoo.kaleido.message.infrastructure.dao.po.MqMessagePO">
         SELECT
@@ -63,15 +52,6 @@
         FROM t_mq_message
         WHERE id = #{id}
         AND deleted = 0
-    </select>
-
-    <!-- 查询所有未被删除的消息 -->
-    <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.message.infrastructure.dao.po.MqMessagePO">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_mq_message
-        WHERE deleted = 0
-        ORDER BY created_at DESC
     </select>
 
     <!-- 查询处理中的消息（创建状态） -->

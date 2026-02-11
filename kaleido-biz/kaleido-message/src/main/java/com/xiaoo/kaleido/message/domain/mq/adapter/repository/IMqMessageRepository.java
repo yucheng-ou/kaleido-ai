@@ -80,18 +80,6 @@ public interface IMqMessageRepository {
     List<MqMessageAggregate> findByTopic(String topic);
 
     /**
-     * 根据用户ID和主题查找消息列表
-     * <p>
-     * 查询指定用户和主题的所有消息
-     *
-     * @param userId 用户ID，不能为空
-     * @param topic  消息主题，不能为空
-     * @return 消息聚合根列表
-     * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当查询失败时抛出
-     */
-    List<MqMessageAggregate> findByUserIdAndTopic(String userId, String topic);
-
-    /**
      * 根据状态查找消息列表
      * <p>
      * 查询指定状态的所有消息
@@ -101,45 +89,4 @@ public interface IMqMessageRepository {
      * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当查询失败时抛出
      */
     List<MqMessageAggregate> findByState(String state);
-
-    /**
-     * 检查消息是否存在
-     * <p>
-     * 检查指定ID的消息是否存在
-     *
-     * @param messageId 消息ID，不能为空
-     * @return 是否存在，true表示存在，false表示不存在
-     * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当参数无效或查询失败时抛出
-     */
-    boolean exists(String messageId);
-
-    /**
-     * 查询所有未被删除的消息
-     * <p>
-     * 查询所有未被删除的消息列表
-     *
-     * @return 消息聚合根列表
-     * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当查询失败时抛出
-     */
-    List<MqMessageAggregate> findAllNotDeleted();
-
-    /**
-     * 查询处理中的消息（创建状态）
-     * <p>
-     * 查询所有状态为创建的消息
-     *
-     * @return 消息聚合根列表
-     * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当查询失败时抛出
-     */
-    List<MqMessageAggregate> findProcessingMessages();
-
-    /**
-     * 查询终态的消息（已完成或失败）
-     * <p>
-     * 查询所有状态为已完成或失败的消息
-     *
-     * @return 消息聚合根列表
-     * @throws com.xiaoo.kaleido.message.types.exception.MessageException 当查询失败时抛出
-     */
-    List<MqMessageAggregate> findFinalStateMessages();
 }

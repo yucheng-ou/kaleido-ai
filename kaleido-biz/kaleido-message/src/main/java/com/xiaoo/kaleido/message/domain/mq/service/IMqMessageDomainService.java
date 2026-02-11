@@ -61,45 +61,4 @@ public interface IMqMessageDomainService {
      */
     MqMessageAggregate markAsFailed(String messageId);
 
-    /**
-     * 更新消息内容
-     *
-     * @param messageId  消息ID，不能为空
-     * @param newMessage 新的消息内容，不能为空
-     * @return 更新后的消息聚合根
-     */
-    MqMessageAggregate updateMessage(String messageId, String newMessage);
-
-    /**
-     * 更新消息主题
-     *
-     * @param messageId 消息ID，不能为空
-     * @param newTopic  新的主题，不能为空
-     * @return 更新后的消息聚合根
-     */
-    MqMessageAggregate updateTopic(String messageId, String newTopic);
-
-    /**
-     * 检查消息是否存在
-     *
-     * @param messageId 消息ID，不能为空
-     * @return 如果消息存在返回true，否则返回false
-     */
-    boolean exists(String messageId);
-
-    /**
-     * 检查消息是否为终态（已完成或失败）
-     *
-     * @param messageId 消息ID，不能为空
-     * @return 如果消息为终态返回true，否则返回false
-     */
-    boolean isFinalState(String messageId);
-
-    /**
-     * 检查消息是否为处理中状态（创建状态）
-     *
-     * @param messageId 消息ID，不能为空
-     * @return 如果消息为处理中状态返回true，否则返回false
-     */
-    boolean isProcessing(String messageId);
 }

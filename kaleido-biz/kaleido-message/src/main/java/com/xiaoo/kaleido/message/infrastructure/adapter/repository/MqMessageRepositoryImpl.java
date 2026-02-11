@@ -121,22 +121,6 @@ public class MqMessageRepositoryImpl implements IMqMessageRepository {
     }
 
     @Override
-    public List<MqMessageAggregate> findByUserIdAndTopic(String userId, String topic) {
-        try {
-            // 1.查询消息列表
-            List<MqMessagePO> messagePOs = mqMessageDao.findByUserIdAndTopic(userId, topic);
-
-            // 2.转换为MqMessageAggregate列表
-            return messagePOs.stream()
-                    .map(MqMessageInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("根据用户ID和主题查询MQ消息失败，用户ID: {}, 主题: {}, 原因: {}", userId, topic, e.getMessage(), e);
-            throw MessageException.of(MessageErrorCode.QUERY_FAIL, "根据用户ID和主题查询MQ消息失败");
-        }
-    }
-
-    @Override
     public List<MqMessageAggregate> findByState(String state) {
         try {
             // 1.查询消息列表
@@ -152,61 +136,4 @@ public class MqMessageRepositoryImpl implements IMqMessageRepository {
         }
     }
 
-    @Override
-    public boolean exists(String messageId) {
-        try {
-            return mqMessageDao.exists(messageId);
-        } catch (Exception e) {
-            log.error("检查MQ消息是否存在失败，消息ID: {}, 原因: {}", messageId, e.getMessage(), e);
-            throw MessageException.of(MessageErrorCode.QUERY_FAIL, "检查MQ消息是否存在失败");
-        }
-    }
-
-    @Override
-    public List<MqMessageAggregate> findAllNotDeleted() {
-        try {
-            // 1.查询所有未被删除的消息
-            List<MqMessagePO> messagePOs = mqMessageDao.findAllNotDeleted();
-
-            // 2.转换为MqMessageAggregate列表
-            return messagePOs.stream()
-                    .map(MqMessageInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询所有未被删除的MQ消息失败，原因: {}", e.getMessage(), e);
-            throw MessageException.of(MessageErrorCode.QUERY_FAIL, "查询所有未被删除的MQ消息失败");
-        }
-    }
-
-    @Override
-    public List<MqMessageAggregate> findProcessingMessages() {
-        try {
-            // 1.查询处理中的消息
-            List<MqMessagePO> messagePOs = mqMessageDao.findProcessingMessages();
-
-            // 2.转换为MqMessageAggregate列表
-            return messagePOs.stream()
-                    .map(MqMessageInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询处理中的MQ消息失败，原因: {}", e.getMessage(), e);
-            throw MessageException.of(MessageErrorCode.QUERY_FAIL, "查询处理中的MQ消息失败");
-        }
-    }
-
-    @Override
-    public List<MqMessageAggregate> findFinalStateMessages() {
-        try {
-            // 1.查询终态的消息
-            List<MqMessagePO> messagePOs = mqMessageDao.findFinalStateMessages();
-
-            // 2.转换为MqMessageAggregate列表
-            return messagePOs.stream()
-                    .map(MqMessageInfraConvertor.INSTANCE::toAggregate)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("查询终态的MQ消息失败，原因: {}", e.getMessage(), e);
-            throw MessageException.of(MessageErrorCode.QUERY_FAIL, "查询终态的MQ消息失败");
-        }
-    }
 }

@@ -43,15 +43,6 @@ public interface MqMessageDao extends BaseMapper<MqMessagePO> {
     List<MqMessagePO> findByTopic(@Param("topic") String topic);
 
     /**
-     * 根据用户ID和主题查询消息列表
-     *
-     * @param userId 用户ID
-     * @param topic 消息主题
-     * @return 消息持久化对象列表
-     */
-    List<MqMessagePO> findByUserIdAndTopic(@Param("userId") String userId, @Param("topic") String topic);
-
-    /**
      * 根据状态查询消息列表
      *
      * @param state 消息状态
@@ -66,13 +57,6 @@ public interface MqMessageDao extends BaseMapper<MqMessagePO> {
      * @return 是否存在，true表示存在，false表示不存在
      */
     boolean exists(@Param("id") String id);
-
-    /**
-     * 查询所有未被删除的消息
-     *
-     * @return 消息持久化对象列表
-     */
-    List<MqMessagePO> findAllNotDeleted();
 
     /**
      * 查询处理中的消息（创建状态）
