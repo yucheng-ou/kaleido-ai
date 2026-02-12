@@ -1,7 +1,7 @@
 <div align="center">
 
 
-<img src="images/logo.png" width="200" alt="Kaleido Logo" />
+<img src="images/logo.png" width="120" alt="Kaleido Logo" />
 
 # 🎨 Kaleido AI 智能衣柜
 
