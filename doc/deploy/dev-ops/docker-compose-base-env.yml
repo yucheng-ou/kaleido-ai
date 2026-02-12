@@ -19,7 +19,8 @@ services:
       - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - NACOS_AUTH_IDENTITY_KEY=kaleido
       - NACOS_AUTH_IDENTITY_VALUE=kaleido
-      - NACOS_AUTH_TOKEN=VGhpcyBpcyBhIHNlY3VyZSBiYXNlNjQga2V5IGZvciBuYWNvcyBhdXRo
+      - NACOS_AUTH_TOKEN=a2FsZWlkbzEyM2thbGVpZG8xMjNrYWxlaWRvMTIza2FsZWlkbzEyMw==
+      - NACOS_AUTH_ENABLE=true
     networks:
       - kaleido-env-network
     depends_on:
