@@ -4,51 +4,47 @@ echo 正在批量设置用户级环境变量...
 echo.
 
 :: 将变量的内容替换为你自己的
-setx NACOS_HOST "xxx"
-setx NACOS_PORT "xxx"
+setx NACOS_HOST "127.0.0.1"
+setx NACOS_PORT "8848"
 
-setx AI_BASE_URL "xxx"
+setx AI_BASE_URL "https://api.deepseek.com"
 setx AI_API_KEY "xxx"
 
-setx MILVUS_HOST "xxx"
-setx MILVUS_PORT "xxx"
-setx MILVUS_USERNAME "xxx"
-setx MILVUS_PASSWORD "xxx"
+setx MILVUS_HOST "127.0.0.1"
+setx MILVUS_PORT "19530"
+setx MILVUS_USERNAME "root"
+setx MILVUS_PASSWORD "Milvus"
 
-setx MONGODB_HOST "xxx"
-setx MONGODB_PORT "xxx"
-setx MONGODB_USERNAME "xxx"
-setx MONGODB_PASSWORD "xxx"
-setx MONGODB_PORT "xxx"
+setx MONGODB_HOST "127.0.0.1"
+setx MONGODB_PORT "27017"
+setx MONGODB_USERNAME "root"
+setx MONGODB_PASSWORD "kaleido123"
 
-setx minio_endpoint "xxx"
-setx minio_fileHost "xxx"
-setx minio_accessKey "xxx"
-setx minio_secretKey "xxx"
+setx minio_endpoint "http://127.0.0.1:9000"
+setx minio_fileHost "http://127.0.0.1:9000"
+setx minio_accessKey "admin"
+setx minio_secretKey "admin123"
 
-setx rabbitmq_address "xxx"
-setx rabbitmq_port "xxx"
-setx rabbitmq_username "xxx"
-setx rabbitmq_password "xxx"
+setx rabbitmq_address "127.0.0.1"
+setx rabbitmq_port "5672"
+setx rabbitmq_username "admin"
+setx rabbitmq_password "kaleido123"
 
-setx xxl_job.accessToken "xxx"
-setx xxl_job.admin.address "xxx"
-setx xxl_job.executor.appName "xxx"
-setx xxl_job.executor.ip "xxx"
-setx xxl_job.executor.port "xxx"
+setx xxl_job.accessToken "default_token"
+setx xxl_job.admin.address "127.0.0.1:9091"
+setx xxl_job.executor.appName "kaleido-job-executor"
+setx xxl_job.executor.ip "127.0.0.1"
+setx xxl_job.executor.port "9999"
 
-setx NACOS_HOST "xxx"
-setx NACOS_PORT "xxx"
-
-setx REDIS_HOST "xxx"
-setx REDIS_PORT "xxx"
-setx REDIS_PASSWORD "xxx"
+setx REDIS_HOST "127.0.0.1"
+setx REDIS_PORT "6379"
+setx REDIS_PASSWORD "kaleido123"
 
 :: 分表的第一张表地址
-setx MYSQL_URL_DB0 "xxx"
+setx MYSQL_URL_DB0 "jdbc:mysql://127.0.0.1:3306/kaleido_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
 :: 分表的第二张表地址
-setx MYSQL_URL_DB1 "xxx"
-setx MYSQL_PASSWORD "xxx"
+setx MYSQL_URL_DB1 "jdbc:mysql://127.0.0.1:3306/kaleido_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
+setx MYSQL_PASSWORD "kaleido123"
 
 echo.
 echo 所有变量设置完成！新终端输入 echo %%变量名%% 验证
