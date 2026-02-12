@@ -70,10 +70,8 @@
         <dynamic-tp.version>1.2.2-x</dynamic-tp.version>
         <jackson.version>2.17.3</jackson.version>
         <minio.version>8.6.0</minio.version>
-        <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
         <shardingsphere.version>5.5.2</shardingsphere.version>
         <antlr4.version>4.10.1</antlr4.version>
-
     </properties>
 
     <dependencyManagement>
@@ -400,12 +398,6 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                <version>${dynamic-datasource.version}</version>
             </dependency>
 
             <dependency>
