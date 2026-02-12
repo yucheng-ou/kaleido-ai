@@ -1,5 +1,4 @@
 version: '2'
- 
 services:
   etcd:
     container_name: milvus-etcd
