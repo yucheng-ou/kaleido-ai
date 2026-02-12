@@ -2,7 +2,7 @@
 
 | Version | Update Time | Status | Author | Description |
 |---------|-------------|--------|--------|-------------|
-|v2026-01-23 10:46:43|2026-01-23 10:46:43|auto|@ouyucheng|Created by smart-doc|
+|v2026-02-12 18:51:00|2026-02-12 18:51:00|auto|@Administrator|Created by smart-doc|
 
 
 
@@ -46,15 +46,15 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/brand
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "pdj2ht",
+  "code": "12367",
+  "msg": "mfd38r",
   "success": true,
   "data": [
     {
-      "brandId": "76",
-      "name": "elwood.donnelly",
-      "logoPath": "opyoei",
-      "description": "2fm37l"
+      "brandId": "124",
+      "name": "giovanna.kshlerin",
+      "logoPath": "gxupnv",
+      "description": "5zdq1j"
     }
   ]
 }
@@ -104,14 +104,14 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/brand/{
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "1zmwbp",
+  "code": "12367",
+  "msg": "vvx4h7",
   "success": true,
   "data": {
-    "brandId": "76",
-    "name": "elwood.donnelly",
-    "logoPath": "0fvfco",
-    "description": "3e9ra1"
+    "brandId": "124",
+    "name": "giovanna.kshlerin",
+    "logoPath": "44m9l0",
+    "description": "m8x0fu"
   }
 }
 ```
@@ -157,20 +157,20 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/brand/{
 **Request-example:**
 ```bash
 curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clothing --data '{
-  "name": "elwood.donnelly",
-  "typeCode": "40521",
-  "colorCode": "40521",
-  "seasonCode": "40521",
-  "brandId": "76",
-  "size": "xb3nnp",
-  "purchaseDate": "2026-01-23",
-  "price": 711,
-  "description": "2s8iy0",
-  "currentLocationId": "76",
+  "name": "giovanna.kshlerin",
+  "typeCode": "12367",
+  "colorCode": "12367",
+  "seasonCode": "12367",
+  "brandId": "124",
+  "size": "0n4d8z",
+  "purchaseDate": "2026-02-12",
+  "price": 998,
+  "description": "t0tqyb",
+  "currentLocationId": "124",
   "images": [
     {
-      "path": "8qyhyh",
-      "imageOrder": 609,
+      "path": "nreopx",
+      "imageOrder": 2,
       "isPrimary": true
     }
   ]
@@ -188,10 +188,10 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "zwhotf",
+  "code": "12367",
+  "msg": "g592gk",
   "success": true,
-  "data": "5cce0n"
+  "data": "614dpk"
 }
 ```
 
@@ -236,21 +236,21 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Request-example:**
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clothing/{clothingId} --data '{
-  "clothingId": "76",
-  "name": "elwood.donnelly",
-  "typeCode": "40521",
-  "colorCode": "40521",
-  "seasonCode": "40521",
-  "brandId": "76",
-  "size": "wro6eo",
-  "purchaseDate": "2026-01-23",
-  "price": 5,
-  "description": "jnraya",
-  "currentLocationId": "76",
+  "clothingId": "124",
+  "name": "giovanna.kshlerin",
+  "typeCode": "12367",
+  "colorCode": "12367",
+  "seasonCode": "12367",
+  "brandId": "124",
+  "size": "z0plc7",
+  "purchaseDate": "2026-02-12",
+  "price": 723,
+  "description": "pkmb7s",
+  "currentLocationId": "124",
   "images": [
     {
-      "path": "q4q3y5",
-      "imageOrder": 641,
+      "path": "sc9xng",
+      "imageOrder": 855,
       "isPrimary": true
     }
   ]
@@ -268,8 +268,8 @@ curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i ht
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "vzq3oj",
+  "code": "12367",
+  "msg": "b6burt",
   "success": true
 }
 ```
@@ -314,8 +314,8 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clot
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "uvopuz",
+  "code": "12367",
+  "msg": "uzwb66",
   "success": true
 }
 ```
@@ -380,38 +380,38 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clothin
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "oivvpd",
+  "code": "12367",
+  "msg": "97tzxg",
   "success": true,
   "data": [
     {
-      "clothingId": "76",
-      "userId": "76",
-      "name": "elwood.donnelly",
-      "typeCode": "40521",
-      "colorCode": "40521",
-      "seasonCode": "40521",
-      "brandId": "76",
-      "brandName": "elwood.donnelly",
-      "size": "bi8cdm",
-      "purchaseDate": "2026-01-23",
-      "price": 706,
-      "description": "3p572t",
-      "currentLocationId": "76",
-      "currentLocationName": "elwood.donnelly",
-      "wearCount": 475,
-      "lastWornDate": "2026-01-23",
+      "clothingId": "124",
+      "userId": "124",
+      "name": "giovanna.kshlerin",
+      "typeCode": "12367",
+      "colorCode": "12367",
+      "seasonCode": "12367",
+      "brandId": "124",
+      "brandName": "giovanna.kshlerin",
+      "size": "k1lr4v",
+      "purchaseDate": "2026-02-12",
+      "price": 349,
+      "description": "aviscs",
+      "currentLocationId": "124",
+      "currentLocationName": "giovanna.kshlerin",
+      "wearCount": 293,
+      "lastWornDate": "2026-02-12",
       "images": [
         {
-          "imageId": "76",
-          "path": "wmewnx",
-          "imageOrder": 697,
+          "imageId": "124",
+          "path": "taldjj",
+          "imageOrder": 376,
           "isMain": true,
-          "width": 241,
-          "height": 176,
-          "fileSize": 8,
+          "width": 483,
+          "height": 623,
+          "fileSize": 187,
           "imageTypeEnums": "JPEG",
-          "description": "gwewiz"
+          "description": "hdxw0n"
         }
       ]
     }
@@ -485,37 +485,37 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clothin
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "a96fdv",
+  "code": "12367",
+  "msg": "kc63pf",
   "success": true,
   "data": {
-    "clothingId": "76",
-    "userId": "76",
-    "name": "elwood.donnelly",
-    "typeCode": "40521",
-    "colorCode": "40521",
-    "seasonCode": "40521",
-    "brandId": "76",
-    "brandName": "elwood.donnelly",
-    "size": "g5lk0d",
-    "purchaseDate": "2026-01-23",
-    "price": 988,
-    "description": "bggqgc",
-    "currentLocationId": "76",
-    "currentLocationName": "elwood.donnelly",
-    "wearCount": 334,
-    "lastWornDate": "2026-01-23",
+    "clothingId": "124",
+    "userId": "124",
+    "name": "giovanna.kshlerin",
+    "typeCode": "12367",
+    "colorCode": "12367",
+    "seasonCode": "12367",
+    "brandId": "124",
+    "brandName": "giovanna.kshlerin",
+    "size": "tziudi",
+    "purchaseDate": "2026-02-12",
+    "price": 583,
+    "description": "4r87fn",
+    "currentLocationId": "124",
+    "currentLocationName": "giovanna.kshlerin",
+    "wearCount": 313,
+    "lastWornDate": "2026-02-12",
     "images": [
       {
-        "imageId": "76",
-        "path": "gfbvti",
-        "imageOrder": 443,
+        "imageId": "124",
+        "path": "agd8g0",
+        "imageOrder": 449,
         "isMain": true,
-        "width": 322,
-        "height": 556,
-        "fileSize": 947,
+        "width": 326,
+        "height": 880,
+        "fileSize": 677,
         "imageTypeEnums": "JPEG",
-        "description": "vc29ln"
+        "description": "njztge"
       }
     ]
   }
@@ -563,8 +563,8 @@ curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clothi
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "damxn2",
+  "code": "12367",
+  "msg": "emzfed",
   "success": true
 }
 ```
@@ -610,8 +610,8 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clot
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "89qxtb",
+  "code": "12367",
+  "msg": "2wmm36",
   "success": true
 }
 ```
@@ -650,13 +650,13 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/clot
 **Request-example:**
 ```bash
 curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/location --data '{
-  "name": "elwood.donnelly",
-  "description": "8absa2",
-  "address": "028 Siobhan Manor， Riceport， OH 65289",
+  "name": "giovanna.kshlerin",
+  "description": "0mwap6",
+  "address": "Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003",
   "images": [
     {
-      "path": "ta5xhk",
-      "imageOrder": 477,
+      "path": "dtwsf8",
+      "imageOrder": 794,
       "isPrimary": true
     }
   ]
@@ -674,10 +674,10 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "c69o9v",
+  "code": "12367",
+  "msg": "pgpmz4",
   "success": true,
-  "data": "rdf2vj"
+  "data": "f3x2nw"
 }
 ```
 
@@ -721,14 +721,14 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Request-example:**
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/location/{locationId} --data '{
-  "locationId": "76",
-  "name": "elwood.donnelly",
-  "description": "e4h4qi",
-  "address": "028 Siobhan Manor， Riceport， OH 65289",
+  "locationId": "124",
+  "name": "giovanna.kshlerin",
+  "description": "hr8o1u",
+  "address": "Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003",
   "images": [
     {
-      "path": "tfznl2",
-      "imageOrder": 886,
+      "path": "ik7ngx",
+      "imageOrder": 46,
       "isPrimary": true
     }
   ]
@@ -746,8 +746,8 @@ curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i ht
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "c0juqh",
+  "code": "12367",
+  "msg": "58gdcd",
   "success": true
 }
 ```
@@ -792,8 +792,8 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/loca
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "q8aazk",
+  "code": "12367",
+  "msg": "6s79cj",
   "success": true
 }
 ```
@@ -847,26 +847,26 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/locatio
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "tgx3lj",
+  "code": "12367",
+  "msg": "2v570i",
   "success": true,
   "data": [
     {
-      "locationId": "76",
-      "userId": "76",
-      "name": "elwood.donnelly",
-      "description": "azhptt",
-      "address": "028 Siobhan Manor， Riceport， OH 65289",
-      "primaryImageId": "76",
+      "locationId": "124",
+      "userId": "124",
+      "name": "giovanna.kshlerin",
+      "description": "b3fzsk",
+      "address": "Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003",
+      "primaryImageId": "124",
       "images": [
         {
-          "imageId": "76",
-          "path": "nm3nr4",
-          "imageOrder": 760,
+          "imageId": "124",
+          "path": "mhikdl",
+          "imageOrder": 907,
           "isPrimary": true,
-          "width": 379,
-          "height": 882,
-          "fileSize": 946,
+          "width": 188,
+          "height": 809,
+          "fileSize": 842,
           "imageTypeEnums": "JPEG"
         }
       ]
@@ -930,25 +930,25 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/locatio
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "3sezov",
+  "code": "12367",
+  "msg": "sg0s75",
   "success": true,
   "data": {
-    "locationId": "76",
-    "userId": "76",
-    "name": "elwood.donnelly",
-    "description": "r6j6c2",
-    "address": "028 Siobhan Manor， Riceport， OH 65289",
-    "primaryImageId": "76",
+    "locationId": "124",
+    "userId": "124",
+    "name": "giovanna.kshlerin",
+    "description": "85khjr",
+    "address": "Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003",
+    "primaryImageId": "124",
     "images": [
       {
-        "imageId": "76",
-        "path": "e3bujg",
-        "imageOrder": 726,
+        "imageId": "124",
+        "path": "0vr1i4",
+        "imageOrder": 20,
         "isPrimary": true,
-        "width": 179,
-        "height": 177,
-        "fileSize": 685,
+        "width": 78,
+        "height": 205,
+        "fileSize": 373,
         "imageTypeEnums": "JPEG"
       }
     ]
@@ -997,8 +997,8 @@ curl -X POST -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/locati
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "rmcpcp",
+  "code": "12367",
+  "msg": "qj1s7z",
   "success": true
 }
 ```
@@ -1044,8 +1044,8 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/loca
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "pajqoh",
+  "code": "12367",
+  "msg": "2z3rzj",
   "success": true
 }
 ```
@@ -1084,15 +1084,15 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/loca
 **Request-example:**
 ```bash
 curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits --data '{
-  "name": "elwood.donnelly",
-  "description": "7xbmsz",
+  "name": "giovanna.kshlerin",
+  "description": "8mi1d1",
   "clothingIds": [
-    "vppjiv"
+    "3fxzkz"
   ],
   "images": [
     {
-      "path": "4qfys7",
-      "imageOrder": 784,
+      "path": "glnr0l",
+      "imageOrder": 625,
       "isPrimary": true
     }
   ]
@@ -1110,10 +1110,10 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "dry7xa",
+  "code": "12367",
+  "msg": "gnh1hu",
   "success": true,
-  "data": "4jynuo"
+  "data": "qg4hi4"
 }
 ```
 
@@ -1157,16 +1157,16 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Request-example:**
 ```bash
 curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/{outfitId} --data '{
-  "outfitId": "76",
-  "name": "elwood.donnelly",
-  "description": "rqlovi",
+  "outfitId": "124",
+  "name": "giovanna.kshlerin",
+  "description": "wfdmal",
   "clothingIds": [
-    "m22nue"
+    "mwlzyg"
   ],
   "images": [
     {
-      "path": "1lnzli",
-      "imageOrder": 858,
+      "path": "xwug96",
+      "imageOrder": 555,
       "isPrimary": true
     }
   ]
@@ -1184,8 +1184,8 @@ curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i ht
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "xz6064",
+  "code": "12367",
+  "msg": "3p0eg1",
   "success": true
 }
 ```
@@ -1222,7 +1222,7 @@ curl -X PUT -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i ht
 
 **Request-example:**
 ```bash
-curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/{outfitId}?userId=76
+curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/{outfitId}?userId=124
 ```
 **Response-fields:**
 
@@ -1236,8 +1236,8 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outf
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "y4brms",
+  "code": "12367",
+  "msg": "7krzrb",
   "success": true
 }
 ```
@@ -1277,9 +1277,9 @@ curl -X DELETE -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outf
 **Request-example:**
 ```bash
 curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/{outfitId}/wear --data '{
-  "outfitId": "76",
-  "wearDate": "2026-01-23",
-  "notes": "p2a5xn"
+  "outfitId": "124",
+  "wearDate": "2026-02-12",
+  "notes": "a2ur35"
 }'
 ```
 **Response-fields:**
@@ -1294,13 +1294,13 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "qa65cz",
+  "code": "12367",
+  "msg": "8ei05c",
   "success": true
 }
 ```
 
-### 根据用户ID查询穿搭列表
+### 查询用户穿搭列表
 **URL:** http://localhost:8082/wardrobe/outfits/list
 
 **Type:** GET
@@ -1309,7 +1309,7 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 
 **Content-Type:** application/x-www-form-urlencoded;charset=UTF-8
 
-**Description:** 根据用户ID查询穿搭列表
+**Description:** 查询用户穿搭列表
 
 **Request-headers:**
 
@@ -1318,15 +1318,9 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization:Bearer ' -i h
 |Authorization|string|false|认证令牌，格式：Bearer {token}。仅需要认证的接口使用。|-|
 
 
-**Query-parameters:**
-
-| Parameter | Type | Required | Description | Since |
-|-----------|------|----------|-------------|-------|
-|userId|string|true|用户ID，不能为空|-|
-
 **Request-example:**
 ```bash
-curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/list?userId=76
+curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits/list
 ```
 **Response-fields:**
 
@@ -1369,47 +1363,47 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "0qfovo",
+  "code": "12367",
+  "msg": "apyev7",
   "success": true,
   "data": [
     {
-      "outfitId": "76",
-      "userId": "76",
-      "name": "elwood.donnelly",
-      "description": "cfjyzk",
-      "wearCount": 630,
-      "lastWornDate": "2026-01-23",
+      "outfitId": "124",
+      "userId": "124",
+      "name": "giovanna.kshlerin",
+      "description": "o8mbqx",
+      "wearCount": 459,
+      "lastWornDate": "2026-02-12",
       "clothings": [
         {
-          "clothingId": "76",
-          "name": "elwood.donnelly",
-          "typeCode": "40521",
-          "colorCode": "40521",
-          "brandName": "elwood.donnelly",
-          "primaryImagePath": "efuklp"
+          "clothingId": "124",
+          "name": "giovanna.kshlerin",
+          "typeCode": "12367",
+          "colorCode": "12367",
+          "brandName": "giovanna.kshlerin",
+          "primaryImagePath": "64o5o5"
         }
       ],
       "images": [
         {
-          "imageId": "76",
-          "path": "mdkgkm",
-          "imageOrder": 807,
+          "imageId": "124",
+          "path": "6a88k6",
+          "imageOrder": 116,
           "isPrimary": true,
-          "width": 63,
-          "height": 414,
-          "fileSize": 677,
+          "width": 399,
+          "height": 404,
+          "fileSize": 44,
           "imageTypeEnums": "JPEG",
-          "description": "6t43aa"
+          "description": "wz72vu"
         }
       ],
       "wearRecords": [
         {
-          "recordId": "76",
-          "userId": "76",
-          "outfitId": "76",
-          "wearDate": "2026-01-23",
-          "notes": "hkxb0a"
+          "recordId": "124",
+          "userId": "124",
+          "outfitId": "124",
+          "wearDate": "2026-02-12",
+          "notes": "r8qe51"
         }
       ]
     }
@@ -1486,46 +1480,46 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "7repf7",
+  "code": "12367",
+  "msg": "6i63yv",
   "success": true,
   "data": {
-    "outfitId": "76",
-    "userId": "76",
-    "name": "elwood.donnelly",
-    "description": "v4djas",
-    "wearCount": 676,
-    "lastWornDate": "2026-01-23",
+    "outfitId": "124",
+    "userId": "124",
+    "name": "giovanna.kshlerin",
+    "description": "f1zi0y",
+    "wearCount": 297,
+    "lastWornDate": "2026-02-12",
     "clothings": [
       {
-        "clothingId": "76",
-        "name": "elwood.donnelly",
-        "typeCode": "40521",
-        "colorCode": "40521",
-        "brandName": "elwood.donnelly",
-        "primaryImagePath": "e2drjk"
+        "clothingId": "124",
+        "name": "giovanna.kshlerin",
+        "typeCode": "12367",
+        "colorCode": "12367",
+        "brandName": "giovanna.kshlerin",
+        "primaryImagePath": "h903jn"
       }
     ],
     "images": [
       {
-        "imageId": "76",
-        "path": "npyn5q",
-        "imageOrder": 636,
+        "imageId": "124",
+        "path": "sqwwbm",
+        "imageOrder": 987,
         "isPrimary": true,
-        "width": 758,
-        "height": 906,
-        "fileSize": 152,
+        "width": 9,
+        "height": 936,
+        "fileSize": 144,
         "imageTypeEnums": "JPEG",
-        "description": "5pb8ly"
+        "description": "cpjkd5"
       }
     ],
     "wearRecords": [
       {
-        "recordId": "76",
-        "userId": "76",
-        "outfitId": "76",
-        "wearDate": "2026-01-23",
-        "notes": "iv8yde"
+        "recordId": "124",
+        "userId": "124",
+        "outfitId": "124",
+        "wearDate": "2026-02-12",
+        "notes": "gcgwgv"
       }
     ]
   }
@@ -1577,16 +1571,16 @@ curl -X GET -H 'Authorization:Bearer ' -i http://localhost:8082/wardrobe/outfits
 **Response-example:**
 ```json
 {
-  "code": "40521",
-  "msg": "319101",
+  "code": "12367",
+  "msg": "w7wyqx",
   "success": true,
   "data": [
     {
-      "recordId": "76",
-      "userId": "76",
-      "outfitId": "76",
-      "wearDate": "2026-01-23",
-      "notes": "ett9jj"
+      "recordId": "124",
+      "userId": "124",
+      "outfitId": "124",
+      "wearDate": "2026-02-12",
+      "notes": "hyrp7m"
     }
   ]
 }

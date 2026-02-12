@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "92cb9912-1ee3-491b-9485-2768ec666849",
+    "_postman_id": "e2641d75-eef6-4168-933d-571c4776fc0b",
     "name": "kaleido-user API 文档"
   },
   "item": [
@@ -50,7 +50,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"userId\": \"152\",\n  \"nickName\": \"timothy.hermiston\"\n}",
+              "raw": "{\n  \"userId\": \"124\",\n  \"nickName\": \"dena.rowe\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -106,7 +106,7 @@
               "query": [
                 {
                   "key": "avatarUrl",
-                  "value": "www.bernice-stoltenberg.info",
+                  "value": "www.roman-hills.co",
                   "description": "头像URL，不能为空"
                 }
               ],
@@ -138,7 +138,7 @@
               }
             },
             "url": {
-              "raw": "::base_url/user/page?pageNum=243&pageSize=10&nickName=timothy.hermiston&telephone=630-404-6643&status=33&gender=MALE",
+              "raw": "::base_url/user/page?pageNum=901&pageSize=10&nickName=dena.rowe&telephone=251.775.6385&status=7&gender=MALE",
               "path": [
                 "user",
                 "page"
@@ -149,7 +149,7 @@
               "query": [
                 {
                   "key": "pageNum",
-                  "value": "820",
+                  "value": "894",
                   "description": "页码"
                 },
                 {
@@ -159,17 +159,17 @@
                 },
                 {
                   "key": "nickName",
-                  "value": "timothy.hermiston",
+                  "value": "dena.rowe",
                   "description": "No comments found."
                 },
                 {
                   "key": "telephone",
-                  "value": "630-404-6643",
+                  "value": "251.775.6385",
                   "description": "No comments found."
                 },
                 {
                   "key": "status",
-                  "value": "975",
+                  "value": "410",
                   "description": "No comments found."
                 },
                 {

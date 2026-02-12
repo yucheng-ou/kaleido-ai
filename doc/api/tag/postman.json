@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "2bf45023-41b5-465f-bc73-407b3e2089b3",
+    "_postman_id": "4d4b65e0-fb78-4d55-938b-59e45539eb3e",
     "name": "kaleido-tag API 文档"
   },
   "item": [
@@ -14,7 +14,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"color\": \"fre7s2\",\n  \"description\": \"1o2evm\"\n}",
+              "raw": "{\n  \"name\": \"giovanna.kshlerin\",\n  \"typeCode\": \"12367\",\n  \"color\": \"f3shqa\",\n  \"description\": \"tg8anm\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -52,7 +52,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"color\": \"b9zng4\",\n  \"description\": \"pzksq4\"\n}",
+              "raw": "{\n  \"name\": \"giovanna.kshlerin\",\n  \"color\": \"edo9w4\",\n  \"description\": \"rraetb\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -72,7 +72,7 @@
               "variable": [
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "  标签ID，不能为空"
                 }
               ]
@@ -115,7 +115,7 @@
               "variable": [
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "标签ID，不能为空"
                 }
               ]
@@ -146,7 +146,7 @@
               }
             },
             "url": {
-              "raw": "::base_url/tag/list?typeCode=12303",
+              "raw": "::base_url/tag/list?typeCode=12367",
               "path": [
                 "tag",
                 "list"
@@ -157,7 +157,7 @@
               "query": [
                 {
                   "key": "typeCode",
-                  "value": "12303",
+                  "value": "12367",
                   "description": "标签类型编码，不能为空"
                 }
               ],

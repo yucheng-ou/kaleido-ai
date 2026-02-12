@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "4baab96a-4e4f-483f-b747-dd437f83e469",
+    "_postman_id": "7b77e590-eeba-4156-b4bb-fed93b4d74e4",
     "name": "kaleido-wardrobe API 文档"
   },
   "item": [
@@ -70,7 +70,7 @@
               "variable": [
                 {
                   "key": "brandId",
-                  "value": "152",
+                  "value": "124",
                   "description": "品牌ID，不能为空"
                 }
               ]
@@ -100,7 +100,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"colorCode\": \"12303\",\n  \"seasonCode\": \"12303\",\n  \"brandId\": \"152\",\n  \"size\": \"5quq2w\",\n  \"purchaseDate\": \"2026-02-05\",\n  \"price\": 212,\n  \"description\": \"bj580m\",\n  \"currentLocationId\": \"152\",\n  \"images\": [\n    {\n      \"path\": \"7lh7k5\",\n      \"imageOrder\": 637,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"name\": \"giovanna.kshlerin\",\n  \"typeCode\": \"12367\",\n  \"colorCode\": \"12367\",\n  \"seasonCode\": \"12367\",\n  \"brandId\": \"124\",\n  \"size\": \"lkoub5\",\n  \"purchaseDate\": \"2026-02-12\",\n  \"price\": 160,\n  \"description\": \"hlxeyu\",\n  \"currentLocationId\": \"124\",\n  \"images\": [\n    {\n      \"path\": \"z08gew\",\n      \"imageOrder\": 497,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -139,7 +139,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"clothingId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"typeCode\": \"12303\",\n  \"colorCode\": \"12303\",\n  \"seasonCode\": \"12303\",\n  \"brandId\": \"152\",\n  \"size\": \"9jxn4x\",\n  \"purchaseDate\": \"2026-02-05\",\n  \"price\": 684,\n  \"description\": \"i9jxg2\",\n  \"currentLocationId\": \"152\",\n  \"images\": [\n    {\n      \"path\": \"zchr1i\",\n      \"imageOrder\": 839,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"clothingId\": \"124\",\n  \"name\": \"giovanna.kshlerin\",\n  \"typeCode\": \"12367\",\n  \"colorCode\": \"12367\",\n  \"seasonCode\": \"12367\",\n  \"brandId\": \"124\",\n  \"size\": \"vkfr5s\",\n  \"purchaseDate\": \"2026-02-12\",\n  \"price\": 630,\n  \"description\": \"gjaeu6\",\n  \"currentLocationId\": \"124\",\n  \"images\": [\n    {\n      \"path\": \"c53zxl\",\n      \"imageOrder\": 433,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -198,7 +198,7 @@
               "variable": [
                 {
                   "key": "clothingId",
-                  "value": "152",
+                  "value": "124",
                   "description": "服装ID，不能为空"
                 }
               ]
@@ -280,7 +280,7 @@
               "variable": [
                 {
                   "key": "clothingId",
-                  "value": "152",
+                  "value": "124",
                   "description": "服装ID，不能为空"
                 }
               ]
@@ -323,12 +323,12 @@
               "variable": [
                 {
                   "key": "clothingId",
-                  "value": "152",
+                  "value": "124",
                   "description": "服装ID，不能为空"
                 },
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "     标签ID，不能为空"
                 }
               ]
@@ -374,12 +374,12 @@
               "variable": [
                 {
                   "key": "clothingId",
-                  "value": "152",
+                  "value": "124",
                   "description": "服装ID，不能为空"
                 },
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "     标签ID，不能为空"
                 }
               ]
@@ -409,7 +409,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"5r83cp\",\n  \"address\": \"38931 Abdul Vista， Donnettefort， MD 22711\",\n  \"images\": [\n    {\n      \"path\": \"jftk0z\",\n      \"imageOrder\": 888,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"name\": \"giovanna.kshlerin\",\n  \"description\": \"r0sjly\",\n  \"address\": \"Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003\",\n  \"images\": [\n    {\n      \"path\": \"rtqc1h\",\n      \"imageOrder\": 207,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -448,7 +448,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"locationId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"na5r0c\",\n  \"address\": \"38931 Abdul Vista， Donnettefort， MD 22711\",\n  \"images\": [\n    {\n      \"path\": \"5em5t1\",\n      \"imageOrder\": 219,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"locationId\": \"124\",\n  \"name\": \"giovanna.kshlerin\",\n  \"description\": \"i7myfg\",\n  \"address\": \"Apt. 419 2515 Chaya Forges， Deniceburgh， VT 17003\",\n  \"images\": [\n    {\n      \"path\": \"dqgzrf\",\n      \"imageOrder\": 573,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -469,7 +469,7 @@
               "variable": [
                 {
                   "key": "locationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "位置ID，不能为空"
                 }
               ]
@@ -513,7 +513,7 @@
               "variable": [
                 {
                   "key": "locationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "位置ID，不能为空"
                 }
               ]
@@ -594,7 +594,7 @@
               "variable": [
                 {
                   "key": "locationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "位置ID，不能为空"
                 }
               ]
@@ -637,12 +637,12 @@
               "variable": [
                 {
                   "key": "locationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "位置ID，不能为空"
                 },
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "     标签ID，不能为空"
                 }
               ]
@@ -688,12 +688,12 @@
               "variable": [
                 {
                   "key": "locationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "位置ID，不能为空"
                 },
                 {
                   "key": "tagId",
-                  "value": "152",
+                  "value": "124",
                   "description": "     标签ID，不能为空"
                 }
               ]
@@ -723,7 +723,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"salvador.grady\",\n  \"description\": \"lod8w0\",\n  \"clothingIds\": [\n    \"dbo1bp\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"mbiuiv\",\n      \"imageOrder\": 318,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"name\": \"giovanna.kshlerin\",\n  \"description\": \"u28cdj\",\n  \"clothingIds\": [\n    \"u7vze4\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"96mvw0\",\n      \"imageOrder\": 660,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -762,7 +762,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"outfitId\": \"152\",\n  \"name\": \"salvador.grady\",\n  \"description\": \"wwhkyg\",\n  \"clothingIds\": [\n    \"otnvyy\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"vcheo5\",\n      \"imageOrder\": 63,\n      \"isPrimary\": true\n    }\n  ]\n}",
+              "raw": "{\n  \"outfitId\": \"124\",\n  \"name\": \"giovanna.kshlerin\",\n  \"description\": \"akea8m\",\n  \"clothingIds\": [\n    \"l7eb9q\"\n  ],\n  \"images\": [\n    {\n      \"path\": \"uduno1\",\n      \"imageOrder\": 670,\n      \"isPrimary\": true\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -783,7 +783,7 @@
               "variable": [
                 {
                   "key": "outfitId",
-                  "value": "152",
+                  "value": "124",
                   "description": "穿搭ID，不能为空"
                 }
               ]
@@ -814,7 +814,7 @@
               }
             },
             "url": {
-              "raw": "::base_url/wardrobe/outfits/:outfitId?userId=152",
+              "raw": "::base_url/wardrobe/outfits/:outfitId?userId=124",
               "path": [
                 "wardrobe",
                 "outfits",
@@ -826,14 +826,14 @@
               "query": [
                 {
                   "key": "userId",
-                  "value": "152",
+                  "value": "124",
                   "description": "  用户ID，不能为空"
                 }
               ],
               "variable": [
                 {
                   "key": "outfitId",
-                  "value": "152",
+                  "value": "124",
                   "description": "穿搭ID，不能为空"
                 }
               ]
@@ -858,7 +858,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"outfitId\": \"152\",\n  \"wearDate\": \"2026-02-05\",\n  \"notes\": \"1t69q3\"\n}",
+              "raw": "{\n  \"outfitId\": \"124\",\n  \"wearDate\": \"2026-02-12\",\n  \"notes\": \"x7zqil\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -880,7 +880,7 @@
               "variable": [
                 {
                   "key": "outfitId",
-                  "value": "152",
+                  "value": "124",
                   "description": "穿搭ID，不能为空"
                 }
               ]
@@ -962,7 +962,7 @@
               "variable": [
                 {
                   "key": "outfitId",
-                  "value": "152",
+                  "value": "124",
                   "description": "穿搭ID，不能为空"
                 }
               ]
@@ -1007,7 +1007,7 @@
               "variable": [
                 {
                   "key": "outfitId",
-                  "value": "152",
+                  "value": "124",
                   "description": "穿搭ID，不能为空"
                 }
               ]

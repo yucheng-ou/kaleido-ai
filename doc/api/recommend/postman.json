@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "1573b9f5-ba1d-4c0d-a398-1d64d2757f1d",
+    "_postman_id": "63f223c4-cb59-4f20-bed4-d9f8802e71f5",
     "name": "kaleido-recommend API 文档"
   },
   "item": [
@@ -14,7 +14,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"prompt\": \"z0dyw1\"\n}",
+              "raw": "{\n  \"prompt\": \"s1i0d9\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -70,7 +70,7 @@
               "variable": [
                 {
                   "key": "recommendRecordId",
-                  "value": "152",
+                  "value": "124",
                   "description": "推荐记录ID"
                 }
               ]

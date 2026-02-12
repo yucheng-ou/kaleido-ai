@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "b3a223a5-76b3-4a19-be6b-b163d8505acd",
+    "_postman_id": "6d70478f-53ca-4861-9bd8-3e9a4d833c79",
     "name": "kaleido-auth API 文档"
   },
   "item": [
@@ -14,7 +14,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "raw": "{\n  \"mobile\": \"1-425-254-1688\",\n  \"verifyCode\": \"12367\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -54,7 +54,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "raw": "{\n  \"mobile\": \"1-425-254-1688\",\n  \"verifyCode\": \"12367\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -99,7 +99,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"targetType\": \"USER\"\n}",
+              "raw": "{\n  \"mobile\": \"1-425-254-1688\",\n  \"targetType\": \"USER\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -144,7 +144,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"telephone\": \"630-404-6643\",\n  \"verificationCode\": \"12303\",\n  \"inviterCode\": \"12303\"\n}",
+              "raw": "{\n  \"telephone\": \"251.775.6385\",\n  \"verificationCode\": \"12367\",\n  \"inviterCode\": \"12367\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -184,7 +184,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"mobile\": \"678.678.3886\",\n  \"verifyCode\": \"12303\"\n}",
+              "raw": "{\n  \"mobile\": \"1-425-254-1688\",\n  \"verifyCode\": \"12367\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

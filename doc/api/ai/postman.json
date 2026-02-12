@@ -1,7 +1,7 @@
 {
   "info": {
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_postman_id": "14fde6de-a448-40ef-8da9-6598bfa8663c",
+    "_postman_id": "2b850467-803d-4a7b-9fc9-c258f43c5314",
     "name": "kaleido-ai API 文档"
   },
   "item": [
@@ -51,7 +51,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"152\"\n}",
+              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"124\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -73,7 +73,7 @@
               "variable": [
                 {
                   "key": "agentId",
-                  "value": "152",
+                  "value": "124",
                   "description": "Agent ID"
                 }
               ]
@@ -98,7 +98,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"152\"\n}",
+              "raw": "{\n  \"message\": \"success\",\n  \"conversationId\": \"124\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -177,7 +177,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"um09q0\"\n}",
+              "raw": "{\n  \"title\": \"aq65fa\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -199,7 +199,7 @@
               "variable": [
                 {
                   "key": "conversationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "会话ID"
                 }
               ]
@@ -243,7 +243,7 @@
               "variable": [
                 {
                   "key": "conversationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "会话ID"
                 }
               ]
@@ -324,7 +324,7 @@
               "variable": [
                 {
                   "key": "conversationId",
-                  "value": "152",
+                  "value": "124",
                   "description": "会话ID"
                 }
               ]
@@ -373,7 +373,7 @@
               "variable": [
                 {
                   "key": "workflowId",
-                  "value": "152",
+                  "value": "124",
                   "description": "工作流ID"
                 }
               ]
@@ -398,7 +398,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workflowId\": \"152\",\n  \"inputData\": \"keunlf\"\n}",
+              "raw": "{\n  \"workflowId\": \"124\",\n  \"inputData\": \"w2qgqu\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
