@@ -3,7 +3,11 @@ spring:
     nacos:
       server-addr: ${NACOS_HOST}:${NACOS_PORT}
       discovery:
+        username: nacos
+        password: nacos
         namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
       config:
         namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
-        file-extension: yaml
+        file-extension: yml
+        username: nacos
+        password: nacos
