@@ -36,7 +36,7 @@ services:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: kaleido123
     ports:
-      - "13306:3306"
+      - "3306:3306"
     volumes:
       - ./mysql/my.cnf:/etc/mysql/conf.d/mysql.cnf:ro
       - ./mysql/sql:/docker-entrypoint-initdb.d
