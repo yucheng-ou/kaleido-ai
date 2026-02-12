@@ -34,6 +34,7 @@
         <module>kaleido-limiter</module>
         <module>kaleido-lock</module>
         <module>kaleido-seata</module>
+        <module>kaleido-monitor</module>
     </modules>
 
     <dependencies>

@@ -72,10 +72,23 @@
         <minio.version>8.6.0</minio.version>
         <shardingsphere.version>5.5.2</shardingsphere.version>
         <antlr4.version>4.10.1</antlr4.version>
+        <micrometer.version>1.14.4</micrometer.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>

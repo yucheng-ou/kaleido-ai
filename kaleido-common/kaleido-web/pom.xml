@@ -21,6 +21,10 @@
     <dependencies>
         <dependency>
             <groupId>com.xiaoo</groupId>
+            <artifactId>kaleido-monitor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaoo</groupId>
             <artifactId>kaleido-base</artifactId>
         </dependency>
 

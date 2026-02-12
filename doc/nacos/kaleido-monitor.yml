@@ -1,0 +1,17 @@
+# 监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus,health,info'
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true

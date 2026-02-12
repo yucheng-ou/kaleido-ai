@@ -11,3 +11,4 @@ spring:
       - nacos:kaleido-rpc.yml
       - nacos:kaleido-cache.yml     #satoken需要用到redis
       - nacos:kaleido-sentinel.yml
+      - nacos:kaleido-monitor.yml
