@@ -1,5 +1,8 @@
 <div align="center">
 
+
+<img src="images/logo.png" width="200" alt="Kaleido Logo" />
+
 # 🎨 Kaleido AI 智能衣柜
 
 > 基于微服务架构的AI智能衣柜，让每一次穿搭都更懂你
