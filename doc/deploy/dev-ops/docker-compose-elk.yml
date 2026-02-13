@@ -10,10 +10,17 @@ services:
       - '9300:9300'
     container_name: elasticsearch
     restart: always
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
     environment:
       - 'cluster.name=kaleido-cluster'
       - 'discovery.type=single-node'
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - kaleido-elk
 
@@ -35,7 +42,8 @@ services:
     networks:
       - kaleido-elk
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
   kibana:
     image: kibana:7.17.28
@@ -51,7 +59,8 @@ services:
     networks:
       - kaleido-elk
     depends_on:
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 
 networks:
   kaleido-elk:

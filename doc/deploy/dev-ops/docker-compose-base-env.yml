@@ -40,6 +40,7 @@ services:
     volumes:
       - ./mysql/my.cnf:/etc/mysql/conf.d/mysql.cnf:ro
       - ./mysql/sql:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 5s
@@ -60,6 +61,7 @@ services:
       - 6379:6379
     volumes:
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
     networks:
       - kaleido-env-network
@@ -72,10 +74,9 @@ services:
     environment:
       MONGODB_INITDB_ROOT_USERNAME: root
       MONGODB_INITDB_ROOT_PASSWORD: kaleido123
-      MONGO_INITDB_DATABASE: testdb
       TZ: Asia/Shanghai
     volumes:
-      - ./mongodb/data:/mongodb/db
+      - ./mongodb/data:/data/db
       - ./mongodb/log:/var/log/mongodb
     restart: always
     networks:
@@ -102,7 +103,8 @@ services:
     container_name: xxl-job-admin
     restart: always
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "9099:9090"
     environment:
@@ -121,6 +123,7 @@ services:
       - 9090:9090
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
     networks:
       - kaleido-env-network
 
@@ -134,6 +137,7 @@ services:
       - prometheus
     volumes:
       - ./grafana:/etc/grafana
+      - ./grafana/data:/var/lib/grafana
     networks:
       - kaleido-env-network
 
@@ -198,9 +202,11 @@ services:
     command: etcd -advertise-client-urls=http://etcd:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
     healthcheck:
       test: ["CMD", "etcdctl", "endpoint", "health"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kaleido-env-network
 
   minio:
     container_name: milvus-minio
@@ -217,9 +223,11 @@ services:
     command: minio server /minio_data --console-address ":9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - kaleido-env-network
 
   standalone:
     container_name: milvus-standalone
@@ -231,7 +239,10 @@ services:
     environment:
       ETCD_ENDPOINTS: etcd:2379
       MINIO_ADDRESS: minio:9000
-      MQ_TYPE: woodpecker
+      MQ_TYPE: rocksmq
+      KNOWHERE_SIMD_TYPE: sse4_2
+      MILVUS_ADDRESS: 0.0.0.0
+      IP_ADDRESS: 127.0.0.1
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/milvus:/var/lib/milvus
     healthcheck:
@@ -244,8 +255,12 @@ services:
       - "19530:19530"
       - "9091:9091"
     depends_on:
-      - "etcd"
-      - "minio"
+      etcd:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - kaleido-env-network
 
 networks:
   kaleido-env-network:
