@@ -26,11 +26,4 @@ public class ChatMemoryConfig {
                 .maxMessages(50)
                 .build();
     }
-
-    @Bean(name = "myEmbeddingModel")
-    @Primary
-    public EmbeddingModel myEmbeddingModel() {
-        OpenAiEmbeddingOptions openAiEmbeddingOptions = OpenAiEmbeddingOptions.builder().model("bge-m3").build();
-        return new OpenAiEmbeddingModel(openAiApi, MetadataMode.EMBED, openAiEmbeddingOptions);
-    }
 }
