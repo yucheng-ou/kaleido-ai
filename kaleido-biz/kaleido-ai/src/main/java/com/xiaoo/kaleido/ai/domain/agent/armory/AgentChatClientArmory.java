@@ -25,7 +25,9 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.milvus.MilvusVectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class AgentChatClientArmory {
     private final ObjectMapper objectMapper;
     private final MongoChatMemoryRepository mongoChatMemoryRepository;
     private final ChatMemory myChatMemory;
+    private final Environment environment;
     private final List<McpSyncClient> mcpSyncClients = new ArrayList<>();
 
     /**
@@ -93,7 +96,7 @@ public class AgentChatClientArmory {
         ChatModel chatModel = OpenAiChatModel.builder()
                 .openAiApi(openAiApi)
                 .defaultOptions(OpenAiChatOptions.builder()
-                        .model("deepseek-v3")
+                        .model(resolveDefaultModel())
                         .build())
                 .build();
 
@@ -125,8 +128,13 @@ public class AgentChatClientArmory {
      * 构建ChatModel
      */
     private ChatModel buildChatModel(AgentAggregate agent) {
+        String modelName = agent.getModelName();
+        String defaultModel = resolveDefaultModel();
+        if (!StringUtils.hasText(modelName)) {
+            modelName = defaultModel;
+        }
         OpenAiChatOptions options = OpenAiChatOptions.builder()
-                .model(agent.getModelName() != null ? agent.getModelName() : "deepseek-v3")
+                .model(modelName)
                 .temperature(agent.getTemperature() != null ? agent.getTemperature().doubleValue() : 0.70)
                 .maxTokens(agent.getMaxTokens() != null ? agent.getMaxTokens() : 2000)
                 .build();
@@ -135,6 +143,14 @@ public class AgentChatClientArmory {
                 .openAiApi(openAiApi)
                 .defaultOptions(options)
                 .build();
+    }
+
+    private String resolveDefaultModel() {
+        String configuredModel = environment.getProperty("spring.ai.openai.chat.options.model");
+        if (StringUtils.hasText(configuredModel)) {
+            return configuredModel.trim();
+        }
+        return "deepseek-v3";
     }
 
     /**
