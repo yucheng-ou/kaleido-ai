@@ -16,9 +16,9 @@ dubbo:
   registry:
     username: nacos
     password: nacos
-    address: nacos://127.0.0.1:8849
+    address: nacos://${NACOS_HOST}:${NACOS_PORT}
     parameters:
-      namespace: aa3a3ee8-fb98-43e5-b3da-11b368d88c21
+      namespace: ${NACOS_DUBBO_NAMESPACE}
       group: dubbo
   # 应用配置
   application:

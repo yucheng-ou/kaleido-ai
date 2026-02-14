@@ -11,3 +11,5 @@ spring:
     topic:
       auth-change: auth-change
       user-registered: user-registered
+      outfit-recommend-completed: outfit-recommend-completed
+      clothing-event: clothing-event

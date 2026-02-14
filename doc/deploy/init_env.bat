@@ -6,9 +6,18 @@ echo.
 :: 将变量的内容替换为你自己的
 setx NACOS_HOST "127.0.0.1"
 setx NACOS_PORT "8848"
+setx NACOS_NAMESPACE "30d71fbd-2d24-4757-81f4-679d26f0ed93"
+setx NACOS_DUBBO_NAMESPACE "aa3a3ee8-fb98-43e5-b3da-11b368d88c21"
+setx SEATA_HOST "117.72.115.40"
+setx SEATA_GROUPLIST_PORT "8091"
+setx SENTINEL_HOST "117.72.115.40"
+setx SENTINEL_DASHBOARD_PORT "8858"
+setx SENTINEL_TRANSPORT_PORT "8719"
 
-setx AI_BASE_URL "https://api.deepseek.com"
-setx AI_API_KEY "xxx"
+setx AI_BASE_URL "https://api.siliconflow.cn"
+setx AI_API_KEY "sk-ckjuvrbndhainyxlzxiocyiyfxldvroevmxklptutmnaaugr"
+setx CHAT_MODEL "deepseek-ai/DeepSeek-V3"
+setx EMBEDDING_MODEL "BAAI/bge-m3"
 
 setx MILVUS_HOST "127.0.0.1"
 setx MILVUS_PORT "19530"

@@ -7,11 +7,11 @@ seata:
       password: nacos
       group: DEFAULT_GROUP
       application: seata-server
-      namespace: 30d71fbd-2d24-4757-81f4-679d26f0ed93
-  # 事务组，根据这个获取TC服务的集群名称
+      namespace: ${NACOS_NAMESPACE}
   tx-service-group: default
   service:
     vgroup-mapping:
-      #和tx-service-group对应
       default: default
+    grouplist:
+      default: ${SEATA_HOST}:${SEATA_PORT}
   data-source-proxy-mode: XA

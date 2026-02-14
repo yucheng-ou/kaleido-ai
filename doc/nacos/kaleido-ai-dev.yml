@@ -10,14 +10,17 @@ dubbo:
   application:
     qos-port: 22230  # 添加此行，指定新的 QOS 端口
 
+spring:
   ai:
     openai:
       base-url: ${AI_BASE_URL}
       api-key: ${AI_API_KEY}
       chat:
         options:
-          model: deepseek-v3
-        completions-path: /v1/chat/completions
+          model: ${CHAT_MODEL}
+      embedding:
+        options:
+          model: ${EMBEDDING_MODEL}
 
     chat:
       memory:
