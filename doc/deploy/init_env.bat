@@ -8,14 +8,14 @@ setx NACOS_HOST "127.0.0.1"
 setx NACOS_PORT "8848"
 setx NACOS_NAMESPACE "30d71fbd-2d24-4757-81f4-679d26f0ed93"
 setx NACOS_DUBBO_NAMESPACE "aa3a3ee8-fb98-43e5-b3da-11b368d88c21"
-setx SEATA_HOST "117.72.115.40"
+setx SEATA_HOST "127.0.0.1"
 setx SEATA_GROUPLIST_PORT "8091"
-setx SENTINEL_HOST "117.72.115.40"
+setx SENTINEL_HOST "127.0.0.1"
 setx SENTINEL_DASHBOARD_PORT "8858"
 setx SENTINEL_TRANSPORT_PORT "8719"
 
 setx AI_BASE_URL "https://api.siliconflow.cn"
-setx AI_API_KEY "sk-ckjuvrbndhainyxlzxiocyiyfxldvroevmxklptutmnaaugr"
+setx AI_API_KEY "xxx"
 setx CHAT_MODEL "deepseek-ai/DeepSeek-V3"
 setx EMBEDDING_MODEL "BAAI/bge-m3"
 
@@ -48,12 +48,6 @@ setx xxl_job.executor.port "9999"
 setx REDIS_HOST "127.0.0.1"
 setx REDIS_PORT "6379"
 setx REDIS_PASSWORD "kaleido123"
-
-:: 分表的第一张表地址
-setx MYSQL_URL_DB0 "jdbc:mysql://127.0.0.1:3306/kaleido_0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
-:: 分表的第二张表地址
-setx MYSQL_URL_DB1 "jdbc:mysql://127.0.0.1:3306/kaleido_1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
-setx MYSQL_PASSWORD "kaleido123"
 
 echo.
 echo 所有变量设置完成！新终端输入 echo %%变量名%% 验证
