@@ -12,7 +12,7 @@
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.0.0-green)](https://spring.io/projects/spring-cloud)
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-orange)](https://spring.io/projects/spring-ai)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Stars](https://img.shields.io/badge/Stars-23-red)
+![Stars](https://img.shields.io/badge/Stars-49-red)
 [![中文文档](https://img.shields.io/badge/文档-中文-blueviolet)](README.md)
 
 [✨ 核心特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档)
@@ -208,122 +208,104 @@ kaleido-server/
 
 ## 🚀 快速开始
 
-### 环境要求
+### 1. 前置准备
 
-在开始之前，请确保您的开发环境满足以下要求：
+在开始之前，请确保您的开发环境已安装以下软件：
 
-| 组件       | 版本要求 | 说明        |
-|----------|------|-----------|
-| JDK      | 21+  | Java开发工具包 |
-| Maven    | 3.8+ | 项目构建工具    |
-| MySQL    | 8.0+ | 关系型数据库    |
-| MongoDB  | 7.0+ | 文档数据库     |
-| Redis    | 6+   | 缓存数据库     |
-| RabbitMQ | 4.2+ | 消息队列      |
-| Milvus   | 2.4+ | 向量数据库     |
-| XXL-job  | 3.0+ | 计划任务      |
+- **JDK 21+**: 项目基于 Java 21 开发 (参考 pom.xml)。
+- **Maven**: 用于项目构建和依赖管理。
+- **Docker & Docker Compose**: 用于运行数据库、中间件等基础环境。
 
-### 部署步骤
+### 2. 克隆项目
 
-#### 1️⃣ 克隆项目
+请根据您的网络环境选择代码仓库：
 
-```bash
-git clone https://github.com/your-org/kaleido-server.git
-cd kaleido-server
-```
+- **Gitee (国内推荐)**
+  ```bash
+  git clone https://gitee.com/ou-yucheng/kaleido-ai.git
+  ```
 
-#### 2️⃣ 部署基础设施
+- **GitHub**
+  ```bash
+  git clone https://github.com/yucheng-ou/kaleido-ai.git
+  ```
 
-部署文件参考 `doc/deploy` 目录。
+### 3. 启动基础环境
 
-需要启动的服务包括：
-
-- **Nacos**：服务注册与配置中心
-- **Sentinel**：流量控制与降级熔断
-- **Seata**：分布式事务协调
-- **MySQL**：主数据库
-- **MongoDB**：文档数据库
-- **Redis**：缓存数据库
-- **RabbitMQ**：消息队列
-- **MinIO**：对象存储
-- **Milvus**：向量数据库
-- **XXL-job**：分布式任务调度
-
-#### 3️⃣ 配置环境变量
-
-修改文件 `doc/deploy/init_env.bat`，将环境变量替换成你自己的配置，然后执行。
-
-#### 4️⃣ 初始化数据库
-
-依次执行 `doc/sql` 目录中的SQL脚本。
-
-#### 5️⃣ 导入Nacos配置
-
-将 `doc/nacos` 目录中的配置文件导入到Nacos中。
-> ⚠️ **注意**：Nacos配置文件使用了大量环境变量，请确保已经配置好环境变量。
-
-### 构建与启动服务
-
-#### 1️⃣ 编译项目
+项目依赖 MySQL, Redis, Nacos, MinIO 等中间件，使用 Docker Compose 一键启动。
 
 ```bash
-# 在项目根目录执行
-mvn clean compile -DskipTests
+# 将doc/deploy/dev-ops目录拷贝到服务器上
+cd doc/deploy/dev-ops
+
+# 启动基础环境 (加上 -d 后台运行)
+docker-compose -f docker-compose-base-env.yml up -d
 ```
 
-#### 2️⃣ 启动核心服务
+> **⚠️ 环境自检**
+> 启动命令执行后，请务必执行以下检查，确保所有容器运行正常：
+
+**1. 检查容器状态**
 
 ```bash
-# 启动网关服务
-cd kaleido-gateway
-mvn spring-boot:run
-
-# 启动认证服务
-cd ../kaleido-auth
-mvn spring-boot:run
+docker compose -f docker-compose-base-env.yml ps
 ```
+请确认以下关键容器的状态为 `Up`。
 
-#### 3️⃣ 启动业务服务
+**2. 检查数据库是否已经成功创建**
 
-根据需要启动相应的业务服务：
+默认会自动创建数据库，不需要再手动创建脚本，连接并检查数据库是否已经创建完成。
 
-```bash
-# 用户服务
-cd kaleido-biz/kaleido-user
-mvn spring-boot:run
+### 4. Nacos 初始化配置
 
-# 衣柜服务
-cd ../kaleido-wardrobe
-mvn spring-boot:run
+务必完成以下配置，否则微服务将无法启动。
 
-# AI服务
-cd ../kaleido-ai
-mvn spring-boot:run
+#### 4.1 创建命名空间
 
-# 推荐服务
-cd ../kaleido-recommend
-mvn spring-boot:run
+登录 Nacos 控制台，进入 **命名空间 (Namespaces)**，创建以下两个命名空间（id可以使用下面表格中的 也可以自己生成）：
 
-# 其他服务...
-```
+| 命名空间名称 | 命名空间 ID (必填) | 用途 |
+|---|---|---|
+| kaleido | 30d71fbd-2d24-4757-81f4-679d26f0ed93 | 主配置与服务发现 |
+| dubbo | aa3a3ee8-fb98-43e5-b3da-11b368d88c21 | Dubbo RPC 服务 |
 
-### 🔧 验证部署
+#### 4.2 导入配置
 
-#### 1️⃣ 访问Nacos控制台
+1. 进入 **配置管理 -> 配置列表**。
+2. 顶部切换到 `kaleido` 命名空间。
+3. 点击 **导入配置**，选择文件：`doc/deploy/nacos/nacos_config_export.zip`。
+4. 检查配置列表是否已成功加载 `kaleido-gateway-dev.yml` 等文件。
 
-- 地址：http://localhost:8848/nacos
-- 默认账号：nacos
-- 默认密码：nacos
-- 确认所有服务已成功注册
+### 5. 本地开发配置修改
 
-#### 2️⃣ 访问API文档
+#### 5.1 修改 ShardingSphere 数据源
 
-```bash
-# 生成文档
-mvn compile smart-doc:html
+修改 `kaleido-common/kaleido-ds/src/main/resources/sharding.yaml`，将数据库地址改成自己的。
 
-# 文档位置：doc/api/{服务名}/index.html
-```
+#### 5.2 创建MinIO密钥
+
+Docker 启动的 MinIO 默认密钥可能与配置不一致，建议手动创建或同步：
+
+1. 登录 MinIO 控制台
+2. 进入 **Access Keys -> Create access key**。
+3. 记录生成的 Access Key 和 Secret Key。
+
+#### 5.3 修改并执行环境变量脚本
+
+1. **修改** ：修改 `doc/deploy/init_env.bat` 脚本，将配置替换为自己的，主要修改ip地址、minio密钥与模型的配置信息，对于AI的API调用，我是用的硅基流动，你可以替换为你自己的。
+2. **执行**: 双击运行或在终端执行该脚本。
+3. **重启**: 必须重启 IDE (IntelliJ IDEA) 以加载新的环境变量，如果还不行重启电脑。
+
+### 6. 服务启动
+
+按依赖顺序启动微服务：
+
+1. **Gateway 服务**: `kaleido-gateway` (端口 9010)
+2. **Auth 服务**: `kaleido-auth`
+3. **Admin 服务**: `kaleido-admin`
+4. **业务服务**: `kaleido-user`, `kaleido-wardrobe` 等
+
+项目启动成功后检查服务是否已经成功注册到nacos上面。
 
 ---
 
