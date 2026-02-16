@@ -14,6 +14,9 @@ setx SENTINEL_HOST "127.0.0.1"
 setx SENTINEL_DASHBOARD_PORT "8858"
 setx SENTINEL_TRANSPORT_PORT "8719"
 
+setx SKYWALKING_OAP "127.0.0.1:11800"
+setx SKYWALKING_AGENT_PATH "C:\skywalking\agent\skywalking-agent.jar"
+
 setx AI_BASE_URL "https://api.siliconflow.cn"
 setx AI_API_KEY "xxx"
 setx CHAT_MODEL "deepseek-ai/DeepSeek-V3"

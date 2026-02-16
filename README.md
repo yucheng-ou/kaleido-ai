@@ -239,7 +239,7 @@ kaleido-server/
 cd doc/deploy/dev-ops
 
 # 启动基础环境 (加上 -d 后台运行)
-docker-compose -f docker-compose-base-env.yml up -d
+docker-compose -f docker-compose.yml up -d
 ```
 
 > **⚠️ 环境自检**
@@ -248,7 +248,7 @@ docker-compose -f docker-compose-base-env.yml up -d
 **1. 检查容器状态**
 
 ```bash
-docker compose -f docker-compose-base-env.yml ps
+docker compose -f docker-compose.yml ps
 ```
 请确认以下关键容器的状态为 `Up`。
 

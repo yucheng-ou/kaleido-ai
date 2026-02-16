@@ -12,9 +12,8 @@ import java.util.List;
 
 /**
  * 网关认证策略配置属性类
- * 
+ * <p>
  * 用于从配置文件加载认证策略配置，支持动态配置管理
- * 
  */
 @Data
 @Component
@@ -24,19 +23,17 @@ public class AuthStrategyConfig {
 
     /**
      * 认证策略配置列表
-     * 
+     * <p>
      * 列表顺序即为匹配优先级，先配置的优先级更高
-     * 
      */
     private List<StrategyItem> strategies = new ArrayList<>();
 
     /**
      * 默认策略类型
-     * 
+     * <p>
      * 当没有路径匹配时使用的默认策略
      * 可选值：PUBLIC, USER, ADMIN
      * 默认值：PUBLIC
-     * 
      */
     private AuthStrategyEnum defaultStrategy = AuthStrategyEnum.PUBLIC;
 
@@ -48,30 +45,27 @@ public class AuthStrategyConfig {
 
         /**
          * 路径模式
-         * 
+         * <p>
          * 支持 Ant 风格路径匹配，例如：/kaleido-auth/**
-         * 
          */
         private String pattern;
 
         /**
          * 策略类型
-         * 
+         * <p>
          * 可选值：
          * - PUBLIC: 公共路径，无需认证
          * - USER: 用户路径，需要用户登录
          * - ADMIN: 管理员路径，需要管理员登录
-         * 
          */
         private AuthStrategyEnum strategy;
     }
 
     /**
      * 验证配置是否有效
-     * 
+     * <p>
      * 检查策略配置的合法性，包括路径模式是否为空、策略类型是否有效等
      * 验证失败时记录错误日志，但不抛出异常，以保证系统的可用性
-     * 
      */
     public void validate() {
         if (strategies == null) {
