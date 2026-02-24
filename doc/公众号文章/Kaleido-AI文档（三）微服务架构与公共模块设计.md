@@ -5,7 +5,7 @@
 - 公共功能如何避免重复实现？
 - 技术栈如何统一规范？
 
-Kaleido-AI作为基于Spring Cloud Alibaba的企业级智能业务系统，通过12个核心微服务和20+公共模块的设计，构建了高性能、高可用的架构体系。以下是我们在实践中的一些经验总结。
+Kaleido-AI作为基于Spring Cloud Alibaba的企业级智能业务系统，通过12个核心微服务和20+公共模块的设计，构建了高性能、高可用的架构体系。
 
 ## 一、技术栈选择：Spring Cloud Alibaba的实践考量
 
@@ -38,7 +38,7 @@ Kaleido-AI作为基于Spring Cloud Alibaba的企业级智能业务系统，通�
 
 **实践体会：** 对于新项目，从成熟的微服务框架开始可以避免重复造轮子。Spring Cloud Alibaba提供了相对完整的解决方案，特别适合国内技术团队。
 
-## 二、服务划分：基础设施与业务领域的14个核心服务
+## 二、服务划分：基础设施与业务领域的12个核心服务
 
 Kaleido-AI采用分层架构设计，将服务分为基础设施层和业务领域层：
 
@@ -191,8 +191,8 @@ return Result.error(UserErrorCode.USER_NOT_FOUND);
 ```java
 // 分库分表示例（2库4表）
 public class CustomShardingAlgorithm implements StandardShardingAlgorithm<Comparable<?>> {
-    public String doSharding(Collection<String> availableTargetNames,
-                             PreciseShardingValue<Comparable<?>> shardingValue) {
+    public String doSharding(Collection<String> availableTargetNames, 
+                            PreciseShardingValue<Comparable<?>> shardingValue) {
         long shardingValueLong = getShardingValue(shardingValue.getValue());
         long tableIndex = shardingValueLong % 8;
         int databaseIndex = (int) (tableIndex / 4);
