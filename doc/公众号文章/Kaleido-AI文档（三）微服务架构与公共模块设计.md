@@ -1,13 +1,11 @@
-# 微服务架构设计实践：Kaleido-AI的14个核心服务与20+公共模块
-
-**📖 导读：** 本文基于Kaleido-AI项目的微服务架构实践，分享技术栈选择、服务划分、通信机制和公共模块设计等方面的经验。内容涵盖从基础设施到业务领域的完整架构设计，适合Java开发者、架构师和技术管理者参考。
+**📖 导读：** 本文基于Kaleido-AI项目的微服务架构实践，分享技术栈选择、服务划分、公共模块设计等方面的实践。内容涵盖从基础设施到业务领域的完整架构设计，适合Java开发者进行参考。
 
 从单体应用到微服务架构的演进过程中，我们常面临这些挑战：
 - 服务边界如何清晰划分？
 - 公共功能如何避免重复实现？
 - 技术栈如何统一规范？
 
-Kaleido-AI作为基于Spring Cloud Alibaba的企业级智能业务系统，通过14个核心微服务和20+公共模块的设计，构建了高性能、高可用的架构体系。以下是我们在实践中的一些经验总结。
+Kaleido-AI作为基于Spring Cloud Alibaba的企业级智能业务系统，通过12个核心微服务和20+公共模块的设计，构建了高性能、高可用的架构体系。以下是我们在实践中的一些经验总结。
 
 ## 一、技术栈选择：Spring Cloud Alibaba的实践考量
 
@@ -157,8 +155,8 @@ public void handleUserRegisteredEvent(UserRegisteredEvent event) {
 ```
 
 **选择建议：**
-- 简单数据交互使用RESTful API
-- 高性能要求场景使用Dubbo RPC
+- 前后端接口交互使用RESTful API
+- 服务之间调用使用Dubbo RPC
 - 需要解耦和异步处理的场景使用消息队列
 
 ## 四、公共模块：20+模块的设计思路
@@ -193,8 +191,8 @@ return Result.error(UserErrorCode.USER_NOT_FOUND);
 ```java
 // 分库分表示例（2库4表）
 public class CustomShardingAlgorithm implements StandardShardingAlgorithm<Comparable<?>> {
-    public String doSharding(Collection<String> availableTargetNames, 
-                            PreciseShardingValue<Comparable<?>> shardingValue) {
+    public String doSharding(Collection<String> availableTargetNames,
+                             PreciseShardingValue<Comparable<?>> shardingValue) {
         long shardingValueLong = getShardingValue(shardingValue.getValue());
         long tableIndex = shardingValueLong % 8;
         int databaseIndex = (int) (tableIndex / 4);
@@ -225,11 +223,11 @@ public interface CacheService {
 public class MultiLevelCacheService implements CacheService {
     private LocalCacheService localCache;      // Caffeine实现
     private DistributedCacheService redisCache; // Redis实现
-    
+
     public <T> T get(String key, Class<T> clazz) {
         T value = localCache.get(key, clazz);
         if (value != null) return value;
-        
+
         value = redisCache.get(key, clazz);
         if (value != null) {
             localCache.set(key, value, 30, TimeUnit.SECONDS);
