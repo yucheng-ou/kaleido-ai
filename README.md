@@ -341,7 +341,7 @@ Docker 启动的 MinIO 默认密钥可能与配置不一致，建议手动创建
     <table>
         <tr>
             <td align="center" style="border: none;">
-                <img src="images/%E5%BE%AE%E4%BF%A1%E5%90%8D%E7%89%87.png" width="300" alt="微信名片"/>
+                <img src="images/微信群.png" width="300" alt="微信名片"/>
             </td>
             <td align="center" style="border: none;">
                 <img src="images/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg" width="300" alt="微信公众号"/>
@@ -350,7 +350,7 @@ Docker 启动的 MinIO 默认密钥可能与配置不一致，建议手动创建
     </table>
 </div>
 
-> 💬 有问题欢迎提Issue或者加我微信联系，我会尽可能解决 😺
+> 💬 有问题欢迎提Issue或者进群联系，我会尽可能解决 😺
 
 ---
 
