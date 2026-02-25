@@ -1,0 +1,43 @@
+# 服务器配置
+server:
+  # 服务端口：langchain4j 版本运行在 9022 端口
+  port: 9022
+  servlet:
+    # 上下文路径：所有API的前缀路径
+    context-path: /kaleido-ai
+
+dubbo:
+  application:
+    qos-port: 22232  # 指定新的 QOS 端口，避免冲突
+
+langchain4j:
+  open-ai:
+    chat-model:
+      api-key: ${AI_API_KEY}
+      base-url: ${AI_BASE_URL}
+      model-name: ${CHAT_MODEL}
+      timeout: 60s
+    embedding-model:
+      api-key: ${AI_API_KEY}
+      base-url: ${AI_BASE_URL}
+      model-name: ${EMBEDDING_MODEL}
+      timeout: 60s
+  vectorstore:
+    milvus:
+      host: ${MILVUS_HOST}
+      port: ${MILVUS_PORT}
+      username: ${MILVUS_USERNAME}
+      password: ${MILVUS_PASSWORD}
+      database-name: kaleido
+      collection-name: kaleido_collection
+      dimension: 1536
+
+spring:
+  data:
+    mongodb:
+      host: ${MONGODB_HOST}
+      port: ${MONGODB_PORT}
+      username: ${MONGODB_USERNAME}
+      password: ${MONGODB_PASSWORD}
+      database: chat_memory_db
+      authentication-database: admin
