@@ -12,7 +12,7 @@
 [![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-2025.0.0-green)](https://spring.io/projects/spring-cloud)
 [![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-orange)](https://spring.io/projects/spring-ai)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Stars](https://img.shields.io/badge/Stars-49-red)
+![Stars](https://img.shields.io/badge/Stars-70+-red)
 [![中文文档](https://img.shields.io/badge/文档-中文-blueviolet)](README.md)
 
 [✨ 核心特性](#-核心特性) • [🏗️ 架构设计](#️-架构设计) • [🚀 快速开始](#-快速开始) • [📖 文档](#-文档)
