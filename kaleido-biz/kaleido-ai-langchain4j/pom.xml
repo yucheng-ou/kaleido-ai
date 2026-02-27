@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>kaleido-ai-langchain4j</artifactId>
+    <description>ai服务（langchain4j版本）</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
