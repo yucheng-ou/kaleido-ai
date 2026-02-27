@@ -25,6 +25,7 @@
         <module>kaleido-mcp</module>
         <module>kaleido-message</module>
         <module>kaleido-langchain4j-demo</module>
+        <module>kaleido-interview</module>
     </modules>
 
     <properties>
