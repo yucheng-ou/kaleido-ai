@@ -4,7 +4,7 @@
   "allInOne": true,
   "outPath": "../../doc/api/ai-langchain4j",
   "coverOld": true,
-  "packageFilters": "com.xiaoo.kaleido.ai.trigger.controller.*",
+  "packageFilters": "com.xiaoo.kaleido.ai.langchain4j.trigger.controller.*",
   "projectName": "Kaleido ai服务 API 文档",
   "framework": "spring",
   "skipTransientField": true,
