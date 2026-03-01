@@ -34,3 +34,6 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### ShardingSphere Config ###
+src/main/resources/sharding.yaml
