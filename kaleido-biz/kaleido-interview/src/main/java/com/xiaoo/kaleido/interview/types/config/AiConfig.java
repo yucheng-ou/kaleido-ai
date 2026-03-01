@@ -12,6 +12,7 @@ import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
@@ -37,6 +38,7 @@ import org.springframework.context.annotation.Configuration;
 public class AiConfig {
 
     private final OpenAiChatModel chatModel;
+    private final OpenAiStreamingChatModel streamingChatModel;
     private final EmbeddingModel embeddingModel;
     private final InterviewTools interviewTools;
     private final EmailTools emailTools;
@@ -172,7 +174,7 @@ public class AiConfig {
     public IGeneralChatAgent generalChatAgent() {
         log.info("初始化普通聊天 Agent");
         return AiServices.builder(IGeneralChatAgent.class)
-                .chatModel(chatModel)
+                .streamingChatModel(streamingChatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .build();
     }
@@ -184,7 +186,7 @@ public class AiConfig {
     public ICandidateAgent candidateAgent(ContentRetriever resumeContentRetriever) {
         log.info("初始化候选人查询 Agent");
         return AiServices.builder(ICandidateAgent.class)
-                .chatModel(chatModel)
+                .streamingChatModel(streamingChatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .contentRetriever(resumeContentRetriever)
                 .tools(interviewTools)
@@ -198,7 +200,7 @@ public class AiConfig {
     public IInterviewAgent interviewAgent() {
         log.info("初始化面试安排 Agent");
         return AiServices.builder(IInterviewAgent.class)
-                .chatModel(chatModel)
+                .streamingChatModel(streamingChatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .tools(interviewTools)
                 .build();
@@ -211,7 +213,7 @@ public class AiConfig {
     public IOfferAgent offerAgent() {
         log.info("初始化Offer发送 Agent");
         return AiServices.builder(IOfferAgent.class)
-                .chatModel(chatModel)
+                .streamingChatModel(streamingChatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .tools(emailTools)
                 .build();
@@ -224,7 +226,7 @@ public class AiConfig {
     public IKnowledgeAgent knowledgeAgent(ContentRetriever knowledgeContentRetriever) {
         log.info("初始化企业知识问答 Agent");
         return AiServices.builder(IKnowledgeAgent.class)
-                .chatModel(chatModel)
+                .streamingChatModel(streamingChatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .contentRetriever(knowledgeContentRetriever)
                 .build();
