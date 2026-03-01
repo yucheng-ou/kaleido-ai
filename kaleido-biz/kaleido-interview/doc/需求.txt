@@ -1,0 +1,129 @@
+项目需求规格说明书：企业级智能招聘与入职助理系统 (EIRA)
+1. 项目背景与业务目标
+1.1 业务背景
+当前企业招聘流程中存在大量非结构化数据处理低效、面试流程割裂的问题。HR 每天耗费数小时人工阅读 PDF 简历并录入 Excel；面试官缺乏实时辅助，面试记录难以回溯；入职引导依赖人工口口相传。
+1.2 建设目标
+我们要构建一套 EIRA (Enterprise Intelligent Recruitment Agent) 系统。该系统不是简单的 CRUD 后台，而是一个具备 AI Agent（智能体） 能力的业务系统。它需要能够自主理解简历、通过对话辅助面试、并具备调用外部工具（邮件、日程管理）的能力。
+2. 系统模块与功能需求
+系统需包含以下四大核心模块，需使用 LangChain4j 全家桶组件实现。
+模块一：智能简历智库 (Resume Intelligence)
+功能描述：
+多格式摄入 (Ingestion)：系统需支持上传 PDF、Word 格式简历。后台自动解析文本内容。
+结构化提取 (Extraction)：AI 需自动阅读简历，提取“姓名、联系方式、学历、核心技能列表、工作年限”等关键信息，并存入 MySQL 关系型数据库。
+语义检索 (Semantic Search)：HR 输入自然语言（如：“寻找熟悉 Spring Boot 且有高并发经验的候选人”），系统需通过向量数据库检索出匹配度最高的简历，而非仅依靠关键字匹配。
+技术要求：使用 Document Loaders 处理文件，Embedding Models 进行向量化，Vector Store 进行存储。
+模块二：面试官 Copilot (Interview Copilot)
+功能描述：
+动态生成面试大纲：在面试开始前，AI 根据【职位 JD】和【候选人简历】的差异，自动生成一组针对性的面试题（如：针对简历中的项目经历进行深度追问）。
+沉浸式辅助对话：面试过程中，面试官可与 AI 对话。AI 需根据历史聊天上下文，充当“技术顾问”角色，提供评估建议。
+技术要求：利用 Prompt Templates 构建复杂提示词，使用 Chat Memory 维护长对话上下文。
+模块三：智能执行中心 (Action Core)
+功能描述：
+意图识别与工具调用：用户在对话框输入“这个候选人不错，帮我约下周二下午两点的复试”，AI 需自动识别意图，提取时间参数，并调用后台的 scheduleInterview() 方法将日程写入数据库。
+Offer 邮件撰写与发送：用户指令“给张三发个 Offer，薪资 20k”，AI 自动生成邮件正文，并调用 sendEmail() 工具发送邮件。
+技术要求：必须实现 Function Calling (Tools) 机制。
+模块四：企业知识问答 (Knowledge Base)
+功能描述：
+支持上传《员工手册》、《公司规章制度》等文档。
+当用户询问非简历类问题（如：“入职体检报销标准是什么？”）时，系统需自动路由到知识库进行 RAG 检索并回答。
+技术要求：实现 Query Routing（查询路由），区分“查人”和“查文档”的请求。
+
+4. 数据库表结构设计 (Schema)
+4.1 MySQL (业务数据)
+SQL
+-- 候选人结构化信息表
+CREATE TABLE t_candidates (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    skills TEXT, -- 逗号分隔的技能
+    experience_years INT,
+    raw_resume_text LONGTEXT, -- 用于RAG的原始文本
+    status VARCHAR(20) DEFAULT 'NEW' -- NEW, INTERVIEWING, HIRED
+);
+
+-- 面试日程表
+CREATE TABLE t_interviews (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    candidate_id BIGINT,
+    interview_time DATETIME,
+    interviewer_name VARCHAR(50),
+    FOREIGN KEY (candidate_id) REFERENCES candidates(id)
+);
+
+
+4.2 向量存储 (Vector Store)
+推荐使用 PostgreSQL (pgvector) 或 Milvus。
+若使用 PGVector，LangChain4j 会自动创建 embeddings 表，无需手动建表。
+5. 核心代码实现骨架 (Core Skeleton)
+以下代码展示了如何利用 Spring Boot 集成 LangChain4j 的 AiServices 模式。
+5.1 定义 AI 服务接口 (The Brain)
+这是系统的核心大脑，集成了聊天、记忆、工具和 RAG。
+Java
+5.2 定义工具类 (The Hands)
+让 AI 能够执行具体业务逻辑。
+Java
+5.3 Spring Controller (The API)
+前端 Vue 调用的 REST 接口。
+Java
+
+package com.example.eira.controller;
+
+import com.example.eira.ai.RecruitmentAgent;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api/agent")
+@RequiredArgsConstructor
+public class AgentController {
+
+    private final RecruitmentAgent recruitmentAgent;
+    private final ResumeIngestionService ingestionService; // 负责文件解析和向量化
+
+    // 1. 核心对话接口
+    @PostMapping("/chat")
+    public String chat(@RequestParam String sessionId, @RequestBody String message) {
+        // 直接调用 AI 接口，LangChain4j 会自动处理 Memory、RAG 和 Tools
+        return recruitmentAgent.chat(sessionId, message);
+    }
+
+    // 2. 简历上传与处理接口
+    @PostMapping("/upload")
+    public String uploadResume(@RequestParam("file") MultipartFile file) {
+        // 1. 解析文件 (Apache Tika)
+        String content = ingestionService.parseFile(file);
+        
+        // 2. 结构化提取 (调用 AI extractProfile)
+        CandidateProfile profile = recruitmentAgent.extractProfile(content);
+        
+        // 3. 存入数据库 (MySQL) & 存入向量库 (EmbeddingStore)
+        ingestionService.saveToDatabaseAndVectorStore(profile, content);
+        
+        return "简历上传成功，已入库";
+    }
+}
+5.4 配置类 (Configuration)
+连接 LLM 和 向量数据库。
+Java
+
+@Configuration
+public class AiConfig {
+
+    // 配置向量检索器 (Retriever)
+    @Bean
+    ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore, 
+                                      EmbeddingModel embeddingModel) {
+        return EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                .maxResults(3) // 每次检索最相似的3份简历
+                .minScore(0.7)
+                .build();
+    }
+    
+    // LangChain4j 的 Spring Boot Starter 会自动根据 application.yml 
+    // 配置 ChatLanguageModel (如 OpenAI/Ollama)
+}
+
+

@@ -1,0 +1,33 @@
+{
+  "serverUrl": "http://localhost:8082",
+  "serverEnv": "{{base_url}}",
+  "allInOne": true,
+  "outPath": "../../doc/api/interview",
+  "coverOld": true,
+  "packageFilters": "com.xiaoo.kaleido.interview.trigger.controller.*",
+  "projectName": "Kaleido 面试助手 API 文档",
+  "framework": "spring",
+  "skipTransientField": true,
+  "requestExample": true,
+  "responseExample": true,
+  "randomMock": true,
+  "style": "xt256",
+  "createDebugPage": true,
+  "sortByTitle": false,
+  "showAuthor": true,
+  "inlineEnum": true,
+  "recursionLimit": 7,
+  "allInOneDocFileName": "index.html",
+  "requestParamsTable": true,
+  "responseParamsTable": true,
+  "requestHeaders": [
+    {
+      "name": "Authorization",
+      "type": "string",
+      "desc": "认证令牌，格式：Bearer {token}。仅需要认证的接口使用。",
+      "value": "Bearer ",
+      "required": false,
+      "since": "-"
+    }
+  ]
+}

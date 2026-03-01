@@ -1,0 +1,148 @@
+package com.xiaoo.kaleido.interview.infrastructure.tools;
+
+import com.xiaoo.kaleido.interview.domain.candidate.adapter.repository.ICandidateRepository;
+import com.xiaoo.kaleido.interview.domain.candidate.model.aggregate.CandidateAggregate;
+import com.xiaoo.kaleido.interview.domain.candidate.service.ICandidateDomainService;
+import com.xiaoo.kaleido.interview.domain.interview.adapter.repository.IInterviewRepository;
+import com.xiaoo.kaleido.interview.domain.interview.model.aggregate.InterviewAggregate;
+import com.xiaoo.kaleido.interview.domain.interview.service.IInterviewDomainService;
+import dev.langchain4j.agent.tool.P;
+import dev.langchain4j.agent.tool.Tool;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * 面试相关工具类
+ * <p>
+ * 提供面试安排、候选人查询等功能供AI调用
+ *
+ * @author ouyucheng
+ * @date 2026/2/28
+ */
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class InterviewTools {
+
+    private final ICandidateDomainService candidateDomainService;
+    private final IInterviewDomainService interviewDomainService;
+    private final ICandidateRepository candidateRepository;
+    private final IInterviewRepository interviewRepository;
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+    /**
+     * 安排面试
+     *
+     * @param candidateId     候选人ID
+     * @param interviewTime   面试时间（格式：yyyy-MM-dd HH:mm）
+     * @param interviewerName 面试官姓名
+     * @return 操作结果
+     */
+    @Tool(value = "安排候选人面试，将面试日程写入数据库", name = "scheduleInterview")
+    public String scheduleInterview(
+            @P("候选人ID") String candidateId,
+            @P("面试时间，格式为yyyy-MM-dd HH:mm，例如：2026-03-01 14:00") String interviewTime,
+            @P("面试官姓名") String interviewerName) {
+
+        log.info("AI调用安排面试工具，候选人ID: {}, 面试时间: {}, 面试官: {}",
+                candidateId, interviewTime, interviewerName);
+
+        try {
+            // 解析时间
+            Date time = DATE_FORMAT.parse(interviewTime);
+
+            // 创建面试
+            InterviewAggregate interview = interviewDomainService.createInterview(
+                    candidateId, time, interviewerName);
+
+            // 保存面试到数据库
+            interviewRepository.save(interview);
+            log.info("面试已保存到数据库，面试ID: {}", interview.getId());
+
+            return String.format("面试安排成功！面试ID: %s，候选人ID: %s，面试时间: %s，面试官: %s",
+                    interview.getId(), candidateId, interviewTime, interviewerName);
+        } catch (Exception e) {
+            log.error("安排面试失败: {}", e.getMessage(), e);
+            return "安排面试失败: " + e.getMessage();
+        }
+    }
+
+    /**
+     * 查询候选人信息
+     *
+     * @param candidateId 候选人ID
+     * @return 候选人信息
+     */
+    @Tool(value = "根据候选人ID查询候选人详细信息", name = "queryCandidate")
+    public String queryCandidate(@P("候选人ID") String candidateId) {
+        log.info("AI调用查询候选人工具，候选人ID: {}", candidateId);
+
+        try {
+            CandidateAggregate candidate = candidateDomainService.findByIdOrThrow(candidateId);
+
+            return String.format("候选人信息：姓名: %s，技能: %s，工作年限: %d年，状态: %s",
+                    candidate.getName(),
+                    candidate.getSkills() != null ? candidate.getSkills() : "未填写",
+                    candidate.getExperienceYears() != null ? candidate.getExperienceYears() : 0,
+                    candidate.getStatus().getDescription());
+        } catch (Exception e) {
+            log.error("查询候选人失败: {}", e.getMessage(), e);
+            return "查询候选人失败: " + e.getMessage();
+        }
+    }
+
+    /**
+     * 更新候选人状态为面试中
+     *
+     * @param candidateId 候选人ID
+     * @return 操作结果
+     */
+    @Tool(value = "将候选人状态更新为面试中", name = "startInterviewStatus")
+    public String startInterviewStatus(@P("候选人ID") String candidateId) {
+        log.info("AI调用开始面试状态工具，候选人ID: {}", candidateId);
+
+        try {
+            CandidateAggregate candidate = candidateDomainService.startInterview(candidateId);
+            
+            // 保存候选人状态更新到数据库
+            candidateRepository.update(candidate);
+            log.info("候选人状态已更新并保存到数据库，候选人ID: {}, 新状态: {}", 
+                     candidateId, candidate.getStatus().getDescription());
+
+            return String.format("候选人 %s 状态已更新为面试中", candidate.getName());
+        } catch (Exception e) {
+            log.error("更新候选人状态失败: {}", e.getMessage(), e);
+            return "更新候选人状态失败: " + e.getMessage();
+        }
+    }
+
+    /**
+     * 录用候选人
+     *
+     * @param candidateId 候选人ID
+     * @return 操作结果
+     */
+    @Tool(value = "将候选人状态更新为已录用", name = "hireCandidate")
+    public String hireCandidate(@P("候选人ID") String candidateId) {
+        log.info("AI调用录用候选人工具，候选人ID: {}", candidateId);
+
+        try {
+            CandidateAggregate candidate = candidateDomainService.hireCandidate(candidateId);
+            
+            // 保存候选人录用状态到数据库
+            candidateRepository.update(candidate);
+            log.info("候选人录用状态已保存到数据库，候选人ID: {}, 新状态: {}", 
+                     candidateId, candidate.getStatus().getDescription());
+
+            return String.format("候选人 %s 已成功录用！", candidate.getName());
+        } catch (Exception e) {
+            log.error("录用候选人失败: {}", e.getMessage(), e);
+            return "录用候选人失败: " + e.getMessage();
+        }
+    }
+}

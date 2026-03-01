@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.interview.infrastructure.dao.InterviewDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, candidate_id, interview_time, interviewer_name
+    </sql>
+
+    <!-- 根据ID查询面试 -->
+    <select id="findById" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.InterviewPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_interviews
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据候选人ID查询面试列表 -->
+    <select id="findByCandidateId" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.InterviewPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_interviews
+        WHERE candidate_id = #{candidateId}
+        AND deleted = 0
+        ORDER BY interview_time DESC
+    </select>
+
+    <!-- 根据面试官姓名查询面试列表 -->
+    <select id="findByInterviewerName" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.InterviewPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_interviews
+        WHERE interviewer_name = #{interviewerName}
+        AND deleted = 0
+        ORDER BY interview_time DESC
+    </select>
+
+    <!-- 根据时间范围查询面试列表 -->
+    <select id="findByTimeRange" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.InterviewPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_interviews
+        WHERE interview_time BETWEEN #{startTime} AND #{endTime}
+        AND deleted = 0
+        ORDER BY interview_time ASC
+    </select>
+
+    <!-- 查询所有未被删除的面试 -->
+    <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.InterviewPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_interviews
+        WHERE deleted = 0
+        ORDER BY interview_time DESC
+    </select>
+
+</mapper>

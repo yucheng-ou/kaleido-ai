@@ -5,6 +5,10 @@ spring:
   profiles:
     active: dev
 
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:sharding.yaml
+
   data:
     redis:
       host: ${REDIS_HOST}
@@ -48,15 +52,15 @@ langchain4j:
   open-ai:
     chat-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}
+      base-url: ${AI_BASE_URL}/v1
       model-name: ${CHAT_MODEL}
     streaming-chat-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}
+      base-url: ${AI_BASE_URL}/v1
       model-name: ${CHAT_MODEL}
     embedding-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}
+      base-url: ${AI_BASE_URL}/v1
       model-name: ${EMBEDDING_MODEL}
 
 milvus:
@@ -65,5 +69,12 @@ milvus:
   username: ${MILVUS_USERNAME}
   password: ${MILVUS_PASSWORD}
   database-name: kaleido
-  collection-name: test
+  collection-name: test2
   dimension: 1536
+
+# MyBatis配置
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 将数据库字段的下划线命名转换为驼峰命名
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 配置SQL语句打印到控制台
+  mapper-locations: classpath:mapper/*.xml # MyBatis映射文件所在的位置，这里是使用XML的配置方式时需要配置的部分

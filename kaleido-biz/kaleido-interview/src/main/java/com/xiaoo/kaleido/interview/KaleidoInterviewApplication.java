@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * AI面试助手服务启动类
  *
- * @author trae
+ * @author ouyucheng
  * @date 2026/02/27
  */
 @SpringBootApplication(scanBasePackages = "com.xiaoo.kaleido.interview")

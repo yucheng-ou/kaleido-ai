@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoo.kaleido.interview.infrastructure.dao.CandidateDao">
+
+    <!-- 基础列映射 -->
+    <sql id="Base_Column_List">
+        id, name, skills, experience_years, raw_resume_text, status
+    </sql>
+
+    <!-- 根据ID查询候选人 -->
+    <select id="findById" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_candidates
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据状态查询候选人列表 -->
+    <select id="findByStatus" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_candidates
+        WHERE status = #{status}
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据技能关键词搜索候选人 -->
+    <select id="findBySkillKeyword" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_candidates
+        WHERE skills LIKE CONCAT('%', #{skillKeyword}, '%')
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 查询所有未被删除的候选人 -->
+    <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_candidates
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+</mapper>
