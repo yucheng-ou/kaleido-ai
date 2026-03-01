@@ -124,6 +124,7 @@ public class ResumeCommandService {
         // 为每个段添加候选人ID元数据
         segments.forEach(segment -> {
             segment.metadata().put("candidateId", candidateId);
+            segment.metadata().put("doc_type", "resume");
         });
 
         // 生成嵌入向量

@@ -22,7 +22,12 @@ public enum IntentType {
     /**
      * Offer发送
      */
-    OFFER_SENDING("Offer发送", "生成和发送录用通知、薪资谈判辅助");
+    OFFER_SENDING("Offer发送", "生成和发送录用通知、薪资谈判辅助"),
+
+    /**
+     * 企业知识问答
+     */
+    KNOWLEDGE_QUERY("企业知识问答", "查询公司规章制度、员工手册、报销流程等非候选人信息");
 
     private final String description;
     private final String detail;

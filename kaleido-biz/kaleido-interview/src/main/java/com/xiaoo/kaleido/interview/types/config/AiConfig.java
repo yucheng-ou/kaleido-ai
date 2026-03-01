@@ -1,5 +1,7 @@
 package com.xiaoo.kaleido.interview.types.config;
 
+import static dev.langchain4j.store.embedding.filter.MetadataFilterBuilder.metadataKey;
+
 import com.xiaoo.kaleido.interview.domain.agent.*;
 import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IResumeExtractor;
 import com.xiaoo.kaleido.interview.infrastructure.tools.EmailTools;
@@ -92,15 +94,34 @@ public class AiConfig {
     }
 
     /**
-     * 内容检索器（用于RAG）
+     * 简历内容检索器（用于RAG）
+     * 只检索 doc_type = "resume" 的内容
      */
     @Bean
-    public ContentRetriever contentRetriever(EmbeddingStore<TextSegment> embeddingStore) {
-        log.info("初始化内容检索器");
+    public ContentRetriever resumeContentRetriever(EmbeddingStore<TextSegment> embeddingStore) {
+        log.info("初始化简历内容检索器");
 
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
+                .filter(metadataKey("doc_type").isEqualTo("resume"))
+                .maxResults(3)
+                .minScore(0.7)
+                .build();
+    }
+
+    /**
+     * 知识库内容检索器（用于RAG）
+     * 只检索 doc_type = "knowledge" 的内容
+     */
+    @Bean
+    public ContentRetriever knowledgeContentRetriever(EmbeddingStore<TextSegment> embeddingStore) {
+        log.info("初始化知识库内容检索器");
+
+        return EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                .filter(metadataKey("doc_type").isEqualTo("knowledge"))
                 .maxResults(3)
                 .minScore(0.7)
                 .build();
@@ -160,12 +181,12 @@ public class AiConfig {
      * 候选人查询 Agent
      */
     @Bean
-    public ICandidateAgent candidateAgent(ContentRetriever contentRetriever) {
+    public ICandidateAgent candidateAgent(ContentRetriever resumeContentRetriever) {
         log.info("初始化候选人查询 Agent");
         return AiServices.builder(ICandidateAgent.class)
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider())
-                .contentRetriever(contentRetriever)
+                .contentRetriever(resumeContentRetriever)
                 .tools(interviewTools)
                 .build();
     }
@@ -193,6 +214,19 @@ public class AiConfig {
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .tools(emailTools)
+                .build();
+    }
+
+    /**
+     * 企业知识问答 Agent
+     */
+    @Bean
+    public IKnowledgeAgent knowledgeAgent(ContentRetriever knowledgeContentRetriever) {
+        log.info("初始化企业知识问答 Agent");
+        return AiServices.builder(IKnowledgeAgent.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider())
+                .contentRetriever(knowledgeContentRetriever)
                 .build();
     }
 }

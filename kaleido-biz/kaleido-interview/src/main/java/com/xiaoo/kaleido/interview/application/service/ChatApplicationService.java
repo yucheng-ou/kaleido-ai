@@ -24,6 +24,7 @@ public class ChatApplicationService {
     private final ICandidateAgent candidateAgent;
     private final IInterviewAgent interviewAgent;
     private final IOfferAgent offerAgent;
+    private final IKnowledgeAgent knowledgeAgent;
     private final RedisChatMemoryStore chatMemoryStore;
 
     /**
@@ -63,6 +64,9 @@ public class ChatApplicationService {
                     break;
                 case OFFER_SENDING:
                     response = offerAgent.chat(sessionId, queryToUse);
+                    break;
+                case KNOWLEDGE_QUERY:
+                    response = knowledgeAgent.chat(sessionId, queryToUse);
                     break;
                 case GENERAL_CHAT:
                 default:

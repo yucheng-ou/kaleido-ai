@@ -23,6 +23,7 @@ public interface IIntentAgent {
         2. CANDIDATE_QUERY: 查询候选人信息、简历筛选、技能匹配等
         3. INTERVIEW_ARRANGEMENT: 安排面试、协调时间、查询面试日程
         4. OFFER_SENDING: 发送Offer、录用通知、薪资相关
+        5. KNOWLEDGE_QUERY: 查询公司内部规章制度、报销标准、员工手册等非候选人信息
         
         同时，请根据上下文改写用户的查询，使其语义更完整、明确，便于后续处理。
         
