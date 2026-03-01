@@ -174,6 +174,17 @@ public class CandidateDomainServiceImpl implements ICandidateDomainService {
     }
 
     @Override
+    public List<CandidateAggregate> findByName(String name) {
+        // 参数校验
+        if (StrUtil.isBlank(name)) {
+            throw InterviewException.of(InterviewErrorCode.VALIDATION_ERROR, "候选人姓名不能为空");
+        }
+
+        // 查询数据库
+        return candidateRepository.findByName(name);
+    }
+
+    @Override
     public List<CandidateAggregate> findBySkillKeyword(String skillKeyword) {
         // 参数校验
         if (StrUtil.isBlank(skillKeyword)) {

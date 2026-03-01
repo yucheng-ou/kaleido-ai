@@ -109,6 +109,20 @@ public class CandidateRepositoryImpl implements ICandidateRepository {
     }
 
     @Override
+    public List<CandidateAggregate> findByName(String name) {
+        try {
+            // 1.根据姓名查询PO
+            List<CandidatePO> candidatePOs = candidateDao.findByName(name);
+
+            // 2.转换为聚合根
+            return CandidateInfraConvertor.INSTANCE.toAggregateList(candidatePOs);
+        } catch (Exception e) {
+            log.error("根据姓名搜索候选人失败，姓名: {}, 原因: {}", name, e.getMessage(), e);
+            throw InterviewException.of(InterviewErrorCode.DATABASE_ERROR);
+        }
+    }
+
+    @Override
     public List<CandidateAggregate> findBySkillKeyword(String skillKeyword) {
         try {
             // 1.根据技能关键词搜索候选人

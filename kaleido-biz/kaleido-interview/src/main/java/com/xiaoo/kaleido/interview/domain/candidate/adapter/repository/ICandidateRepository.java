@@ -80,6 +80,15 @@ public interface ICandidateRepository {
     List<CandidateAggregate> findAll();
 
     /**
+     * 根据姓名搜索候选人
+     *
+     * @param name 姓名关键词，不能为空
+     * @return 候选人聚合根列表
+     * @throws com.xiaoo.kaleido.interview.types.exception.InterviewException 当查询失败时抛出
+     */
+    List<CandidateAggregate> findByName(String name);
+
+    /**
      * 根据技能关键词搜索候选人
      * <p>
      * 根据技能关键词模糊匹配查询候选人列表

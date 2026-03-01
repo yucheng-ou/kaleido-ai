@@ -43,6 +43,14 @@ public interface CandidateDao extends BaseMapper<CandidatePO> {
     List<CandidatePO> findBySkillKeyword(@Param("skillKeyword") String skillKeyword);
 
     /**
+     * 根据姓名搜索候选人
+     *
+     * @param name 姓名关键词
+     * @return 候选人持久化对象列表
+     */
+    List<CandidatePO> findByName(@Param("name") String name);
+
+    /**
      * 查询所有未被删除的候选人
      *
      * @return 候选人持久化对象列表

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 聊天应用服务 (Application Layer)
@@ -37,12 +36,17 @@ public class ChatApplicationService {
     public String chat(String sessionId, String message) {
         log.info("收到聊天请求，SessionId: {}, Message: {}", sessionId, message);
 
-        // 1. 获取历史记录（用于意图识别上下文）
-        String chatHistory = getChatHistoryAsString(sessionId);
+        // 1. 获取历史消息快照（用于后续回滚）
+        List<ChatMessage> originalHistory = chatMemoryStore.getMessages(sessionId);
 
         // 2. 意图识别与查询改写
-        IntentResult intentResult = intentAgent.analyzeIntent(chatHistory, message);
+        // 注意：IntentAgent 会将 UserMessage 和 AiMessage(JSON) 写入内存
+        IntentResult intentResult = intentAgent.analyzeIntent(sessionId, message);
         log.info("意图识别结果: {}", intentResult);
+
+        // 3. 回滚内存状态
+        // 移除 IntentAgent 产生的中间过程消息，避免污染主对话历史
+        chatMemoryStore.updateMessages(sessionId, originalHistory);
 
         // 3. 根据意图路由到相应的 Agent
         String response;
@@ -71,21 +75,5 @@ public class ChatApplicationService {
         }
 
         return response;
-    }
-
-    /**
-     * 获取格式化的聊天历史
-     */
-    private String getChatHistoryAsString(String sessionId) {
-        List<ChatMessage> messages = chatMemoryStore.getMessages(sessionId);
-        if (messages == null || messages.isEmpty()) {
-            return "无历史记录";
-        }
-        
-        // 取最近 10 条记录
-        int start = Math.max(0, messages.size() - 10);
-        return messages.subList(start, messages.size()).stream()
-                .map(msg -> msg.type() + ": " + msg.text())
-                .collect(Collectors.joining("\n"));
     }
 }

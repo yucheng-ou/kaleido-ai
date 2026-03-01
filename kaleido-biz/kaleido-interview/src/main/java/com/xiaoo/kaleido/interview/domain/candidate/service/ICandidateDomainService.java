@@ -109,6 +109,14 @@ public interface ICandidateDomainService {
     List<CandidateAggregate> findAll();
 
     /**
+     * 根据姓名搜索候选人
+     *
+     * @param name 姓名关键词，不能为空
+     * @return 候选人聚合根列表
+     */
+    List<CandidateAggregate> findByName(String name);
+
+    /**
      * 根据技能关键词搜索候选人
      *
      * @param skillKeyword 技能关键词，不能为空

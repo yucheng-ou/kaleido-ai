@@ -36,6 +36,16 @@
         ORDER BY created_at DESC
     </select>
 
+    <!-- 根据姓名搜索候选人 -->
+    <select id="findByName" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_candidates
+        WHERE name LIKE CONCAT('%', #{name}, '%')
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
     <!-- 查询所有未被删除的候选人 -->
     <select id="findAllNotDeleted" resultType="com.xiaoo.kaleido.interview.infrastructure.dao.po.CandidatePO">
         SELECT

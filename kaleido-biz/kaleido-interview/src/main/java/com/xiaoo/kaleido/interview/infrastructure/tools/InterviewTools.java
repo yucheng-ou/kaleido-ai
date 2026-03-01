@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 面试相关工具类
@@ -143,6 +144,40 @@ public class InterviewTools {
         } catch (Exception e) {
             log.error("录用候选人失败: {}", e.getMessage(), e);
             return "录用候选人失败: " + e.getMessage();
+        }
+    }
+
+    /**
+     * 根据姓名搜索候选人
+     *
+     * @param name 候选人姓名
+     * @return 候选人信息列表
+     */
+    @Tool(value = "根据姓名搜索候选人，返回候选人ID和详细信息", name = "searchCandidateByName")
+    public String searchCandidateByName(@P("候选人姓名") String name) {
+        log.info("AI调用搜索候选人工具，姓名: {}", name);
+
+        try {
+            List<CandidateAggregate> candidates = candidateDomainService.findByName(name);
+            
+            if (candidates == null || candidates.isEmpty()) {
+                return "未找到名为 " + name + " 的候选人。";
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("找到以下候选人：\n");
+            for (CandidateAggregate candidate : candidates) {
+                sb.append(String.format("- ID: %s, 姓名: %s, 技能: %s, 经验: %d年, 状态: %s\n",
+                        candidate.getId(),
+                        candidate.getName(),
+                        candidate.getSkills() != null ? candidate.getSkills() : "未填写",
+                        candidate.getExperienceYears() != null ? candidate.getExperienceYears() : 0,
+                        candidate.getStatus().getDescription()));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            log.error("搜索候选人失败: {}", e.getMessage(), e);
+            return "搜索候选人失败: " + e.getMessage();
         }
     }
 }
