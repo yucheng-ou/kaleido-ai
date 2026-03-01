@@ -52,15 +52,15 @@ langchain4j:
   open-ai:
     chat-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}/v1
+      base-url: ${AI_BASE_URL}
       model-name: ${CHAT_MODEL}
     streaming-chat-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}/v1
+      base-url: ${AI_BASE_URL}
       model-name: ${CHAT_MODEL}
     embedding-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}/v1
+      base-url: ${AI_BASE_URL}
       model-name: ${EMBEDDING_MODEL}
 
 milvus:
