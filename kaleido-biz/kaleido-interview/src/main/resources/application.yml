@@ -60,7 +60,7 @@ langchain4j:
       model-name: ${CHAT_MODEL}
     embedding-model:
       api-key: ${AI_API_KEY}
-      base-url: ${AI_BASE_URL}
+      base-url: ${AI_BASE_URL}/v1
       model-name: ${EMBEDDING_MODEL}
 
 milvus:

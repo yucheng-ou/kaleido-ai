@@ -1,7 +1,7 @@
 package com.xiaoo.kaleido.interview.application.command;
 
 import com.xiaoo.kaleido.api.interview.response.ResumeUploadResponse;
-import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IRecruitmentAgent;
+import com.xiaoo.kaleido.interview.domain.agent.IInterviewAgent;
 import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IResumeExtractor;
 import com.xiaoo.kaleido.interview.domain.candidate.model.vo.CandidateProfile;
 import com.xiaoo.kaleido.interview.domain.candidate.adapter.repository.ICandidateRepository;
@@ -43,7 +43,7 @@ public class ResumeCommandService {
 
     private final ICandidateDomainService candidateDomainService;
     private final IResumeExtractor resumeExtractor;
-    private final IRecruitmentAgent recruitmentAgent;
+    private final IInterviewAgent interviewAgent;
     private final EmbeddingModel embeddingModel;
     private final EmbeddingStore<TextSegment> embeddingStore;
     private final ICandidateRepository candidateRepository;
@@ -169,7 +169,7 @@ public class ResumeCommandService {
             String prompt = buildInterviewQuestionsPrompt(candidate, jobDescription);
             
             // 5. 调用AI服务
-            String questions = recruitmentAgent.generateInterviewQuestions(prompt);
+            String questions = interviewAgent.generateInterviewQuestions(prompt);
             
             log.info("面试问题生成成功，候选人: {}, 问题长度: {}", 
                      candidate.getName(), questions.length());

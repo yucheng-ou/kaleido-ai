@@ -3,16 +3,14 @@ package com.xiaoo.kaleido.interview.trigger.controller;
 import com.xiaoo.kaleido.api.interview.command.ChatCommand;
 import com.xiaoo.kaleido.api.interview.response.ResumeUploadResponse;
 import com.xiaoo.kaleido.base.result.Result;
-import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IRecruitmentAgent;
+import com.xiaoo.kaleido.interview.application.service.ChatApplicationService;
 import com.xiaoo.kaleido.interview.application.command.ResumeCommandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Flux;
 
 /**
  * 招聘助手Agent控制器
@@ -28,13 +26,13 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class AgentController {
 
-    private final IRecruitmentAgent recruitmentAgent;
+    private final ChatApplicationService chatApplicationService;
     private final ResumeCommandService resumeCommandService;
 
     /**
      * 核心对话接口
      * <p>
-     * 直接调用AI接口，LangChain4j会自动处理Memory、RAG和Tools
+     * 集成意图识别、多Agent协作
      *
      * @param command 聊天命令（包含sessionId和message）
      * @return AI回复
@@ -42,19 +40,7 @@ public class AgentController {
     @PostMapping("/chat")
     public String chat(@Valid @RequestBody ChatCommand command) {
         log.info("收到对话请求，sessionId: {}, message: {}", command.getSessionId(), command.getMessage());
-        return recruitmentAgent.chat(command.getSessionId(), command.getMessage());
-    }
-
-    /**
-     * 流式对话接口
-     *
-     * @param command 聊天命令
-     * @return 流式AI回复
-     */
-    @PostMapping(value = "/chat/stream")
-    public Flux<String> chatStream(@Valid @RequestBody ChatCommand command) {
-        log.info("收到流式对话请求，sessionId: {}", command.getSessionId());
-        return recruitmentAgent.chatStream(command.getSessionId(), command.getMessage());
+        return chatApplicationService.chat(command.getSessionId(), command.getMessage());
     }
 
     /**
@@ -89,3 +75,4 @@ public class AgentController {
         return resumeCommandService.generateInterviewQuestions(candidateId, jobDescription);
     }
 }
+

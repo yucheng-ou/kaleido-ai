@@ -1,9 +1,9 @@
 package com.xiaoo.kaleido.interview.types.config;
 
+import com.xiaoo.kaleido.interview.domain.agent.*;
+import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IResumeExtractor;
 import com.xiaoo.kaleido.interview.infrastructure.tools.EmailTools;
 import com.xiaoo.kaleido.interview.infrastructure.tools.InterviewTools;
-import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IRecruitmentAgent;
-import com.xiaoo.kaleido.interview.domain.candidate.adapter.ai.IResumeExtractor;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.ChatMemoryProvider;
@@ -133,20 +133,65 @@ public class AiConfig {
     }
 
     /**
-     * 招聘助手AI代理（Application层实现）
+     * 意图识别 Agent
      */
     @Bean
-    public IRecruitmentAgent applicationRecruitmentAgent(
-            EmbeddingStore<TextSegment> embeddingStore,
-            ContentRetriever contentRetriever) {
+    public IIntentAgent intentAgent() {
+        log.info("初始化意图识别 Agent");
+        return AiServices.builder(IIntentAgent.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider())
+                .build();
+    }
 
-        log.info("初始化招聘助手AI代理（Application层）");
+    /**
+     * 普通聊天 Agent
+     */
+    @Bean
+    public IGeneralChatAgent generalChatAgent() {
+        log.info("初始化普通聊天 Agent");
+        return AiServices.builder(IGeneralChatAgent.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider())
+                .build();
+    }
 
-        return AiServices.builder(IRecruitmentAgent.class)
+    /**
+     * 候选人查询 Agent
+     */
+    @Bean
+    public ICandidateAgent candidateAgent(ContentRetriever contentRetriever) {
+        log.info("初始化候选人查询 Agent");
+        return AiServices.builder(ICandidateAgent.class)
                 .chatModel(chatModel)
                 .chatMemoryProvider(chatMemoryProvider())
                 .contentRetriever(contentRetriever)
                 .tools(interviewTools)
+                .build();
+    }
+
+    /**
+     * 面试安排 Agent
+     */
+    @Bean
+    public IInterviewAgent interviewAgent() {
+        log.info("初始化面试安排 Agent");
+        return AiServices.builder(IInterviewAgent.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider())
+                .tools(interviewTools)
+                .build();
+    }
+
+    /**
+     * Offer发送 Agent
+     */
+    @Bean
+    public IOfferAgent offerAgent() {
+        log.info("初始化Offer发送 Agent");
+        return AiServices.builder(IOfferAgent.class)
+                .chatModel(chatModel)
+                .chatMemoryProvider(chatMemoryProvider())
                 .tools(emailTools)
                 .build();
     }
