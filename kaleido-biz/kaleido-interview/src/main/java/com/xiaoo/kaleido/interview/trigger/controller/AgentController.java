@@ -6,8 +6,10 @@ import com.xiaoo.kaleido.interview.application.command.ResumeCommandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 /**
  * 招聘助手Agent控制器
@@ -34,8 +36,8 @@ public class AgentController {
      * @param command 聊天命令（包含sessionId和message）
      * @return AI回复
      */
-    @PostMapping("/chat")
-    public String chat(@Valid @RequestBody ChatCommand command) {
+    @PostMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> chat(@Valid @RequestBody ChatCommand command) {
         log.info("收到对话请求，sessionId: {}, message: {}", command.getSessionId(), command.getMessage());
         return chatApplicationService.chat(command.getSessionId(), command.getMessage());
     }

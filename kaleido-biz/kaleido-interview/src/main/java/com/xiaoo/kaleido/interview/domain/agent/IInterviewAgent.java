@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.interview.domain.agent;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * 面试安排 Agent
@@ -22,7 +23,7 @@ public interface IInterviewAgent {
         在安排面试前，请确保你已经获取了必要的信息：候选人姓名/ID、面试时间、面试官姓名。
         如果信息不全，请向用户追问。
         """)
-    String chat(@MemoryId String sessionId, @UserMessage String message);
+    Flux<String> chat(@MemoryId String sessionId, @UserMessage String message);
 
     /**
      * 生成面试问题

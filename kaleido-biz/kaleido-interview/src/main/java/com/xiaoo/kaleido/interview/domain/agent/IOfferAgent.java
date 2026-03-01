@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.interview.domain.agent;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * Offer发送 Agent
@@ -21,5 +22,5 @@ public interface IOfferAgent {
         在发送Offer前，请务必确认：候选人姓名、邮箱、职位、薪资、入职日期。
         这是一个严肃的商业行为，请保持严谨。
         """)
-    String chat(@MemoryId String sessionId, @UserMessage String message);
+    Flux<String> chat(@MemoryId String sessionId, @UserMessage String message);
 }

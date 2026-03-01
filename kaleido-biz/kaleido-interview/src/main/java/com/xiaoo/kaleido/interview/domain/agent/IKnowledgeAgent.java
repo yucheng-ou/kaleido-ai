@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.interview.domain.agent;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * 企业知识问答 Agent
@@ -17,5 +18,5 @@ public interface IKnowledgeAgent {
         
         请基于检索到的文档内容回答，如果文档中没有相关信息，请如实告知，不要编造。
         """)
-    String chat(@MemoryId String sessionId, @UserMessage String message);
+    Flux<String> chat(@MemoryId String sessionId, @UserMessage String message);
 }

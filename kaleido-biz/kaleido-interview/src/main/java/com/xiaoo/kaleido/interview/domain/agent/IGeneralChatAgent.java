@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.interview.domain.agent;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * 通用聊天 Agent
@@ -16,5 +17,5 @@ public interface IGeneralChatAgent {
         请保持礼貌、专业且幽默的风格。
         如果用户问及具体的候选人、面试或Offer相关问题，请礼貌地引导他们提供更多信息，或者告知你将转接给专门的业务助手（虽然实际上是由系统调度，但你可以假装是你转接）。
         """)
-    String chat(@MemoryId String sessionId, @UserMessage String message);
+    Flux<String> chat(@MemoryId String sessionId, @UserMessage String message);
 }

@@ -3,6 +3,7 @@ package com.xiaoo.kaleido.interview.domain.agent;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 /**
  * 候选人查询 Agent
@@ -22,5 +23,5 @@ public interface ICandidateAgent {
         
         请基于事实回答，如果找不到相关信息，请如实告知。
         """)
-    String chat(@MemoryId String sessionId, @UserMessage String message);
+    Flux<String> chat(@MemoryId String sessionId, @UserMessage String message);
 }
