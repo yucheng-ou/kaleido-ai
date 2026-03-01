@@ -74,6 +74,49 @@ public class InterviewTools {
     }
 
     /**
+     * 根据姓名安排面试
+     *
+     * @param candidateName   候选人姓名
+     * @param interviewTime   面试时间（格式：yyyy-MM-dd HH:mm）
+     * @param interviewerName 面试官姓名
+     * @return 操作结果
+     */
+    @Tool(value = "根据候选人姓名安排面试，无需ID", name = "scheduleInterviewByName")
+    public String scheduleInterviewByName(
+            @P("候选人姓名") String candidateName,
+            @P("面试时间，格式为yyyy-MM-dd HH:mm，例如：2026-03-01 14:00") String interviewTime,
+            @P("面试官姓名") String interviewerName) {
+
+        log.info("AI调用根据姓名安排面试工具，候选人姓名: {}, 面试时间: {}, 面试官: {}",
+                candidateName, interviewTime, interviewerName);
+
+        try {
+            List<CandidateAggregate> candidates = candidateDomainService.findByName(candidateName);
+
+            if (candidates == null || candidates.isEmpty()) {
+                return "未找到名为 " + candidateName + " 的候选人。";
+            }
+
+            if (candidates.size() > 1) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("找到多名名为 ").append(candidateName).append(" 的候选人，请使用ID进行操作：\n");
+                for (CandidateAggregate candidate : candidates) {
+                    sb.append(String.format("- ID: %s, 状态: %s\n", candidate.getId(), candidate.getStatus().getDescription()));
+                }
+                return sb.toString();
+            }
+
+            String candidateId = candidates.get(0).getId();
+            log.info("根据姓名 {} 找到唯一候选人ID: {}，即将安排面试", candidateName, candidateId);
+
+            return scheduleInterview(candidateId, interviewTime, interviewerName);
+        } catch (Exception e) {
+            log.error("根据姓名安排面试失败: {}", e.getMessage(), e);
+            return "根据姓名安排面试失败: " + e.getMessage();
+        }
+    }
+
+    /**
      * 查询候选人信息
      *
      * @param candidateId 候选人ID
@@ -119,6 +162,42 @@ public class InterviewTools {
         } catch (Exception e) {
             log.error("更新候选人状态失败: {}", e.getMessage(), e);
             return "更新候选人状态失败: " + e.getMessage();
+        }
+    }
+
+    /**
+     * 根据姓名将候选人状态更新为面试中
+     *
+     * @param candidateName 候选人姓名
+     * @return 操作结果
+     */
+    @Tool(value = "根据候选人姓名将状态更新为面试中", name = "startInterviewStatusByName")
+    public String startInterviewStatusByName(@P("候选人姓名") String candidateName) {
+        log.info("AI调用根据姓名开始面试状态工具，候选人姓名: {}", candidateName);
+
+        try {
+            List<CandidateAggregate> candidates = candidateDomainService.findByName(candidateName);
+
+            if (candidates == null || candidates.isEmpty()) {
+                return "未找到名为 " + candidateName + " 的候选人。";
+            }
+
+            if (candidates.size() > 1) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("找到多名名为 ").append(candidateName).append(" 的候选人，请使用ID进行操作：\n");
+                for (CandidateAggregate candidate : candidates) {
+                    sb.append(String.format("- ID: %s, 状态: %s\n", candidate.getId(), candidate.getStatus().getDescription()));
+                }
+                return sb.toString();
+            }
+
+            String candidateId = candidates.get(0).getId();
+            log.info("根据姓名 {} 找到唯一候选人ID: {}，即将更新状态为面试中", candidateName, candidateId);
+
+            return startInterviewStatus(candidateId);
+        } catch (Exception e) {
+            log.error("根据姓名更新候选人状态失败: {}", e.getMessage(), e);
+            return "根据姓名更新候选人状态失败: " + e.getMessage();
         }
     }
 
