@@ -7,7 +7,6 @@ import dev.langchain4j.data.message.TextContent;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.model.openai.OpenAiImageModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ public class ChatController {
 
     private final OpenAiChatModel chatModel;
     private final ChatService chatService;
-    private final OpenAiImageModel imageModel;
 
     /**
      * 直接使用 OpenAiChatModel 进行聊天

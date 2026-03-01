@@ -3,6 +3,7 @@ package com.xiaoo.langchain4j.demo.config;
 import com.xiaoo.kaleido.redis.service.RedissonService;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ChatMessageDeserializer;
+import dev.langchain4j.data.message.ChatMessageSerializer;
 import dev.langchain4j.store.memory.chat.ChatMemoryStore;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +15,12 @@ import java.util.List;
  * 使用 Redis 持久化存储 LangChain4j 的聊天消息
  *
  * @author ouyucheng
- * @date 2026-02-27
+ * @date 2026-02-28
  */
 @Component
 public class RedisChatMemoryStore implements ChatMemoryStore {
 
     private final RedissonService redissonService;
-
 
     public RedisChatMemoryStore(RedissonService redissonService) {
         this.redissonService = redissonService;
@@ -41,7 +41,8 @@ public class RedisChatMemoryStore implements ChatMemoryStore {
     @Override
     public void updateMessages(Object memoryId, List<ChatMessage> messages) {
         String key = getKey(memoryId);
-        redissonService.setValue(key, messages);
+        String json = ChatMessageSerializer.messagesToJson(messages);
+        redissonService.setValue(key, json);
     }
 
     @Override
@@ -50,6 +51,6 @@ public class RedisChatMemoryStore implements ChatMemoryStore {
     }
 
     private String getKey(Object memoryId) {
-        return "langchain4j:demo:chat-memory:" + memoryId;
+        return "interview:chat:memory:" + memoryId;
     }
 }
